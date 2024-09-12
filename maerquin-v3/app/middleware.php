@@ -5,14 +5,14 @@ declare(strict_types=1);
 use App\Application\Middleware\Firewall;
 use App\Application\Middleware\SessionMiddleware;
 use Slim\App;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
 return function (App $app) {
-//    $twig = Twig::create(__DIR__ . '/../src/.../Templates', ['cache' => false]);
-//    //    $twig = Twig::create(__DIR__ . '/../src/.../Templates', ['cache' => __DIR__ . '/../var/cache/twig']);
-//    $twig->addExtension(new Extensions($app->getContainer()->get(Session::class)));
-//    $twig->addExtension(new AdminExtension());
+
+    $twig = Twig::create(__DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Templates', ['cache' => false]);
 
     $app->add(Firewall::class);
     $app->add(SessionMiddleware::class);
-//    $app->add(TwigMiddleware::create($app, $twig));
+    $app->add(TwigMiddleware::create($app, $twig));
 };

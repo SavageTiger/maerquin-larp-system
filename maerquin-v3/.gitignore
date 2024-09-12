@@ -1,0 +1,6 @@
+logs
+var
+vendor
+.php-cs-fixer.cache
+public/fotos
+app/doctrine.php

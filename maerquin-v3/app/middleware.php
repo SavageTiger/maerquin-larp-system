@@ -9,8 +9,11 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 return function (App $app) {
-
-    $twig = Twig::create(__DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Templates', ['cache' => false]);
+    if ($_ENV['DEBUG'] === 'true') {
+        $twig = Twig::create(__DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Templates', ['cache' => false]);
+    } else {
+        $twig = Twig::create(__DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Templates', ['cache' => __DIR__ . '/../var/cache/twig']);
+    }
 
     $app->add(Firewall::class);
     $app->add(SessionMiddleware::class);

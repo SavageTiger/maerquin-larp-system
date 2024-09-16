@@ -1,7 +1,8 @@
-d#!/usr/bin/env php
+#!/usr/bin/env php
 <?php
 
 require 'vendor/autoload.php';
+require __DIR__ . '/app/load-env.php';
 
 use DI\ContainerBuilder;
 use Doctrine\ORM\EntityManager;

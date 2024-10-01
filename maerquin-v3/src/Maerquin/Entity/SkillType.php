@@ -15,6 +15,15 @@ class SkillType
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private string $id;
 
-    #[ORM\Column(type: "string", length: 255, nullable: false)]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $plural = '';
+
+    #[ORM\Column(type: 'integer')]
+    private int $ordinal;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $magical;
 }

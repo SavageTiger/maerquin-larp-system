@@ -9,9 +9,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Archetype Entity
- */
 #[ORM\Entity]
 class Archetype
 {

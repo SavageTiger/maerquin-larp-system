@@ -9,9 +9,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Race Entity
- */
 #[ORM\Entity]
 class Race
 {

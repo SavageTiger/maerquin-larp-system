@@ -7,9 +7,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Uuid;
 
-/**
- * Deity Entity
- */
 #[ORM\Entity]
 class Deity
 {

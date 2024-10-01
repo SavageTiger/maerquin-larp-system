@@ -17,10 +17,10 @@ class CustomValue
     public Uuid $id;
 
     #[ORM\ManyToOne(targetEntity: CustomField::class)]
-    #[ORM\JoinColumn(name: "customFieldId", referencedColumnName: "id")]
+    #[ORM\JoinColumn(name: "customfield_id", referencedColumnName: "id")]
     public CustomField $customField;
 
-    #[ORM\Column(type: 'uuid')]
+    #[ORM\Column(name: "entity_id", type: 'uuid')]
     public string $entityId;
 
     #[ORM\Column(type: 'text', nullable: true)]

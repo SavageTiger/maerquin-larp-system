@@ -1,5 +1,62 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    Hello there
+    <section class="hero is-primary is-fullheight">
+        <div class="hero-body">
+
+            <div class="container">
+                {% if loginError is not null %}
+                    <div class="columns is-centered">
+                        <div class="column is-two-fifths">
+                            <article class="message is-danger">
+                                <div class="message-header">
+                                    <p>Login failed</p>
+                                </div>
+                                <div class="message-body">
+                                    {{ loginError }}
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="columns is-three-fifths is-centered">
+                    <form method="POST" class="box column is-two-fifths">
+                        <div class="field">
+                            <label for="" class="label">Username</label>
+                            <div class="control has-icons-left">
+                                <input type="text" name="username" placeholder="e.g. John" class="input"
+                                       required>
+
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="" class="label">Password</label>
+                            <div class="control has-icons-left">
+                                <input type="password" name="password" placeholder="*******" class="input" required>
+
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="" class="checkbox">
+                                <input type="checkbox">
+                                Remember me
+                            </label>
+                        </div>
+                        <div class="field">
+                            <button type="submit" class="button is-success">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

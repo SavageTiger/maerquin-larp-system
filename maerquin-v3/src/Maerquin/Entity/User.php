@@ -36,4 +36,21 @@ class User extends \App\Domain\User\User
     #[ORM\ManyToOne(targetEntity: Player::class)]
     #[ORM\JoinColumn(name: 'player_id', referencedColumnName: 'id', nullable: true)]
     private ?Player $player = null;
+
+    public function checkPassword(string $password): bool
+    {
+        $algorithm = "sha512";
+        $iterations = 10000;
+
+        $derivedHash = hash_pbkdf2(
+            $algorithm,
+            $password,
+            $this->salt,
+            $iterations,
+            strlen($this->hash),
+            true
+        );
+
+        return hash_equals($this->hash, $derivedHash);
+    }
 }

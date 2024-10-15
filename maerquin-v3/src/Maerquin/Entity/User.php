@@ -39,18 +39,18 @@ class User extends \App\Domain\User\User
 
     public function checkPassword(string $password): bool
     {
-        $algorithm = "sha512";
-        $iterations = 10000;
+        $algorithm = 'sha512';
+        $iterations = 1000;
 
         $derivedHash = hash_pbkdf2(
             $algorithm,
             $password,
-            $this->salt,
+            base64_decode($this->salt),
             $iterations,
-            strlen($this->hash),
+            strlen(base64_decode($this->hash)),
             true
         );
 
-        return hash_equals($this->hash, $derivedHash);
+        return hash_equals(base64_decode($this->hash), $derivedHash);
     }
 }

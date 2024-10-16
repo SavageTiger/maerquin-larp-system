@@ -13,6 +13,8 @@ use SvenHK\Maerquin\Repository\UserRepository;
 
 class LoginController extends Action
 {
+    use RedirectTo;
+
     /**
      * @var UserRepository
      */
@@ -33,16 +35,20 @@ class LoginController extends Action
                 $form->getValue('username'),
                 $form->getValue('password')
             );
+
+            if ($loginError === false) {
+                return $this->redirectTo('/home.html');
+            }
         }
 
         return $view->render(
             $this->response,
             'login.html.twig',
-            ['loginError' => $loginError ?? null]
+            ['form' => $form, 'loginError' => $loginError ?? null]
         );
     }
 
-    public function login(string $username, string $password): true|string
+    public function login(string $username, string $password): false|string
     {
         $user = $this->userRepository->findByUsername($username);
 
@@ -54,6 +60,6 @@ class LoginController extends Action
             return 'Password incorrect';
         }
 
-        return true;
+        return false;
     }
 }

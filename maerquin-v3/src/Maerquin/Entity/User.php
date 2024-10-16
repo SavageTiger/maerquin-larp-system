@@ -4,8 +4,9 @@ namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use SvenHK\Maerquin\Repository\UserRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
 class User extends \App\Domain\User\User
 {

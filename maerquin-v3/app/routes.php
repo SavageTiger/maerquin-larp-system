@@ -15,4 +15,5 @@ return function (App $app) {
 
     $app->get('/', HomeController::class);
     $app->get('/login.html', LoginController::class);
+    $app->post('/login.html', LoginController::class);
 };

@@ -18,12 +18,14 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getValue(string $name): string
+    public function getValue(string $name, string|null $default = null): string
     {
-        if (is_string($this->request->getParsedBody()[$name] ?? null) === false) {
+        $value = $this->request->getParsedBody()[$name] ?? $default;
+
+        if (is_string($value) === false) {
             throw new MissingFormFieldException(sprintf('%s is not a valid form element', $name));
         }
 
-        return $this->request->getParsedBody()[$name];
+        return $value;
     }
 }

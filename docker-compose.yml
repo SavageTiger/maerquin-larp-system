@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./src:/var/www/html
+      - ./maerquin-v3:/var/www/html
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - php
@@ -16,7 +16,7 @@ services:
     image: chialab/php:8.3-fpm-alpine
     container_name: php_container_maerquin
     volumes:
-      - ./src:/var/www/html
+      - ./maerquin-v3:/var/www/html
     depends_on:
       - db
 

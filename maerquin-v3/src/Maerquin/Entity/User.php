@@ -8,7 +8,7 @@ use SvenHK\Maerquin\Repository\UserRepository;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
-class User extends \App\Domain\User\User
+class User
 {
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
@@ -53,5 +53,10 @@ class User extends \App\Domain\User\User
         );
 
         return hash_equals(base64_decode($this->hash), $derivedHash);
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

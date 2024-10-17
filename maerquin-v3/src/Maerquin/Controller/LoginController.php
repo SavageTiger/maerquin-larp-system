@@ -10,6 +10,7 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Form\FormResolver;
 use SvenHK\Maerquin\Repository\UserRepository;
+use SvenHK\Maerquin\Session\Session;
 
 class LoginController extends Action
 {
@@ -20,7 +21,10 @@ class LoginController extends Action
      */
     private EntityRepository $userRepository;
 
-    public function __construct(private EntityManager $entityManager)
+    public function __construct(
+        private Session       $session,
+        private EntityManager $entityManager
+    )
     {
         $this->userRepository = $this->entityManager->getRepository(User::class);
     }
@@ -59,6 +63,8 @@ class LoginController extends Action
         if ($user->checkPassword($password) === false) {
             return 'Password incorrect';
         }
+
+        $this->session->write('userId', $user->getId());
 
         return false;
     }

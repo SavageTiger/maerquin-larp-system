@@ -22,7 +22,7 @@
     }
   ],
   "require": {
-    "php": "^8.3",
+    "php": "^8.4",
     "ext-gd": "*",
     "ext-json": "*",
     "doctrine/orm": "^3.1",
@@ -30,7 +30,7 @@
     "monolog/monolog": "^2.8",
     "mpdf/mpdf": "^8.2",
     "nesbot/carbon": "^3.3",
-    "php-di/php-di": "^6.4",
+    "php-di/php-di": "^7.0",
     "ramsey/uuid-doctrine": "^2.0",
     "slim/psr7": "^1.5",
     "slim/slim": "^4.10",

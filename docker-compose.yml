@@ -10,11 +10,13 @@ services:
       - ./maerquin-v3:/var/www/html
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - php
+      - php84
 
-  php:
-    image: chialab/php:8.3-fpm-alpine
-    container_name: php_container_maerquin
+  php84:
+    image: chialab/php:8.4-fpm-alpine
+    container_name: php84_container_maerquin
+    ports:
+      - "9000:9000"
     volumes:
       - ./maerquin-v3:/var/www/html
     depends_on:

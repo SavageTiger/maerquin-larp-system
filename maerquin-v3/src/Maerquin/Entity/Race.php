@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 class Race
@@ -16,13 +16,13 @@ class Race
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public Uuid $id;
+    protected UuidInterface $id;
 
     #[ORM\Column(type: "string", length: 255)]
-    public string $name;
+    protected string $name;
 
     #[ORM\OneToMany(mappedBy: "race", targetEntity: Character::class)]
-    public Collection $characters;
+    protected Collection $characters;
 
     public function __construct()
     {

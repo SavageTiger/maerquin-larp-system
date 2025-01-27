@@ -7,22 +7,23 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\Player as PlayerModel;
 
 #[ORM\Entity]
-class Player
+class Player extends PlayerModel
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public Uuid $id;
+    protected UuidInterface $id;
 
     #[ORM\Column(type: "string", length: 255)]
-    public string $name;
+    protected string $name;
 
-    #[ORM\OneToMany(mappedBy: "player", targetEntity: Character::class)]
-    public Collection $characters;
+    #[ORM\OneToMany(targetEntity: Character::class, mappedBy: "player")]
+    protected Collection $characters;
 
     public function __construct()
     {

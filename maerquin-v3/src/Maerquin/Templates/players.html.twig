@@ -1,5 +1,29 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
-    players
+
+    <div class="hero">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
+            <tr>
+                <th>
+                    Naam
+                </th>
+                <th>
+                    Characters
+                </th>
+            </tr>
+
+            {% for player in players %}
+                <tr>
+                    <td>{{ player.name }}</td>
+                    <td>
+                        {% for character in player.characters %}
+                            <span class="tag is-link is-light">{{ character.name }}</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
 {% endblock %}

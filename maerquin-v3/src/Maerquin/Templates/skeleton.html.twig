@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-fixed-top has-background-primary-25" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-            </a>
+            <div class="logo">
+                <i class="fa-solid fa-book-skull"></i>&nbsp;Maerquin Character Database
+            </div>
         </div>
 
         <div class="navbar-menu">
@@ -16,7 +16,7 @@
             </div>
         </div>
     </nav>
-    {% block container %}
 
+    {% block container %}
     {% endblock %}
 {% endblock %}

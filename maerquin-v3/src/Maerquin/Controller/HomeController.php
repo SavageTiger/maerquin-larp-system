@@ -23,6 +23,9 @@ class HomeController extends Action
 
         $view = Twig::fromRequest($this->request);
 
-        return $view->render($this->response, 'home.html.twig');
+        return $view->render(
+            $this->response, 'home.html.twig',
+            ['user' => $this->session->getUser()]
+        );
     }
 }

@@ -1,5 +1,7 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
-    hello
+    <div class="hero">
+        <h4 class="title is-1">Hallo {{ user.username|capitalize }} 👋</h4>
+    </div>
 {% endblock %}

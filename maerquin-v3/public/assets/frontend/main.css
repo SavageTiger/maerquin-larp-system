@@ -44,6 +44,24 @@ body::before {
     color: white;
 }
 
+
+.navbar-start::before {
+    content: "|";
+    font-size: 23pt;
+    padding-top: 2px;
+    color: white;
+}
+
+.navbar-item {
+    border-radius: 5px;
+    margin: 5px;
+    color: white !important;
+}
+
+.navbar-item:hover, .navbar-item.is-active {
+    background-color: rgb(7, 78, 61) !important;
+}
+
 .navbar-brand div.logo {
     color: white;
     padding: 10px;

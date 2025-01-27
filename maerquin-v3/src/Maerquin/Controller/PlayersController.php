@@ -25,7 +25,7 @@ class PlayersController extends Action
         return $view->render(
             $this->response,
             'players.html.twig',
-            ['players' => $this->playerRepository->findAll()]
+            ['players' => $this->playerRepository->findBy([], ['name' => 'ASC'])]
         );
     }
 }

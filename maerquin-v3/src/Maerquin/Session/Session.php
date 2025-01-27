@@ -8,9 +8,13 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Model\Anonymous;
+use SvenHK\Maerquin\Repository\UserRepository;
 
 class Session implements FrameworkSession
 {
+    /**
+     * @var UserRepository
+     */
     private EntityRepository $userRepository;
 
     public function __construct(EntityManager $entityManager)
@@ -30,7 +34,7 @@ class Session implements FrameworkSession
 
     public function getUser(): FrameworkUser
     {
-        $user = $this->userRepository->findOneBy(['id' => $this->read('userId', false)]);
+        $user = $this->userRepository->findById($this->read('userId', false));
 
         if ($user === null) {
             return new Anonymous();

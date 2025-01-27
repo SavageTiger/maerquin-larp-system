@@ -1,0 +1,36 @@
+body {
+    height: 100%;
+}
+
+body::before {
+    content: "";
+
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    background-image: url('maerquin-logo.jpeg');
+    background-position: right 60%;
+    background-repeat: no-repeat;
+    background-size: 300px;
+
+    opacity: 0.4;
+}
+
+.hero {
+    background-color: rgba(247, 247, 247);
+}
+
+.navbar-version {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 999;
+    color: white;
+}
+
+.navbar-brand div.logo {
+    color: white;
+    padding: 10px;
+    font-size: 16pt;
+}

@@ -64,7 +64,7 @@ class LoginController extends Action
             return 'Password incorrect';
         }
 
-        $this->session->write('userId', $user->getId());
+        $this->session->setUser($user);
 
         return false;
     }

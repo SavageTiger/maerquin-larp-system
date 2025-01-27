@@ -17,12 +17,12 @@ class Firewall implements Middleware
     {
     }
 
-    public function process(Request $request, RequestHandler $handler) : Response
+    public function process(Request $request, RequestHandler $handler): Response
     {
         $uri = $request->getUri();
 
         if ($uri->getPath() === '/admin' || str_contains($uri->getPath(), '/admin/')) {
-            if ($this->session->getUser() === null) {
+            if ($this->session->getUser()->isAnonymous() === true) {
                 throw new Exception('Access denied');
             }
 

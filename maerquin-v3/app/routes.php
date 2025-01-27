@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
+use SvenHK\Maerquin\Controller\PlayersController;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -18,4 +19,7 @@ return function (App $app) {
 
     $app->get('/login.html', LoginController::class);
     $app->post('/login.html', LoginController::class);
+
+    $app->get('/admin/players.html', PlayersController::class);
+    $app->post('/admin/players.html', PlayersController::class);
 };

@@ -2,10 +2,11 @@
 
 namespace App\Application\Session;
 
-class Session
+use App\Domain\Entity\User;
+
+interface Session
 {
-    public function getUser() : User
-    {
-        return new User();
-    }
+    public function setUser(User $user): void;
+
+    public function getUser(): User;
 }

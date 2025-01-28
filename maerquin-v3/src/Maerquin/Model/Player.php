@@ -12,6 +12,31 @@ class Player
     protected string $name;
     protected Collection $characters;
 
+    /**
+     * @return Character[]
+     */
+    public function getCharacters(): array
+    {
+        return $this->characters->toArray();
+    }
+
+    public function serialize()
+    {
+        $characters = [];
+
+        /** @var Character $character */
+        foreach ($this->characters->toArray() as $character) {
+            $characters[] = $character->serialize();
+        }
+
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'characters' => $characters,
+        ];
+
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -20,14 +45,6 @@ class Player
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return Character[]
-     */
-    public function getCharacters(): array
-    {
-        return $this->characters->toArray();
     }
 }
 

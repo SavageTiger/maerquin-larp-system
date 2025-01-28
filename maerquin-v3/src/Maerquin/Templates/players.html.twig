@@ -4,7 +4,14 @@
 
     <div class="columns is-gapless">
         <div class="column is-12 is-gapless">
-            <button class="button is-pulled-right"><i class="fa-solid fa-user-plus"></i>&nbsp;Nieuwe aanmaken</button>
+            <div class="field is-pulled-right has-addons">
+                &nbsp;
+                <div class="control">
+                    <input class="input" type="text" v-model="search" placeholder="Zoeken">
+                </div>
+            </div>
+            <button class="button is-pulled-right"><i class="fa-solid fa-user-plus"></i>&nbsp;Nieuwe aanmaken
+            </button>
         </div>
     </div>
 
@@ -12,28 +19,50 @@
         <div class="column is-12">
             <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
                 <tr>
-                    <th>
-                        Naam
-                    </th>
-                    <th>
-                        Characters
-                    </th>
+                    <th>Naam</th>
+                    <th>Characters</th>
                 </tr>
-
-                {% for player in players %}
-                    <tr>
-                        <td class="is-clickable"
-                            onclick="document.location.href = '/admin/players/{{ player.id }}.html'">
-                            <a href="/admin/players/{{ player.id }}.html">{{ player.name }}</a>
-                        </td>
-                        <td>
-                            {% for character in player.characters %}
-                                <span class="tag is-link is-light">{{ character.name }}</span>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                <tr v-for="player in filteredPlayers" :key="player.id">
+                    <td class="is-clickable" @click="navigateToPlayer(player.id)"><a
+                                href="#">{{ '{{ player.name }}' }}</a></td>
+                    <td>
+                            <span v-for="character in player.characters" :key="character.id"
+                                  class="tag is-link is-light ml-1">{{ '{{ character.name }}' }}</span>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: '',
+                    players: {{ players.serialize|json_encode|raw }}
+                };
+            },
+            computed: {
+                filteredPlayers() {
+                    return this.players.filter((player) => {
+                        for (character of player.characters) {
+                            if (
+                                character.name.toLowerCase().includes(this.search.toLowerCase()) === true
+                            ) {
+                                return true;
+                            }
+                        }
+
+                        return player.name.toLowerCase().includes(this.search.toLowerCase());
+                    })
+                }
+            },
+            methods: {
+                navigateToPlayer(playerId) {
+                    document.location.href = `/admin/players/${playerId}.html`;
+                }
+            }
+        }).mount('.content');
+    </script>
+
 {% endblock %}

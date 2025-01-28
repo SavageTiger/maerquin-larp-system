@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Model\PlayerCollection;
 
 class PlayersController extends Action
 {
@@ -25,7 +26,9 @@ class PlayersController extends Action
         return $view->render(
             $this->response,
             'players.html.twig',
-            ['players' => $this->playerRepository->findBy([], ['name' => 'ASC'])]
+            ['players' => new PlayerCollection(
+                $this->playerRepository->findBy([], ['name' => 'ASC'])
+            )]
         );
     }
 }

@@ -9,6 +9,11 @@ class Character
     protected UuidInterface $id;
     protected string $name;
 
+    public function serialize(): array
+    {
+        return ['id' => $this->getId(), 'name' => $this->getName()];
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -18,6 +23,4 @@ class Character
     {
         return $this->name;
     }
-
 }
-

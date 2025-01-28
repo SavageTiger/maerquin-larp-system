@@ -31,9 +31,8 @@ body::before {
     opacity: 0.4;
 }
 
-.hero {
-    padding-left: 30px;
-    padding-top: 90px;
+.container {
+    padding-top: 70px;
 }
 
 .navbar-version {
@@ -69,7 +68,9 @@ body::before {
 }
 
 .is-overview-table {
-    margin-left: 20px;
+    width: 100%;
+    margin-top: -10px;
+    margin-left: 10px;
+    margin-right: 20px;
     margin-bottom: 20px;
-    margin-right: 5%;
 }

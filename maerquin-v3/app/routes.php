@@ -21,5 +21,6 @@ return function (App $app) {
     $app->post('/login.html', LoginController::class);
 
     $app->get('/admin/players.html', PlayersController::class);
-    $app->post('/admin/players.html', PlayersController::class);
+    $app->get('/admin/players/{userId}.html', PlayersController::class);
+    $app->post('/admin/players/{userId}.html', PlayersController::class);
 };

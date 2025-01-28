@@ -2,28 +2,38 @@
 
 {% block container %}
 
-    <div class="hero">
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
-            <tr>
-                <th>
-                    Naam
-                </th>
-                <th>
-                    Characters
-                </th>
-            </tr>
-
-            {% for player in players %}
-                <tr>
-                    <td>{{ player.name }}</td>
-                    <td>
-                        {% for character in player.characters %}
-                            <span class="tag is-link is-light">{{ character.name }}</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+    <div class="columns is-gapless">
+        <div class="column is-12 is-gapless">
+            <button class="button is-pulled-right"><i class="fa-solid fa-user-plus"></i>&nbsp;Nieuwe aanmaken</button>
+        </div>
     </div>
-    
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
+                <tr>
+                    <th>
+                        Naam
+                    </th>
+                    <th>
+                        Characters
+                    </th>
+                </tr>
+
+                {% for player in players %}
+                    <tr>
+                        <td class="is-clickable"
+                            onclick="document.location.href = '/admin/players/{{ player.id }}.html'">
+                            <a href="/admin/players/{{ player.id }}.html">{{ player.name }}</a>
+                        </td>
+                        <td>
+                            {% for character in player.characters %}
+                                <span class="tag is-link is-light">{{ character.name }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

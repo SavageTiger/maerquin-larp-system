@@ -31,6 +31,9 @@
                         </div>
                     </div>
 
+                    <button class="button is-pulled-right" @click="manageCharacters">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;Aanpassen
+                    </button>
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
                             <label class="label">Characters</label>
@@ -39,11 +42,43 @@
                             TODO
                         </div>
                     </div>
-
-
                 </div>
             </article>
         </div>
+
+        <div class="modal" id="manageCharacters">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Modal title</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <!-- Content ... -->
+                </section>
+                <footer class="modal-card-foot">
+                    <div class="buttons">
+                        <button class="button is-success">Save changes</button>
+                        <button class="button">Cancel</button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+        <script type="module">
+
+            Vue.createApp({
+                data() {
+                    return {};
+                },
+                methods: {
+                    manageCharacters() {
+                        openModal(document.getElementById('manageCharacters'));
+                    }
+                }
+            }).mount('.content');
+        </script>
+
     </div>
 
 {% endblock %}

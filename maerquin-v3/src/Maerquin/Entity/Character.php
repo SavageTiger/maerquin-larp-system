@@ -9,8 +9,9 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Character as CharacterModel;
+use SvenHK\Maerquin\Repository\CharacterRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CharacterRepository::class)]
 #[ORM\Table(name: '`character`')]
 class Character extends CharacterModel
 {

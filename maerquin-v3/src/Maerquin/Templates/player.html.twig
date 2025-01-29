@@ -1,0 +1,25 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <button class="button is-pulled-right"><i class="fa-solid fa-save"></i>&nbsp;Opslaan
+            </button>
+        </div>
+    </div>
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <article class="message is-dark">
+                <div class="message-header ">
+                    {{ player.name }}
+                </div>
+                <div class="message-body">
+                    form...
+                </div>
+            </article>
+        </div>
+    </div>
+
+{% endblock %}

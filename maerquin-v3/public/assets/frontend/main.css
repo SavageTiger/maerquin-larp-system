@@ -74,3 +74,18 @@ body::before {
     margin-right: 20px;
     margin-bottom: 20px;
 }
+
+div.checkbox {
+    display: block;
+}
+
+.container .modal-card-foot, .container .modal-card-head {
+    padding: 0.4rem;
+    padding: 10px;
+}
+
+.container .modal-card-title {
+    margin-top: 0px;
+    margin-bottom: 0px !important;
+    margin-left: 10px;
+}

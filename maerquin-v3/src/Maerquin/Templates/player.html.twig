@@ -50,16 +50,22 @@
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Modal title</p>
-                    <button class="delete" aria-label="close"></button>
+                    <p class="modal-card-title">Characters</p>
+                    <div class="control">
+                        <input class="input" type="text" v-model="characterFilter" placeholder="Filter">
+                    </div>
                 </header>
                 <section class="modal-card-body">
-                    <!-- Content ... -->
+                    <div class="checkbox" v-for="character in filteredCharacters">
+                        <label class="checkbox">
+                            <input type="checkbox"/>
+                            {{ '{{ character.name }}' }}
+                        </label>
+                    </div>
                 </section>
                 <footer class="modal-card-foot">
                     <div class="buttons">
-                        <button class="button is-success">Save changes</button>
-                        <button class="button">Cancel</button>
+                        <button class="button">Sluiten</button>
                     </div>
                 </footer>
             </div>
@@ -69,11 +75,27 @@
 
             Vue.createApp({
                 data() {
-                    return {};
+                    return {
+                        characters: [],
+                        characterFilter: ''
+                    };
+                },
+                computed: {
+                    filteredCharacters() {
+                        return this.characters.filter((character) => {
+                            return character.name.toLowerCase().includes(
+                                this.characterFilter.toLowerCase()
+                            ) !== false
+                        });
+                    }
                 },
                 methods: {
                     manageCharacters() {
-                        openModal(document.getElementById('manageCharacters'));
+                        axios.get('/admin/characters/api').then((response) => {
+                            this.characters = response.data.data ?? [];
+
+                            openModal(document.getElementById('manageCharacters'));
+                        });
                     }
                 }
             }).mount('.content');

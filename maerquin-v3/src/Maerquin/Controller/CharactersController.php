@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
-use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 
@@ -21,7 +21,7 @@ class CharactersController extends Action
 
     public function __construct(EntityManager $entityManager)
     {
-        $this->characterRepository = $entityManager->getRepository(Player::class);
+        $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
     public function action(): ResponseInterface

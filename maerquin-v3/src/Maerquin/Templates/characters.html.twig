@@ -17,7 +17,40 @@
 
     <div class="columns is-gapless">
         <div class="column is-12">
+
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
+                <tr>
+                    <th>Naam</th>
+                    <th>Speler</th>
+                </tr>
+                <tr v-for="character in characters" :key="character.id">
+                    <td class="is-clickable" @click="navigateToCharacter(character.id)">
+                        <a href="#">{{ '{{ character.name }}' }}</a>
+                    </td>
+                    <td>
+                        ???
+                    </td>
+                </tr>
+            </table>
+
         </div>
     </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: '',
+                    characters: {{ characters.serialize|json_encode|raw }}
+                };
+            },
+            computed: {},
+            methods: {
+                navigateToCharacter(characterId) {
+                    document.location.href = `/admin/characters/${characterId}.html`;
+                }
+            }
+        }).mount('.content');
+    </script>
 
 {% endblock %}

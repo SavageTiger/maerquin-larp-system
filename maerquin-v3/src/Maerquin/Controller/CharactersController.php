@@ -9,42 +9,43 @@ use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Player;
-use SvenHK\Maerquin\Model\PlayerCollection;
-use SvenHK\Maerquin\Repository\PlayerRepository;
+use SvenHK\Maerquin\Model\CharacterCollection;
+use SvenHK\Maerquin\Repository\CharacterRepository;
 
-class PlayersController extends Action
+class CharactersController extends Action
 {
     /**
-     * @var PlayerRepository
+     * @var CharacterRepository
      */
-    private EntityRepository $playerRepository;
+    private EntityRepository $characterRepository;
 
     public function __construct(EntityManager $entityManager)
     {
-        $this->playerRepository = $entityManager->getRepository(Player::class);
+        $this->characterRepository = $entityManager->getRepository(Player::class);
     }
 
     public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
-        $userId = $this->request->getAttribute('userId');
+        $characterId = $this->request->getAttribute('characterId');
 
-        if (is_string($userId) && Uuid::isValid($userId)) {
+        if (is_string($characterId) && Uuid::isValid($characterId)) {
             return $view->render(
                 $this->response,
-                'player.html.twig',
+                'character.html.twig',
                 [
-                    'player' => $this->playerRepository->getById($userId)
+                    'player' => $this->characterRepository->getById($characterId)
                 ]
             );
+
         }
 
         return $view->render(
             $this->response,
-            'players.html.twig',
+            'characters.html.twig',
             [
-                'players' => new PlayerCollection($this->playerRepository->findAllSorted())
+                'characters' => new CharacterCollection($this->characterRepository->findAllSorted())
             ]
         );
     }

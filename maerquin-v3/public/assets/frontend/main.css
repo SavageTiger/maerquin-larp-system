@@ -2,25 +2,18 @@ body {
     height: 100%;
 }
 
-html::before {
+body::after {
     content: "";
 
+    position: fixed;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-attachment: fixed;
     background-color: rgba(247, 247, 247);
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-
-    z-index: -2;
-}
-
-body::before {
-    content: "";
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-
     background-image: url('maerquin-logo.jpeg');
     background-position: right 60%;
     background-repeat: no-repeat;

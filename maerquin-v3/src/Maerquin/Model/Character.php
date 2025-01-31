@@ -11,7 +11,11 @@ class Character
 
     public function serialize(): array
     {
-        return ['id' => $this->getId(), 'name' => $this->getName()];
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'playerId' => $this->playerId()
+        ];
     }
 
     public function getId(): string
@@ -22,5 +26,10 @@ class Character
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function playerId(): string
+    {
+        return $this->player->getId();
     }
 }

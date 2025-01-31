@@ -40,8 +40,8 @@ class Character extends CharacterModel
     protected ?string $birthplace;
 
     #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: "characters")]
-    #[ORM\JoinColumn(nullable: false)]
-    protected Player $player;
+    #[ORM\JoinColumn(nullable: true)]
+    protected ?Player $player;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     protected ?string $notes;

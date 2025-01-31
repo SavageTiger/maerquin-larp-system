@@ -22,6 +22,7 @@ return function (App $app) {
     $app->post('/login.html', LoginController::class);
 
     $app->get('/admin/characters/api', CharacterApiController::class);
+    $app->get('/admin/characters/api/for-player/{playerId}', CharacterApiController::class);
 
     $app->get('/admin/players.html', PlayersController::class);
     $app->get('/admin/players/{userId}.html', PlayersController::class);

@@ -14,4 +14,13 @@ class CharacterRepository extends EntityRepository
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
+
+    /**
+     * @return Character[]
+     */
+    public function forPlayer(string $playerId): array
+    {
+        return $this->findBy(['player' => $playerId], ['name' => 'ASC']);
+    }
 }
+

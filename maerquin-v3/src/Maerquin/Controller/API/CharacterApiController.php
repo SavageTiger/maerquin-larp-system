@@ -23,8 +23,16 @@ class CharacterApiController extends Action
 
     public function action(): ResponseInterface
     {
+        $forPlayerId = $this->request->getAttribute('playerId');
+
+        if (is_string($forPlayerId) === true) {
+            $characters = $this->characterRepository->forPlayer($forPlayerId);
+        } else {
+            $characters = $this->characterRepository->findAllSorted();
+        }
+
         return $this->respondWithData(array_map(function (Character $character) {
             return $character->serialize();
-        }, $this->characterRepository->findAllSorted()));
+        }, $characters));
     }
 }

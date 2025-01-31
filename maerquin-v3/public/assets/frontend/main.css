@@ -33,6 +33,8 @@ body::before {
 
 .container {
     padding-top: 70px;
+    padding-left: 80px;
+    padding-right: 80px;
 }
 
 .navbar-version {
@@ -89,3 +91,9 @@ div.checkbox {
     margin-bottom: 0px !important;
     margin-left: 10px;
 }
+
+div.already-coupled {
+    font-size: 9pt;
+    color: lightgray;
+}
+

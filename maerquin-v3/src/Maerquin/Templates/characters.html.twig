@@ -23,12 +23,12 @@
                     <th>Naam</th>
                     <th>Speler</th>
                 </tr>
-                <tr v-for="character in characters" :key="character.id">
+                <tr v-for="character in filteredCharacters" :key="character.id">
                     <td class="is-clickable" @click="navigateToCharacter(character.id)">
                         <a href="#">{{ '{{ character.name }}' }}</a>
                     </td>
                     <td>
-                        ???
+                        {{ '{{ character.playerName }}' }}
                     </td>
                 </tr>
             </table>
@@ -41,13 +41,36 @@
             data() {
                 return {
                     search: '',
-                    characters: {{ characters.serialize|json_encode|raw }}
+                    characters: {{ characters.serialize|json_encode|raw }},
+                    players: {{ players.serialize|json_encode|raw }}
                 };
             },
-            computed: {},
+            computed: {
+                filteredCharacters() {
+                    return this.characters.filter((character) => {
+                        return (
+                            character.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                            character.playerName.toLowerCase().includes(this.search.toLowerCase())
+                        );
+                    });
+                }
+            },
             methods: {
                 navigateToCharacter(characterId) {
                     document.location.href = `/admin/characters/${characterId}.html`;
+                }
+            },
+            mounted() {
+                for (let index = 0; index < this.characters.length; index++) {
+                    for (const player of this.players) {
+                        if (player.id === this.characters[index].playerId) {
+                            this.characters[index].playerName = player.name
+
+                            break;
+                        }
+
+                        this.characters[index].playerName = '(geen)';
+                    }
                 }
             }
         }).mount('.content');

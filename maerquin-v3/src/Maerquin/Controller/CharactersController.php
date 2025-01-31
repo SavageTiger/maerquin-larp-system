@@ -9,8 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
+use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Model\CharacterCollection;
+use SvenHK\Maerquin\Model\PlayerCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
+use SvenHK\Maerquin\Repository\PlayerRepository;
 
 class CharactersController extends Action
 {
@@ -19,8 +22,14 @@ class CharactersController extends Action
      */
     private EntityRepository $characterRepository;
 
+    /**
+     * @var PlayerRepository
+     */
+    private EntityRepository $playerRepository;
+
     public function __construct(EntityManager $entityManager)
     {
+        $this->playerRepository = $entityManager->getRepository(Player::class);
         $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
@@ -45,6 +54,7 @@ class CharactersController extends Action
             $this->response,
             'characters.html.twig',
             [
+                'players' => new PlayerCollection($this->playerRepository->findAll()),
                 'characters' => new CharacterCollection($this->characterRepository->findAllSorted())
             ]
         );

@@ -12,6 +12,7 @@ use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Model\CharacterCollection;
+use SvenHK\Maerquin\Model\DietiesCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
@@ -53,7 +54,7 @@ class CharactersController extends Action
                 'character.html.twig',
                 [
                     'character' => $this->characterRepository->getById($characterId),
-                    'deities' => $this->deityRepository->findAll()
+                    'deities' => $this->deityRepository->findAll(),
                 ]
             );
 
@@ -64,7 +65,8 @@ class CharactersController extends Action
             'characters.html.twig',
             [
                 'players' => new PlayerCollection($this->playerRepository->findAll()),
-                'characters' => new CharacterCollection($this->characterRepository->findAllSorted())
+                'characters' => new CharacterCollection($this->characterRepository->findAllSorted()),
+                'dieties' => new DietiesCollection($this->deityRepository->findAll())
             ]
         );
     }

@@ -21,11 +21,22 @@
             <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
                 <tr>
                     <th>Naam</th>
+                    <th>Geloof</th>
                     <th>Speler</th>
                 </tr>
                 <tr v-for="character in filteredCharacters" :key="character.id">
                     <td class="is-clickable" @click="navigateToCharacter(character.id)">
                         <a href="#">{{ '{{ character.name }}' }}</a>
+                    </td>
+                    <td>
+                        <div>
+                            {{ '{{ getDeity(character.primaryDeityId) }}' }}
+
+                            <span v-if="getDeity(character.secondaryDeityId).length > 0">
+                                &amp;
+                                {{ '{{ getDeity(character.secondaryDeityId) }}' }}
+                            </span>
+                        </div>
                     </td>
                     <td>
                         {{ '{{ character.playerName }}' }}
@@ -42,8 +53,10 @@
                 return {
                     search: '',
                     characters: {{ characters.serialize|json_encode|raw }},
-                    players: {{ players.serialize|json_encode|raw }}
-                };
+                    players: {{ players.serialize|json_encode|raw }},
+                    dieties: {{ dieties.serialize|json_encode|raw }}
+                }
+
             },
             computed: {
                 filteredCharacters() {
@@ -58,6 +71,14 @@
             methods: {
                 navigateToCharacter(characterId) {
                     document.location.href = `/admin/characters/${characterId}.html`;
+                },
+
+                getDeity(deityId) {
+                    const deity = this.dieties.find((diety) => {
+                        return diety.id === deityId;
+                    });
+
+                    return deity ? deity.name : '';
                 }
             },
             mounted() {

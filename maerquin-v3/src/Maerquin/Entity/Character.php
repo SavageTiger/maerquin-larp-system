@@ -55,9 +55,6 @@ class Character extends CharacterModel
     #[ORM\JoinColumn(nullable: true)]
     protected ?Archetype $archetype;
 
-    #[ORM\Column(type: "boolean")]
-    protected bool $inactive;
-
     #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: "characters")]
     #[ORM\JoinColumn(nullable: true)]
     protected ?Race $race;

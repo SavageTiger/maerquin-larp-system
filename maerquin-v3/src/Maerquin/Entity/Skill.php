@@ -4,74 +4,80 @@ namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\Deity as DeityModel;
+use SvenHK\Maerquin\Model\Element as ElementModel;
+use SvenHK\Maerquin\Model\Skill as SkillModel;
+use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
+use SvenHK\Maerquin\Repository\SkillRepository;
 
-#[ORM\Entity]
-class Skill
+#[ORM\Entity(repositoryClass: SkillRepository::class)]
+class Skill extends SkillModel
 {
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private string $id;
+    protected UuidInterface $id;
 
     #[ORM\Column(type: "string", length: 255, nullable: false)]
-    private string $name;
+    protected string $name;
 
     #[ORM\Column(type: "integer", nullable: false)]
-    private int $points;
+    protected int $points;
 
     #[ORM\Column(type: "integer", nullable: false)]
-    private int $numberOfTimes;
+    protected int $numberOfTimes;
 
     #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
-    private string $description = '';
+    protected string $description = '';
 
     #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
-    private string $remarks = '';
+    protected string $remarks = '';
 
     #[ORM\Column(type: "string", length: 64, nullable: false, options: ['default' => ''])]
-    private string $distance = '';
+    protected string $distance = '';
 
     #[ORM\Column(type: "string", length: 64, nullable: false, options: ['default' => ''])]
-    private string $duration = '';
+    protected string $duration = '';
 
     #[ORM\Column(type: "integer", nullable: false)]
-    private int $usageCosts;
+    protected int $usageCosts;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $nonFree;
+    protected bool $nonFree;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $hidden;
+    protected bool $hidden;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $spell;
+    protected bool $spell;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $innatePossible;
+    protected bool $innatePossible;
 
     #[ORM\Column(type: "integer", nullable: false)]
-    private int $level;
+    protected int $level;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $availableAsComponents;
+    protected bool $availableAsComponents;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $componentPage;
+    protected ?string $componentPage;
 
     #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
-    private string $scrollText = '';
+    protected string $scrollText = '';
 
     #[ORM\ManyToOne(targetEntity: Element::class)]
     #[ORM\JoinColumn(name: "element_id", referencedColumnName: "id", nullable: true)]
-    private ?Element $element;
+    protected ?ElementModel $element;
 
     #[ORM\ManyToOne(targetEntity: Deity::class)]
     #[ORM\JoinColumn(name: "deity_id", referencedColumnName: "id", nullable: true)]
-    private ?Deity $deity;
+    protected ?DeityModel $deity;
 
     #[ORM\ManyToOne(targetEntity: SkillType::class)]
     #[ORM\JoinColumn(name: "skilltype_id", referencedColumnName: "id", nullable: true)]
-    private ?SkillType $skillType;
+    protected ?SkillTypeModel $skillType;
 
 }

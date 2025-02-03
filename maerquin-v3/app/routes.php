@@ -10,6 +10,7 @@ use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\PlayersController;
+use SvenHK\Maerquin\Controller\SkillsController;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -30,4 +31,6 @@ return function (App $app) {
     $app->get('/admin/players.html', PlayersController::class);
     $app->get('/admin/players/{userId}.html', PlayersController::class);
     $app->post('/admin/players/{userId}.html', PlayersController::class);
+
+    $app->get('/admin/skills.html', SkillsController::class);
 };

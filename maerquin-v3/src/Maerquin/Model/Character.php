@@ -2,6 +2,7 @@
 
 namespace SvenHK\Maerquin\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Deity;
 
@@ -11,6 +12,11 @@ class Character
     protected string $name;
     protected ?Deity $primaryDeity;
     protected ?Deity $secondaryDeity;
+
+    /**
+     * @var SkillLink[]
+     */
+    protected Collection $skills;
 
     public function serialize(): array
     {
@@ -52,6 +58,14 @@ class Character
     public function playerId(): string
     {
         return $this->player->getId();
+    }
+
+    /**
+     * @return SkillLink[]
+     */
+    public function getSkills(): array
+    {
+        return $this->skills->toArray();
     }
 
 }

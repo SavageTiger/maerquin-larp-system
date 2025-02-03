@@ -16,13 +16,10 @@ class CharacterCollection
 
     public function serialize(): array
     {
-        $serialized = [];
-
-        foreach ($this->characters as $character) {
-            $serialized[] = $character->serialize();
-        }
-
-        return $serialized;
+        return array_map(
+            fn(Character $character) => $character->serialize(),
+            $this->characters
+        );
     }
 }
 

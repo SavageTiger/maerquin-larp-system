@@ -4,26 +4,25 @@ namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
 
 #[ORM\Entity]
 #[ORM\Table(name: "skilltype")]
-class SkillType
+class SkillType extends SkillTypeModel
 {
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private string $id;
+    protected UuidInterface $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $name;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
-    private string $plural = '';
+    protected string $name;
 
     #[ORM\Column(type: 'integer')]
-    private int $ordinal;
+    protected int $ordinal;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $magical;
+    protected bool $magical;
 }

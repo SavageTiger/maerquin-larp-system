@@ -102,7 +102,28 @@
                         </div>
                     </div>
 
+                    <div class="column is-12">
+
+                        <button class="button is-pulled-right" @click="manageCharacters">
+                            <i class="fa-solid fa-person-military-to-person"></i>&nbsp;Aanpassen
+                        </button>
+                        <div class="field is-horizontal">
+
+                            <div class="field-label is-normal">
+                                <label class="label">Skills</label>
+                            </div>
+
+                            <div class="field-body">
+                                <div class="field card ml-5 mr-5 m-1 p-3">
+                                    {% for skillLink in character.skills %}
+                                        <span class="tag is-link is-light ml-3 mb-3">{{ skillLink.skill.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </article>
         </div>
 

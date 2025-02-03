@@ -9,10 +9,12 @@ use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
+use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
+use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 
 class CharactersController extends Action
@@ -23,14 +25,20 @@ class CharactersController extends Action
     private EntityRepository $characterRepository;
 
     /**
+     * @var DeityRepository
+     */
+    private EntityRepository $deityRepository;
+
+    /**
      * @var PlayerRepository
      */
     private EntityRepository $playerRepository;
 
     public function __construct(EntityManager $entityManager)
     {
-        $this->playerRepository = $entityManager->getRepository(Player::class);
         $this->characterRepository = $entityManager->getRepository(Character::class);
+        $this->deityRepository = $entityManager->getRepository(Deity::class);
+        $this->playerRepository = $entityManager->getRepository(Player::class);
     }
 
     public function action(): ResponseInterface
@@ -44,7 +52,8 @@ class CharactersController extends Action
                 $this->response,
                 'character.html.twig',
                 [
-                    'character' => $this->characterRepository->getById($characterId)
+                    'character' => $this->characterRepository->getById($characterId),
+                    'deities' => $this->deityRepository->findAll()
                 ]
             );
 

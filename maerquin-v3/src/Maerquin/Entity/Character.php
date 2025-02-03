@@ -27,8 +27,13 @@ class Character extends CharacterModel
     #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
     protected string $title;
 
-    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
-    protected string $deity = '';
+    #[ORM\ManyToOne(targetEntity: Deity::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    protected ?Deity $primaryDeity = null;
+
+    #[ORM\ManyToOne(targetEntity: Deity::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    protected ?Deity $secondaryDeity = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
     protected string $occupation = '';

@@ -17,8 +17,8 @@
                     {{ character.name }}
                 </div>
                 <div class="message-body">
-                    <div class="columns is-gapless">
 
+                    <div class="columns is-gapless">
                         <div class="column is-6">
                             <div class="field is-horizontal">
                                 <div class="field-label is-normal">
@@ -50,10 +50,63 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+                    <div class="columns is-gapless">
+                        <div class="column is-6">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Primair geloof</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+
+                                        <div class="select is-fullwidth">
+                                            <select>
+                                                <option>(geen)</option>
+                                                {% for deity in deities %}
+                                                    <option {% if character.primaryDeityId == deity.id %}selected{% endif %}>
+                                                        {{ deity.name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column is-6">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Secundair geloof</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+
+                                        <div class="select is-fullwidth">
+                                            <select>
+                                                <option>(geen)</option>
+                                                {% for deity in deities %}
+                                                    <option {% if character.SecondaryDeityId == deity.id %}selected{% endif %}>
+                                                        {{ deity.name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </article>
         </div>
+
+
     </div>
 
     <script>

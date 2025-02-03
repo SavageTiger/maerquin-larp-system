@@ -3,11 +3,14 @@
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Deity;
 
 class Character
 {
     protected UuidInterface $id;
     protected string $name;
+    protected ?Deity $primaryDeity;
+    protected ?Deity $secondaryDeity;
 
     public function serialize(): array
     {
@@ -15,6 +18,8 @@ class Character
             'id' => $this->getId(),
             'name' => $this->getName(),
             'title' => $this->getTitle(),
+            'primaryDeityId' => $this->getPrimaryDeityId(),
+            'secondaryDeityId' => $this->getSecondaryDeityId(),
             'playerId' => $this->playerId()
         ];
     }
@@ -34,8 +39,19 @@ class Character
         return $this->title;
     }
 
+    public function getPrimaryDeityId(): string
+    {
+        return $this->primaryDeity?->getId() ?? '';
+    }
+
+    public function getSecondaryDeityId()
+    {
+        return $this->secondaryDeity?->getId() ?? '';
+    }
+
     public function playerId(): string
     {
         return $this->player->getId();
     }
+
 }

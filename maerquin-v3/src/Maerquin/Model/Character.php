@@ -14,6 +14,7 @@ class Character
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
+            'title' => $this->getTitle(),
             'playerId' => $this->playerId()
         ];
     }
@@ -26,6 +27,11 @@ class Character
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function playerId(): string

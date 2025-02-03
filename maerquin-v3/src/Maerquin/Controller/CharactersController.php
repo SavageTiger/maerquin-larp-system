@@ -44,7 +44,7 @@ class CharactersController extends Action
                 $this->response,
                 'character.html.twig',
                 [
-                    'player' => $this->characterRepository->getById($characterId)
+                    'character' => $this->characterRepository->getById($characterId)
                 ]
             );
 

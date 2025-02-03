@@ -12,7 +12,7 @@ use SvenHK\Maerquin\Model\Character as CharacterModel;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
-#[ORM\Table(name: '`character`')]
+#[ORM\Table(name: '`Character`')]
 class Character extends CharacterModel
 {
     #[ORM\Id]
@@ -24,27 +24,27 @@ class Character extends CharacterModel
     #[ORM\Column(type: "string", length: 255)]
     protected string $name;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $title;
+    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    protected string $title;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $deity;
+    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    protected string $deity = '';
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $occupation;
+    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    protected string $occupation = '';
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $guild;
+    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    protected string $guild;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $birthplace;
+    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    protected string $birthplace;
 
     #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: "characters")]
     #[ORM\JoinColumn(nullable: true)]
     protected ?Player $player;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $notes;
+    #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
+    protected string $notes;
 
     #[ORM\ManyToOne(targetEntity: Archetype::class, inversedBy: "characters")]
     #[ORM\JoinColumn(nullable: true)]

@@ -4,6 +4,7 @@ namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\Character;
+use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 
 class CharacterRepository extends EntityRepository
 {
@@ -21,6 +22,14 @@ class CharacterRepository extends EntityRepository
     public function forPlayer(string $playerId): array
     {
         return $this->findBy(['player' => $playerId], ['name' => 'ASC']);
+    }
+
+    /**
+     * @throws MaerquinEntityNotFoundException
+     */
+    public function getById(string $characterId): Character
+    {
+        return $this->findOneBy(['id' => $characterId]) ?? throw MaerquinEntityNotFoundException::withType(Character::class);
     }
 }
 

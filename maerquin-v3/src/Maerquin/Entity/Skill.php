@@ -41,32 +41,14 @@ class Skill extends SkillModel
     #[ORM\Column(type: "string", length: 64, nullable: false, options: ['default' => ''])]
     protected string $duration = '';
 
-    #[ORM\Column(type: "integer", nullable: false)]
-    protected int $usageCosts;
-
     #[ORM\Column(type: "boolean", nullable: false)]
     protected bool $nonFree;
 
     #[ORM\Column(type: "boolean", nullable: false)]
     protected bool $hidden;
 
-    #[ORM\Column(type: "boolean", nullable: false)]
-    protected bool $spell;
-
-    #[ORM\Column(type: "boolean", nullable: false)]
-    protected bool $innatePossible;
-
     #[ORM\Column(type: "integer", nullable: false)]
     protected int $level;
-
-    #[ORM\Column(type: "boolean", nullable: false)]
-    protected bool $availableAsComponents;
-
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    protected ?string $componentPage;
-
-    #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
-    protected string $scrollText = '';
 
     #[ORM\ManyToOne(targetEntity: Element::class)]
     #[ORM\JoinColumn(name: "element_id", referencedColumnName: "id", nullable: true)]
@@ -79,5 +61,4 @@ class Skill extends SkillModel
     #[ORM\ManyToOne(targetEntity: SkillType::class)]
     #[ORM\JoinColumn(name: "skilltype_id", referencedColumnName: "id", nullable: true)]
     protected ?SkillTypeModel $skillType;
-
 }

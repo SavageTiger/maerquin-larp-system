@@ -33,4 +33,5 @@ return function (App $app) {
     $app->post('/admin/players/{userId}.html', PlayersController::class);
 
     $app->get('/admin/skills.html', SkillsController::class);
+    $app->get('/admin/skills/{skillId}.html', SkillsController::class);
 };

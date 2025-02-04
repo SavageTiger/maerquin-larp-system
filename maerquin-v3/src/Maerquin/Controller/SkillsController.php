@@ -6,6 +6,7 @@ use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
+use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\SkillCollection;
@@ -27,11 +28,23 @@ class SkillsController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
+        $skillId = $this->request->getAttribute('skillId');
+
+        if (is_string($skillId) && Uuid::isValid($skillId)) {
+            return $view->render(
+                $this->response,
+                'skill.html.twig',
+                [
+                    'skill' => $this->skillRepository->getById($skillId)
+                ]
+            );
+        }
+
         return $view->render(
             $this->response,
             'skills.html.twig',
             [
-                'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize()
+                'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true)
             ]
         );
     }

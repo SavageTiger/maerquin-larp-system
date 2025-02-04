@@ -17,9 +17,10 @@
 
     <span v-for="skillGroup in skillGroups">
         <span v-if="filteredSkills(skillGroup.name).length">
-            <h1 class="title is-1">{{ '{{ skillGroup.name }}' }}</h1>
+            <h1 class="title is-2">{{ '{{ skillGroup.name }}' }}</h1>
             <div class="grid">
-                <div class="cell is-clickable py-3 px-3 skill-cell has-radius-normal"
+                <div @click="navigateToSkill(skill.id)"
+                     class="cell is-clickable py-3 px-3 skill-cell has-radius-normal"
                      v-for="skill in filteredSkills(skillGroup.name)">
                     <a href="#">
                         {{ '{{ skill.name }}' }}

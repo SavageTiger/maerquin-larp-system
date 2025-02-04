@@ -90,3 +90,20 @@ div.already-coupled {
     color: lightgray;
 }
 
+.skill-cell:hover {
+    background-color: #716a6a !important;
+}
+
+.skill-cell:hover a {
+    color: white !important;
+}
+
+.skill-cell {
+    border: 1px solid #e0e0e0 !important;
+    background-color: white;
+}
+
+.skill-cell a {
+    font-weight: bold;
+    color: black;
+}

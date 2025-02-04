@@ -15,26 +15,28 @@
         </div>
     </div>
 
-    <div class="columns is-gapless" v-for="skillGroup in skillGroups">
-        <div class="column is-12">
+    <span v-for="skillGroup in skillGroups">
+        <span v-if="filteredSkills(skillGroup.name).length">
             <h1 class="title is-1">{{ '{{ skillGroup.name }}' }}</h1>
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
-                <tr>
-                    <th>Naam</th>
-                    <th>Geloof / Element</th>
-                </tr>
-                <tr v-for="skill in filteredSkills(skillGroup.name)" :key="skill.id">
-                    <td class="is-clickable" @click="navigateToSkill(skill.id)">
-                        <a href="#">{{ '{{ skill.name }}' }}</a>
-                    </td>
-                    <td>
-                        {{ '{{ skill.deityName }}' }}
-                        {{ '{{ skill.elementName }}' }}
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+            <div class="grid">
+                <div class="cell is-clickable py-3 px-3 skill-cell has-radius-normal"
+                     v-for="skill in filteredSkills(skillGroup.name)">
+                    <a href="#">
+                        {{ '{{ skill.name }}' }}
+
+                        <span v-if="skill.deityName">
+                            [{{ '{{ skill.deityName }}' }}]
+                        </span>
+
+                        <span v-if="skill.elementName">
+                            [{{ '{{ skill.elementName }}' }}]
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </span>
+    </span>
 
     <script>
         Vue.createApp({
@@ -50,10 +52,22 @@
             methods: {
                 filteredSkills(skillGroup) {
                     return this.skills.filter(
-                        (skill) => skill.typeName === skillGroup
+                        (skill) =>
+                            (
+                                skill.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                                skill.deityName.toLowerCase().includes(this.search.toLowerCase()) ||
+                                skill.elementName.toLowerCase().includes(this.search.toLowerCase())
+                            ) &&
+                            skill.typeName === skillGroup
                     );
+                },
+
+
+                navigateToSkill(skillId) {
+                    document.location.href = `/admin/skills/${skillId}.html`;
                 }
-            }, mounted() {
+            },
+            mounted() {
                 const skillGroups = [];
 
                 for (const skill of this.skills) {

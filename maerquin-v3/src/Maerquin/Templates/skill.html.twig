@@ -4,13 +4,14 @@
 
     <div class="columns is-gapless">
         <div class="column is-12">
-            <button class="button is-pulled-right"><i class="fa-solid fa-save"></i>&nbsp;Opslaan
+            <button onclick="return false" class="button is-pulled-right" @click="saveSkill">
+                <i class="fa-solid fa-save"></i>&nbsp;Opslaan
             </button>
             &nbsp;
         </div>
     </div>
 
-    <article class="message is-dark">
+    <article class="message is-dark" id="skillForm">
         <div class="message-header ">
             {{ skill.name }}
         </div>
@@ -26,7 +27,7 @@
                                     <div class="control">
                                         <div class="control">
                                             <div class="select is-fullwidth">
-                                                <select>
+                                                <select name="skillType">
                                                     {% for skillType in skillTypes.serialize %}
                                                         <option
                                                                 {% if skillType.id == skill.skillTypeId %}
@@ -50,11 +51,11 @@
                                 <div class="field">
                                     <div class="control">
                                         <div class="select is-fullwidth">
-                                            <select>
+                                            <select name="deityElement">
                                                 <option>(geen)</option>
                                                 <optgroup label="Geloof">
                                                     {% for deity in deities %}
-                                                        <option
+                                                        <option value="{{ deity.id }}"
                                                                 {% if skill.deityId == deity.id %}
                                                                     selected="selected"
                                                                 {% endif %}
@@ -63,7 +64,7 @@
                                                 </optgroup>
                                                 <optgroup label="Element">
                                                     {% for element in elements %}
-                                                        <option
+                                                        <option value="{{ element.id }}"
                                                                 {% if skill.elementId == element.id %}
                                                                     selected="selected"
                                                                 {% endif %}
@@ -86,7 +87,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
+                                        <input class="input" name="name" type="text"
                                                value="{{ skill.name }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -100,10 +101,10 @@
                                 <div class="field">
                                     <div class="control">
                                         <div class="select is-fullwidth">
-                                            <select>
+                                            <select name="requiredSkill">
                                                 <option>(geen)</option>
                                                 {% for requiredSkill in skills %}
-                                                    <option
+                                                    <option value="{{ requiredSkill.id }}"
                                                             {% if requiredSkill.id == skill.parentRequirementSkillId %}selected="selected"{% endif %}
                                                     >{{ requiredSkill.name }}</option>
                                                 {% endfor %}
@@ -125,7 +126,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
+                                        <input class="input" name="numberOfTimes" type="text"
                                                value="{{ skill.numberOfTimes }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -139,7 +140,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
+                                        <input class="input" name="distance" type="text"
                                                value="{{ skill.distance }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -154,7 +155,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
+                                        <input class="input" name="points" type="text"
                                                value="{{ skill.points }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -168,7 +169,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
+                                        <input class="input" name="duration" type="text"
                                                value="{{ skill.duration }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -184,7 +185,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
+                                        <input class="input" name="level" type="text"
                                                value="{{ skill.level }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -194,15 +195,17 @@
                     <div class="cell checkbox-group">
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox" {% if skill.hidden %}checked="checked"{% endif %} />
-                                Verborgen
+                                <input type="checkbox" name="hidden"
+                                       {% if skill.hidden %}checked="checked"{% endif %} />
+                                &nbsp;Verborgen
                             </label>
                         </div>
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox"
+                                <input type="checkbox" name="isFreelyAvailable"
                                        {% if skill.isFreelyAvailable == false %}checked="checked"{% endif %}/>
-                                <b>Niet</b> vrij verkrijgbaar
+
+                                &nbsp;<b>Niet</b> vrij verkrijgbaar
                             </label>
                         </div>
                     </div>
@@ -217,7 +220,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <textarea class="input">{{ skill.description }}</textarea>
+                                        <textarea name="description" class="input">{{ skill.description }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -229,7 +232,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <textarea class="input">{{ skill.remarks }}</textarea>
+                                        <textarea name="remarkss" class="input">{{ skill.remarks }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -242,8 +245,12 @@
 
     <script type="module">
         Vue.createApp({
-            data() {
-                skill: {{ skill.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+            methods: {
+                saveSkill() {
+                    alert(JSON.stringify(serializeForm('containerForm')))
+
+                    return false;
+                }
             }
         }).mount('.content');
     </script>

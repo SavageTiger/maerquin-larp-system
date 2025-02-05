@@ -10,7 +10,7 @@ class Skill
     protected string $name;
     protected ?Deity $deity;
     protected ?Element $element;
-    protected ?SkillType $skillType;
+    protected SkillType $skillType;
     protected int $points;
     protected int $numberOfTimes;
     protected string $description;
@@ -26,9 +26,11 @@ class Skill
         $minimal = [
             'id' => $this->getId(),
             'name' => $this->getName(),
+            'deityId' => $this->getDeityId(),
+            'elementId' => $this->getElementId(),
             'deityName' => $this->getDeityName(),
             'elementName' => $this->getElementName(),
-            'typeName' => $this->getTypeName(),
+            'skillTypeId' => $this->getSkillTypeId(),
         ];
 
         if ($compact === true) {
@@ -60,6 +62,16 @@ class Skill
         return $this->name;
     }
 
+    public function getDeityId(): string
+    {
+        return $this->deity?->getId() ?? '';
+    }
+
+    public function getElementId(): string
+    {
+        return $this->element?->getId() ?? '';
+    }
+
     public function getDeityName(): string
     {
         return $this->deity?->getName() ?? '';
@@ -70,9 +82,9 @@ class Skill
         return $this->element?->getName() ?? '';
     }
 
-    public function getTypeName(): string
+    public function getSkillTypeId(): string
     {
-        return $this->skillType?->getName() ?? '';
+        return $this->skillType->getId();
     }
 
     public function getPoints(): int

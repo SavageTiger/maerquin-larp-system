@@ -54,7 +54,6 @@ class CharactersController extends Action
                 'character.html.twig',
                 [
                     'character' => $this->characterRepository->getById($characterId),
-                    'deities' => $this->deityRepository->findAll(),
                 ]
             );
 

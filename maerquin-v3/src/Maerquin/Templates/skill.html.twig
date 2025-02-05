@@ -24,8 +24,19 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
-                                               value="{{ skill.skillType }}" placeholder=""/>
+                                        <div class="control">
+                                            <div class="select is-fullwidth">
+                                                <select>
+                                                    {% for skillType in skillTypes.serialize %}
+                                                        <option
+                                                                {% if skillType.id == skill.skillTypeId %}
+                                                                    selected="selected"
+                                                                {% endif %}
+                                                        >{{ skillType.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -38,8 +49,29 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="..." type="text"
-                                               value="{{ skill.elementName }}" placeholder=""/>
+                                        <div class="select is-fullwidth">
+                                            <select>
+                                                <option>(geen)</option>
+                                                <optgroup label="Geloof">
+                                                    {% for deity in deities %}
+                                                        <option
+                                                                {% if skill.deityId == deity.id %}
+                                                                    selected="selected"
+                                                                {% endif %}
+                                                        >{{ deity.name }}</option>
+                                                    {% endfor %}
+                                                </optgroup>
+                                                <optgroup label="Element">
+                                                    {% for element in elements %}
+                                                        <option
+                                                                {% if skill.elementId == element.id %}
+                                                                    selected="selected"
+                                                                {% endif %}
+                                                        >{{ element.name }}</option>
+                                                    {% endfor %}
+                                                </optgroup>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +224,7 @@
     <script type="module">
         Vue.createApp({
             data() {
-                skill: {{ skill.serialize(false)|json_encode|raw }}
+                skill: {{ skill.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
             }
         }).mount('.content');
     </script>

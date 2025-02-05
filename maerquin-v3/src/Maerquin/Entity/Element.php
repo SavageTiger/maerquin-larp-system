@@ -7,8 +7,9 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Element as ElementModel;
+use SvenHK\Maerquin\Repository\ElementRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ElementRepository::class)]
 class Element extends ElementModel
 {
     #[ORM\Id]

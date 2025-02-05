@@ -59,6 +59,6 @@ class Skill extends SkillModel
     protected ?DeityModel $deity;
 
     #[ORM\ManyToOne(targetEntity: SkillType::class)]
-    #[ORM\JoinColumn(name: "skilltype_id", referencedColumnName: "id", nullable: true)]
-    protected ?SkillTypeModel $skillType;
+    #[ORM\JoinColumn(name: "skilltype_id", referencedColumnName: "id", nullable: false)]
+    protected SkillTypeModel $skillType;
 }

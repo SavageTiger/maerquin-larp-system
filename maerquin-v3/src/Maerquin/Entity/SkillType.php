@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
+use SvenHK\Maerquin\Repository\SkillTypeRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SkillTypeRepository::class)]
 #[ORM\Table(name: "skilltype")]
 class SkillType extends SkillTypeModel
 {
@@ -22,7 +23,4 @@ class SkillType extends SkillTypeModel
 
     #[ORM\Column(type: 'integer')]
     protected int $ordinal;
-
-    #[ORM\Column(type: 'boolean')]
-    protected bool $magical;
 }

@@ -3,12 +3,12 @@
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use SvenHK\Maerquin\Model\Deity;
+use SvenHK\Maerquin\Model\Element;
 
-class DeityRepository extends EntityRepository
+class ElementRepository extends EntityRepository
 {
     /**
-     * @return Deity[]
+     * @return Element[]
      */
     public function findAllSorted(): array
     {

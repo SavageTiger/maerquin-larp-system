@@ -5,7 +5,7 @@ namespace SvenHK\Maerquin\Model;
 class CharacterCollection
 {
     /**
-     * @var Character[]
+     * @var SkillType[]
      */
     private array $characters;
 
@@ -17,7 +17,7 @@ class CharacterCollection
     public function serialize(): array
     {
         return array_map(
-            fn(Character $character) => $character->serialize(),
+            fn(SkillType $character) => $character->serialize(),
             $this->characters
         );
     }

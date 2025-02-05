@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
-use SvenHK\Maerquin\Model\Character as CharacterModel;
+use SvenHK\Maerquin\Model\SkillType as CharacterModel;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]

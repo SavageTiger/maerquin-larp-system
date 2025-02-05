@@ -8,9 +8,16 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
+use SvenHK\Maerquin\Entity\Deity;
+use SvenHK\Maerquin\Entity\Element;
 use SvenHK\Maerquin\Entity\Skill;
+use SvenHK\Maerquin\Entity\SkillType;
 use SvenHK\Maerquin\Model\SkillCollection;
+use SvenHK\Maerquin\Model\SkillTypeCollection;
+use SvenHK\Maerquin\Repository\DeityRepository;
+use SvenHK\Maerquin\Repository\ElementRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
+use SvenHK\Maerquin\Repository\SkillTypeRepository;
 
 class SkillsController extends Action
 {
@@ -19,9 +26,27 @@ class SkillsController extends Action
      */
     private EntityRepository $skillRepository;
 
+    /**
+     * @var SkillTypeRepository
+     */
+    private EntityRepository $skillTypeRepository;
+
+    /**
+     * @var DeityRepository
+     */
+    private EntityRepository $deityRepository;
+
+    /**
+     * @var ElementRepository
+     */
+    private EntityRepository $elementRepository;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->skillRepository = $entityManager->getRepository(Skill::class);
+        $this->skillTypeRepository = $entityManager->getRepository(SkillType::class);
+        $this->deityRepository = $entityManager->getRepository(Deity::class);
+        $this->elementRepository = $entityManager->getRepository(Element::class);
     }
 
     public function action(): ResponseInterface
@@ -35,7 +60,10 @@ class SkillsController extends Action
                 $this->response,
                 'skill.html.twig',
                 [
-                    'skill' => $this->skillRepository->getById($skillId)
+                    'skill' => $this->skillRepository->getById($skillId),
+                    'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
+                    'deities' => $this->deityRepository->findAllSorted(),
+                    'elements' => $this->elementRepository->findAllSorted()
                 ]
             );
         }
@@ -44,7 +72,8 @@ class SkillsController extends Action
             $this->response,
             'skills.html.twig',
             [
-                'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true)
+                'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true),
+                'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
             ]
         );
     }

@@ -7,8 +7,9 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Deity as DeityModel;
+use SvenHK\Maerquin\Repository\DeityRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: DeityRepository::class)]
 class Deity extends DeityModel
 {
     #[ORM\Id]

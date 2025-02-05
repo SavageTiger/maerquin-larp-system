@@ -16,12 +16,12 @@
     </div>
 
     <span v-for="skillGroup in skillGroups">
-        <span v-if="filteredSkills(skillGroup.name).length">
+        <span v-if="filteredSkills(skillGroup.id).length">
             <h1 class="title is-2">{{ '{{ skillGroup.name }}' }}</h1>
             <div class="grid">
                 <div @click="navigateToSkill(skill.id)"
                      class="cell is-clickable py-3 px-3 skill-cell has-radius-normal"
-                     v-for="skill in filteredSkills(skillGroup.name)">
+                     v-for="skill in filteredSkills(skillGroup.id)">
                     <a href="#">
                         {{ '{{ skill.name }}' }}
 
@@ -44,14 +44,14 @@
             data() {
                 return {
                     search: '',
-                    skills: {{ skills|json_encode|raw }},
-                    skillGroups: []
+                    skills: {{ skills|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    skillGroups: {{ skillTypes.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
 
             },
             computed: {},
             methods: {
-                filteredSkills(skillGroup) {
+                filteredSkills(skillGroupId) {
                     return this.skills.filter(
                         (skill) =>
                             (
@@ -59,26 +59,13 @@
                                 skill.deityName.toLowerCase().includes(this.search.toLowerCase()) ||
                                 skill.elementName.toLowerCase().includes(this.search.toLowerCase())
                             ) &&
-                            skill.typeName === skillGroup
+                            skill.skillTypeId === skillGroupId
                     );
                 },
-
 
                 navigateToSkill(skillId) {
                     document.location.href = `/admin/skills/${skillId}.html`;
                 }
-            },
-            mounted() {
-                const skillGroups = [];
-
-                for (const skill of this.skills) {
-                    if (skillGroups.indexOf(skill.typeName) === -1) {
-                        skillGroups.push(skill.typeName);
-                    }
-                }
-                this.skillGroups = skillGroups.map((skillGroup) => {
-                    return { name: skillGroup }
-                });
             }
         }).mount('.content');
     </script>

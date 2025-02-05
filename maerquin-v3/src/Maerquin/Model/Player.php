@@ -4,7 +4,6 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
-use SvenHK\Maerquin\Entity\Character;
 
 class Player
 {
@@ -13,7 +12,7 @@ class Player
     protected Collection $characters;
 
     /**
-     * @return Character[]
+     * @return SkillType[]
      */
     public function getCharacters(): array
     {
@@ -24,7 +23,7 @@ class Player
     {
         $characters = [];
 
-        /** @var Character $character */
+        /** @var SkillType $character */
         foreach ($this->characters->toArray() as $character) {
             $characters[] = $character->serialize();
         }

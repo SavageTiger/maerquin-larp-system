@@ -52,9 +52,9 @@
             data() {
                 return {
                     search: '',
-                    characters: {{ characters.serialize|json_encode|raw }},
-                    players: {{ players.serialize|json_encode|raw }},
-                    dieties: {{ dieties.serialize|json_encode|raw }}
+                    characters: {{ characters.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    players: {{ players.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    dieties: {{ dieties.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
 
             },

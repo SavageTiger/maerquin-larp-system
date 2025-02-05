@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Deity;
 
-class Character
+class SkillType
 {
     protected UuidInterface $id;
     protected string $name;

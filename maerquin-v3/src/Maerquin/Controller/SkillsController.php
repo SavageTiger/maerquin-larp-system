@@ -12,6 +12,7 @@ use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Element;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Entity\SkillType;
+use SvenHK\Maerquin\Form\SkillFormHandler;
 use SvenHK\Maerquin\Model\SkillCollection;
 use SvenHK\Maerquin\Model\SkillTypeCollection;
 use SvenHK\Maerquin\Repository\DeityRepository;
@@ -41,24 +42,30 @@ class SkillsController extends Action
      */
     private EntityRepository $elementRepository;
 
-    public function __construct(EntityManager $entityManager)
-    {
+    public function __construct(
+        readonly private SkillFormHandler $skillFormHandler,
+        EntityManager $entityManager
+    ) {
         $this->skillRepository = $entityManager->getRepository(Skill::class);
         $this->skillTypeRepository = $entityManager->getRepository(SkillType::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
         $this->elementRepository = $entityManager->getRepository(Element::class);
     }
 
-    public function action(): ResponseInterface
+    public function action() : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
+
+        $skillId = $this->request->getAttribute('skillId');
+
+        if ($this->request->getMethod() === 'POST' && is_string($skillId) && Uuid::isValid($skillId)) {
+            $this->skillFormHandler->handle($skillId, $this->request);
+        }
 
         $viewContext = [
             'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true),
             'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
         ];
-
-        $skillId = $this->request->getAttribute('skillId');
 
         if (is_string($skillId) && Uuid::isValid($skillId)) {
             return $view->render(

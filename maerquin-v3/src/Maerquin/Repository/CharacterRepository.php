@@ -11,7 +11,7 @@ class CharacterRepository extends EntityRepository
     /**
      * @return Character[]
      */
-    public function findAllSorted(): array
+    public function findAllSorted() : array
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
@@ -19,7 +19,7 @@ class CharacterRepository extends EntityRepository
     /**
      * @return Character[]
      */
-    public function forPlayer(string $playerId): array
+    public function forPlayer(string $playerId) : array
     {
         return $this->findBy(['player' => $playerId], ['name' => 'ASC']);
     }
@@ -27,7 +27,7 @@ class CharacterRepository extends EntityRepository
     /**
      * @throws MaerquinEntityNotFoundException
      */
-    public function getById(string $characterId): Character
+    public function getById(string $characterId) : Character
     {
         return $this->findOneBy(['id' => $characterId]) ?? throw MaerquinEntityNotFoundException::withType(Character::class);
     }

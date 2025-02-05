@@ -15,7 +15,7 @@ class HomeController extends Action
     {
     }
 
-    public function action(): ResponseInterface
+    public function action() : ResponseInterface
     {
         if ($this->session->getUser()->isAnonymous() === true) {
             return $this->redirectTo('/login.html');

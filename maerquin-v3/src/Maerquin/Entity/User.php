@@ -31,7 +31,7 @@ class User extends UserModel
     #[ORM\JoinColumn(name: 'player_id', referencedColumnName: 'id', nullable: true)]
     protected ?Player $player = null;
 
-    public function checkPassword(string $password): bool
+    public function checkPassword(string $password) : bool
     {
         $algorithm = 'sha512';
         $iterations = 1000;

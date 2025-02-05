@@ -8,6 +8,7 @@ use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Deity as DeityModel;
 use SvenHK\Maerquin\Model\Element as ElementModel;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
+use SvenHK\Maerquin\Model\SkillSkillLink as SkillSkillLinkModel;
 use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
 use SvenHK\Maerquin\Repository\SkillRepository;
 
@@ -62,6 +63,11 @@ class Skill extends SkillModel
     #[ORM\JoinColumn(name: "skilltype_id", referencedColumnName: "id", nullable: false)]
     protected SkillTypeModel $skillType;
 
-    #[ORM\OneToOne(targetEntity: SkillSkillLink::class, mappedBy: "secondSkill")]
-    protected ?SkillSkillLink $requiredSkillLink = null;
+    #[ORM\OneToOne(
+        targetEntity: SkillSkillLink::class,
+        mappedBy: "secondSkill",
+        orphanRemoval: true,
+        cascade: ['persist'])
+    ]
+    protected ?SkillSkillLinkModel $requiredSkillLink = null;
 }

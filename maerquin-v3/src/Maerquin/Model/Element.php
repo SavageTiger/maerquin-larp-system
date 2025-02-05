@@ -9,12 +9,12 @@ class Element
     protected UuidInterface $id;
     protected string $name;
 
-    public function getId(): string
+    public function getId() : string
     {
         return $this->id->toString();
     }
 
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }

@@ -17,7 +17,7 @@ class Firewall implements Middleware
     {
     }
 
-    public function process(Request $request, RequestHandler $handler): Response
+    public function process(Request $request, RequestHandler $handler) : Response
     {
         $uri = $request->getUri();
 

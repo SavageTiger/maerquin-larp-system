@@ -14,7 +14,7 @@ class DietiesCollection
         $this->dieties = $dieties;
     }
 
-    public function serialize(): array
+    public function serialize() : array
     {
         return array_map(
             fn(Deity $diety) => $diety->serialize(),

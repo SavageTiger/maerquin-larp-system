@@ -3,7 +3,6 @@
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\UuidInterface;
-use SvenHK\Maerquin\Entity\SkillSkillLink;
 
 class Skill
 {
@@ -55,88 +54,120 @@ class Skill
             ]);
     }
 
-    public function getId(): string
+    public function getId() : string
     {
         return $this->id->toString();
     }
 
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
 
-    public function getDeityId(): string
+    public function getDeityId() : string
     {
         return $this->deity?->getId() ?? '';
     }
 
-    public function getElementId(): string
+    public function getElementId() : string
     {
         return $this->element?->getId() ?? '';
     }
 
-    public function getDeityName(): string
+    public function getDeityName() : string
     {
         return $this->deity?->getName() ?? '';
     }
 
-    public function getElementName(): string
+    public function getElementName() : string
     {
         return $this->element?->getName() ?? '';
     }
 
-    public function getSkillTypeId(): string
+    public function getSkillTypeId() : string
     {
         return $this->skillType->getId();
     }
 
-    public function getPoints(): int
+    public function getPoints() : int
     {
         return $this->points;
     }
 
-    public function getNumberOfTimes(): int
+    public function getNumberOfTimes() : int
     {
         return $this->numberOfTimes;
     }
 
-    public function getDistance(): string
+    public function getDistance() : string
     {
         return $this->distance;
     }
 
-    public function getDuration(): string
+    public function getDuration() : string
     {
         return $this->duration;
     }
 
-    public function isFreelyAvailable(): bool
+    public function isFreelyAvailable() : bool
     {
         return $this->nonFree === false;
     }
 
-    public function isHidden(): bool
+    public function isHidden() : bool
     {
         return $this->hidden;
     }
 
-    public function getLevel(): int
+    public function getLevel() : int
     {
         return $this->level;
     }
 
-    public function getDescription(): string
+    public function getDescription() : string
     {
         return $this->description;
     }
 
-    public function getRemarks(): string
+    public function getRemarks() : string
     {
         return $this->remarks;
     }
 
-    public function getParentRequirementSkillId(): string|null
+    public function getParentRequirementSkillId() : string|null
     {
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
+    }
+
+    public function updateSkill(
+        string $name,
+        ?Deity $deity,
+        ?Element $element,
+        SkillType $skillType,
+        ?SkillSkillLink $requiredSkillLink,
+        int $points,
+        int $numberOfTimes,
+        int $level,
+        string $distance,
+        string $duration,
+        bool $notFreelyAvailable,
+        bool $isHidden,
+        string $description,
+        string $remarks,
+    ) : void {
+        $this->name = $name;
+        $this->deity = $deity;
+        $this->element = $element;
+        $this->skillType = $skillType;
+        $this->requiredSkillLink = $requiredSkillLink;
+        $this->points = $points;
+        $this->numberOfTimes = $numberOfTimes;
+        $this->level = $level;
+        $this->distance = $distance;
+        $this->duration = $duration;
+        $this->nonFree = $notFreelyAvailable;
+        $this->hidden = $isHidden;
+        $this->description = $description;
+        $this->remarks = $remarks;
     }
 }

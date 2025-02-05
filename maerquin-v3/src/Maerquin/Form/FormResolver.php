@@ -10,7 +10,7 @@ class FormResolver
     {
     }
 
-    public static function createFromRequest(Request $request): self
+    public static function createFromRequest(Request $request) : self
     {
         return new self($request);
     }
@@ -18,11 +18,29 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getValue(string $name, string|null $default = null): string
+    public function getValue(string $name, string|null $namespace = null, string|null $default = null) : string
     {
-        $value = $this->request->getParsedBody()[$name] ?? $default;
+        $value = is_string($namespace) === false ?
+            $this->request->getParsedBody()[$name] ?? $default :
+            $this->request->getParsedBody()[$namespace][$name] ?? $default;
 
         if (is_string($value) === false) {
+            throw new MissingFormFieldException(sprintf('%s is not a valid form element', $name));
+        }
+
+        return $value;
+    }
+
+    /**
+     * @throws MissingFormFieldException
+     */
+    public function getBoolean(string $name, string|null $namespace = null, string|null $default = null) : bool
+    {
+        $value = is_string($namespace) === false ?
+            $this->request->getParsedBody()[$name] ?? $default :
+            $this->request->getParsedBody()[$namespace][$name] ?? $default;
+
+        if (is_bool($value) === false) {
             throw new MissingFormFieldException(sprintf('%s is not a valid form element', $name));
         }
 

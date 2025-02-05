@@ -4,17 +4,17 @@ namespace App\Domain\Entity;
 
 class User
 {
-    public function getId(): string
+    public function getId() : string
     {
         return '';
     }
 
-    public function isAdmin(): bool
+    public function isAdmin() : bool
     {
         return false;
     }
 
-    public function isAnonymous(): bool
+    public function isAnonymous() : bool
     {
         return true;
     }

@@ -9,7 +9,7 @@ class Deity
     protected UuidInterface $id;
     protected string $name;
 
-    public function serialize(): array
+    public function serialize() : array
     {
         return [
             'id' => $this->getId(),
@@ -17,12 +17,12 @@ class Deity
         ];
     }
 
-    public function getId(): string
+    public function getId() : string
     {
         return $this->id->toString();
     }
 
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }

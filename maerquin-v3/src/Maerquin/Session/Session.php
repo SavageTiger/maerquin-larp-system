@@ -22,17 +22,17 @@ class Session implements FrameworkSession
         $this->userRepository = $entityManager->getRepository(User::class);
     }
 
-    public function setUser(FrameworkUser $user): void
+    public function setUser(FrameworkUser $user) : void
     {
         $this->write('userId', $user->getId());
     }
 
-    private function write(string $key, string|int|bool $value): void
+    private function write(string $key, string|int|bool $value) : void
     {
         $_SESSION[$key] = $value;
     }
 
-    public function getUser(): FrameworkUser
+    public function getUser() : FrameworkUser
     {
         $user = $this->userRepository->findById($this->read('userId', false));
 
@@ -43,7 +43,7 @@ class Session implements FrameworkSession
         return $user;
     }
 
-    private function read(string $key, string|int|bool $defaultValue): string|int|bool
+    private function read(string $key, string|int|bool $defaultValue) : string|int|bool
     {
         return $_SESSION[$key] ?? $defaultValue;
     }

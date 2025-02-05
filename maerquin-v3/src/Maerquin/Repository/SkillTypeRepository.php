@@ -10,9 +10,14 @@ class SkillTypeRepository extends EntityRepository
     /**
      * @return SkillType[]
      */
-    public function findAllSorted(): array
+    public function findAllSorted() : array
     {
         return $this->findBy([], ['ordinal' => 'ASC']);
+    }
+
+    public function getOneById(string $skillTypeId) : SkillType
+    {
+        return $this->findOneBy(['id' => $skillTypeId]);
     }
 }
 

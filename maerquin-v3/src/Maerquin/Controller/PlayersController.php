@@ -24,7 +24,7 @@ class PlayersController extends Action
         $this->playerRepository = $entityManager->getRepository(Player::class);
     }
 
-    public function action(): ResponseInterface
+    public function action() : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 

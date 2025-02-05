@@ -6,7 +6,7 @@ use App\Domain\Entity\User;
 
 interface Session
 {
-    public function setUser(User $user): void;
+    public function setUser(User $user) : void;
 
-    public function getUser(): User;
+    public function getUser() : User;
 }

@@ -4,6 +4,7 @@ namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
 use SvenHK\Maerquin\Model\SkillSkillLink as SkillSkillLinkModel;
 
@@ -15,7 +16,7 @@ class SkillSkillLink extends SkillSkillLinkModel
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    protected string $id;
+    protected UuidInterface $id;
 
     #[ORM\ManyToOne(targetEntity: Skill::class)]
     #[ORM\JoinColumn(name: "firstskill_id", referencedColumnName: "id", nullable: false)]

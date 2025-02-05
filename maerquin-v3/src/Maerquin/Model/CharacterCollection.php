@@ -14,7 +14,7 @@ class CharacterCollection
         $this->characters = $characters;
     }
 
-    public function serialize(): array
+    public function serialize() : array
     {
         return array_map(
             fn(SkillType $character) => $character->serialize(),

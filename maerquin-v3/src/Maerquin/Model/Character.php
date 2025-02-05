@@ -18,7 +18,7 @@ class SkillType
      */
     protected Collection $skills;
 
-    public function serialize(): array
+    public function serialize() : array
     {
         return [
             'id' => $this->getId(),
@@ -30,22 +30,22 @@ class SkillType
         ];
     }
 
-    public function getId(): string
+    public function getId() : string
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
 
-    public function getTitle(): string
+    public function getTitle() : string
     {
         return $this->title;
     }
 
-    public function getPrimaryDeityId(): string
+    public function getPrimaryDeityId() : string
     {
         return $this->primaryDeity?->getId() ?? '';
     }
@@ -55,7 +55,7 @@ class SkillType
         return $this->secondaryDeity?->getId() ?? '';
     }
 
-    public function playerId(): string
+    public function playerId() : string
     {
         return $this->player->getId();
     }
@@ -63,7 +63,7 @@ class SkillType
     /**
      * @return SkillLink[]
      */
-    public function getSkills(): array
+    public function getSkills() : array
     {
         return $this->skills->toArray();
     }

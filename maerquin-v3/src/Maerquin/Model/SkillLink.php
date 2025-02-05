@@ -10,12 +10,12 @@ class SkillLink
     protected UuidInterface $id;
     protected Skill $skill;
 
-    public function getId(): string
+    public function getId() : string
     {
         return $this->id->toString();
     }
 
-    public function getSkill(): Skill
+    public function getSkill() : Skill
     {
         return $this->skill;
     }

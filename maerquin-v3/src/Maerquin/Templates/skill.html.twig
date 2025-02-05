@@ -4,7 +4,7 @@
 
     <div class="columns is-gapless">
         <div class="column is-12">
-            <button onclick="return false" class="button is-pulled-right" @click="saveSkill">
+            <button onclick="return false" class="button is-pulled-right" @click="saveSkill('{{ skill.id }}')">
                 <i class="fa-solid fa-save"></i>&nbsp;Opslaan
             </button>
             &nbsp;
@@ -27,9 +27,9 @@
                                     <div class="control">
                                         <div class="control">
                                             <div class="select is-fullwidth">
-                                                <select name="skillType">
+                                                <select name="skillTypeId">
                                                     {% for skillType in skillTypes.serialize %}
-                                                        <option
+                                                        <option value="{{ skillType.id }}"
                                                                 {% if skillType.id == skill.skillTypeId %}
                                                                     selected="selected"
                                                                 {% endif %}
@@ -51,8 +51,8 @@
                                 <div class="field">
                                     <div class="control">
                                         <div class="select is-fullwidth">
-                                            <select name="deityElement">
-                                                <option>(geen)</option>
+                                            <select name="deityElementId">
+                                                <option value="">(geen)</option>
                                                 <optgroup label="Geloof">
                                                     {% for deity in deities %}
                                                         <option value="{{ deity.id }}"
@@ -101,8 +101,8 @@
                                 <div class="field">
                                     <div class="control">
                                         <div class="select is-fullwidth">
-                                            <select name="requiredSkill">
-                                                <option>(geen)</option>
+                                            <select name="requiredSkillId">
+                                                <option value="">(geen)</option>
                                                 {% for requiredSkill in skills %}
                                                     <option value="{{ requiredSkill.id }}"
                                                             {% if requiredSkill.id == skill.parentRequirementSkillId %}selected="selected"{% endif %}
@@ -126,7 +126,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="numberOfTimes" type="text"
+                                        <input class="input" numbers="true" name="numberOfTimes" type="text"
                                                value="{{ skill.numberOfTimes }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -155,7 +155,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="points" type="text"
+                                        <input class="input" numbers="true" name="points" type="text"
                                                value="{{ skill.points }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" name="level" type="text"
+                                        <input class="input" numbers="true" name="level" type="text"
                                                value="{{ skill.level }}" placeholder=""/>
                                     </div>
                                 </div>
@@ -195,14 +195,14 @@
                     <div class="cell checkbox-group">
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox" name="hidden"
+                                <input type="checkbox" name="isHidden"
                                        {% if skill.hidden %}checked="checked"{% endif %} />
                                 &nbsp;Verborgen
                             </label>
                         </div>
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox" name="isFreelyAvailable"
+                                <input type="checkbox" name="isNotFreelyAvailable"
                                        {% if skill.isFreelyAvailable == false %}checked="checked"{% endif %}/>
 
                                 &nbsp;<b>Niet</b> vrij verkrijgbaar
@@ -232,7 +232,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <textarea name="remarkss" class="input">{{ skill.remarks }}</textarea>
+                                        <textarea name="remarks" class="input">{{ skill.remarks }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -246,8 +246,17 @@
     <script type="module">
         Vue.createApp({
             methods: {
-                saveSkill() {
-                    alert(JSON.stringify(serializeForm('containerForm')))
+                saveSkill(skillId) {
+                    const skillForm = serializeForm('containerForm');
+
+                    axios
+                        .post(`/admin/skills/${skillId}.html`, { skill: skillForm })
+                        .then(() => {
+                            document.location.href = '/admin/skills.html'
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
 
                     return false;
                 }

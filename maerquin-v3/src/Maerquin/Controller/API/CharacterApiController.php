@@ -21,7 +21,7 @@ class CharacterApiController extends Action
         $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
-    public function action(): ResponseInterface
+    public function action() : ResponseInterface
     {
         $forPlayerId = $this->request->getAttribute('playerId');
 

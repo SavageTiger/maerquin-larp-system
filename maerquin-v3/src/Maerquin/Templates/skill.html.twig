@@ -9,199 +9,185 @@
             &nbsp;
         </div>
     </div>
-    <div class="spacer is-12"></div>
-    <div class="columns is-gapless">
-        <article class="message is-dark">
-            <div class="message-header ">
-                {{ skill.name }}
+
+    <article class="message is-dark">
+        <div class="message-header ">
+            {{ skill.name }}
+        </div>
+        <div class="message-body">
+
+            <div class="box inner-box is-shadowless">
+                <div class="grid">
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Soort</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.skillType }}" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Element / Geloof</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.elementName }}" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Naam</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.name }}" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        &nbsp;
+                    </div>
+                </div>
             </div>
-            <div class="message-body">
 
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Naam</label>
-                    </div>
-                    <div class="field-body">
+            <div class="box inner-box is-shadowless">
+                <div class="grid">
+                    <div class="cell">
                         <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.name }}" placeholder=""/>
+                            <label class="label">Aantal keer bruikbaar</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.numberOfTimes }}" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Afstand</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.distance }}" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Kosten (punten)</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.points }}" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Duratie</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.duration }}" placeholder=""/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Soort</label>
-                    </div>
-                    <div class="field-body">
+                <div class="grid">
+                    <div class="cell">
                         <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.skillType }}" placeholder=""/>
+                            <label class="label">Niveau</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="..." type="text"
+                                               value="{{ skill.level }}" placeholder=""/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Geloof</label>
-                    </div>
-                    <div class="field-body">
+                    <div class="cell checkbox-group">
                         <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.deityName }}" placeholder=""/>
-                            </div>
+                            <label class="checkbox">
+                                <input type="checkbox"/>
+                                Verborgen
+                            </label>
+                        </div>
+                        <div class="field">
+                            <label class="checkbox">
+                                <input type="checkbox"/>
+                                Vrij verkrijgbaar
+                            </label>
                         </div>
                     </div>
                 </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Element</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.elementName }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Kosten (punten)</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.points }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Aantal keer bruikbaar</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.numberOfTimes }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Afstand</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.distance }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Duratie</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.duration }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Vrij verkrijgbaar</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.nonFree }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Verborgen</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.hidden }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Niveau</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.level }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Omschrijving</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.description }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label">Opmerking</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input" name="..." type="text"
-                                       value="{{ skill.remarks }}" placeholder=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </article>
-    </div>
+
+            <div class="box inner-box is-shadowless">
+                <div class="grid">
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Omschrijving</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <textarea class="input">{{ skill.description }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="field">
+                            <label class="label">Opmerking</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <textarea class="input">{{ skill.remarks }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
 
     <script type="module">
         Vue.createApp({

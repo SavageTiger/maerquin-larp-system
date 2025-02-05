@@ -103,7 +103,32 @@ div.already-coupled {
     background-color: white;
 }
 
+span.skill-addon {
+    font-size: 9pt;
+    color: #534f4f;
+}
+
 .skill-cell a {
     font-weight: bold;
     color: black;
+}
+
+.box.inner-box {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background-color: #ffffff;
+}
+
+.box.inner-box .grid {
+    margin: 5px;
+}
+
+.checkbox-group {
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+textarea.input {
+    height: 300px;
 }

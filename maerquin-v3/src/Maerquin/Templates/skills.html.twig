@@ -25,12 +25,12 @@
                     <a href="#">
                         {{ '{{ skill.name }}' }}
 
-                        <span v-if="skill.deityName">
-                            [{{ '{{ skill.deityName }}' }}]
+                        <span v-if="skill.deityName" class="skill-addon">
+                            {{ '{{ skill.deityName }}' }}
                         </span>
 
-                        <span v-if="skill.elementName">
-                            [{{ '{{ skill.elementName }}' }}]
+                        <span v-if="skill.elementName" class="skill-addon">
+                            {{ '{{ skill.elementName }}' }}
                         </span>
                     </a>
                 </div>

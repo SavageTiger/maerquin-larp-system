@@ -61,4 +61,7 @@ class Skill extends SkillModel
     #[ORM\ManyToOne(targetEntity: SkillType::class)]
     #[ORM\JoinColumn(name: "skilltype_id", referencedColumnName: "id", nullable: false)]
     protected SkillTypeModel $skillType;
+
+    #[ORM\OneToOne(targetEntity: SkillSkillLink::class, mappedBy: "secondSkill")]
+    protected ?SkillSkillLink $requiredSkillLink = null;
 }

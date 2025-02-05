@@ -3,6 +3,7 @@
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\SkillSkillLink;
 
 class Skill
 {
@@ -20,6 +21,7 @@ class Skill
     protected bool $nonFree;
     protected bool $hidden;
     protected int $level;
+    protected ?SkillSkillLink $requiredSkillLink = null;
 
     public function serialize(bool $compact)
     {
@@ -49,6 +51,7 @@ class Skill
                 'level' => $this->getLevel(),
                 'description' => $this->getDescription(),
                 'remarks' => $this->getRemarks(),
+                'requiresParentSkill' => $this->getParentRequirementSkillId()
             ]);
     }
 
@@ -130,5 +133,10 @@ class Skill
     public function getRemarks(): string
     {
         return $this->remarks;
+    }
+
+    public function getParentRequirementSkillId(): string|null
+    {
+        return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }
 }

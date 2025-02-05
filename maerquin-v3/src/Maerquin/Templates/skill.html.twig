@@ -94,7 +94,25 @@
                         </div>
                     </div>
                     <div class="cell">
-                        &nbsp;
+                        <div class="field">
+                            <label class="label">Benodigde skill</label>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select>
+                                                <option>(geen)</option>
+                                                {% for requiredSkill in skills %}
+                                                    <option
+                                                            {% if requiredSkill.id == skill.parentRequirementSkillId %}selected="selected"{% endif %}
+                                                    >{{ requiredSkill.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,14 +194,15 @@
                     <div class="cell checkbox-group">
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox"/>
+                                <input type="checkbox" {% if skill.hidden %}checked="checked"{% endif %} />
                                 Verborgen
                             </label>
                         </div>
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox"/>
-                                Vrij verkrijgbaar
+                                <input type="checkbox"
+                                       {% if skill.isFreelyAvailable == false %}checked="checked"{% endif %}/>
+                                <b>Niet</b> vrij verkrijgbaar
                             </label>
                         </div>
                     </div>

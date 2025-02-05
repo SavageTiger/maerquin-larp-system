@@ -53,28 +53,31 @@ class SkillsController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
+        $viewContext = [
+            'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true),
+            'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
+        ];
+
         $skillId = $this->request->getAttribute('skillId');
 
         if (is_string($skillId) && Uuid::isValid($skillId)) {
             return $view->render(
                 $this->response,
                 'skill.html.twig',
-                [
-                    'skill' => $this->skillRepository->getById($skillId),
-                    'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
-                    'deities' => $this->deityRepository->findAllSorted(),
-                    'elements' => $this->elementRepository->findAllSorted()
-                ]
+                array_merge($viewContext,
+                    [
+                        'skill' => $this->skillRepository->getById($skillId),
+                        'deities' => $this->deityRepository->findAllSorted(),
+                        'elements' => $this->elementRepository->findAllSorted()
+                    ]
+                )
             );
         }
 
         return $view->render(
             $this->response,
             'skills.html.twig',
-            [
-                'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true),
-                'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
-            ]
+            $viewContext
         );
     }
 }

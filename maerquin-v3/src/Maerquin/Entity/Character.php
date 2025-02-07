@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
-use SvenHK\Maerquin\Model\SkillType as CharacterModel;
+use SvenHK\Maerquin\Model\Character as CharacterModel;
+use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
@@ -46,7 +47,7 @@ class Character extends CharacterModel
 
     #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: "characters")]
     #[ORM\JoinColumn(nullable: true)]
-    protected ?Player $player;
+    protected ?PlayerModel $player;
 
     #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
     protected string $notes;

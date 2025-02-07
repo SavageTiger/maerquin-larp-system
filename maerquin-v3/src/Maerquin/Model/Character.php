@@ -6,12 +6,13 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Deity;
 
-class SkillType
+class Character
 {
     protected UuidInterface $id;
     protected string $name;
     protected ?Deity $primaryDeity;
     protected ?Deity $secondaryDeity;
+    protected ?Player $player;
 
     /**
      * @var SkillLink[]
@@ -57,7 +58,7 @@ class SkillType
 
     public function playerId() : string
     {
-        return $this->player->getId();
+        return $this->player?->getId();
     }
 
     /**

@@ -34,7 +34,7 @@
                         <div class="field">
                             <label for="" class="label">Username</label>
                             <div class="control has-icons-left">
-                                <input type="text" value="{{ form.getValue('username', '') }}" name="username"
+                                <input type="text" value="{{ form.getValue('username', default: '') }}" name="username"
                                        placeholder="e.g. John" class="input"
                                        required>
 
@@ -46,7 +46,8 @@
                         <div class="field">
                             <label for="" class="label">Password</label>
                             <div class="control has-icons-left">
-                                <input type="password" value="{{ form.getValue('password', '') }}" name="password"
+                                <input type="password" value="{{ form.getValue('password', default: '') }}"
+                                       name="password"
                                        placeholder="*******" class="input" required>
 
                                 <span class="icon is-small is-left">

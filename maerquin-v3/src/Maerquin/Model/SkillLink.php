@@ -9,6 +9,8 @@ class SkillLink
 {
     protected UuidInterface $id;
     protected Skill $skill;
+    protected int $points;
+    protected int $amount;
 
     public function getId() : string
     {
@@ -18,6 +20,17 @@ class SkillLink
     public function getSkill() : Skill
     {
         return $this->skill;
+    }
+
+    public function getPoints() : int
+    {
+        return $this->points;
+    }
+
+
+    public function getAmount() : int
+    {
+        return $this->amount;
     }
 }
 

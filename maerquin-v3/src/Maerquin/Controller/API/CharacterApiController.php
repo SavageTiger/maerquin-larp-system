@@ -32,7 +32,7 @@ class CharacterApiController extends Action
         }
 
         return $this->respondWithData(array_map(function (Character $character) {
-            return $character->serialize();
+            return $character->serialize(true);
         }, $characters));
     }
 }

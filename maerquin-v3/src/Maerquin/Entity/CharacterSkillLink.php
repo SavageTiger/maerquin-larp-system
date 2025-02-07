@@ -11,9 +11,6 @@ use SvenHK\Maerquin\Model\SkillLink;
 #[ORM\Entity]
 class CharacterSkillLink extends SkillLink
 {
-    // FIX: Armored casting
-    // FIX: Fast-casting (Innate casting)
-
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -33,4 +30,10 @@ class CharacterSkillLink extends SkillLink
 
     #[ORM\Column(type: "integer")]
     protected int $amount;
+
+    #[ORM\Column(type: "boolean", nullable: false, options: ['default' => false])]
+    protected bool $armouredCasting = false;
+
+    #[ORM\Column(type: "boolean", nullable: false, options: ['default' => false])]
+    protected bool $fastCasting = false;
 }

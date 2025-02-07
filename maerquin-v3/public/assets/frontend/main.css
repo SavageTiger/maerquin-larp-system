@@ -132,3 +132,13 @@ span.skill-addon {
 textarea.input {
     height: 300px;
 }
+
+.skill-original {
+    float: right;
+    color: #4a4949;
+    font-size: 10pt;
+}
+
+input.skill-input {
+    width: 90px;
+}

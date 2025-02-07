@@ -103,41 +103,105 @@
                     </div>
 
                     <div class="column is-12">
-
-                        <button class="button is-pulled-right" @click="manageCharacters">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>&nbsp;Aanpassen
+                        <button class="button is-pulled-right">
+                            <i class="fa-solid fa-dice-d20"></i>&nbsp;Toevoegen
                         </button>
-                        <div class="field is-horizontal">
+                    </div>
 
-                            <div class="field-label is-normal">
-                                <label class="label">Skills</label>
-                            </div>
+                    <div class="column is-12 pl-3 p-0">
+                        <h3 class="mb-0">Skills</h3>
+                    </div>
 
-                            <div class="field-body">
-                                <div class="field card ml-5 mr-5 m-1 p-3">
-                                    {% for skillLink in character.skills %}
-                                        <span class="tag is-link is-light ml-3 mb-3">{{ skillLink.skill.name }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
+                    <div class="column is-12">
+                        <table class="table is-bordered is-striped is-narrow is-fullwidth">
+                            <tr>
+                                <th>Naam</th>
+                                <th>Kosten (punten)</th>
+                                <th>Aantal keer bruikbaar</th>
+                                <th>Fast casting</th>
+                                <th>Armoured casting</th>
+                                <th>
+                                </th>
+                            </tr>
+
+                            <tr v-for="linkedSkill in character.linkedSkills">
+                                <td>
+                                    {{ '{{ linkedSkill.skillName }}' }}
+                                </td>
+                                <td>
+                                    <input
+                                            @keyup="numbersOnly(linkedSkill, 'points')"
+                                            @change="numbersOnly(linkedSkill, 'points')"
+                                            type="input"
+                                            class="input skill-input"
+                                            name="skillLinkPoints[]"
+                                            v-model="linkedSkill.points"/>
+                                    <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
+                                </td>
+                                <td>
+                                    <input @keyup="numbersOnly(linkedSkill, 'numberOfTimes')"
+                                           @change="numbersOnly(linkedSkill, 'numberOfTimes')"
+                                           type="input"
+                                           class="input skill-input"
+                                           name="skillLinkAmount[]"
+                                           v-model="linkedSkill.numberOfTimes"/>
+                                    <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
+                                </td>
+                                <td>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="linkedSkill.fastCast"
+                                               name="fastCast[]"/>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="linkedSkill.armouredCasting"
+                                               name="armouredCasting[]"/>
+                                    </label>
+                                </td>
+                                <td>
+                                    <i class="fa fa-trash"/>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
             </article>
         </div>
-
-
     </div>
 
     <script>
         Vue.createApp({
             data() {
-                return {};
+                return {
+                    character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                    {#        linkedSkills #}
+                    {# : #}
+                    {#    [ #}
+                    {#        {% for skillLink in character.skills %} #}
+                    {#        { #}
+                    {#            skillName: '{{ skillLink.skill.name }}', #}
+                    {#            points: {{ skillLink.points }}, #}
+                    {#            numberOfTimes: {{ skillLink.amount }}, #}
+                    {#            pointsSource: {{ skillLink.skill.points }}, #}
+                    {#            numberOfTimesSource: {{ skillLink.skill.numberOfTimes }}, #}
+                    {#        }, #}
+                    {#        {% endfor %} #}
+                    {#    ] #}
+                }
+
             },
             computed: {},
-            methods: {},
+            methods: {
+                numbersOnly: (sender, field) => {
+                    sender[field] = sender[field].replace(/[^0-9]/g, '')
+                }
+            },
             mounted() {
+                this.character.linkedSkills.sort(
+                    (left, right) => left.skillName.localeCompare(right.skillName)
+                );
             }
         }).mount('.content');
     </script>

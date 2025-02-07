@@ -19,9 +19,9 @@ class Character
      */
     protected Collection $skills;
 
-    public function serialize() : array
+    public function serialize($compact) : array
     {
-        return [
+        $minimal = [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'title' => $this->getTitle(),
@@ -29,6 +29,24 @@ class Character
             'secondaryDeityId' => $this->getSecondaryDeityId(),
             'playerId' => $this->playerId()
         ];
+
+        if ($compact === true) {
+            return $minimal;
+        }
+
+        $linkedSkills = [];
+
+        foreach ($this->getSkills() as $linkedSkill) {
+            $linkedSkills[] = [
+                'skillName' => $linkedSkill->getSkill()->getName(),
+                'numberOfTimes' => $linkedSkill->getAmount(),
+                'points' => $linkedSkill->getPoints(),
+                'numberOfTimesSource' => $linkedSkill->getSkill()->getNumberOfTimes(),
+                'pointsSource' => $linkedSkill->getSkill()->getPoints(),
+            ];
+        }
+
+        return array_merge($minimal, ['linkedSkills' => $linkedSkills]);
     }
 
     public function getId() : string

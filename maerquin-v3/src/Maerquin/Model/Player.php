@@ -19,13 +19,13 @@ class Player
         return $this->characters->toArray();
     }
 
-    public function serialize()
+    public function serialize($compact)
     {
         $characters = [];
 
-        /** @var SkillType $character */
+        /** @var Character $character */
         foreach ($this->characters->toArray() as $character) {
-            $characters[] = $character->serialize();
+            $characters[] = $character->serialize($compact);
         }
 
         return [

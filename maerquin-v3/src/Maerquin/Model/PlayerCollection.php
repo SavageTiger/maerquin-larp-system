@@ -14,12 +14,12 @@ class PlayerCollection
         $this->players = $players;
     }
 
-    public function serialize() : array
+    public function serialize($compact) : array
     {
         $serialized = [];
 
         foreach ($this->players as $player) {
-            $serialized[] = $player->serialize();
+            $serialized[] = $player->serialize($compact);
         }
 
         return $serialized;

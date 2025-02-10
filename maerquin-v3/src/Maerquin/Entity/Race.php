@@ -6,9 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\Race as RaceModel;
+use SvenHK\Maerquin\Repository\RaceRepository;
 
-#[ORM\Entity]
-class Race
+#[ORM\Entity(repositoryClass: RaceRepository::class)]
+class Race extends RaceModel
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]

@@ -13,6 +13,8 @@ class Character
     protected ?Deity $primaryDeity;
     protected ?Deity $secondaryDeity;
     protected ?Player $player;
+    protected Race $race;
+    protected bool $deceased;
 
     /**
      * @var SkillLink[]
@@ -46,7 +48,13 @@ class Character
             ];
         }
 
-        return array_merge($minimal, ['linkedSkills' => $linkedSkills]);
+        return array_merge(
+            $minimal,
+            [
+                'isDeceased' => $this->isDeceased(),
+                'raceId' => $this->race->getId(),
+                'linkedSkills' => $linkedSkills
+            ]);
     }
 
     public function getId() : string
@@ -87,4 +95,8 @@ class Character
         return $this->skills->toArray();
     }
 
+    private function isDeceased() : bool
+    {
+        return $this->deceased;
+    }
 }

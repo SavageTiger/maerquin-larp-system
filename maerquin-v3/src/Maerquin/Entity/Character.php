@@ -10,6 +10,7 @@ use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Character as CharacterModel;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
+use SvenHK\Maerquin\Model\Race as RaceModel;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
@@ -54,7 +55,7 @@ class Character extends CharacterModel
 
     #[ORM\ManyToOne(targetEntity: Race::class)]
     #[ORM\JoinColumn(nullable: false)]
-    protected Race $race;
+    protected RaceModel $race;
 
     #[ORM\Column(type: "boolean")]
     protected bool $deceased;

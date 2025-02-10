@@ -11,12 +11,15 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\DeitiesCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
+use SvenHK\Maerquin\Model\RaceCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
+use SvenHK\Maerquin\Repository\RaceRepository;
 
 class CharactersController extends Action
 {
@@ -35,11 +38,17 @@ class CharactersController extends Action
      */
     private EntityRepository $playerRepository;
 
+    /**
+     * @var RaceRepository
+     */
+    private EntityRepository $raceRepository;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
         $this->playerRepository = $entityManager->getRepository(Player::class);
+        $this->raceRepository = $entityManager->getRepository(Race::class);
     }
 
     public function action() : ResponseInterface
@@ -55,6 +64,7 @@ class CharactersController extends Action
                 'character.html.twig', array_merge($viewContext,
                     [
                         'character' => $this->characterRepository->getById($characterId),
+                        'races' => new RaceCollection($this->raceRepository->findAllSorted()),
                     ]
                 )
             );

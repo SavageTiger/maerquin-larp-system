@@ -65,13 +65,18 @@
                             <div class="column is-5">
                                 <div class="field is-horizontal">
                                     <div class="field-label is-normal">
-                                        <label class="label">Titel</label>
+                                        <label class="label">Ras</label>
                                     </div>
                                     <div class="field-body">
                                         <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="name" type="text"
-                                                       value="{{ character.title }}" placeholder=""/>
+                                            <div class="select is-fullwidth">
+                                                <select v-model="character.raceId">
+                                                    {% for race in races.serialize %}
+                                                        <option value="{{ race.id }}">
+                                                            {{ race.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -96,6 +101,29 @@
                                                     {% endfor %}
                                                 </select>
                                             </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="columns is-gapless">
+                            <div class="column is-5">
+                                &nbsp;
+                            </div>
+
+                            <div class="column is-7">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">&nbsp;</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <label class="checkbox">
+                                                <input type="checkbox" v-model="character.isDeceased"/>
+                                                &nbsp;<b>Overleden</b>
+                                            </label>
 
                                         </div>
                                     </div>

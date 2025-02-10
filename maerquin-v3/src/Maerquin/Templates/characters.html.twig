@@ -54,9 +54,8 @@
                     search: '',
                     characters: {{ characters.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
                     players: {{ players.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-                    dieties: {{ dieties.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                    deities: {{ deities.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
-
             },
             computed: {
                 filteredCharacters() {
@@ -74,7 +73,7 @@
                 },
 
                 getDeity(deityId) {
-                    const deity = this.dieties.find((diety) => {
+                    const deity = this.deities.find((diety) => {
                         return diety.id === deityId;
                     });
 

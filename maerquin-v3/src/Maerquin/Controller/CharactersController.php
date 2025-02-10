@@ -12,7 +12,7 @@ use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Model\CharacterCollection;
-use SvenHK\Maerquin\Model\DietiesCollection;
+use SvenHK\Maerquin\Model\DeitiesCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
@@ -45,28 +45,27 @@ class CharactersController extends Action
     public function action() : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
+        $viewContext = ['deities' => new DeitiesCollection($this->deityRepository->findAll())];
 
         $characterId = $this->request->getAttribute('characterId');
 
         if (is_string($characterId) && Uuid::isValid($characterId)) {
             return $view->render(
                 $this->response,
-                'character.html.twig',
-                [
-                    'character' => $this->characterRepository->getById($characterId),
-                ]
+                'character.html.twig', array_merge($viewContext,
+                    [
+                        'character' => $this->characterRepository->getById($characterId),
+                    ]
+                )
             );
-
         }
 
         return $view->render(
             $this->response,
-            'characters.html.twig',
-            [
+            'characters.html.twig', array_merge($viewContext, [
                 'players' => new PlayerCollection($this->playerRepository->findAll()),
                 'characters' => new CharacterCollection($this->characterRepository->findAllSorted()),
-                'dieties' => new DietiesCollection($this->deityRepository->findAll())
-            ]
+            ])
         );
     }
 }

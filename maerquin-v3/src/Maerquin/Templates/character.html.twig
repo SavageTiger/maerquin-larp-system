@@ -9,93 +9,95 @@
             &nbsp;
         </div>
     </div>
-
     <div class="columns is-gapless">
         <div class="column is-12">
+
             <article class="message is-dark">
                 <div class="message-header ">
                     {{ character.name }}
                 </div>
                 <div class="message-body">
 
-                    <div class="columns is-gapless">
-                        <div class="column is-6">
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal">
-                                    <label class="label">Naam</label>
+                    <div class="box inner-box is-shadowless">
+                        <div class="columns is-gapless">
+                            <div class="column is-5">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Naam</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input class="input" name="name" type="text"
+                                                       value="{{ character.name }}" placeholder=""/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="field-body">
-                                    <div class="field">
-                                        <div class="control">
-                                            <input class="input" name="name" type="text"
-                                                   value="{{ character.name }}" placeholder=""/>
+                            </div>
+
+                            <div class="column is-7">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Pri. geloof</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+
+                                            <div class="select is-fullwidth">
+                                                <select v-model="character.primaryDeityId">
+                                                    <option value="">(geen)</option>
+                                                    {% for deity in deities.serialize %}
+                                                        <option value="{{ deity.id }}">
+                                                            {{ deity.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="column is-6">
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal">
-                                    <label class="label">Titel</label>
-                                </div>
-                                <div class="field-body">
-                                    <div class="field">
-                                        <div class="control">
-                                            <input class="input" name="name" type="text"
-                                                   value="{{ character.title }}" placeholder=""/>
+                        <div class="columns is-gapless">
+                            <div class="column is-5">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Titel</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input class="input" name="name" type="text"
+                                                       value="{{ character.title }}" placeholder=""/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="columns is-gapless">
-                        <div class="column is-6">
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal">
-                                    <label class="label">Primair geloof</label>
-                                </div>
-                                <div class="field-body">
-                                    <div class="field">
-
-                                        <div class="select is-fullwidth">
-                                            <select>
-                                                <option>(geen)</option>
-                                                {% for deity in deities %}
-                                                    <option {% if character.primaryDeityId == deity.id %}selected{% endif %}>
-                                                        {{ deity.name }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
+                            <div class="column is-7">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Sec. geloof</label>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                    <div class="field-body">
+                                        <div class="field">
 
-                        <div class="column is-6">
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal">
-                                    <label class="label">Secundair geloof</label>
-                                </div>
-                                <div class="field-body">
-                                    <div class="field">
+                                            <div class="select is-fullwidth">
+                                                <select v-model="character.secondaryDeityId">
+                                                    <option value="">(geen)</option>
+                                                    {% for deity in deities.serialize %}
+                                                        <option value="{{ deity.id }}">
+                                                            {{ deity.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
 
-                                        <div class="select is-fullwidth">
-                                            <select>
-                                                <option>(geen)</option>
-                                                {% for deity in deities %}
-                                                    <option {% if character.SecondaryDeityId == deity.id %}selected{% endif %}>
-                                                        {{ deity.name }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -120,8 +122,7 @@
                                 <th>Aantal keer bruikbaar</th>
                                 <th>Fast casting</th>
                                 <th>Armoured casting</th>
-                                <th>
-                                </th>
+                                <th></th>
                             </tr>
 
                             <tr v-for="linkedSkill in character.linkedSkills">
@@ -176,19 +177,6 @@
             data() {
                 return {
                     character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
-                    {#        linkedSkills #}
-                    {# : #}
-                    {#    [ #}
-                    {#        {% for skillLink in character.skills %} #}
-                    {#        { #}
-                    {#            skillName: '{{ skillLink.skill.name }}', #}
-                    {#            points: {{ skillLink.points }}, #}
-                    {#            numberOfTimes: {{ skillLink.amount }}, #}
-                    {#            pointsSource: {{ skillLink.skill.points }}, #}
-                    {#            numberOfTimesSource: {{ skillLink.skill.numberOfTimes }}, #}
-                    {#        }, #}
-                    {#        {% endfor %} #}
-                    {#    ] #}
                 }
 
             },

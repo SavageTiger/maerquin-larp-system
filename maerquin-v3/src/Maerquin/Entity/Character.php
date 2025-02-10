@@ -52,13 +52,9 @@ class Character extends CharacterModel
     #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
     protected string $notes;
 
-    #[ORM\ManyToOne(targetEntity: Archetype::class, inversedBy: "characters")]
-    #[ORM\JoinColumn(nullable: true)]
-    protected ?Archetype $archetype;
-
-    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: "characters")]
-    #[ORM\JoinColumn(nullable: true)]
-    protected ?Race $race;
+    #[ORM\ManyToOne(targetEntity: Race::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    protected Race $race;
 
     #[ORM\Column(type: "boolean")]
     protected bool $deceased;

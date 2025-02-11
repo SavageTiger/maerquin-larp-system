@@ -5,23 +5,25 @@ namespace SvenHK\Maerquin\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\CustomField as CustomFieldModel;
+use SvenHK\Maerquin\Repository\CustomFieldRepository;
 
-#[ORM\Entity]
-class CustomField
+#[ORM\Entity(repositoryClass: CustomFieldRepository::class)]
+class CustomField extends CustomFieldModel
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public Uuid $id;
+    protected UuidInterface $id;
 
     #[ORM\Column(length: 255)]
-    public string $tableName;
+    protected string $tableName;
 
     #[ORM\Column(length: 255)]
-    public string $name;
+    protected string $name;
 
     #[ORM\Column(type: 'integer')]
-    public int $ordinal;
+    protected int $ordinal;
 }

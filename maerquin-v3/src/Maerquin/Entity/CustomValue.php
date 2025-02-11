@@ -5,7 +5,7 @@ namespace SvenHK\Maerquin\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 class CustomValue
@@ -14,15 +14,15 @@ class CustomValue
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public Uuid $id;
+    protected UuidInterface $id;
 
     #[ORM\ManyToOne(targetEntity: CustomField::class)]
     #[ORM\JoinColumn(name: "customfield_id", referencedColumnName: "id")]
-    public CustomField $customField;
+    protected CustomField $customField;
 
     #[ORM\Column(name: "entity_id", type: 'uuid')]
-    public string $entityId;
+    protected string $entityId;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    public string $value;
+    protected string $value;
 }

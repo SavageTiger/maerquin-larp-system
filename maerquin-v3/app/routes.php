@@ -38,4 +38,5 @@ return function (App $app) {
     $app->get('/admin/skills/{skillId}.html', SkillsController::class);
 
     $app->get('/admin/events.html', EventsController::class);
+    $app->get('/admin/events/{eventId}.html', EventsController::class);
 };

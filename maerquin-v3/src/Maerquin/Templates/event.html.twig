@@ -1,0 +1,156 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <button onclick="return false" class="button is-pulled-right" @click="saveEvent('{{ event.id }}')">
+                <i class="fa-solid fa-save"></i>&nbsp;Opslaan
+            </button>
+            &nbsp;
+        </div>
+    </div>
+
+    <div class="spacer is-12"></div>
+
+    <div class="columns">
+        <div class="column is-6">
+            <article class="message is-dark">
+                <div class="message-header ">
+                    {{ event.name }}
+                </div>
+                <div class="message-body">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Naam</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="name" type="text"
+                                           value="{{ event.name }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Alt. Naam</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="secondaryName" type="text"
+                                           value="{{ event.secondaryName }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Punten</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="points" type="text"
+                                           value="{{ event.points }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Startdatum</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input numbers="true" class="input input-date" name="startDateDay" type="text"
+                                           value="{{ event.startDate.format('d') }}" placeholder=""/>
+
+                                    <input numbers="true" class="input input-date" name="startDateMonth" type="text"
+                                           value="{{ event.startDate.format('m') }}" placeholder=""/>
+
+                                    <input numbers="true" class="input input-date" name="startDateYear" type="text"
+                                           value="{{ event.startDate.format('Y') }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Einddatum</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input numbers="true" class="input input-date" name="endDateDay" type="text"
+                                           value="{{ event.endDate.format('d') }}" placeholder=""/>
+
+                                    <input numbers="true" class="input input-date" name="endDateMonth" type="text"
+                                           value="{{ event.endDate.format('m') }}" placeholder=""/>
+
+                                    <input numbers="true" class="input input-date" name="endDateYear" type="text"
+                                           value="{{ event.endDate.format('Y') }}" placeholder=""/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </article>
+        </div>
+
+        <div class="column is-6">
+            <article class="message is-dark">
+                <div class="message-header ">
+                    Characters aanwezig
+                </div>
+                <div class="message-body">
+                    <div class="content">
+                        <ol type="1">
+                            {% for character in characters %}
+                                <li>
+                                    <i class="fa-regular fa-id-badge"></i>
+                                    {{ character.name }}
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+
+
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {};
+            },
+            computed: {},
+            methods: {
+                saveEvent(eventId) {
+                    const eventForm = serializeForm('containerForm');
+
+                    axios
+                        .post(`/admin/events/${eventId}.html`, { event: eventForm })
+                        .then(() => {
+                            document.location.href = '/admin/events.html'
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+
+                    return false;
+                }
+            }
+        }).mount('.content');
+    </script>
+
+{% endblock %}

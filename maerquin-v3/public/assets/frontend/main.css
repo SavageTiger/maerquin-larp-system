@@ -133,6 +133,11 @@ textarea.input {
     height: 300px;
 }
 
+input.input-date {
+    width: 25%;
+    margin-right: 10px;
+}
+
 .skill-original {
     float: right;
     color: #4a4949;

@@ -36,7 +36,7 @@ class Event
         return $this->name;
     }
 
-    private function getSecondaryName() : string
+    public function getSecondaryName() : string
     {
         return $this->secondaryName;
     }

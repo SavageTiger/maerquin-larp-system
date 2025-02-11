@@ -16,11 +16,10 @@ class RaceCollection
 
     public function serialize() : array
     {
-        foreach ($this->races as $race) {
-            $serialized[] = $race->serialize();
-        }
-
-        return $serialized;
+        return array_map(
+            fn(Race $race) => $race->serialize(),
+            $this->races
+        );
     }
 }
 

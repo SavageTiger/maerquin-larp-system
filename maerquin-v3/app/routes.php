@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use SvenHK\Maerquin\Controller\API\CharacterApiController;
 use SvenHK\Maerquin\Controller\CharactersController;
+use SvenHK\Maerquin\Controller\EventsController;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\PlayersController;
@@ -35,4 +36,6 @@ return function (App $app) {
     $app->get('/admin/skills.html', SkillsController::class);
     $app->post('/admin/skills/{skillId}.html', SkillsController::class);
     $app->get('/admin/skills/{skillId}.html', SkillsController::class);
+
+    $app->get('/admin/events.html', EventsController::class);
 };

@@ -6,32 +6,34 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\Event as EventModel;
+use SvenHK\Maerquin\Repository\EventRepository;
 
-#[ORM\Entity]
-class Event
+#[ORM\Entity(repositoryClass: EventRepository::class)]
+class Event extends EventModel
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public Uuid $id;
+    protected UuidInterface $id;
 
     #[ORM\Column(length: 255)]
-    public string $name;
+    protected string $name;
 
     #[ORM\Column(type: 'integer')]
-    public int $points;
+    protected int $points;
 
     #[ORM\Column(length: 255, nullable: true)]
-    public string $secondaryName;
+    protected string $secondaryName;
 
     #[ORM\Column(type: 'datetime')]
-    public DateTimeInterface $startDate;
+    protected DateTimeInterface $startDate;
 
     #[ORM\Column(type: 'datetime')]
-    public DateTimeInterface $endDate;
+    protected DateTimeInterface $endDate;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    public string $notes;
+    protected string $notes;
 }

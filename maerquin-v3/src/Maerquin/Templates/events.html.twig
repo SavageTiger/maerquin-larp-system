@@ -1,0 +1,98 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12 is-gapless">
+            <div class="field is-pulled-right has-addons">
+                &nbsp;
+                <div class="control">
+                    <input class="input" type="text" v-model="search" placeholder="Zoeken">
+                </div>
+            </div>
+            <button class="button is-pulled-right"><i class="fa-solid fa-calendar-plus"></i>&nbsp;Nieuwe aanmaken
+            </button>
+        </div>
+    </div>
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
+                <tr>
+                    <th>Naam</th>
+                    <th></th>
+                    <th>Start datum</th>
+                    <th>Eind datum</th>
+                    <th>Punten</th>
+                </tr>
+                <tr v-for="event in filteredEvents" :key="event.id">
+                    <td class="is-clickable" @click="navigateToEvent(event.id)">
+                        <a href="#">
+                            {{ '{{ event.name }}' }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ '{{ event.alternativeName }}' }}
+                    </td>
+                    <td>
+                        {{ '{{ formatDate(event.startDate) }}' }}
+                    </td>
+                    <td>
+                        {{ '{{ formatDate(event.endDate) }}' }}
+                    </td>
+                    <td>
+                        {{ '{{ event.points }}' }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: '',
+                    events: {{ events.serialize()|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                };
+            },
+            computed: {
+                filteredEvents() {
+                    const searchTerm = this.search.toLowerCase();
+                    
+                    return this.events.filter(event =>
+                        event.name.toLowerCase().includes(searchTerm) ||
+                        event.alternativeName.toLowerCase().includes(searchTerm)
+                    );
+                }
+            },
+            methods: {
+                navigateToEvent(eventId) {
+                    document.location.href = `/admin/events/${eventId}.html`;
+                },
+
+                formatDate(dateText) {
+                    const month = [
+                        "Januari",
+                        "Februari",
+                        "Maart",
+                        "April",
+                        "Mei",
+                        "Juni",
+                        "Juli",
+                        "Augustus",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "December"
+                    ];
+
+                    const date = new Date(dateText);
+
+                    return date.getDate() + ' ' + month[date.getMonth()] + ' ' + date.getFullYear();
+                }
+            }
+        }).mount('.content');
+    </script>
+
+{% endblock %}

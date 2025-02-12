@@ -63,7 +63,10 @@ class CharactersController extends Action
     public function action() : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
-        $viewContext = ['deities' => new DeitiesCollection($this->deityRepository->findAll())];
+
+        $viewContext = [
+            'deities' => new DeitiesCollection($this->deityRepository->findAll())
+        ];
 
         $characterId = $this->request->getAttribute('characterId');
 

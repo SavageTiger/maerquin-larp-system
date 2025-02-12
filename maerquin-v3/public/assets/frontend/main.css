@@ -156,3 +156,10 @@ input.skill-input {
 .character-skill-table {
     font-size: 11pt;
 }
+
+button.small-button {
+    font-size: 12pt;
+    height: 22px;
+    padding: 10px;
+    margin: 0;
+}

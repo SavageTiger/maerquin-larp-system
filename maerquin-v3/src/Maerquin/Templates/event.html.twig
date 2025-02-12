@@ -13,6 +13,9 @@
 
     <div class="spacer is-12"></div>
 
+    <input class="input" name="characters" type="text"
+           v-model="characterIds" placeholder=""/>
+
     <div class="columns">
         <div class="column is-6">
             <article class="message is-dark">
@@ -109,31 +112,77 @@
             <article class="message is-dark">
                 <div class="message-header ">
                     Characters aanwezig
+                    <button class="button is-pulled-right small-button" onclick="return false"
+                            @click="manageCharacters">
+                        <i class="fa-solid fa-person-military-to-person"></i>&nbsp;Aanpassen
+                    </button>
                 </div>
                 <div class="message-body">
-                    <div class="content">
-                        <ol type="1">
-                            {% for character in characters %}
-                                <li>
+                    <div class="box is-shadowless inner-box">
+                        <div class="content">
+                            <ol type="1">
+                                <li v-for="character in characters">
                                     <i class="fa-regular fa-id-badge"></i>
-                                    {{ character.name }}
+                                    {{ '{{ character.name }}' }}
                                 </li>
-                            {% endfor %}
-                        </ol>
+                            </ol>
+                        </div>
                     </div>
-
-
                 </div>
             </article>
+        </div>
+    </div>
+
+    <div class="modal" id="manageCharacters">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Characters</p>
+                <div class="control">
+                    <input class="input" type="text" v-model="characterFilter" placeholder="Filter">
+                </div>
+            </header>
+            <section class="modal-card-body">
+                <div class="checkbox" v-for="character in filteredCharacters">
+                    <label class="checkbox">
+                        <input type="checkbox"
+                               :value="character"
+                               v-model="characters"/>
+                        {{ '{{ character.name }}' }}
+                    </label>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button class="button">Sluiten</button>
+                </div>
+            </footer>
         </div>
     </div>
 
     <script>
         Vue.createApp({
             data() {
-                return {};
+                return {
+                    characterFilter: '',
+                    characters: {{ characters.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    allCharacters: []
+                };
             },
-            computed: {},
+            computed: {
+                characterIds: function () {
+                    return JSON.stringify(this.characters.map((character) => {
+                        return character.id;
+                    }));
+                },
+                filteredCharacters() {
+                    return this.allCharacters.filter((character) => {
+                        return character.name.toLowerCase().includes(
+                            this.characterFilter.toLowerCase()
+                        ) !== false
+                    });
+                },
+            },
             methods: {
                 saveEvent(eventId) {
                     const eventForm = serializeForm('containerForm');
@@ -150,7 +199,16 @@
                         });
 
                     return false;
-                }
+                },
+
+
+                manageCharacters() {
+                    axios.get('/admin/characters/api').then((response) => {
+                        this.allCharacters = response.data.data ?? [];
+
+                        openModal(document.getElementById('manageCharacters'));
+                    });
+                },
             }
         }).mount('.content');
     </script>

@@ -23,5 +23,12 @@ class EventRepository extends EntityRepository
     {
         return $this->findOneBy(['id' => $eventId]) ?? throw MaerquinEntityNotFoundException::withType(Event::class);
     }
+
+    public function save(Event $event) : void
+    {
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
+    }
+
 }
 

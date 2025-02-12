@@ -11,6 +11,7 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Form\EventFormHandler;
+use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\EventCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
@@ -51,7 +52,7 @@ class EventsController extends Action
                 'event.html.twig',
                 [
                     'event' => $this->eventRepository->getById($eventId),
-                    'characters' => $this->characterRepository->findByEvent($eventId),
+                    'characters' => new CharacterCollection($this->characterRepository->findByEvent($eventId)),
                 ]
             );
 

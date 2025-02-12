@@ -2,7 +2,9 @@
 
 namespace SvenHK\Maerquin\Model;
 
+use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 
 class Event
@@ -13,6 +15,7 @@ class Event
     protected DateTimeInterface $startDate;
     protected DateTimeInterface $endDate;
     protected int $points;
+    protected Collection $charactersPresent;
 
     public function serialize()
     {
@@ -54,5 +57,19 @@ class Event
     public function getPoints() : int
     {
         return $this->points;
+    }
+
+    public function updateEvent(
+        string $name,
+        string $secondaryName,
+        int $points,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+    ) {
+        $this->name = $name;
+        $this->secondaryName = $secondaryName;
+        $this->points = $points;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
     }
 }

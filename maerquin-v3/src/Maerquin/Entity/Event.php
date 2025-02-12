@@ -3,6 +3,8 @@
 namespace SvenHK\Maerquin\Entity;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
@@ -28,12 +30,20 @@ class Event extends EventModel
     #[ORM\Column(length: 255, nullable: true)]
     protected string $secondaryName;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime_immutable')]
     protected DateTimeInterface $startDate;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime_immutable')]
     protected DateTimeInterface $endDate;
 
     #[ORM\Column(type: 'text', nullable: true)]
     protected string $notes;
+
+    #[ORM\OneToMany(mappedBy: "event", targetEntity: CharacterEventLink::class)]
+    protected Collection $charactersPresent;
+
+    public function __construct()
+    {
+        $this->charactersPresent = new ArrayCollection();
+    }
 }

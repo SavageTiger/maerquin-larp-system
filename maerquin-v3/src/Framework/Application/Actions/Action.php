@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Application\Actions;
 
+use App\Domain\Exception\ExpectedException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
 use Slim\Exception\HttpNotFoundException;
 use Throwable;
 
@@ -38,6 +40,8 @@ abstract class Action
 
         try {
             return $this->action();
+        } catch (ExpectedException   $e) {
+            throw new HttpException($this->request, $e->getMessage(), 400);
         } catch (Throwable $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
         }

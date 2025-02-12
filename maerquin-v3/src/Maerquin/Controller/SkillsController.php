@@ -56,9 +56,9 @@ class SkillsController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
-        $skillId = $this->request->getAttribute('skillId');
+        $skillId = (string)($this->request->getAttribute('skillId') ?? '');
 
-        if ($this->request->getMethod() === 'POST' && is_string($skillId) && Uuid::isValid($skillId)) {
+        if ($this->request->getMethod() === 'POST' && Uuid::isValid($skillId)) {
             $this->skillFormHandler->handle($skillId, $this->request);
         }
 
@@ -67,7 +67,7 @@ class SkillsController extends Action
             'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
         ];
 
-        if (is_string($skillId) && Uuid::isValid($skillId)) {
+        if ($skillId !== '') {
             return $view->render(
                 $this->response,
                 'skill.html.twig',

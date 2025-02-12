@@ -39,4 +39,5 @@ return function (App $app) {
 
     $app->get('/admin/events.html', EventsController::class);
     $app->get('/admin/events/{eventId}.html', EventsController::class);
+    $app->post('/admin/events/{eventId}.html', EventsController::class);
 };

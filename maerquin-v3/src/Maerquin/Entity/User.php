@@ -26,11 +26,7 @@ class User extends UserModel
 
     #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
-
-    #[ORM\ManyToOne(targetEntity: Player::class)]
-    #[ORM\JoinColumn(name: 'player_id', referencedColumnName: 'id', nullable: true)]
-    protected ?Player $player = null;
-
+    
     public function checkPassword(string $password) : bool
     {
         $algorithm = 'sha512';

@@ -1,0 +1,60 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12 is-gapless">
+            <div class="field is-pulled-right has-addons">
+                &nbsp;
+                <div class="control">
+                    <input class="input" type="text" v-model="search" placeholder="Zoeken">
+                </div>
+            </div>
+            <button class="button is-pulled-right"><i class="fa-solid fa-circle-plus"></i>&nbsp;Nieuwe aanmaken
+            </button>
+        </div>
+    </div>
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
+                <tr>
+                    <th>Naam</th>
+                </tr>
+                <tr v-for="race in filteredRaces" :key="race.id">
+                    <td class="is-clickable" @click="navigateToRace(race.id)">
+                        <a href="#">{{ '{{ race.name }}' }}</a>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    search: '',
+                    races: {{ races.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                }
+            },
+            computed: {
+                filteredRaces() {
+                    return this.races.filter((race) => {
+                        return (
+                            race.name.toLowerCase().includes(this.search.toLowerCase())
+                        );
+                    });
+                }
+            },
+            methods: {
+                navigateToRace(raceId) {
+                    document.location.href = `/admin/races/${raceId}.html`;
+                },
+            }
+        }).mount('.content');
+    </script>
+
+{% endblock %}

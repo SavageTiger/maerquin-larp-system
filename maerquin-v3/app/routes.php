@@ -11,6 +11,7 @@ use SvenHK\Maerquin\Controller\EventsController;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\PlayersController;
+use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
 
 return function (App $app) {
@@ -40,4 +41,7 @@ return function (App $app) {
     $app->get('/admin/events.html', EventsController::class);
     $app->get('/admin/events/{eventId}.html', EventsController::class);
     $app->post('/admin/events/{eventId}.html', EventsController::class);
+
+    $app->get('/admin/races.html', RacesController::class);
+
 };

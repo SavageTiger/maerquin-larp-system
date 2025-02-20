@@ -6,6 +6,7 @@ use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
+use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Model\RaceCollection;
@@ -27,6 +28,20 @@ class RacesController extends Action
     public function action() : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
+
+        $raceId = (string)($this->request->getAttribute('raceId') ?? '');
+
+        if ($this->request->getMethod() === 'POST' && Uuid::isValid($raceId)) {
+            // FORM HANDLE
+        }
+
+        if ($raceId !== '' && Uuid::isValid($raceId)) {
+            return $view->render(
+                $this->response,
+                'race.html.twig',
+                ['race' => $this->raceRepository->getById($raceId)]
+            );
+        }
 
         return $view->render(
             $this->response,

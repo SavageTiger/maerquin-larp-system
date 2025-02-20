@@ -55,7 +55,6 @@ class EventsController extends Action
                     'characters' => new CharacterCollection($this->characterRepository->findByEvent($eventId)),
                 ]
             );
-
         }
 
         return $view->render(

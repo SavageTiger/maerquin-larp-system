@@ -1,0 +1,39 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <button class="button is-pulled-right"><i class="fa-solid fa-save"></i>&nbsp;Opslaan
+            </button>
+            &nbsp;
+        </div>
+    </div>
+
+    <div class="spacer is-12"></div>
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <article class="message is-dark">
+                <div class="message-header ">
+                    {{ race.name }}
+                </div>
+                <div class="message-body">
+
+                    Body
+
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {}
+            },
+            methods: {}
+        }).mount('.content');
+    </script>
+
+{% endblock %}

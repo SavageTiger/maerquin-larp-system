@@ -43,5 +43,5 @@ return function (App $app) {
     $app->post('/admin/events/{eventId}.html', EventsController::class);
 
     $app->get('/admin/races.html', RacesController::class);
-
+    $app->get('/admin/races/{raceId}.html', RacesController::class);
 };

@@ -7,6 +7,11 @@ use SvenHK\Maerquin\Entity\Race;
 
 class RaceRepository extends EntityRepository
 {
+    public function getById(string $raceId) : Race
+    {
+        return $this->findOneBy(['id' => $raceId]);
+    }
+
     /**
      * @return Race[]
      */

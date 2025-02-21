@@ -20,8 +20,43 @@
                 </div>
                 <div class="message-body">
 
-                    Body
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Naam</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="name" type="text"
+                                           value="{{ race.name }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <h2>Verplichte skills</h2>
+
+                    <div class="box inner-box is-shadowless">
+                        <table class="table is-bordered is-striped is-fullwidth">
+                            <tr v-for="skill in mandatorySkills" :key="skill.id">
+                                <td>
+                                    {{ '{{ skill.name }}' }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h2>Verboden skills</h2>
+
+                    <div class="box inner-box is-shadowless">
+                        <table class="table is-bordered is-striped is-fullwidth">
+                            <tr v-for="skill in forbiddenSkills" :key="skill.id">
+                                <td>
+                                    {{ '{{ skill.name }}' }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </article>
         </div>
@@ -30,7 +65,10 @@
     <script>
         Vue.createApp({
             data() {
-                return {}
+                return {
+                    mandatorySkills: {{ mandatorySkills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    forbiddenSkills: {{ forbiddenSkills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                }
             },
             methods: {}
         }).mount('.content');

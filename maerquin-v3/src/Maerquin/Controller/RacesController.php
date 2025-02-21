@@ -9,8 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Race;
+use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\RaceCollection;
+use SvenHK\Maerquin\Model\SkillCollection;
 use SvenHK\Maerquin\Repository\RaceRepository;
+use SvenHK\Maerquin\Repository\SkillRepository;
 
 class RacesController extends Action
 {
@@ -19,10 +22,16 @@ class RacesController extends Action
      */
     private EntityRepository $raceRepository;
 
+    /**
+     * @var SkillRepository
+     */
+    private EntityRepository $skillRepository;
+
     public function __construct(
         EntityManager $entityManager
     ) {
         $this->raceRepository = $entityManager->getRepository(Race::class);
+        $this->skillRepository = $entityManager->getRepository(Skill::class);
     }
 
     public function action() : ResponseInterface
@@ -39,7 +48,15 @@ class RacesController extends Action
             return $view->render(
                 $this->response,
                 'race.html.twig',
-                ['race' => $this->raceRepository->getById($raceId)]
+                [
+                    'race' => $this->raceRepository->getById($raceId),
+                    'mandatorySkills' => new SkillCollection(
+                        $this->skillRepository->findAllMandatorySortedForRace($raceId)
+                    ),
+                    'forbiddenSkills' => new SkillCollection(
+                        $this->skillRepository->findAllForbiddenSortedForRace($raceId)
+                    ),
+                ]
             );
         }
 

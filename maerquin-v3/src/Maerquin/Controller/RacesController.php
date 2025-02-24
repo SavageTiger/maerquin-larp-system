@@ -56,6 +56,9 @@ class RacesController extends Action
                     'forbiddenSkills' => new SkillCollection(
                         $this->skillRepository->findAllForbiddenSortedForRace($raceId)
                     ),
+                    'differentPointSkills' => new SkillCollection(
+                        $this->skillRepository->findDifferentPointSkillsSortedForRace($raceId)
+                    ),
                 ]
             );
         }

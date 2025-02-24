@@ -34,30 +34,55 @@
                         </div>
                     </div>
 
-                    <h2>Verplichte skills</h2>
+                    <br/>
+
+                    <div class="columns">
+                        <div class="column">
+                            <h2>Verplichte skills</h2>
+
+                            <div class="box inner-box is-shadowless">
+                                <table class="table is-bordered is-striped is-fullwidth">
+                                    <tr v-for="skill in mandatorySkills" :key="skill.id">
+                                        <td>
+                                            {{ '{{ skill.name }}' }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+                            <h2>Verboden skills</h2>
+
+                            <div class="box inner-box is-shadowless">
+                                <table class="table is-bordered is-striped is-fullwidth">
+                                    <tr v-for="skill in forbiddenSkills" :key="skill.id">
+                                        <td>
+                                            {{ '{{ skill.name }}' }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Afwijkende kosten (punten) voor ras</h2>
 
                     <div class="box inner-box is-shadowless">
                         <table class="table is-bordered is-striped is-fullwidth">
-                            <tr v-for="skill in mandatorySkills" :key="skill.id">
+                            <tr v-for="skill in differentPointSkills" :key="skill.id">
                                 <td>
                                     {{ '{{ skill.name }}' }}
                                 </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <h2>Verboden skills</h2>
-
-                    <div class="box inner-box is-shadowless">
-                        <table class="table is-bordered is-striped is-fullwidth">
-                            <tr v-for="skill in forbiddenSkills" :key="skill.id">
                                 <td>
-                                    {{ '{{ skill.name }}' }}
+                                    {{ '{{ skill.points }}' }}
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
+
             </article>
         </div>
     </div>
@@ -67,7 +92,8 @@
             data() {
                 return {
                     mandatorySkills: {{ mandatorySkills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-                    forbiddenSkills: {{ forbiddenSkills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                    forbiddenSkills: {{ forbiddenSkills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    differentPointSkills: {{ differentPointSkills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
                 }
             },
             methods: {}

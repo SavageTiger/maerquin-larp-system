@@ -33,6 +33,7 @@ class SkillRepository extends EntityRepository
         $skillIds = array_column(
             $this->createBaseRaceSkillQuery($raceId)
                 ->andWhere('skillLink.mandatory = :mandatory')
+                ->andWhere('skillLink.points = 0')
                 ->setParameter('mandatory', true)
                 ->getQuery()
                 ->getArrayResult(),
@@ -61,7 +62,26 @@ class SkillRepository extends EntityRepository
         $skillIds = array_column(
             $this->createBaseRaceSkillQuery($raceId)
                 ->andWhere('skillLink.forbidden = :forbidden')
+                ->andWhere('skillLink.points = 0')
                 ->setParameter('forbidden', true)
+                ->getQuery()
+                ->getArrayResult(),
+            'id'
+        );
+
+        return $this->findBy(['id' => $skillIds], ['name' => 'ASC']);
+    }
+
+    /**
+     * @return SkillModel[]
+     */
+    public function findDifferentPointSkillsSortedForRace(string $raceId) : array
+    {
+        $skillIds = array_column(
+            $this->createBaseRaceSkillQuery($raceId)
+                ->andWhere('skillLink.points > 0')
+                ->andWhere('skillLink.forbidden = false')
+                ->andWhere('skillLink.mandatory = false')
                 ->getQuery()
                 ->getArrayResult(),
             'id'

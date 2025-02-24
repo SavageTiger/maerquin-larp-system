@@ -42,9 +42,9 @@
 
                             <div class="box inner-box is-shadowless">
                                 <table class="table is-bordered is-striped is-fullwidth">
-                                    <tr v-for="skill in mandatorySkills" :key="skill.id">
+                                    <tr v-for="skillConnection in mandatorySkills" :key="skillConnection.id">
                                         <td>
-                                            {{ '{{ skill.name }}' }}
+                                            {{ '{{ skillConnection.skillName }}' }}
                                         </td>
                                     </tr>
                                 </table>
@@ -57,9 +57,9 @@
 
                             <div class="box inner-box is-shadowless">
                                 <table class="table is-bordered is-striped is-fullwidth">
-                                    <tr v-for="skill in forbiddenSkills" :key="skill.id">
+                                    <tr v-for="skillConnection in forbiddenSkills" :key="skillConnection.id">
                                         <td>
-                                            {{ '{{ skill.name }}' }}
+                                            {{ '{{ skillConnection.skillName }}' }}
                                         </td>
                                     </tr>
                                 </table>
@@ -71,12 +71,14 @@
 
                     <div class="box inner-box is-shadowless">
                         <table class="table is-bordered is-striped is-fullwidth">
-                            <tr v-for="skill in differentPointSkills" :key="skill.id">
+                            <tr v-for="skillConnection in differentPointSkills" :key="skillConnection.id">
                                 <td>
-                                    {{ '{{ skill.name }}' }}
+                                    {{ '{{ skillConnection.skillName }}' }}
                                 </td>
-                                <td>
-                                    {{ '{{ skill.points }}' }}
+                                <td style="width: 20%">
+                                    <input class="input" name="points[]" type="text"
+                                           v-model="skillConnection.customPoints"
+                                           placeholder=""/>
                                 </td>
                             </tr>
                         </table>

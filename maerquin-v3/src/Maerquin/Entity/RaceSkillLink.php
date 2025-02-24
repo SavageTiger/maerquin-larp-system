@@ -4,31 +4,33 @@ namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\SkillRaceConnection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "raceSkillLink")]
-class RaceSkillLink
+class RaceSkillLink extends SkillRaceConnection
 {
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private string $id;
+    protected UuidInterface $id;
 
     #[ORM\ManyToOne(targetEntity: Race::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Race $race;
+    protected Race $race;
 
     #[ORM\ManyToOne(targetEntity: Skill::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Skill $skill;
+    protected Skill $skill;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $mandatory;
+    protected bool $mandatory;
 
     #[ORM\Column(type: "boolean", nullable: false)]
-    private bool $forbidden;
+    protected bool $forbidden;
 
     #[ORM\Column(type: "integer", nullable: false)]
-    private int $points;
+    protected int $points;
 }

@@ -3,12 +3,12 @@
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
 use SvenHK\Maerquin\Entity\Skill as Skill;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
+use SvenHK\Maerquin\Model\SkillCollection;
 
 class SkillRepository extends EntityRepository
 {
@@ -26,68 +26,52 @@ class SkillRepository extends EntityRepository
     }
 
     /**
-     * @return SkillModel[]
+     * @return SkillCollection[]
      */
     public function findAllMandatorySortedForRace(string $raceId) : array
     {
-        $skillIds = array_column(
-            $this->createBaseRaceSkillQuery($raceId)
-                ->andWhere('skillLink.mandatory = :mandatory')
-                ->andWhere('skillLink.points = 0')
-                ->setParameter('mandatory', true)
-                ->getQuery()
-                ->getArrayResult(),
-            'id'
-        );
-
-        return $this->findBy(['id' => $skillIds], ['name' => 'ASC']);
+        return $this->createBaseRaceSkillConnectionQuery($raceId)
+            ->andWhere('skillRaceConnection.mandatory = :mandatory')
+            ->andWhere('skillRaceConnection.points = 0')
+            ->setParameter('mandatory', true)
+            ->getQuery()
+            ->getResult();
     }
 
-    private function createBaseRaceSkillQuery(string $raceId) : QueryBuilder
+    private function createBaseRaceSkillConnectionQuery(string $raceId) : QueryBuilder
     {
         return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('skill.id')
-            ->from(Skill::class, 'skill')
-            ->innerJoin(RaceSkillLink::class, 'skillLink', Join::WITH, 'skillLink.skill = skill.id AND skillLink.race = :raceId')
-            ->where('skillLink.race = :raceId')
+            ->select('skillRaceConnection')
+            ->from(RaceSkillLink::class, 'skillRaceConnection')
+            ->where('skillRaceConnection.race = :raceId')
             ->setParameter('raceId', $raceId);
     }
 
     /**
-     * @return SkillModel[]
+     * @return SkillCollection[]
      */
     public function findAllForbiddenSortedForRace(string $raceId) : array
     {
-        $skillIds = array_column(
-            $this->createBaseRaceSkillQuery($raceId)
-                ->andWhere('skillLink.forbidden = :forbidden')
-                ->andWhere('skillLink.points = 0')
-                ->setParameter('forbidden', true)
-                ->getQuery()
-                ->getArrayResult(),
-            'id'
-        );
-
-        return $this->findBy(['id' => $skillIds], ['name' => 'ASC']);
+        return $this->createBaseRaceSkillConnectionQuery($raceId)
+            ->andWhere('skillRaceConnection.forbidden = :forbidden')
+            ->andWhere('skillRaceConnection.points = 0')
+            ->setParameter('forbidden', true)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
-     * @return SkillModel[]
+     * @return SkillCollection[]
      */
     public function findDifferentPointSkillsSortedForRace(string $raceId) : array
     {
-        $skillIds = array_column(
-            $this->createBaseRaceSkillQuery($raceId)
-                ->andWhere('skillLink.points > 0')
-                ->andWhere('skillLink.forbidden = false')
-                ->andWhere('skillLink.mandatory = false')
-                ->getQuery()
-                ->getArrayResult(),
-            'id'
-        );
-
-        return $this->findBy(['id' => $skillIds], ['name' => 'ASC']);
+        return $this->createBaseRaceSkillConnectionQuery($raceId)
+            ->andWhere('skillRaceConnection.points > 0')
+            ->andWhere('skillRaceConnection.forbidden = false')
+            ->andWhere('skillRaceConnection.mandatory = false')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

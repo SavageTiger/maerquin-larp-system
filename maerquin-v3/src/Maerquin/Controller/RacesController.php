@@ -11,7 +11,7 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\RaceCollection;
-use SvenHK\Maerquin\Model\SkillCollection;
+use SvenHK\Maerquin\Model\SkillRaceConnectionCollection;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
 
@@ -50,13 +50,13 @@ class RacesController extends Action
                 'race.html.twig',
                 [
                     'race' => $this->raceRepository->getById($raceId),
-                    'mandatorySkills' => new SkillCollection(
+                    'mandatorySkills' => new SkillRaceConnectionCollection(
                         $this->skillRepository->findAllMandatorySortedForRace($raceId)
                     ),
-                    'forbiddenSkills' => new SkillCollection(
+                    'forbiddenSkills' => new SkillRaceConnectionCollection(
                         $this->skillRepository->findAllForbiddenSortedForRace($raceId)
                     ),
-                    'differentPointSkills' => new SkillCollection(
+                    'differentPointSkills' => new SkillRaceConnectionCollection(
                         $this->skillRepository->findDifferentPointSkillsSortedForRace($raceId)
                     ),
                 ]

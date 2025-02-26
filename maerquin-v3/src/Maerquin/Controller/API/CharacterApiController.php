@@ -25,10 +25,10 @@ class CharacterApiController extends Action
     {
         $forPlayerId = $this->request->getAttribute('playerId');
 
+        $characters = [];
+        
         if (is_string($forPlayerId) === true) {
             $characters = $this->characterRepository->forPlayer($forPlayerId);
-        } else {
-            $characters = $this->characterRepository->findAllSorted();
         }
 
         return $this->respondWithData(array_map(function (Character $character) {

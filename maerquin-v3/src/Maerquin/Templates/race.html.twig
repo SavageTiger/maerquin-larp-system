@@ -78,7 +78,7 @@
 
                     <button class="button is-pulled-right mt-4" onclick="return false;"
                             @click="manageSkills('DifferentPoint')">
-                        <i class="fa-solid fa-certificate"></i>&nbsp;Aanpassen
+                        <i class="fa-solid fa-arrow-up-1-9"></i>&nbsp;Aanpassen
                     </button>
 
                     <h2>Afwijkende kosten (punten) voor ras</h2>
@@ -117,8 +117,9 @@
                 <div class="checkbox" v-for="skill in allSkillsFiltered">
                     <label class="checkbox">
                         <input type="checkbox"
-                               :value="skill"
-                               v-model="mandatorySkills"/>
+                               @change="changeSkillConnection('mandatorySkill', { 'skillId': skill.id, 'skillName': skill.name })"
+                               :checked="isSkillConnectionSelected('mandatorySkill', skill.id)"
+                        />
                         {{ '{{ skill.name }}' }}
                     </label>
                 </div>
@@ -144,8 +145,9 @@
                 <div class="checkbox" v-for="skill in allSkillsFiltered">
                     <label class="checkbox">
                         <input type="checkbox"
-                               :value="skill"
-                               v-model="forbiddenSkills"/>
+                               @change="changeSkillConnection('forbiddenSkill', { 'skillId': skill.id, 'skillName': skill.name })"
+                               :checked="isSkillConnectionSelected('forbiddenSkill', skill.id)"
+                        />
                         {{ '{{ skill.name }}' }}
                     </label>
                 </div>
@@ -171,8 +173,9 @@
                 <div class="checkbox" v-for="skill in allSkillsFiltered">
                     <label class="checkbox">
                         <input type="checkbox"
-                               :value="skill"
-                               v-model="differentPointSkills"/>
+                               @change="changeSkillConnection('differentPointSkill', { 'skillId': skill.id, 'skillName': skill.name })"
+                               :checked="isSkillConnectionSelected('differentPointSkill', skill.id)"
+                        />
                         {{ '{{ skill.name }}' }}
                     </label>
                 </div>
@@ -186,6 +189,8 @@
     </div>
 
     <script>
+        const differentPointSkillsShadow = {};
+
         Vue.createApp({
             data() {
                 return {
@@ -204,7 +209,7 @@
                             this.skillsSearch.toLowerCase()
                         );
                     });
-                }
+                },
             },
             methods: {
                 manageSkills(windowName) {
@@ -216,8 +221,86 @@
                         openModal(document.getElementById('manageSkills' + windowName));
                     });
                 },
-            },
 
+                changeSkillConnection(skillType, value) {
+                    const hasSkillConnection = this.isSkillConnectionSelected(skillType, value.skillId);
+
+                    let skillConnections = [];
+
+                    switch (skillType) {
+                        case 'mandatorySkill':
+                            skillConnections = this.mandatorySkills;
+                            break;
+
+                        case 'forbiddenSkill':
+                            skillConnections = this.forbiddenSkills;
+                            break;
+
+                        case 'differentPointSkill':
+                            skillConnections = this.differentPointSkills;
+
+                            break;
+                    }
+
+                    if (hasSkillConnection) {
+                        let index = 0;
+
+                        for (const skillConnection of skillConnections) {
+                            if (skillConnection.skillId === value.skillId) {
+                                if (skillType === 'differentPointSkill') {
+                                    differentPointSkillsShadow[value.skillId] = skillConnection.customPoints;
+                                }
+
+                                skillConnections = skillConnections.splice(index, 1);
+
+                                return;
+                            }
+
+                            index++;
+                        }
+
+                        return;
+                    }
+
+                    if (skillType === 'differentPointSkill') {
+                        value.customPoints = differentPointSkillsShadow[value.skillId] ?? 0;
+                    }
+
+
+                    skillConnections.push(value);
+                },
+
+                isSkillConnectionSelected(skillType, skillId) {
+                    let skillConnections = [];
+
+                    switch (skillType) {
+                        case 'mandatorySkill':
+                            skillConnections = this.mandatorySkills;
+                            break;
+
+                        case 'forbiddenSkill':
+                            skillConnections = this.forbiddenSkills;
+                            break;
+
+                        case 'differentPointSkill':
+                            skillConnections = this.differentPointSkills;
+                            break;
+                    }
+
+                    for (const skillConnection of skillConnections) {
+                        if (skillConnection.skillId === skillId) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+            },
+            mounted() {
+                for (const differentPointSkill of this.differentPointSkills) {
+                    differentPointSkillsShadow[differentPointSkill.skillId] = differentPointSkill.customPoints;
+                }
+            }
         }).mount('.content');
     </script>
 

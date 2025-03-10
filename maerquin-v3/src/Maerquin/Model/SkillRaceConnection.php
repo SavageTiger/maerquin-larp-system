@@ -19,6 +19,7 @@ class SkillRaceConnection
         return [
             'id' => $this->getId(),
             'skillName' => $this->skill->getName(),
+            'skillId' => $this->skill->getId(),
             'mandatory' => $this->isMandatory(),
             'forbidden' => $this->isForbidden(),
             'customPoints' => $this->getCustomPoints(),

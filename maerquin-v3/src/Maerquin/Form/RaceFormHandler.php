@@ -1,0 +1,83 @@
+<?php
+
+namespace SvenHK\Maerquin\Form;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use JsonException;
+use Slim\Psr7\Request;
+use SvenHK\Maerquin\Entity\Race;
+use SvenHK\Maerquin\Entity\RaceSkillLink;
+use SvenHK\Maerquin\Entity\Skill;
+use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Repository\RaceRepository;
+use SvenHK\Maerquin\Repository\SkillRepository;
+
+class RaceFormHandler
+{
+    /**
+     * @var RaceRepository
+     */
+    private EntityRepository $raceRepository;
+
+    /**
+     * @var SkillRepository
+     */
+    private EntityRepository $skillRepository;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->raceRepository = $entityManager->getRepository(Race::class);
+        $this->skillRepository = $entityManager->getRepository(Skill::class);
+    }
+
+    /**
+     * @throws MissingFormFieldException
+     * @throws MaerquinEntityNotFoundException
+     * @throws JsonException
+     */
+    public function handle(string $raceId, Request $request) : void
+    {
+        $race = $this->raceRepository->getById($raceId);
+
+        $formResolver = FormResolver::createFromRequest($request);
+
+        $skillConnections = [];
+
+        $mandatorySkills = json_decode($formResolver->getValue('mandatorySkills'), true, 512, JSON_THROW_ON_ERROR);
+        $forbiddenSkills = json_decode($formResolver->getValue('forbiddenSkills'), true, 512, JSON_THROW_ON_ERROR);
+        $differentPointSkills = json_decode($formResolver->getValue('differentPointSkills'), true, 512, JSON_THROW_ON_ERROR);
+
+        foreach ($mandatorySkills['skillIds'] ?? [] as $skillId) {
+            $skillConnections[] = RaceSkillLink::createMandatory(
+                $race,
+                $this->skillRepository->getById($skillId)
+            );
+        }
+
+        foreach ($forbiddenSkills['skillIds'] ?? [] as $skillId) {
+            $skillConnections[] = RaceSkillLink::createForbidden(
+                $race,
+                $this->skillRepository->getById($skillId)
+            );
+        }
+
+        foreach ($differentPointSkills['skillIds'] ?? [] as $index => $skillId) {
+            $customPoints = $differentPointSkills['points'][$index] ?? 0;
+
+            $skillConnections[] = RaceSkillLink::createWithCustomPoints(
+                $race,
+                $this->skillRepository->getById($skillId),
+                $customPoints
+            );
+        }
+
+//        $race->updateRace(
+//            $formResolver->getValue('name', 'race'),
+//            $formResolver->getValue('description', 'race'),
+//            $skillConnections
+//        );
+//
+//        $this->raceRepository->save($race);
+    }
+}

@@ -4,11 +4,18 @@
 
     <div class="columns is-gapless">
         <div class="column is-12">
-            <button class="button is-pulled-right"><i class="fa-solid fa-save"></i>&nbsp;Opslaan
+            <button class="button is-pulled-right" @click="saveRace('{{ race.id }}')" onclick="return false;"><i
+                        class="fa-solid fa-save"></i>&nbsp;Opslaan
             </button>
             &nbsp;
         </div>
     </div>
+
+    <form method="POST">
+        <input type="hidden" name="mandatorySkills" v-model="mandatorySkillsFormValue"/>
+        <input type="hidden" name="forbiddenSkills" v-model="forbiddenSkillsFormValue"/>
+        <input type="hidden" name="differentPointSkills" v-model="differentPointSkillsFormValue"/>
+    </form>
 
     <div class="spacer is-12"></div>
 
@@ -210,8 +217,46 @@
                         );
                     });
                 },
+
+                mandatorySkillsFormValue() {
+                    return JSON.stringify({
+                        skillIds: this.mandatorySkills.map((skillConnection) => skillConnection.skillId)
+                    });
+                },
+
+                forbiddenSkillsFormValue() {
+                    return JSON.stringify({
+                        skillIds: this.forbiddenSkills.map((skillConnection) => skillConnection.skillId)
+                    })
+
+                },
+
+                differentPointSkillsFormValue() {
+                    return JSON.stringify({
+                        skillIds: this.differentPointSkills.map((skillConnection) => skillConnection.skillId),
+                        points: this.differentPointSkills.map((skillConnection) => parseInt(skillConnection.customPoints))
+                    })
+                },
+
             },
             methods: {
+                saveRace(raceId) {
+                    const raceForm = serializeForm('containerForm');
+
+                    axios
+                        .post(`/admin/races/${raceId}.html`, { event: raceForm })
+                        .then(() => {
+                            document.location.href = '/admin/events.html'
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+
+                    return false;
+                },
+
                 manageSkills(windowName) {
                     axios.get('/admin/skills/api').then((response) => {
                         this.allSkillsSorted = response.data.data ?? [];

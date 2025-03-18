@@ -19,5 +19,12 @@ class RaceRepository extends EntityRepository
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
+
+    public function save(Race $race) : void
+    {
+        $this->getEntityManager()->persist($race);
+        $this->getEntityManager()->flush();
+    }
+
 }
 

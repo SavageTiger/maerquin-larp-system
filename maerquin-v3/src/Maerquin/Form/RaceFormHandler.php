@@ -44,9 +44,9 @@ class RaceFormHandler
 
         $skillConnections = [];
 
-        $mandatorySkills = json_decode($formResolver->getValue('mandatorySkills'), true, 512, JSON_THROW_ON_ERROR);
-        $forbiddenSkills = json_decode($formResolver->getValue('forbiddenSkills'), true, 512, JSON_THROW_ON_ERROR);
-        $differentPointSkills = json_decode($formResolver->getValue('differentPointSkills'), true, 512, JSON_THROW_ON_ERROR);
+        $mandatorySkills = json_decode($formResolver->getValue('mandatorySkills', 'race'), true, 512, JSON_THROW_ON_ERROR);
+        $forbiddenSkills = json_decode($formResolver->getValue('forbiddenSkills', 'race'), true, 512, JSON_THROW_ON_ERROR);
+        $differentPointSkills = json_decode($formResolver->getValue('differentPointSkills', 'race'), true, 512, JSON_THROW_ON_ERROR);
 
         foreach ($mandatorySkills['skillIds'] ?? [] as $skillId) {
             $skillConnections[] = RaceSkillLink::createMandatory(
@@ -72,12 +72,11 @@ class RaceFormHandler
             );
         }
 
-//        $race->updateRace(
-//            $formResolver->getValue('name', 'race'),
-//            $formResolver->getValue('description', 'race'),
-//            $skillConnections
-//        );
-//
-//        $this->raceRepository->save($race);
+        $race->updateRace(
+            $formResolver->getValue('name', 'race'),
+            $skillConnections
+        );
+
+        $this->raceRepository->save($race);
     }
 }

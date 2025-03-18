@@ -11,12 +11,6 @@
         </div>
     </div>
 
-    <form method="POST">
-        <input type="hidden" name="mandatorySkills" v-model="mandatorySkillsFormValue"/>
-        <input type="hidden" name="forbiddenSkills" v-model="forbiddenSkillsFormValue"/>
-        <input type="hidden" name="differentPointSkills" v-model="differentPointSkillsFormValue"/>
-    </form>
-
     <div class="spacer is-12"></div>
 
     <div class="columns is-gapless">
@@ -27,20 +21,25 @@
                 </div>
                 <div class="message-body">
 
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Naam</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input" name="name" type="text"
-                                           value="{{ race.name }}" placeholder=""/>
+                    <form method="POST">
+                        <input type="hidden" name="mandatorySkills" v-model="mandatorySkillsFormValue"/>
+                        <input type="hidden" name="forbiddenSkills" v-model="forbiddenSkillsFormValue"/>
+                        <input type="hidden" name="differentPointSkills" v-model="differentPointSkillsFormValue"/>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Naam</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" name="name" type="text"
+                                               value="{{ race.name }}" placeholder=""/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </form>
 
                     <div class="columns">
                         <div class="column">
@@ -244,9 +243,9 @@
                     const raceForm = serializeForm('containerForm');
 
                     axios
-                        .post(`/admin/races/${raceId}.html`, { event: raceForm })
+                        .post(`/admin/races/${raceId}.html`, { race: raceForm })
                         .then(() => {
-                            document.location.href = '/admin/events.html'
+                            document.location.href = '/admin/races.html'
                         })
                         .catch((error) => {
                             const message = error.response.data.error.description;

@@ -10,6 +10,7 @@ use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\Skill;
+use SvenHK\Maerquin\Form\RaceFormHandler;
 use SvenHK\Maerquin\Model\RaceCollection;
 use SvenHK\Maerquin\Model\SkillRaceConnectionCollection;
 use SvenHK\Maerquin\Repository\RaceRepository;
@@ -28,6 +29,7 @@ class RacesController extends Action
     private EntityRepository $skillRepository;
 
     public function __construct(
+        private readonly RaceFormHandler $raceFormHandler,
         EntityManager $entityManager
     ) {
         $this->raceRepository = $entityManager->getRepository(Race::class);
@@ -41,7 +43,7 @@ class RacesController extends Action
         $raceId = (string)($this->request->getAttribute('raceId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($raceId)) {
-            // FORM HANDLE
+            $this->raceFormHandler->handle($raceId, $this->request);
         }
 
         if ($raceId !== '' && Uuid::isValid($raceId)) {

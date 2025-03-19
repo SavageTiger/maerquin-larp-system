@@ -65,7 +65,8 @@ class CharactersController extends Action
         $view = Twig::fromRequest($this->request);
 
         $viewContext = [
-            'deities' => new DeitiesCollection($this->deityRepository->findAll())
+            'deities' => new DeitiesCollection($this->deityRepository->findAll()),
+            'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
         ];
 
         $characterId = $this->request->getAttribute('characterId');
@@ -73,7 +74,8 @@ class CharactersController extends Action
         if (is_string($characterId) && Uuid::isValid($characterId)) {
             return $view->render(
                 $this->response,
-                'character.html.twig', array_merge($viewContext,
+                'character.html.twig', array_merge(
+                    $viewContext,
                     [
                         'character' => $this->characterRepository->getById($characterId),
                         'races' => new RaceCollection($this->raceRepository->findAllSorted()),
@@ -85,10 +87,12 @@ class CharactersController extends Action
 
         return $view->render(
             $this->response,
-            'characters.html.twig', array_merge($viewContext, [
-                'players' => new PlayerCollection($this->playerRepository->findAll()),
-                'characters' => new CharacterCollection($this->characterRepository->findAllSorted()),
-            ])
+            'characters.html.twig', array_merge(
+                $viewContext,
+                [
+                    'characters' => new CharacterCollection($this->characterRepository->findAllSorted()),
+                ]
+            )
         );
     }
 

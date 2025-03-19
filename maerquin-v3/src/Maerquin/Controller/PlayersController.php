@@ -8,8 +8,11 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
+use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
+use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 
 class PlayersController extends Action
@@ -19,9 +22,15 @@ class PlayersController extends Action
      */
     private EntityRepository $playerRepository;
 
+    /**
+     * @var CharacterRepository
+     */
+    private EntityRepository $characterRepository;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->playerRepository = $entityManager->getRepository(Player::class);
+        $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
     public function action() : ResponseInterface
@@ -31,11 +40,14 @@ class PlayersController extends Action
         $userId = $this->request->getAttribute('userId');
 
         if (is_string($userId) && Uuid::isValid($userId)) {
+            $player = $this->playerRepository->getById($userId);
+
             return $view->render(
                 $this->response,
                 'player.html.twig',
                 [
-                    'player' => $this->playerRepository->getById($userId)
+                    'player' => $player,
+                    'playerCharacters' => new CharacterCollection($this->characterRepository->forPlayer($player->getId()))
                 ]
             );
         }

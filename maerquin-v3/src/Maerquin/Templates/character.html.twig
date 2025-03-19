@@ -38,7 +38,38 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="columns is-gapless">
+                            <div class="column is-12">
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Speler</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <div class="field-body">
+                                                <div class="field">
+                                                    <div class="select is-fullwidth">
+                                                        <select>
+                                                            <option value="{{ player.id }}">
+                                                                (ontkoppeld)
+                                                            </option>
+
+                                                            {% for player in players.serialize(true) %}
+                                                                <option value="{{ player.id }}"
+                                                                        {% if player.id == character.playerId %}selected="selected"{% endif %}>
+                                                                    {{ player.name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="columns is-gapless">

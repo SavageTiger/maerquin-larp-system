@@ -25,8 +25,8 @@ class Race extends RaceModel
     #[ORM\OneToMany(
         targetEntity: RaceSkillLink::class,
         mappedBy: "race",
-        orphanRemoval: true,
-        cascade: ["PERSIST", "REMOVE"])
-    ]
+        cascade: ["PERSIST", "REMOVE"],
+        orphanRemoval: true
+    )]
     protected Collection $skillConnections;
 }

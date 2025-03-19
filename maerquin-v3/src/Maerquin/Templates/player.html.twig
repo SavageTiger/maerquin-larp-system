@@ -31,9 +31,6 @@
                             </div>
                         </div>
                     </div>
-                    <button class="button is-pulled-right" @click="manageCharacters">
-                        <i class="fa-solid fa-person-military-to-person"></i>&nbsp;Aanpassen
-                    </button>
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
                             <label class="label">Characters</label>
@@ -41,7 +38,7 @@
 
                         <div class="field-body">
                             <div class="field card ml-5 mr-5 m-1 p-3">
-                                <div v-for="character in coupledCharacters">
+                                <div v-for="character in coupledCharacters" @click="navigateToCharacter(character.id)">
                                     <label class="checkbox">
                                         <i class="fa-solid fa-id-badge"></i>
                                         {{ '{{ character.name }}' }}
@@ -54,36 +51,6 @@
             </article>
         </div>
 
-        <div class="modal" id="manageCharacters">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Characters</p>
-                    <div class="control">
-                        <input class="input" type="text" v-model="characterFilter" placeholder="Filter">
-                    </div>
-                </header>
-                <section class="modal-card-body">
-                    <div class="checkbox" v-for="character in filteredCharacters">
-                        <label class="checkbox">
-                            <input type="checkbox"
-                                   :disabled="character.playerId !== playerId"
-                                   :value="character"
-                                   v-model="coupledCharacters"/>
-                            {{ '{{ character.name }}' }}
-                        </label>
-                        <div class="is-pulled-right already-coupled">
-                            {{ '{{ (character.playerId && character.playerId !== playerId) ? \'(Gekoppeld)\' : \'\' }}' }}
-                        </div>
-                    </div>
-                </section>
-                <footer class="modal-card-foot">
-                    <div class="buttons">
-                        <button class="button">Sluiten</button>
-                    </div>
-                </footer>
-            </div>
-        </div>
     </div>
 
     <script type="module">
@@ -91,33 +58,16 @@
             data() {
                 return {
                     playerId: '{{ player.id }}',
-                    characters: [],
-                    characterFilter: '',
-                    coupledCharacters: [],
+                    coupledCharacters: {{ playerCharacters.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
                 };
             },
-            computed: {
-                filteredCharacters() {
-                    return this.characters.filter((character) => {
-                        return character.name.toLowerCase().includes(
-                            this.characterFilter.toLowerCase()
-                        ) !== false
-                    });
-                }
-            },
             methods: {
-                manageCharacters() {
-                    axios.get('/admin/characters/api').then((response) => {
-                        this.characters = response.data.data ?? [];
-
-                        openModal(document.getElementById('manageCharacters'));
-                    });
-                },
-            },
-            mounted() {
-                axios.get('/admin/characters/api/for-player/{{ player.id }}').then((response) => {
-                    this.coupledCharacters = response.data.data ?? [];
-                });
+                navigateToCharacter(characterId) {
+                    window.open(
+                        `/admin/characters/${characterId}.html`,
+                        '_blank'
+                    );
+                }
             }
         }).mount('.content');
     </script>

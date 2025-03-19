@@ -15,19 +15,19 @@
             {{ character.name }}
         </div>
         <div class="message-body">
-
             <div class="tabs is-toggle is-fullwidth mr-6 ml-4">
                 <ul>
-                    <li class="is-active">
-                        <a>
-                            <span class=" icon is-small">
-                        <i class="fas fa-receipt" aria-hidden="true"></i>
-                        </span>
+                    <li :class="{ 'is-active': activeTab === 'basic' }">
+                        <a @click="activeTab = 'basic'">
+                            <span class="icon is-small">
+                                <i class="fas fa-receipt" aria-hidden="true"></i>
+                            </span>
                             <span>Basis</span>
                         </a>
                     </li>
-                    <li>
-                        <a>
+
+                    <li :class="{ 'is-active': activeTab === 'skills' }">
+                        <a @click="activeTab = 'skills'">
                             <span class="icon is-small">
                                 <i class="fas fa-wand-sparkles" aria-hidden="true"></i>
                             </span>
@@ -37,54 +37,56 @@
                 </ul>
             </div>
 
-            <div class="grid">
-                <div class="cell">
-                    <div class="column is-12 pl-1 pb-5 pt-0 p-0">
-                        <h3 class="mb-0">Basis</h3>
-                    </div>
+            <div v-show="activeTab === 'basic'">
+                <div class="grid">
+                    <div class="cell">
+                        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+                            <h3 class="mb-0">Basis</h3>
+                        </div>
 
-                    <div class="box inner-box is-shadowless">
-                        <div class="columns is-gapless">
-                            <div class="column is-12">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Naam</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="name" type="text"
-                                                       value="{{ character.name }}" placeholder=""/>
+                        <div class="box inner-box is-shadowless">
+                            <div class="columns is-gapless">
+                                <div class="column is-12">
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">Naam</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" name="name" type="text"
+                                                           value="{{ character.name }}" placeholder=""/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="columns is-gapless">
-                            <div class="column is-12">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Speler</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="field-body">
-                                                <div class="field">
-                                                    <div class="select is-fullwidth">
-                                                        <select>
-                                                            <option value="{{ player.id }}">
-                                                                (ontkoppeld)
-                                                            </option>
-
-                                                            {% for player in players.serialize(true) %}
-                                                                <option value="{{ player.id }}"
-                                                                        {% if player.id == character.playerId %}selected="selected"{% endif %}>
-                                                                    {{ player.name }}
+                            <div class="columns is-gapless">
+                                <div class="column is-12">
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">Speler</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="field-body">
+                                                    <div class="field">
+                                                        <div class="select is-fullwidth">
+                                                            <select>
+                                                                <option value="{{ player.id }}">
+                                                                    (ontkoppeld)
                                                                 </option>
-                                                            {% endfor %}
-                                                        </select>
+
+                                                                {% for player in players.serialize(true) %}
+                                                                    <option value="{{ player.id }}"
+                                                                            {% if player.id == character.playerId %}selected="selected"{% endif %}>
+                                                                        {{ player.name }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -92,97 +94,42 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="columns is-gapless">
-                            <div class="column is-12">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Ras</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="select is-fullwidth">
-                                                <select v-model="character.raceId">
-                                                    {% for race in races.serialize %}
-                                                        <option value="{{ race.id }}">
-                                                            {{ race.name }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
+                            <div class="columns is-gapless">
+                                <div class="column is-12">
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">Ras</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="select is-fullwidth">
+                                                    <select v-model="character.raceId">
+                                                        {% for race in races.serialize %}
+                                                            <option value="{{ race.id }}">
+                                                                {{ race.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="columns is-gapless">
-                            <div class="column is-12">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">&nbsp;</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <label class="checkbox">
-                                                <input type="checkbox" v-model="character.isDeceased"/>
-                                                &nbsp;<b>Overleden</b>
-                                            </label>
+                            <div class="columns is-gapless">
+                                <div class="column is-12">
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">&nbsp;</label>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-12 pl-1 pb-5 pt-0 p-0">
-                        <h3 class="mb-0">Geloof</h3>
-                    </div>
-
-                    <div class="box inner-box is-shadowless">
-                        <div class="columns">
-                            <div class="column is-12">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Primair</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-
-                                            <div class="select is-fullwidth">
-                                                <select v-model="character.primaryDeityId">
-                                                    <option value="">(geen)</option>
-                                                    {% for deity in deities.serialize %}
-                                                        <option value="{{ deity.id }}">
-                                                            {{ deity.name }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="columns">
-                            <div class="column is-12">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Secondair</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="select is-fullwidth">
-                                                <select v-model="character.secondaryDeityId">
-                                                    <option value="">(geen)</option>
-                                                    {% for deity in deities.serialize %}
-                                                        <option value="{{ deity.id }}">
-                                                            {{ deity.name }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <label class="checkbox">
+                                                    <input type="checkbox" v-model="character.isDeceased"/>
+                                                    &nbsp;<b>Overleden</b>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -191,173 +138,236 @@
                         </div>
                     </div>
 
-                    <div class="column is-12 pl-1 pb-5 pt-0 p-0">
-                        <h3 class="mb-0">Achtergrond</h3>
-                    </div>
-
-                    <div class="box inner-box is-shadowless">
-                        <div class="columns">
-
-                            <div class="column is-6">
-                                <div class="field">
-                                    <label class="label">Titel</label>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="title" type="text"
-                                                       value="{{ character.title }}" placeholder=""/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="column is-6">
-                                <div class="field">
-                                    <label class="label">Gilde</label>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="guild" type="text"
-                                                       value="{{ character.guild }}" placeholder=""/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="cell">
+                        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+                            <h3 class="mb-0">Achtergrond</h3>
                         </div>
 
-                        <div class="columns">
-                            <div class="column is-6">
-                                <div class="field">
-                                    <label class="label">Beroep</label>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="accupation" type="text"
-                                                       value="{{ character.accupation }}" placeholder=""/>
+                        <div class="box inner-box is-shadowless">
+                            <div class="columns">
+                                <div class="column is-6">
+                                    <div class="field">
+                                        <label class="label">Titel</label>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" name="title" type="text"
+                                                           value="{{ character.title }}" placeholder=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column is-6">
+                                    <div class="field">
+                                        <label class="label">Gilde</label>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" name="guild" type="text"
+                                                           value="{{ character.guild }}" placeholder=""/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="column is-6">
-                                <div class="field">
-                                    <label class="label">Geboorteplaats</label>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="birthplace" type="text"
-                                                       value="{{ character.birthplace }}" placeholder=""/>
+                            <div class="columns">
+                                <div class="column is-6">
+                                    <div class="field">
+                                        <label class="label">Beroep</label>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" name="accupation" type="text"
+                                                           value="{{ character.accupation }}" placeholder=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column is-6">
+                                    <div class="field">
+                                        <label class="label">Geboorteplaats</label>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" name="birthplace" type="text"
+                                                           value="{{ character.birthplace }}" placeholder=""/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {% for customField in customFields.serialize %}
-                            {% if loop.index0 % 2 == 0 %}
-                                <div class="columns">
-                            {% endif %}
+                            {% for customField in customFields.serialize %}
+                                {% if loop.index0 % 2 == 0 %}
+                                    <div class="columns">
+                                {% endif %}
 
-                            <div class="column is-6">
-                                <div class="field">
-                                    <label class="label">{{ customField.name }}</label>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <input class="input" name="{{ customField.name }}" type="text"
-                                                       value="{{ customField.value }}" placeholder=""/>
+                                <div class="column is-6">
+                                    <div class="field">
+                                        <label class="label">{{ customField.name }}</label>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" name="{{ customField.name }}" type="text"
+                                                           value="{{ customField.value }}" placeholder=""/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {% if loop.index0 % 2 == 1 %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+                                {% if loop.index0 % 2 == 1 %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
 
-                    <div class="column is-12 pl-1 pb-5 pt-0 p-0">
-                        <h3 class="mb-0">Notities</h3>
-                    </div>
-
-                    <div class="box inner-box is-shadowless">
-                        <div class="columns">
-                            <div class="column is-12">
-                                <textarea class="input">{{ character.notes }}</textarea>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="cell">
+                <div class="grid">
+                    <div class="cell">
+                        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+                            <h3 class="mb-0">Geloof</h3>
+                        </div>
 
-                    <button class="button is-pulled-right">
-                        <i class="fa-solid fa-dice-d20"></i>&nbsp;Toevoegen
-                    </button>
+                        <div class="box inner-box is-shadowless">
+                            <div class="columns">
+                                <div class="column is-12">
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">Primair</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
 
-                    <div class="column is-12 pl-3 pb-3 p-0">
-                        <h3 class="mb-0">Skills</h3>
+                                                <div class="select is-fullwidth">
+                                                    <select v-model="character.primaryDeityId">
+                                                        <option value="">(geen)</option>
+                                                        {% for deity in deities.serialize %}
+                                                            <option value="{{ deity.id }}">
+                                                                {{ deity.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column is-12">
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">Secondair</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="select is-fullwidth">
+                                                    <select v-model="character.secondaryDeityId">
+                                                        <option value="">(geen)</option>
+                                                        {% for deity in deities.serialize %}
+                                                            <option value="{{ deity.id }}">
+                                                                {{ deity.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="cell">
+                        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+                            <h3 class="mb-0">Notities</h3>
+                        </div>
 
-                    <div class="column is-12">
+                        <div class="box inner-box is-shadowless">
+                            <div class="columns">
+                                <div class="column is-12">
+                                    <textarea class="input">{{ character.notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
 
-                        <table class="table character-skill-table is-bordered is-striped is-narrow is-fullwidth">
-                            <tr>
-                                <th>Naam</th>
-                                <th>Kosten (punten)</th>
-                                <th>Aantal keer bruikbaar</th>
-                                <th>F.C.</th>
-                                <th>A.C.</th>
-                                <th></th>
-                            </tr>
-
-                            <tr v-for="linkedSkill in character.linkedSkills">
-                                <td>
-                                    {{ '{{ linkedSkill.skillName }}' }}
-                                </td>
-                                <td>
-                                    <input
-                                            @keyup="numbersOnly(linkedSkill, 'points')"
-                                            @change="numbersOnly(linkedSkill, 'points')"
-                                            type="input"
-                                            class="input skill-input"
-                                            name="skillLinkPoints[]"
-                                            v-model="linkedSkill.points"/>
-                                    <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
-                                </td>
-                                <td>
-                                    <input @keyup="numbersOnly(linkedSkill, 'numberOfTimes')"
-                                           @change="numbersOnly(linkedSkill, 'numberOfTimes')"
-                                           type="input"
-                                           class="input skill-input"
-                                           name="skillLinkAmount[]"
-                                           v-model="linkedSkill.numberOfTimes"/>
-                                    <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
-                                </td>
-                                <td>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="linkedSkill.fastCast"
-                                               name="fastCast[]"/>
-                                    </label>
-                                </td>
-                                <td>
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="linkedSkill.armouredCasting"
-                                               name="armouredCasting[]"/>
-                                    </label>
-                                </td>
-                                <td>
-                                    <i class="fa fa-trash"/>
-                                </td>
-                            </tr>
-                        </table>
                     </div>
                 </div>
+            </div>
+
+            <div v-show="activeTab === 'skills'">
+                <button class="button is-pulled-right">
+                    <i class="fa-solid fa-dice-d20"></i>&nbsp;Toevoegen
+                </button>
+
+                <div class="column is-12 pl-3 pb-3 p-0">
+                    <h3 class="mb-0">Skills</h3>
+                </div>
+
+                <div class="column is-12">
+
+                    <table class="table character-skill-table is-bordered is-striped is-narrow is-fullwidth">
+                        <tr>
+                            <th>Naam</th>
+                            <th>Kosten (punten)</th>
+                            <th>Aantal keer bruikbaar</th>
+                            <th>Fast Casting</th>
+                            <th>Armor Class</th>
+                            <th></th>
+                        </tr>
+
+                        <tr v-for="linkedSkill in character.linkedSkills">
+                            <td>
+                                {{ '{{ linkedSkill.skillName }}' }}
+                            </td>
+                            <td>
+                                <input
+                                        @keyup="numbersOnly(linkedSkill, 'points')"
+                                        @change="numbersOnly(linkedSkill, 'points')"
+                                        type="input"
+                                        class="input skill-input"
+                                        name="skillLinkPoints[]"
+                                        v-model="linkedSkill.points"/>
+                                <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
+                            </td>
+                            <td>
+                                <input @keyup="numbersOnly(linkedSkill, 'numberOfTimes')"
+                                       @change="numbersOnly(linkedSkill, 'numberOfTimes')"
+                                       type="input"
+                                       class="input skill-input"
+                                       name="skillLinkAmount[]"
+                                       v-model="linkedSkill.numberOfTimes"/>
+                                <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
+                            </td>
+                            <td>
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="linkedSkill.fastCast"
+                                           name="fastCast[]"/>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="linkedSkill.armouredCasting"
+                                           name="armouredCasting[]"/>
+                                </label>
+                            </td>
+                            <td>
+                                <i class="fa fa-trash"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
             </div>
         </div>
 
@@ -368,6 +378,8 @@
         Vue.createApp({
             data() {
                 return {
+                    activeTab: 'basic',
+
                     character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
 

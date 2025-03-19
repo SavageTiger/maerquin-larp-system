@@ -47,7 +47,9 @@ class PlayersController extends Action
                 'player.html.twig',
                 [
                     'player' => $player,
-                    'playerCharacters' => new CharacterCollection($this->characterRepository->forPlayer($player->getId()))
+                    'playerCharacters' => new CharacterCollection(
+                        $this->characterRepository->forPlayer($player->getId())
+                    )
                 ]
             );
         }

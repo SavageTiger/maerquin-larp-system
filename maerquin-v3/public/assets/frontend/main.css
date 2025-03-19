@@ -163,3 +163,11 @@ button.small-button {
     padding: 10px;
     margin: 0;
 }
+
+.tabs a {
+    text-decoration: none !important;
+}
+
+.tabs li.is-active a {
+    background-color: rgb(194, 201, 255) !important;
+}

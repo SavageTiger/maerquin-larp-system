@@ -41,6 +41,7 @@ class Character
         foreach ($this->getSkills() as $linkedSkill) {
             $linkedSkills[] = [
                 'skillName' => $linkedSkill->getSkill()->getName(),
+                'skillGroup' => $linkedSkill->getSkill()->getSkillTypeName(),
                 'numberOfTimes' => $linkedSkill->getAmount(),
                 'points' => $linkedSkill->getPoints(),
                 'numberOfTimesSource' => $linkedSkill->getSkill()->getNumberOfTimes(),

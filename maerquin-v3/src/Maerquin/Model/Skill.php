@@ -139,6 +139,11 @@ class Skill
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }
 
+    public function getSkillTypeName() : string
+    {
+        return $this->skillType->getName();
+    }
+
     public function updateSkill(
         string $name,
         ?Deity $deity,

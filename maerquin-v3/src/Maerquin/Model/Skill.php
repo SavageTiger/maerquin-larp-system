@@ -144,6 +144,11 @@ class Skill
         return $this->skillType->getName();
     }
 
+    public function getSkillTypeOrdering() : int
+    {
+        return $this->skillType->getOrdering();
+    }
+
     public function updateSkill(
         string $name,
         ?Deity $deity,

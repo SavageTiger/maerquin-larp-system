@@ -316,56 +316,62 @@
 
                 <div class="column is-12">
 
-                    <table class="table character-skill-table is-bordered is-striped is-narrow is-fullwidth">
-                        <tr>
-                            <th>Naam</th>
-                            <th>Kosten (punten)</th>
-                            <th>Aantal keer bruikbaar</th>
-                            <th>Fast Casting</th>
-                            <th>Armor Class</th>
-                            <th></th>
-                        </tr>
+                    <div v-for="(skillGroup, skillGroupName) in groupedSkills">
+                        <h3>{{ '{{ skillGroupName }}' }}</h3>
 
-                        <tr v-for="linkedSkill in character.linkedSkills">
-                            <td>
-                                {{ '{{ linkedSkill.skillName }}' }}
-                            </td>
-                            <td>
-                                <input
-                                        @keyup="numbersOnly(linkedSkill, 'points')"
-                                        @change="numbersOnly(linkedSkill, 'points')"
-                                        type="input"
-                                        class="input skill-input"
-                                        name="skillLinkPoints[]"
-                                        v-model="linkedSkill.points"/>
-                                <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
-                            </td>
-                            <td>
-                                <input @keyup="numbersOnly(linkedSkill, 'numberOfTimes')"
-                                       @change="numbersOnly(linkedSkill, 'numberOfTimes')"
-                                       type="input"
-                                       class="input skill-input"
-                                       name="skillLinkAmount[]"
-                                       v-model="linkedSkill.numberOfTimes"/>
-                                <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
-                            </td>
-                            <td>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="linkedSkill.fastCast"
-                                           name="fastCast[]"/>
-                                </label>
-                            </td>
-                            <td>
-                                <label class="checkbox">
-                                    <input type="checkbox" v-model="linkedSkill.armouredCasting"
-                                           name="armouredCasting[]"/>
-                                </label>
-                            </td>
-                            <td>
-                                <i class="fa fa-trash"/>
-                            </td>
-                        </tr>
-                    </table>
+                        <table class="table character-skill-table is-bordered is-striped is-narrow is-fullwidth">
+                            <tr>
+                                <th>Naam</th>
+                                <th>Kosten (punten)</th>
+                                <th>Aantal keer bruikbaar</th>
+                                <th>Fast Casting</th>
+                                <th>Armor Class</th>
+                                <th></th>
+                            </tr>
+
+                            <tr v-for="linkedSkill in skillGroup.skills">
+                                <td>
+                                    {{ '{{ linkedSkill.skillName }}' }}
+                                </td>
+                                <td>
+                                    <input
+                                            @keyup="numbersOnly(linkedSkill, 'points')"
+                                            @change="numbersOnly(linkedSkill, 'points')"
+                                            type="input"
+                                            class="input skill-input"
+                                            name="skillLinkPoints[]"
+                                            v-model="linkedSkill.points"/>
+                                    <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
+                                </td>
+                                <td>
+                                    <input @keyup="numbersOnly(linkedSkill, 'numberOfTimes')"
+                                           @change="numbersOnly(linkedSkill, 'numberOfTimes')"
+                                           type="input"
+                                           class="input skill-input"
+                                           name="skillLinkAmount[]"
+                                           v-model="linkedSkill.numberOfTimes"/>
+                                    <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
+                                </td>
+                                <td>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="linkedSkill.fastCast"
+                                               name="fastCast[]"/>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="linkedSkill.armouredCasting"
+                                               name="armouredCasting[]"/>
+                                    </label>
+                                </td>
+                                <td>
+                                    <i class="fa fa-trash"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div>&nbsp;</div>
+                    </div>
                 </div>
 
             </div>
@@ -382,9 +388,35 @@
 
                     character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
-
             },
-            computed: {},
+            computed: {
+                groupedSkills() {
+                    const groupCollection = {};
+
+                    for (linkedSkill of this.character.linkedSkills) {
+                        const groupName = linkedSkill.skillGroup || 'Ungrouped';
+
+                        if (groupCollection[groupName] === undefined) {
+                            groupCollection[groupName] = {
+                                skills: [],
+                                ordering: linkedSkill.skillGroupOrdering || 999
+                            };
+                        }
+
+                        groupCollection[groupName].skills.push(linkedSkill);
+                    }
+
+                    const sortedGroups = Object.entries(groupCollection)
+                        .sort((left, right) => left[1].ordering - right[1].ordering)
+                        .reduce((acc, [key, value]) => {
+                            acc[key] = value;
+
+                            return acc;
+                        }, {});
+
+                    return sortedGroups;
+                }
+            },
             methods: {
                 numbersOnly: (sender, field) => {
                     sender[field] = sender[field].replace(/[^0-9]/g, '')

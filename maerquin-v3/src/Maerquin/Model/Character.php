@@ -42,6 +42,7 @@ class Character
             $linkedSkills[] = [
                 'skillName' => $linkedSkill->getSkill()->getName(),
                 'skillGroup' => $linkedSkill->getSkill()->getSkillTypeName(),
+                'skillGroupOrdering' => $linkedSkill->getSkill()->getSkillTypeOrdering(),
                 'numberOfTimes' => $linkedSkill->getAmount(),
                 'points' => $linkedSkill->getPoints(),
                 'numberOfTimesSource' => $linkedSkill->getSkill()->getNumberOfTimes(),

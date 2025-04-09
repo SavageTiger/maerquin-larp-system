@@ -8,10 +8,11 @@ class SkillType
 {
     protected UuidInterface $id;
     protected string $name;
+    protected int $ordinal;
 
     public function serialize()
     {
-        return ['id' => $this->getId(), 'name' => $this->getName()];
+        return ['id' => $this->getId(), 'name' => $this->getName(), 'ordering' => $this->ordinal];
     }
 
     public function getId() : string
@@ -22,6 +23,11 @@ class SkillType
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function getOrdering() : string
+    {
+        return $this->ordinal;
     }
 }
 

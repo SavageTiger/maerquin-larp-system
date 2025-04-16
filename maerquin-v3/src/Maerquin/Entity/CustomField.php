@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

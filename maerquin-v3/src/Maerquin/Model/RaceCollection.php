@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 class RaceCollection
@@ -18,8 +20,7 @@ class RaceCollection
     {
         return array_map(
             fn(Race $race) => $race->serialize(),
-            $this->races
+            $this->races,
         );
     }
 }
-

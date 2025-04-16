@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -29,6 +31,4 @@ class EventRepository extends EntityRepository
         $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush();
     }
-
 }
-

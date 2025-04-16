@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -11,9 +13,7 @@ class HomeController extends Action
 {
     use RedirectTo;
 
-    public function __construct(private Session $session)
-    {
-    }
+    public function __construct(private Session $session) {}
 
     public function action() : ResponseInterface
     {
@@ -24,8 +24,9 @@ class HomeController extends Action
         $view = Twig::fromRequest($this->request);
 
         return $view->render(
-            $this->response, 'home.html.twig',
-            ['user' => $this->session->getUser()]
+            $this->response,
+            'home.html.twig',
+            ['user' => $this->session->getUser()],
         );
     }
 }

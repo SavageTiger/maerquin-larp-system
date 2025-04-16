@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 class SkillCollection
@@ -18,8 +20,7 @@ class SkillCollection
     {
         return array_map(
             fn(Skill $skill) => $skill->serialize($compact),
-            $this->skills
+            $this->skills,
         );
     }
 }
-

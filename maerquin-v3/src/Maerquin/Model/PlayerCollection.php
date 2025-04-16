@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 class PlayerCollection
@@ -25,4 +27,3 @@ class PlayerCollection
         return $serialized;
     }
 }
-

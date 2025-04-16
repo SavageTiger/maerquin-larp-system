@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\Common\Collections\Collection;
@@ -19,14 +21,14 @@ class Race extends RaceModel
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $name;
 
     #[ORM\OneToMany(
         targetEntity: RaceSkillLink::class,
-        mappedBy: "race",
-        cascade: ["PERSIST", "REMOVE"],
-        orphanRemoval: true
+        mappedBy: 'race',
+        cascade: ['PERSIST', 'REMOVE'],
+        orphanRemoval: true,
     )]
     protected Collection $skillConnections;
 }

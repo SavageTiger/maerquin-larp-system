@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -30,7 +32,7 @@ class EventsController extends Action
 
     public function __construct(
         readonly private EventFormHandler $eventFormHandler,
-        EntityManager $entityManager
+        EntityManager $entityManager,
     ) {
         $this->eventRepository = $entityManager->getRepository(Event::class);
         $this->characterRepository = $entityManager->getRepository(Character::class);
@@ -40,7 +42,7 @@ class EventsController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
-        $eventId = (string)($this->request->getAttribute('eventId') ?? '');
+        $eventId = (string) ($this->request->getAttribute('eventId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($eventId)) {
             $this->eventFormHandler->handle($eventId, $this->request);
@@ -53,7 +55,7 @@ class EventsController extends Action
                 [
                     'event' => $this->eventRepository->getById($eventId),
                     'characters' => new CharacterCollection($this->characterRepository->findByEvent($eventId)),
-                ]
+                ],
             );
         }
 
@@ -61,8 +63,8 @@ class EventsController extends Action
             $this->response,
             'events.html.twig',
             [
-                'events' => new EventCollection($this->eventRepository->findAllSorted())
-            ]
+                'events' => new EventCollection($this->eventRepository->findAllSorted()),
+            ],
         );
     }
 }

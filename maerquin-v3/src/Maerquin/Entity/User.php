@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,8 +15,8 @@ use SvenHK\Maerquin\Repository\UserRepository;
 class User extends UserModel
 {
     #[ORM\Id]
-    #[ORM\Column(type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
@@ -26,7 +28,7 @@ class User extends UserModel
 
     #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
-    
+
     public function checkPassword(string $password) : bool
     {
         $algorithm = 'sha512';
@@ -38,7 +40,7 @@ class User extends UserModel
             base64_decode($this->salt),
             $iterations,
             strlen(base64_decode($this->hash)),
-            true
+            true,
         );
 
         return hash_equals(base64_decode($this->hash), $derivedHash);

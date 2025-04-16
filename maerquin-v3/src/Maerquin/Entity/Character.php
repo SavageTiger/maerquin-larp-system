@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,10 +25,10 @@ class Character extends CharacterModel
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $name;
 
-    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
     protected string $title;
 
     #[ORM\ManyToOne(targetEntity: Deity::class)]
@@ -37,30 +39,30 @@ class Character extends CharacterModel
     #[ORM\JoinColumn(nullable: true)]
     protected ?Deity $secondaryDeity = null;
 
-    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
     protected string $occupation = '';
 
-    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
     protected string $guild;
 
-    #[ORM\Column(type: "string", length: 255, nullable: false, options: ['default' => ''])]
+    #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
     protected string $birthplace;
 
-    #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: "characters")]
+    #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: true)]
     protected ?PlayerModel $player;
 
-    #[ORM\Column(type: "text", nullable: false, options: ['default' => ''])]
+    #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
     protected string $notes;
 
     #[ORM\ManyToOne(targetEntity: Race::class)]
     #[ORM\JoinColumn(nullable: false)]
     protected RaceModel $race;
 
-    #[ORM\Column(type: "boolean")]
+    #[ORM\Column(type: 'boolean')]
     protected bool $deceased;
 
-    #[ORM\OneToMany(mappedBy: "character", targetEntity: CharacterSkillLink::class)]
+    #[ORM\OneToMany(mappedBy: 'character', targetEntity: CharacterSkillLink::class)]
     protected Collection $skills;
 
     public function __construct()

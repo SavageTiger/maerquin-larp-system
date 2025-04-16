@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -30,7 +32,7 @@ class RacesController extends Action
 
     public function __construct(
         private readonly RaceFormHandler $raceFormHandler,
-        EntityManager $entityManager
+        EntityManager $entityManager,
     ) {
         $this->raceRepository = $entityManager->getRepository(Race::class);
         $this->skillRepository = $entityManager->getRepository(Skill::class);
@@ -40,7 +42,7 @@ class RacesController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
-        $raceId = (string)($this->request->getAttribute('raceId') ?? '');
+        $raceId = (string) ($this->request->getAttribute('raceId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($raceId)) {
             $this->raceFormHandler->handle($raceId, $this->request);
@@ -53,23 +55,24 @@ class RacesController extends Action
                 [
                     'race' => $this->raceRepository->getById($raceId),
                     'mandatorySkills' => new SkillRaceConnectionCollection(
-                        $this->skillRepository->findAllMandatorySortedForRace($raceId)
+                        $this->skillRepository->findAllMandatorySortedForRace($raceId),
                     ),
                     'forbiddenSkills' => new SkillRaceConnectionCollection(
-                        $this->skillRepository->findAllForbiddenSortedForRace($raceId)
+                        $this->skillRepository->findAllForbiddenSortedForRace($raceId),
                     ),
                     'differentPointSkills' => new SkillRaceConnectionCollection(
-                        $this->skillRepository->findDifferentPointSkillsSortedForRace($raceId)
+                        $this->skillRepository->findDifferentPointSkillsSortedForRace($raceId),
                     ),
-                ]
+                ],
             );
         }
 
         return $view->render(
             $this->response,
-            'races.html.twig', [
+            'races.html.twig',
+            [
                 'races' => new RaceCollection($this->raceRepository->findAllSorted()),
-            ]
+            ],
         );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use App\Domain\Entity\User as FrameworkUser;
@@ -30,4 +32,3 @@ class User extends FrameworkUser
         return false;
     }
 }
-

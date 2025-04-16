@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
@@ -33,7 +35,6 @@ class Player
             'name' => $this->getName(),
             'characters' => $characters,
         ];
-
     }
 
     public function getId() : string
@@ -46,4 +47,3 @@ class Player
         return $this->name;
     }
 }
-

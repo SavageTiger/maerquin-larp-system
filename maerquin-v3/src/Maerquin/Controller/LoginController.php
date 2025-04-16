@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -23,7 +25,7 @@ class LoginController extends Action
 
     public function __construct(
         private Session $session,
-        private EntityManager $entityManager
+        private EntityManager $entityManager,
     ) {
         $this->userRepository = $this->entityManager->getRepository(User::class);
     }
@@ -36,7 +38,7 @@ class LoginController extends Action
         if ($this->request->getMethod() === 'POST') {
             $loginError = $this->login(
                 $form->getValue('username'),
-                $form->getValue('password')
+                $form->getValue('password'),
             );
 
             if ($loginError === false) {
@@ -47,11 +49,11 @@ class LoginController extends Action
         return $view->render(
             $this->response,
             'login.html.twig',
-            ['form' => $form, 'loginError' => $loginError ?? null]
+            ['form' => $form, 'loginError' => $loginError ?? null],
         );
     }
 
-    public function login(string $username, string $password) : false|string
+    public function login(string $username, string $password) : false | string
     {
         $user = $this->userRepository->findByUsername($username);
 

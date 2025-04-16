@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 class SkillRaceConnectionCollection
@@ -18,7 +20,7 @@ class SkillRaceConnectionCollection
     {
         return array_map(
             fn(SkillRaceConnection $skillRaceConnection) => $skillRaceConnection->serialize(),
-            $this->skillRaceConnetions
+            $this->skillRaceConnetions,
         );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +20,6 @@ class Element extends ElementModel
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $name;
 }

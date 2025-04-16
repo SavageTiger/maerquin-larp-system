@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller\API;
 
 use App\Application\Actions\Action;
@@ -25,7 +27,7 @@ class SkillsApiController extends Action
     public function action() : ResponseInterface
     {
         return $this->respondWithData(
-            new SkillCollection($this->skillRepository->findAllSorted())->serialize(false)
+            new SkillCollection($this->skillRepository->findAllSorted())->serialize(false),
         );
     }
 }

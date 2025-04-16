@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Form;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class FormResolver
 {
-    private function __construct(private Request $request)
-    {
-    }
+    private function __construct(private Request $request) {}
 
     public static function createFromRequest(Request $request) : self
     {
@@ -18,7 +18,7 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getValue(string $name, string|null $namespace = null, string|null $default = null) : string
+    public function getValue(string $name, ?string $namespace = null, ?string $default = null) : string
     {
         $value = is_string($namespace) === false ?
             $this->request->getParsedBody()[$name] ?? $default :
@@ -34,7 +34,7 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getBoolean(string $name, string|null $namespace = null, string|null $default = null) : bool
+    public function getBoolean(string $name, ?string $namespace = null, ?string $default = null) : bool
     {
         $value = is_string($namespace) === false ?
             $this->request->getParsedBody()[$name] ?? $default :

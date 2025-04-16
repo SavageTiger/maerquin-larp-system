@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\UuidInterface;
@@ -27,10 +29,8 @@ class SkillLink
         return $this->points;
     }
 
-
     public function getAmount() : int
     {
         return $this->amount;
     }
 }
-

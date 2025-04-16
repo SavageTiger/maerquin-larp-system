@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -44,7 +46,7 @@ class SkillsController extends Action
 
     public function __construct(
         readonly private SkillFormHandler $skillFormHandler,
-        EntityManager $entityManager
+        EntityManager $entityManager,
     ) {
         $this->skillRepository = $entityManager->getRepository(Skill::class);
         $this->skillTypeRepository = $entityManager->getRepository(SkillType::class);
@@ -56,7 +58,7 @@ class SkillsController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
-        $skillId = (string)($this->request->getAttribute('skillId') ?? '');
+        $skillId = (string) ($this->request->getAttribute('skillId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($skillId)) {
             $this->skillFormHandler->handle($skillId, $this->request);
@@ -71,20 +73,21 @@ class SkillsController extends Action
             return $view->render(
                 $this->response,
                 'skill.html.twig',
-                array_merge($viewContext,
+                array_merge(
+                    $viewContext,
                     [
                         'skill' => $this->skillRepository->getById($skillId),
                         'deities' => $this->deityRepository->findAllSorted(),
-                        'elements' => $this->elementRepository->findAllSorted()
-                    ]
-                )
+                        'elements' => $this->elementRepository->findAllSorted(),
+                    ],
+                ),
             );
         }
 
         return $view->render(
             $this->response,
             'skills.html.twig',
-            $viewContext
+            $viewContext,
         );
     }
 }

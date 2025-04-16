@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -48,9 +50,9 @@ class PlayersController extends Action
                 [
                     'player' => $player,
                     'playerCharacters' => new CharacterCollection(
-                        $this->characterRepository->forPlayer($player->getId())
-                    )
-                ]
+                        $this->characterRepository->forPlayer($player->getId()),
+                    ),
+                ],
             );
         }
 
@@ -58,8 +60,8 @@ class PlayersController extends Action
             $this->response,
             'players.html.twig',
             [
-                'players' => new PlayerCollection($this->playerRepository->findAllSorted())
-            ]
+                'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
+            ],
         );
     }
 }

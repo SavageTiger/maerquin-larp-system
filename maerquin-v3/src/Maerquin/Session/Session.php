@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Session;
 
 use App\Application\Session\Session as FrameworkSession;
@@ -27,7 +29,7 @@ class Session implements FrameworkSession
         $this->write('userId', $user->getId());
     }
 
-    private function write(string $key, string|int|bool $value) : void
+    private function write(string $key, bool | int | string $value) : void
     {
         $_SESSION[$key] = $value;
     }
@@ -43,9 +45,8 @@ class Session implements FrameworkSession
         return $user;
     }
 
-    private function read(string $key, string|int|bool $defaultValue) : string|int|bool
+    private function read(string $key, bool | int | string $defaultValue) : bool | int | string
     {
         return $_SESSION[$key] ?? $defaultValue;
     }
-
 }

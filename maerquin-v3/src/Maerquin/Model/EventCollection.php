@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 class EventCollection
@@ -18,8 +20,7 @@ class EventCollection
     {
         return array_map(
             fn(Event $event) => $event->serialize(),
-            $this->events
+            $this->events,
         );
     }
 }
-

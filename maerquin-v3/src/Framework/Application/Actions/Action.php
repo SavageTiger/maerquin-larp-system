@@ -61,13 +61,12 @@ abstract class Action
     }
 
     /**
-     * @return mixed
-     *
      * @throws HttpBadRequestException
+     * @return mixed
      */
     protected function resolveArg(string $name)
     {
-        if (!isset($this->args[$name])) {
+        if (! isset($this->args[$name])) {
             throw new HttpBadRequestException($this->request, "Could not resolve argument `{$name}`.");
         }
 

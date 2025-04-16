@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +19,7 @@ class CharacterSkillLink extends SkillLink
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
-    #[ORM\ManyToOne(targetEntity: Character::class, inversedBy: "skills")]
+    #[ORM\ManyToOne(targetEntity: Character::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(nullable: false)]
     protected Character $character;
 
@@ -25,15 +27,15 @@ class CharacterSkillLink extends SkillLink
     #[ORM\JoinColumn(nullable: false)]
     protected Skill $skill;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     protected int $points;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     protected int $amount;
 
-    #[ORM\Column(type: "boolean", nullable: false, options: ['default' => false])]
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $armouredCasting = false;
 
-    #[ORM\Column(type: "boolean", nullable: false, options: ['default' => false])]
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $fastCasting = false;
 }

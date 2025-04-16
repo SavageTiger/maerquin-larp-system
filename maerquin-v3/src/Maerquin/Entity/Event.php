@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use DateTimeInterface;
@@ -39,7 +41,7 @@ class Event extends EventModel
     #[ORM\Column(type: 'text', nullable: true)]
     protected string $notes;
 
-    #[ORM\OneToMany(mappedBy: "event", targetEntity: CharacterEventLink::class)]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: CharacterEventLink::class)]
     protected Collection $charactersPresent;
 
     public function __construct()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -25,6 +27,4 @@ class RaceRepository extends EntityRepository
         $this->getEntityManager()->persist($race);
         $this->getEntityManager()->flush();
     }
-
 }
-

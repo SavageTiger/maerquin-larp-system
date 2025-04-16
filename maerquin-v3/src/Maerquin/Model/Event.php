@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use DateTimeImmutable;
@@ -25,7 +27,7 @@ class Event
             'alternativeName' => $this->getSecondaryName(),
             'startDate' => $this->getStartDate()->format(DateTimeInterface::ISO8601),
             'endDate' => $this->getEndDate()->format(DateTimeInterface::ISO8601),
-            'points' => $this->getPoints()
+            'points' => $this->getPoints(),
         ];
     }
 
@@ -65,7 +67,7 @@ class Event
         int $points,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-    ) {
+    ) : void {
         $this->name = $name;
         $this->secondaryName = $secondaryName;
         $this->points = $points;

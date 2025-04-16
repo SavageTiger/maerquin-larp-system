@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Form;
 
 use Doctrine\ORM\EntityManager;
@@ -50,7 +52,7 @@ class SkillFormHandler
      * @throws MissingFormFieldException
      * @throws MaerquinEntityNotFoundException
      */
-    public function handle(string $skillId, Request $request)
+    public function handle(string $skillId, Request $request) : void
     {
         $formResolver = FormResolver::createFromRequest($request);
 
@@ -58,7 +60,7 @@ class SkillFormHandler
 
         $requiredSkillLink = null;
         $requiredSkill = $this->skillRepository->findById(
-            $formResolver->getValue('requiredSkillId', 'skill')
+            $formResolver->getValue('requiredSkillId', 'skill'),
         );
 
         if ($requiredSkill !== null) {
@@ -71,9 +73,9 @@ class SkillFormHandler
             $this->elementRepository->findById($formResolver->getValue('deityElementId', 'skill')),
             $this->skillTypeRepository->getOneById($formResolver->getValue('skillTypeId', 'skill')),
             $requiredSkillLink,
-            (int)$formResolver->getValue('points', 'skill'),
-            (int)$formResolver->getValue('numberOfTimes', 'skill'),
-            (int)$formResolver->getValue('level', 'skill'),
+            (int) $formResolver->getValue('points', 'skill'),
+            (int) $formResolver->getValue('numberOfTimes', 'skill'),
+            (int) $formResolver->getValue('level', 'skill'),
             $formResolver->getValue('distance', 'skill'),
             $formResolver->getValue('duration', 'skill'),
             $formResolver->getBoolean('isNotFreelyAvailable', 'skill'),

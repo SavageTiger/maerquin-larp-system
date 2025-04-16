@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use SvenHK\Maerquin\Entity\CustomField;
@@ -33,4 +35,3 @@ class CustomFieldCollection
         return $serialized;
     }
 }
-

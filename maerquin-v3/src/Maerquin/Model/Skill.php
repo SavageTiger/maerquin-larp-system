@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\UuidInterface;
@@ -50,8 +52,9 @@ class Skill
                 'level' => $this->getLevel(),
                 'description' => $this->getDescription(),
                 'remarks' => $this->getRemarks(),
-                'requiresParentSkill' => $this->getParentRequirementSkillId()
-            ]);
+                'requiresParentSkill' => $this->getParentRequirementSkillId(),
+            ],
+        );
     }
 
     public function getId() : string
@@ -134,7 +137,7 @@ class Skill
         return $this->remarks;
     }
 
-    public function getParentRequirementSkillId() : string|null
+    public function getParentRequirementSkillId() : ?string
     {
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }

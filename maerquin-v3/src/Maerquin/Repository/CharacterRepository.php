@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -51,4 +53,3 @@ class CharacterRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 }
-

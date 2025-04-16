@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
@@ -29,7 +31,7 @@ class Character
             'title' => $this->getTitle(),
             'primaryDeityId' => $this->getPrimaryDeityId(),
             'secondaryDeityId' => $this->getSecondaryDeityId(),
-            'playerId' => $this->playerId()
+            'playerId' => $this->playerId(),
         ];
 
         if ($compact === true) {
@@ -55,8 +57,9 @@ class Character
             [
                 'isDeceased' => $this->isDeceased(),
                 'raceId' => $this->race->getId(),
-                'linkedSkills' => $linkedSkills
-            ]);
+                'linkedSkills' => $linkedSkills,
+            ],
+        );
     }
 
     public function getId() : string

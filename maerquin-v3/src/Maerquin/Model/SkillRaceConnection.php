@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\UuidInterface;
@@ -85,4 +87,3 @@ class SkillRaceConnection
         return $this->points;
     }
 }
-

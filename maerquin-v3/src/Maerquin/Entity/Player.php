@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,10 +22,10 @@ class Player extends PlayerModel
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $name;
 
-    #[ORM\OneToMany(targetEntity: Character::class, mappedBy: "player")]
+    #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'player')]
     protected Collection $characters;
 
     public function __construct()

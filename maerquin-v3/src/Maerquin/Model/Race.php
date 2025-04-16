@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
@@ -24,7 +26,6 @@ class Race
 
     public function serialize()
     {
-
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
@@ -41,4 +42,3 @@ class Race
         return $this->name;
     }
 }
-

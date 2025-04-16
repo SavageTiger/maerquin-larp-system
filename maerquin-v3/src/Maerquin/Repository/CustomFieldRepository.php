@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -32,4 +34,3 @@ class CustomFieldRepository extends EntityRepository
         return $value[0]['value'] ?? '';
     }
 }
-

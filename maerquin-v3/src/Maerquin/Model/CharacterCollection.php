@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use SvenHK\Maerquin\Entity\Character;
@@ -20,8 +22,7 @@ class CharacterCollection
     {
         return array_map(
             fn(Character $character) => $character->serialize($compact),
-            $this->characters
+            $this->characters,
         );
     }
 }
-

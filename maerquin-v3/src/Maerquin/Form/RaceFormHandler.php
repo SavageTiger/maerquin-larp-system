@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Form;
 
 use Doctrine\ORM\EntityManager;
@@ -51,14 +53,14 @@ class RaceFormHandler
         foreach ($mandatorySkills['skillIds'] ?? [] as $skillId) {
             $skillConnections[] = RaceSkillLink::createMandatory(
                 $race,
-                $this->skillRepository->getById($skillId)
+                $this->skillRepository->getById($skillId),
             );
         }
 
         foreach ($forbiddenSkills['skillIds'] ?? [] as $skillId) {
             $skillConnections[] = RaceSkillLink::createForbidden(
                 $race,
-                $this->skillRepository->getById($skillId)
+                $this->skillRepository->getById($skillId),
             );
         }
 
@@ -68,13 +70,13 @@ class RaceFormHandler
             $skillConnections[] = RaceSkillLink::createWithCustomPoints(
                 $race,
                 $this->skillRepository->getById($skillId),
-                $customPoints
+                $customPoints,
             );
         }
 
         $race->updateRace(
             $formResolver->getValue('name', 'race'),
-            $skillConnections
+            $skillConnections,
         );
 
         $this->raceRepository->save($race);

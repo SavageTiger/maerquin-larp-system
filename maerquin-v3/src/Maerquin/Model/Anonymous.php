@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use App\Domain\Entity\User as FrameworkUser;
@@ -16,4 +18,3 @@ class Anonymous extends FrameworkUser
         return false;
     }
 }
-

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\Uuid;
@@ -34,4 +36,3 @@ class SkillSkillLink
         return $this->id;
     }
 }
-

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -17,10 +19,10 @@ class CustomValue
     protected UuidInterface $id;
 
     #[ORM\ManyToOne(targetEntity: CustomField::class)]
-    #[ORM\JoinColumn(name: "customfield_id", referencedColumnName: "id")]
+    #[ORM\JoinColumn(name: 'customfield_id', referencedColumnName: 'id')]
     protected CustomField $customField;
 
-    #[ORM\Column(name: "entity_id", type: 'uuid')]
+    #[ORM\Column(name: 'entity_id', type: 'uuid')]
     protected string $entityId;
 
     #[ORM\Column(type: 'text', nullable: true)]

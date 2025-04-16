@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Model;
 
 class DeitiesCollection
@@ -18,8 +20,7 @@ class DeitiesCollection
     {
         return array_map(
             fn(Deity $deity) => $deity->serialize(),
-            $this->deities
+            $this->deities,
         );
     }
 }
-

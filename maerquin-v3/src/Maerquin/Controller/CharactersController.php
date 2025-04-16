@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
@@ -74,25 +76,27 @@ class CharactersController extends Action
         if (is_string($characterId) && Uuid::isValid($characterId)) {
             return $view->render(
                 $this->response,
-                'character.html.twig', array_merge(
+                'character.html.twig',
+                array_merge(
                     $viewContext,
                     [
                         'character' => $this->characterRepository->getById($characterId),
                         'races' => new RaceCollection($this->raceRepository->findAllSorted()),
                         'customFields' => $this->fetchCustomFields($characterId),
-                    ]
-                )
+                    ],
+                ),
             );
         }
 
         return $view->render(
             $this->response,
-            'characters.html.twig', array_merge(
+            'characters.html.twig',
+            array_merge(
                 $viewContext,
                 [
                     'characters' => new CharacterCollection($this->characterRepository->findAllSorted()),
-                ]
-            )
+                ],
+            ),
         );
     }
 
@@ -104,7 +108,7 @@ class CharactersController extends Action
         foreach ($customFields as $customField) {
             $customValues[$customField->getId()] = $this->customFieldRepository->readFieldValue(
                 $customField->getId(),
-                $characterId
+                $characterId,
             );
         }
 

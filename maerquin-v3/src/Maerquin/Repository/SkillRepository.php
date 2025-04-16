@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
-use SvenHK\Maerquin\Entity\Skill as Skill;
+use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
 use SvenHK\Maerquin\Model\SkillCollection;
@@ -88,4 +90,3 @@ class SkillRepository extends EntityRepository
         $this->getEntityManager()->flush();
     }
 }
-

@@ -55,11 +55,11 @@ class Skill extends SkillModel
 
     #[ORM\ManyToOne(targetEntity: Element::class)]
     #[ORM\JoinColumn(name: 'element_id', referencedColumnName: 'id', nullable: true)]
-    protected ?ElementModel $element;
+    protected null | ElementModel $element;
 
     #[ORM\ManyToOne(targetEntity: Deity::class)]
     #[ORM\JoinColumn(name: 'deity_id', referencedColumnName: 'id', nullable: true)]
-    protected ?DeityModel $deity;
+    protected null | DeityModel $deity;
 
     #[ORM\ManyToOne(targetEntity: SkillType::class)]
     #[ORM\JoinColumn(name: 'skilltype_id', referencedColumnName: 'id', nullable: false)]
@@ -72,5 +72,5 @@ class Skill extends SkillModel
         cascade: ['persist'],
     )
     ]
-    protected ?SkillSkillLinkModel $requiredSkillLink = null;
+    protected null | SkillSkillLinkModel $requiredSkillLink = null;
 }

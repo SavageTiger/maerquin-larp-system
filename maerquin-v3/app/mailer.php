@@ -8,7 +8,7 @@ use Symfony\Component\Mailer\Transport;
 
 class MailerFactory
 {
-    public static function create() : Mailer\Mailer
+    public static function create(): Mailer\Mailer
     {
         $dsn = '...';
         $transport = Transport::fromDsn($dsn);
@@ -17,7 +17,7 @@ class MailerFactory
     }
 }
 
-return function (ContainerBuilder $containerBuilder) {
+return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
         Mailer\Mailer::class => function () {
             return MailerFactory::create();

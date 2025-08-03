@@ -13,9 +13,11 @@ class HomeController extends Action
 {
     use RedirectTo;
 
-    public function __construct(private Session $session) {}
+    public function __construct(private Session $session)
+    {
+    }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         if ($this->session->getUser()->isAnonymous() === true) {
             return $this->redirectTo('/login.html');

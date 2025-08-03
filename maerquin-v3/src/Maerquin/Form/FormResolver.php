@@ -8,9 +8,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class FormResolver
 {
-    private function __construct(private Request $request) {}
+    private function __construct(private Request $request)
+    {
+    }
 
-    public static function createFromRequest(Request $request) : self
+    public static function createFromRequest(Request $request): self
     {
         return new self($request);
     }
@@ -18,7 +20,7 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getValue(string $name, ?string $namespace = null, ?string $default = null) : string
+    public function getValue(string $name, null | string $namespace = null, null | string $default = null): string
     {
         $value = is_string($namespace) === false ?
             $this->request->getParsedBody()[$name] ?? $default :
@@ -34,7 +36,7 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getBoolean(string $name, ?string $namespace = null, ?string $default = null) : bool
+    public function getBoolean(string $name, null | string $namespace = null, null | string $default = null): bool
     {
         $value = is_string($namespace) === false ?
             $this->request->getParsedBody()[$name] ?? $default :

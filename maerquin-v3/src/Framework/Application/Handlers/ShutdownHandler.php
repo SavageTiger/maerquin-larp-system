@@ -26,9 +26,10 @@ class ShutdownHandler
         $this->displayErrorDetails = $displayErrorDetails;
     }
 
-    public function __invoke() : void
+    public function __invoke(): void
     {
         $error = error_get_last();
+
         if ($error) {
             $errorFile = $error['file'];
             $errorLine = $error['line'];

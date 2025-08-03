@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use DI\ContainerBuilder;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -16,10 +18,10 @@ class DoctrineConfig
 
     public function __construct()
     {
-        if (!Type::hasType(UuidType::NAME)) {
+        if (! Type::hasType(UuidType::NAME)) {
             Type::addType(
                 UuidType::NAME,
-                UuidType::class
+                UuidType::class,
             );
         }
 
@@ -28,11 +30,10 @@ class DoctrineConfig
             isDevMode: true,
         );
 
-
         $this->connection = DriverManager::getConnection([
             'driver' => 'pdo_mysql',
             'host' => $_ENV['DATABASE_HOSTNAME'] ?? '',
-            'port' => 3306,
+            'port' => 3_306,
             'dbname' => $_ENV['DATABASE_NAME'] ?? '',
             'user' => $_ENV['DATABASE_USERNAME'] ?? '',
             'password' => $_ENV['DATABASE_PASSWORD'] ?? '',
@@ -41,14 +42,14 @@ class DoctrineConfig
     }
 }
 
-return function (ContainerBuilder $containerBuilder) {
+return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
         EntityManager::class => function () {
             $doctrineConfig = new DoctrineConfig();
 
             return new EntityManager(
                 $doctrineConfig->connection,
-                $doctrineConfig->config
+                $doctrineConfig->config,
             );
         },
     ]);

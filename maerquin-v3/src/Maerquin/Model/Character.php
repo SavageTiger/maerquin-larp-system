@@ -12,9 +12,9 @@ class Character
 {
     protected UuidInterface $id;
     protected string $name;
-    protected ?Deity $primaryDeity;
-    protected ?Deity $secondaryDeity;
-    protected ?Player $player;
+    protected null | Deity $primaryDeity;
+    protected null | Deity $secondaryDeity;
+    protected null | Player $player;
     protected Race $race;
     protected bool $deceased;
 
@@ -23,7 +23,7 @@ class Character
      */
     protected Collection $skills;
 
-    public function serialize($compact) : array
+    public function serialize($compact): array
     {
         $minimal = [
             'id' => $this->getId(),
@@ -62,22 +62,22 @@ class Character
         );
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function getPrimaryDeityId() : string
+    public function getPrimaryDeityId(): string
     {
         return $this->primaryDeity?->getId() ?? '';
     }
@@ -87,7 +87,7 @@ class Character
         return $this->secondaryDeity?->getId() ?? '';
     }
 
-    public function playerId() : string
+    public function playerId(): string
     {
         return $this->player?->getId();
     }
@@ -95,12 +95,12 @@ class Character
     /**
      * @return SkillLink[]
      */
-    public function getSkills() : array
+    public function getSkills(): array
     {
         return $this->skills->toArray();
     }
 
-    private function isDeceased() : bool
+    private function isDeceased(): bool
     {
         return $this->deceased;
     }

@@ -12,11 +12,11 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use SvenHK\Maerquin\Session\Session;
 
-return function (ContainerBuilder $containerBuilder) {
+return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
-        \App\Application\Session\Session::class => function (ContainerInterface $c) {
+        App\Application\Session\Session::class => function (ContainerInterface $c) {
             return new Session(
-                $c->get(EntityManager::class)
+                $c->get(EntityManager::class),
             );
         },
 

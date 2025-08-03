@@ -16,7 +16,7 @@ class SkillTypeCollection
         $this->skillTypes = $skillTypes;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return array_map(
             fn(SkillType $skillType) => $skillType->serialize(),

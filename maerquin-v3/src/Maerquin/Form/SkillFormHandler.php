@@ -52,7 +52,7 @@ class SkillFormHandler
      * @throws MissingFormFieldException
      * @throws MaerquinEntityNotFoundException
      */
-    public function handle(string $skillId, Request $request) : void
+    public function handle(string $skillId, Request $request): void
     {
         $formResolver = FormResolver::createFromRequest($request);
 
@@ -73,9 +73,9 @@ class SkillFormHandler
             $this->elementRepository->findById($formResolver->getValue('deityElementId', 'skill')),
             $this->skillTypeRepository->getOneById($formResolver->getValue('skillTypeId', 'skill')),
             $requiredSkillLink,
-            (int) $formResolver->getValue('points', 'skill'),
-            (int) $formResolver->getValue('numberOfTimes', 'skill'),
-            (int) $formResolver->getValue('level', 'skill'),
+            (int)$formResolver->getValue('points', 'skill'),
+            (int)$formResolver->getValue('numberOfTimes', 'skill'),
+            (int)$formResolver->getValue('level', 'skill'),
             $formResolver->getValue('distance', 'skill'),
             $formResolver->getValue('duration', 'skill'),
             $formResolver->getBoolean('isNotFreelyAvailable', 'skill'),

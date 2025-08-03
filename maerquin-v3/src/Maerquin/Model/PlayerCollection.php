@@ -16,7 +16,7 @@ class PlayerCollection
         $this->players = $players;
     }
 
-    public function serialize($compact) : array
+    public function serialize($compact): array
     {
         $serialized = [];
 

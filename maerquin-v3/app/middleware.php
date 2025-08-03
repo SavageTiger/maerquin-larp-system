@@ -8,7 +8,7 @@ use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
-return function (App $app) {
+return function (App $app): void {
     if ($_ENV['DEBUG'] === 'true') {
         $twig = Twig::create(__DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Templates', ['cache' => false]);
     } else {

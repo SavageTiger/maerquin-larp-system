@@ -16,7 +16,7 @@ class SkillCollection
         $this->skills = $skills;
     }
 
-    public function serialize(bool $compact) : array
+    public function serialize(bool $compact): array
     {
         return array_map(
             fn(Skill $skill) => $skill->serialize($compact),

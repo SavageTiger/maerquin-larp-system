@@ -29,10 +29,10 @@ class User extends UserModel
     #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
 
-    public function checkPassword(string $password) : bool
+    public function checkPassword(string $password): bool
     {
         $algorithm = 'sha512';
-        $iterations = 1000;
+        $iterations = 1_000;
 
         $derivedHash = hash_pbkdf2(
             $algorithm,

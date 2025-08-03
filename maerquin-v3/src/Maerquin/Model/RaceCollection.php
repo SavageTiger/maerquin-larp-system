@@ -16,7 +16,7 @@ class RaceCollection
         $this->races = $races;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return array_map(
             fn(Race $race) => $race->serialize(),

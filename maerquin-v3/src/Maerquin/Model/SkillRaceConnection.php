@@ -19,7 +19,7 @@ class SkillRaceConnection
     protected int $points;
     protected SkillEntity $skill;
 
-    public static function createMandatory(Race $race, SkillEntity $skill) : self
+    public static function createMandatory(Race $race, SkillEntity $skill): self
     {
         $connection = new static();
         $connection->race = $race;
@@ -31,7 +31,7 @@ class SkillRaceConnection
         return $connection;
     }
 
-    public static function createForbidden(Race $race, SkillEntity $skill) : self
+    public static function createForbidden(Race $race, SkillEntity $skill): self
     {
         $connection = new static();
         $connection->race = $race;
@@ -43,7 +43,7 @@ class SkillRaceConnection
         return $connection;
     }
 
-    public static function createWithCustomPoints(Race $race, SkillEntity $skill, int $points) : self
+    public static function createWithCustomPoints(Race $race, SkillEntity $skill, int $points): self
     {
         $connection = new static();
         $connection->race = $race;
@@ -55,7 +55,7 @@ class SkillRaceConnection
         return $connection;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return [
             'id' => $this->getId(),
@@ -67,22 +67,22 @@ class SkillRaceConnection
         ];
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id->toString();
     }
 
-    public function isMandatory() : bool
+    public function isMandatory(): bool
     {
         return $this->mandatory;
     }
 
-    public function isForbidden() : bool
+    public function isForbidden(): bool
     {
         return $this->forbidden;
     }
 
-    public function getCustomPoints() : int
+    public function getCustomPoints(): int
     {
         return $this->points;
     }

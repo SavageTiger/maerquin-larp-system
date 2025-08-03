@@ -31,18 +31,18 @@ class EventsController extends Action
     private EntityRepository $characterRepository;
 
     public function __construct(
-        readonly private EventFormHandler $eventFormHandler,
+        private readonly EventFormHandler $eventFormHandler,
         EntityManager $entityManager,
     ) {
         $this->eventRepository = $entityManager->getRepository(Event::class);
         $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
-        $eventId = (string) ($this->request->getAttribute('eventId') ?? '');
+        $eventId = (string)($this->request->getAttribute('eventId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($eventId)) {
             $this->eventFormHandler->handle($eventId, $this->request);

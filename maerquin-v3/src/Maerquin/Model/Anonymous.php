@@ -8,12 +8,12 @@ use App\Domain\Entity\User as FrameworkUser;
 
 class Anonymous extends FrameworkUser
 {
-    public function getId() : string
+    public function getId(): string
     {
         return 'anonymous';
     }
 
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return false;
     }

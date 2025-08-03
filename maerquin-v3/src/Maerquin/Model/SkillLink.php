@@ -14,22 +14,22 @@ class SkillLink
     protected int $points;
     protected int $amount;
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id->toString();
     }
 
-    public function getSkill() : Skill
+    public function getSkill(): Skill
     {
         return $this->skill;
     }
 
-    public function getPoints() : int
+    public function getPoints(): int
     {
         return $this->points;
     }
 
-    public function getAmount() : int
+    public function getAmount(): int
     {
         return $this->amount;
     }

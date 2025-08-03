@@ -45,7 +45,7 @@ class SkillsController extends Action
     private EntityRepository $elementRepository;
 
     public function __construct(
-        readonly private SkillFormHandler $skillFormHandler,
+        private readonly SkillFormHandler $skillFormHandler,
         EntityManager $entityManager,
     ) {
         $this->skillRepository = $entityManager->getRepository(Skill::class);
@@ -54,11 +54,11 @@ class SkillsController extends Action
         $this->elementRepository = $entityManager->getRepository(Element::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
-        $skillId = (string) ($this->request->getAttribute('skillId') ?? '');
+        $skillId = (string)($this->request->getAttribute('skillId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($skillId)) {
             $this->skillFormHandler->handle($skillId, $this->request);

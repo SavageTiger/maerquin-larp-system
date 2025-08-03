@@ -16,7 +16,7 @@ class DeitiesCollection
         $this->deities = $deities;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return array_map(
             fn(Deity $deity) => $deity->serialize(),

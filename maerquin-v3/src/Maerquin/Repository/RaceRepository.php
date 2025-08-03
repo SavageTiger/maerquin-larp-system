@@ -9,7 +9,7 @@ use SvenHK\Maerquin\Entity\Race;
 
 class RaceRepository extends EntityRepository
 {
-    public function getById(string $raceId) : Race
+    public function getById(string $raceId): Race
     {
         return $this->findOneBy(['id' => $raceId]);
     }
@@ -17,12 +17,12 @@ class RaceRepository extends EntityRepository
     /**
      * @return Race[]
      */
-    public function findAllSorted() : array
+    public function findAllSorted(): array
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
 
-    public function save(Race $race) : void
+    public function save(Race $race): void
     {
         $this->getEntityManager()->persist($race);
         $this->getEntityManager()->flush();

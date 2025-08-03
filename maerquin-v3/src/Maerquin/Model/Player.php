@@ -16,7 +16,7 @@ class Player
     /**
      * @return SkillType[]
      */
-    public function getCharacters() : array
+    public function getCharacters(): array
     {
         return $this->characters->toArray();
     }
@@ -37,12 +37,12 @@ class Player
         ];
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }

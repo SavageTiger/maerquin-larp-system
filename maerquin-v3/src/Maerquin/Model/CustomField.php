@@ -11,7 +11,7 @@ class CustomField
     protected UuidInterface $id;
     protected string $name;
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return [
             'id' => $this->getId(),
@@ -19,12 +19,12 @@ class CustomField
         ];
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }

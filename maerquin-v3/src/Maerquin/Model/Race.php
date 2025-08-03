@@ -13,7 +13,7 @@ class Race
     protected string $name;
     protected Collection $skillConnections;
 
-    public function updateRace(string $name, array $skillConnections) : void
+    public function updateRace(string $name, array $skillConnections): void
     {
         $this->name = $name;
 
@@ -32,12 +32,12 @@ class Race
         ];
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }

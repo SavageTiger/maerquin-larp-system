@@ -16,7 +16,7 @@ class EventCollection
         $this->events = $events;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return array_map(
             fn(Event $event) => $event->serialize(),

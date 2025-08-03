@@ -13,7 +13,7 @@ class PlayerRepository extends EntityRepository
     /**
      * @return Player[]
      */
-    public function findAllSorted() : array
+    public function findAllSorted(): array
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
@@ -21,7 +21,7 @@ class PlayerRepository extends EntityRepository
     /**
      * @throws MaerquinEntityNotFoundException
      */
-    public function getById(string $userId) : Player
+    public function getById(string $userId): Player
     {
         return $this->findOneBy(['id' => $userId]) ?? throw MaerquinEntityNotFoundException::withType(Player::class);
     }

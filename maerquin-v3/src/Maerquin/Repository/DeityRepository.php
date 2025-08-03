@@ -12,12 +12,12 @@ class DeityRepository extends EntityRepository
     /**
      * @return Deity[]
      */
-    public function findAllSorted() : array
+    public function findAllSorted(): array
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
 
-    public function findById(string $deityId) : ?Deity
+    public function findById(string $deityId): null | Deity
     {
         return $this->find($deityId);
     }

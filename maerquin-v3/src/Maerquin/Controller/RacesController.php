@@ -38,11 +38,11 @@ class RacesController extends Action
         $this->skillRepository = $entityManager->getRepository(Skill::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
-        $raceId = (string) ($this->request->getAttribute('raceId') ?? '');
+        $raceId = (string)($this->request->getAttribute('raceId') ?? '');
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($raceId)) {
             $this->raceFormHandler->handle($raceId, $this->request);

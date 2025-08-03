@@ -10,7 +10,7 @@ use Slim\Psr7\Response;
 
 trait RedirectTo
 {
-    public function redirectTo(string $path) : ResponseInterface
+    public function redirectTo(string $path): ResponseInterface
     {
         $headers = new Headers([
             'Location' => $path,

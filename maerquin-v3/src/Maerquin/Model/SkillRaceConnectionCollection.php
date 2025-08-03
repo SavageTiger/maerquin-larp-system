@@ -16,7 +16,7 @@ class SkillRaceConnectionCollection
         $this->skillRaceConnetions = $skillRaceConnection;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return array_map(
             fn(SkillRaceConnection $skillRaceConnection) => $skillRaceConnection->serialize(),

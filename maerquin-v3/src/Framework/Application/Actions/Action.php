@@ -32,7 +32,7 @@ abstract class Action
      * @throws HttpNotFoundException
      * @throws HttpBadRequestException
      */
-    public function __invoke(Request $request, Response $response, array $args) : Response
+    public function __invoke(Request $request, Response $response, array $args): Response
     {
         $this->request = $request;
         $this->response = $response;
@@ -50,7 +50,7 @@ abstract class Action
     /**
      * @throws HttpBadRequestException
      */
-    abstract protected function action() : Response;
+    abstract protected function action(): Response;
 
     /**
      * @return array|object
@@ -62,6 +62,7 @@ abstract class Action
 
     /**
      * @throws HttpBadRequestException
+     *
      * @return mixed
      */
     protected function resolveArg(string $name)
@@ -76,14 +77,14 @@ abstract class Action
     /**
      * @param null|array|object $data
      */
-    protected function respondWithData($data = null, int $statusCode = 200) : Response
+    protected function respondWithData($data = null, int $statusCode = 200): Response
     {
         $payload = new ActionPayload($statusCode, $data);
 
         return $this->respond($payload);
     }
 
-    protected function respond(ActionPayload $payload) : Response
+    protected function respond(ActionPayload $payload): Response
     {
         $json = json_encode($payload, JSON_PRETTY_PRINT);
         $this->response->getBody()->write($json);

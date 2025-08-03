@@ -24,7 +24,7 @@ class SkillsApiController extends Action
         $this->skillRepository = $entityManager->getRepository(Skill::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         return $this->respondWithData(
             new SkillCollection($this->skillRepository->findAllSorted())->serialize(false),

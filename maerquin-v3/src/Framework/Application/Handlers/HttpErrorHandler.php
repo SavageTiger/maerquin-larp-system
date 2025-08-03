@@ -19,7 +19,7 @@ use Throwable;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
-    protected function respond() : Response
+    protected function respond(): Response
     {
         $exception = $this->exception;
         $statusCode = 500;

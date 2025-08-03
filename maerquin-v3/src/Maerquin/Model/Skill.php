@@ -10,8 +10,8 @@ class Skill
 {
     protected UuidInterface $id;
     protected string $name;
-    protected ?Deity $deity;
-    protected ?Element $element;
+    protected null | Deity $deity;
+    protected null | Element $element;
     protected SkillType $skillType;
     protected int $points;
     protected int $numberOfTimes;
@@ -22,7 +22,7 @@ class Skill
     protected bool $nonFree;
     protected bool $hidden;
     protected int $level;
-    protected ?SkillSkillLink $requiredSkillLink = null;
+    protected null | SkillSkillLink $requiredSkillLink = null;
 
     public function serialize(bool $compact)
     {
@@ -57,107 +57,107 @@ class Skill
         );
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id->toString();
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getDeityId() : string
+    public function getDeityId(): string
     {
         return $this->deity?->getId() ?? '';
     }
 
-    public function getElementId() : string
+    public function getElementId(): string
     {
         return $this->element?->getId() ?? '';
     }
 
-    public function getDeityName() : string
+    public function getDeityName(): string
     {
         return $this->deity?->getName() ?? '';
     }
 
-    public function getElementName() : string
+    public function getElementName(): string
     {
         return $this->element?->getName() ?? '';
     }
 
-    public function getSkillTypeId() : string
+    public function getSkillTypeId(): string
     {
         return $this->skillType->getId();
     }
 
-    public function getPoints() : int
+    public function getPoints(): int
     {
         return $this->points;
     }
 
-    public function getNumberOfTimes() : int
+    public function getNumberOfTimes(): int
     {
         return $this->numberOfTimes;
     }
 
-    public function getDistance() : string
+    public function getDistance(): string
     {
         return $this->distance;
     }
 
-    public function getDuration() : string
+    public function getDuration(): string
     {
         return $this->duration;
     }
 
-    public function isFreelyAvailable() : bool
+    public function isFreelyAvailable(): bool
     {
         return $this->nonFree === false;
     }
 
-    public function isHidden() : bool
+    public function isHidden(): bool
     {
         return $this->hidden;
     }
 
-    public function getLevel() : int
+    public function getLevel(): int
     {
         return $this->level;
     }
 
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function getRemarks() : string
+    public function getRemarks(): string
     {
         return $this->remarks;
     }
 
-    public function getParentRequirementSkillId() : ?string
+    public function getParentRequirementSkillId(): null | string
     {
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }
 
-    public function getSkillTypeName() : string
+    public function getSkillTypeName(): string
     {
         return $this->skillType->getName();
     }
 
-    public function getSkillTypeOrdering() : int
+    public function getSkillTypeOrdering(): int
     {
         return $this->skillType->getOrdering();
     }
 
     public function updateSkill(
         string $name,
-        ?Deity $deity,
-        ?Element $element,
+        null | Deity $deity,
+        null | Element $element,
         SkillType $skillType,
-        ?SkillSkillLink $requiredSkillLink,
+        null | SkillSkillLink $requiredSkillLink,
         int $points,
         int $numberOfTimes,
         int $level,
@@ -167,7 +167,7 @@ class Skill
         bool $isHidden,
         string $description,
         string $remarks,
-    ) : void {
+    ): void {
         $this->name = $name;
         $this->deity = $deity;
         $this->element = $element;

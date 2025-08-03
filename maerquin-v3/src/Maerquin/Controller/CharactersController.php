@@ -62,7 +62,7 @@ class CharactersController extends Action
         $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
@@ -100,7 +100,7 @@ class CharactersController extends Action
         );
     }
 
-    private function fetchCustomFields(string $characterId) : CustomFieldCollection
+    private function fetchCustomFields(string $characterId): CustomFieldCollection
     {
         $customFields = $this->customFieldRepository->findForCharacter();
         $customValues = [];

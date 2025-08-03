@@ -33,11 +33,11 @@ class Character extends CharacterModel
 
     #[ORM\ManyToOne(targetEntity: Deity::class)]
     #[ORM\JoinColumn(nullable: true)]
-    protected ?Deity $primaryDeity = null;
+    protected null | Deity $primaryDeity = null;
 
     #[ORM\ManyToOne(targetEntity: Deity::class)]
     #[ORM\JoinColumn(nullable: true)]
-    protected ?Deity $secondaryDeity = null;
+    protected null | Deity $secondaryDeity = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
     protected string $occupation = '';
@@ -50,7 +50,7 @@ class Character extends CharacterModel
 
     #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: true)]
-    protected ?PlayerModel $player;
+    protected null | PlayerModel $player;
 
     #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
     protected string $notes;

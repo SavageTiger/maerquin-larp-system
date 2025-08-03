@@ -13,12 +13,12 @@ class CustomFieldRepository extends EntityRepository
     /**
      * @return CustomField[]
      */
-    public function findForCharacter() : array
+    public function findForCharacter(): array
     {
         return $this->findBy(['tableName' => 'character'], ['ordinal' => 'ASC']);
     }
 
-    public function readFieldValue(string $fieldId, string $subjectId) : string
+    public function readFieldValue(string $fieldId, string $subjectId): string
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

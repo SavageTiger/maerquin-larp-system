@@ -14,7 +14,7 @@ use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
 
-return function (App $app) {
+return function (App $app): void {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
         return $response;
     });

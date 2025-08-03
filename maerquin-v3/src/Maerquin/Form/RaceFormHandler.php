@@ -38,7 +38,7 @@ class RaceFormHandler
      * @throws MaerquinEntityNotFoundException
      * @throws JsonException
      */
-    public function handle(string $raceId, Request $request) : void
+    public function handle(string $raceId, Request $request): void
     {
         $race = $this->raceRepository->getById($raceId);
 

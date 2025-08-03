@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class SessionMiddleware implements Middleware
 {
-    public function process(Request $request, RequestHandler $handler) : Response
+    public function process(Request $request, RequestHandler $handler): Response
     {
         session_cache_limiter(null);
         session_start();

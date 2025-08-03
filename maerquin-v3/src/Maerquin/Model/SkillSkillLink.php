@@ -21,17 +21,17 @@ class SkillSkillLink
         $this->secondSkill = $subjectSkill;
     }
 
-    public static function createForSkill(Skill $subjectSkill, Skill $requiredSkill) : self
+    public static function createForSkill(Skill $subjectSkill, Skill $requiredSkill): self
     {
         return new SkillSkillLinkEntity($subjectSkill, $requiredSkill);
     }
 
-    public function requiredSkillId() : string
+    public function requiredSkillId(): string
     {
         return $this->firstSkill->getId();
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }

@@ -29,16 +29,16 @@ class EventFormHandler
      * @throws MissingFormFieldException
      * @throws MaerquinEntityNotFoundException
      */
-    public function handle(string $eventId, Request $request) : void
+    public function handle(string $eventId, Request $request): void
     {
         $formResolver = FormResolver::createFromRequest($request);
 
-        $startDateYear = (int) $formResolver->getValue('startDateYear', 'event');
-        $startDateMonth = (int) $formResolver->getValue('startDateMonth', 'event');
-        $startDateDay = (int) $formResolver->getValue('startDateDay', 'event');
-        $endDateYear = (int) $formResolver->getValue('endDateYear', 'event');
-        $endDateMonth = (int) $formResolver->getValue('endDateMonth', 'event');
-        $endDateDay = (int) $formResolver->getValue('endDateDay', 'event');
+        $startDateYear = (int)$formResolver->getValue('startDateYear', 'event');
+        $startDateMonth = (int)$formResolver->getValue('startDateMonth', 'event');
+        $startDateDay = (int)$formResolver->getValue('startDateDay', 'event');
+        $endDateYear = (int)$formResolver->getValue('endDateYear', 'event');
+        $endDateMonth = (int)$formResolver->getValue('endDateMonth', 'event');
+        $endDateDay = (int)$formResolver->getValue('endDateDay', 'event');
 
         $this->guardDate($startDateYear, $startDateMonth, $startDateDay);
         $this->guardDate($endDateYear, $endDateMonth, $endDateDay);
@@ -56,7 +56,7 @@ class EventFormHandler
         $event->updateEvent(
             $formResolver->getValue('name', 'event'),
             $formResolver->getValue('secondaryName', 'event'),
-            (int) $formResolver->getValue('points', 'event'),
+            (int)$formResolver->getValue('points', 'event'),
             $startDate,
             $endDate,
             // TODO: Characters with their points!.
@@ -65,11 +65,11 @@ class EventFormHandler
         $this->eventRepository->save($event);
     }
 
-    private function guardDate(int $year, int $month, int $day) : void
+    private function guardDate(int $year, int $month, int $day): void
     {
         if (
-            $year < 1950 ||
-            $year > 2100 ||
+            $year < 1_950 ||
+            $year > 2_100 ||
             $month < 1 ||
             $month > 12 ||
             $day < 1 ||

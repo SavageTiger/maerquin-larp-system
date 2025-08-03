@@ -30,7 +30,7 @@ class LoginController extends Action
         $this->userRepository = $this->entityManager->getRepository(User::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
         $form = FormResolver::createFromRequest($this->request);
@@ -53,7 +53,7 @@ class LoginController extends Action
         );
     }
 
-    public function login(string $username, string $password) : false | string
+    public function login(string $username, string $password): false | string
     {
         $user = $this->userRepository->findByUsername($username);
 

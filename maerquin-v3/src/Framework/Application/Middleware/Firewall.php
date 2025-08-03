@@ -13,9 +13,11 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class Firewall implements Middleware
 {
-    public function __construct(private Session $session) {}
+    public function __construct(private Session $session)
+    {
+    }
 
-    public function process(Request $request, RequestHandler $handler) : Response
+    public function process(Request $request, RequestHandler $handler): Response
     {
         $uri = $request->getUri();
 

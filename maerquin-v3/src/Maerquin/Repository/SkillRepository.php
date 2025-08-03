@@ -14,7 +14,7 @@ use SvenHK\Maerquin\Model\SkillCollection;
 
 class SkillRepository extends EntityRepository
 {
-    public function findById(string $skillId) : ?SkillModel
+    public function findById(string $skillId): null | SkillModel
     {
         return $this->find($skillId);
     }
@@ -22,7 +22,7 @@ class SkillRepository extends EntityRepository
     /**
      * @return SkillModel[]
      */
-    public function findAllSorted() : array
+    public function findAllSorted(): array
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
@@ -30,7 +30,7 @@ class SkillRepository extends EntityRepository
     /**
      * @return SkillCollection[]
      */
-    public function findAllMandatorySortedForRace(string $raceId) : array
+    public function findAllMandatorySortedForRace(string $raceId): array
     {
         return $this->createBaseRaceSkillConnectionQuery($raceId)
             ->andWhere('skillRaceConnection.mandatory = :mandatory')
@@ -40,7 +40,7 @@ class SkillRepository extends EntityRepository
             ->getResult();
     }
 
-    private function createBaseRaceSkillConnectionQuery(string $raceId) : QueryBuilder
+    private function createBaseRaceSkillConnectionQuery(string $raceId): QueryBuilder
     {
         return $this->getEntityManager()
             ->createQueryBuilder()
@@ -53,7 +53,7 @@ class SkillRepository extends EntityRepository
     /**
      * @return SkillCollection[]
      */
-    public function findAllForbiddenSortedForRace(string $raceId) : array
+    public function findAllForbiddenSortedForRace(string $raceId): array
     {
         return $this->createBaseRaceSkillConnectionQuery($raceId)
             ->andWhere('skillRaceConnection.forbidden = :forbidden')
@@ -66,7 +66,7 @@ class SkillRepository extends EntityRepository
     /**
      * @return SkillCollection[]
      */
-    public function findDifferentPointSkillsSortedForRace(string $raceId) : array
+    public function findDifferentPointSkillsSortedForRace(string $raceId): array
     {
         return $this->createBaseRaceSkillConnectionQuery($raceId)
             ->andWhere('skillRaceConnection.points > 0')
@@ -79,12 +79,12 @@ class SkillRepository extends EntityRepository
     /**
      * @throws MaerquinEntityNotFoundException
      */
-    public function getById(string $skillId) : SkillModel
+    public function getById(string $skillId): SkillModel
     {
         return $this->findOneBy(['id' => $skillId]) ?? throw MaerquinEntityNotFoundException::withType(Skill::class);
     }
 
-    public function save(SkillModel $skill) : void
+    public function save(SkillModel $skill): void
     {
         $this->getEntityManager()->persist($skill);
         $this->getEntityManager()->flush();

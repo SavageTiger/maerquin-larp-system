@@ -12,12 +12,12 @@ class ElementRepository extends EntityRepository
     /**
      * @return Element[]
      */
-    public function findAllSorted() : array
+    public function findAllSorted(): array
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
 
-    public function findById(string $elementId) : ?Element
+    public function findById(string $elementId): null | Element
     {
         return $this->find($elementId);
     }

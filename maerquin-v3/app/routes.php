@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
+use SvenHK\Maerquin\Controller\API\CharactersApiController;
 use SvenHK\Maerquin\Controller\API\SkillsApiController;
 use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
@@ -27,6 +28,7 @@ return function (App $app): void {
 
     $app->get('/admin/characters.html', CharactersController::class);
     $app->get('/admin/characters/{characterId}.html', CharactersController::class);
+    $app->get('/admin/characters/api', CharactersApiController::class);
 
     $app->get('/admin/players.html', PlayersController::class);
     $app->get('/admin/players/{userId}.html', PlayersController::class);

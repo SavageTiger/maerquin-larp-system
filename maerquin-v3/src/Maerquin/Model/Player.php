@@ -21,7 +21,7 @@ class Player
         return $this->characters->toArray();
     }
 
-    public function serialize($compact)
+    public function serialize(bool $compact)
     {
         $characters = [];
 

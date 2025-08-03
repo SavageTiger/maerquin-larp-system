@@ -306,8 +306,9 @@
             </div>
 
             <div v-show="activeTab === 'skills'">
-                <button class="button is-pulled-right">
-                    <i class="fa-solid fa-dice-d20"></i>&nbsp;Toevoegen
+                <button class="button is-pulled-right" @click="appendSkill" onclick="return false">
+                    <i class="fa-solid fa-dice-d20">
+                    </i>&nbsp;Toevoegen
                 </button>
 
                 <div class="column is-12 pl-3 pb-3 p-0">
@@ -420,6 +421,11 @@
             methods: {
                 numbersOnly: (sender, field) => {
                     sender[field] = sender[field].replace(/[^0-9]/g, '')
+                },
+
+                appendSkill: (sender) => {
+                    console.log(sender);
+                    alert('.');
                 }
             },
             mounted() {

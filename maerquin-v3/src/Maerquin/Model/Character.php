@@ -23,7 +23,7 @@ class Character
      */
     protected Collection $skills;
 
-    public function serialize($compact): array
+    public function serialize(bool $compact): array
     {
         $minimal = [
             'id' => $this->getId(),

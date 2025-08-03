@@ -67,11 +67,13 @@ class Event
         int $points,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
+        Collection $charactersPresent,
     ): void {
         $this->name = $name;
         $this->secondaryName = $secondaryName;
         $this->points = $points;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->charactersPresent = $charactersPresent;
     }
 }

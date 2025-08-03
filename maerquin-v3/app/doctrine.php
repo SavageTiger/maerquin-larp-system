@@ -40,6 +40,7 @@ class DoctrineConfig
             'user' => $_ENV['DATABASE_USERNAME'] ?? '',
             'password' => $_ENV['DATABASE_PASSWORD'] ?? '',
             'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
         ], $this->config);
     }
 }

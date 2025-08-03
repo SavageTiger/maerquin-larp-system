@@ -48,6 +48,7 @@ class CharacterRepository extends EntityRepository
             ->from(Character::class, 'c')
             ->leftJoin(CharacterEventLink::class, 'cl', Join::WITH, 'c.id = cl.character and cl.event = :eventId')
             ->where('cl.event = :eventId')
+            ->orderBy('c.name')
             ->setParameter('eventId', $eventId);
 
         return $qb->getQuery()->getResult();

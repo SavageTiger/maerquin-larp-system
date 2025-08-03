@@ -41,7 +41,12 @@ class Event extends EventModel
     #[ORM\Column(type: 'text', nullable: true)]
     protected string $notes;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: CharacterEventLink::class)]
+    #[ORM\OneToMany(
+        targetEntity: CharacterEventLink::class,
+        mappedBy: 'event',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
     protected Collection $charactersPresent;
 
     public function __construct()

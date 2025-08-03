@@ -17,9 +17,10 @@ class Event
     protected DateTimeInterface $startDate;
     protected DateTimeInterface $endDate;
     protected int $points;
+    protected null | string $notes;
     protected Collection $charactersPresent;
 
-    public function serialize()
+    public function serialize(): array
     {
         return [
             'id' => $this->getId(),
@@ -28,6 +29,7 @@ class Event
             'startDate' => $this->getStartDate()->format(DateTimeInterface::ISO8601),
             'endDate' => $this->getEndDate()->format(DateTimeInterface::ISO8601),
             'points' => $this->getPoints(),
+            'notes' => $this->getNotes(),
         ];
     }
 
@@ -61,12 +63,18 @@ class Event
         return $this->points;
     }
 
+    public function getNotes(): string
+    {
+        return $this->notes ?? '';
+    }
+
     public function updateEvent(
         string $name,
         string $secondaryName,
         int $points,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
+        string $notes,
         Collection $charactersPresent,
     ): void {
         $this->name = $name;
@@ -74,6 +82,7 @@ class Event
         $this->points = $points;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->notes = $notes;
         $this->charactersPresent = $charactersPresent;
     }
 }

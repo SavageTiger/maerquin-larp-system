@@ -54,6 +54,8 @@ class EventFormHandler
         $endDateYear = (int)$formResolver->getValue('endDateYear', 'event');
         $endDateMonth = (int)$formResolver->getValue('endDateMonth', 'event');
         $endDateDay = (int)$formResolver->getValue('endDateDay', 'event');
+        $points = (int)$formResolver->getValue('points', 'event');
+        $notes = $formResolver->getValue('notes', 'event');
 
         $characterIds = json_decode($formResolver->getValue('characters', 'event'), true);
 
@@ -77,10 +79,11 @@ class EventFormHandler
         $event->updateEvent(
             $formResolver->getValue('name', 'event'),
             $formResolver->getValue('secondaryName', 'event'),
-            (int)$formResolver->getValue('points', 'event'),
+            $points,
             $startDate,
             $endDate,
-            $this->createCharacterPresenceList($event, $characterIds),
+            $notes,
+            $this->createCharacterPresenceList($event, $points, $characterIds),
         );
 
         $this->eventRepository->save($event);
@@ -107,6 +110,7 @@ class EventFormHandler
      */
     private function createCharacterPresenceList(
         Event $event,
+        int $points,
         array $characterIds,
     ): Collection {
         $charactersPresent = [];
@@ -114,6 +118,7 @@ class EventFormHandler
         foreach ($characterIds as $characterId) {
             $charactersPresent[] = CharacterEventLink::createEventAndCharacter(
                 $event,
+                $points,
                 $this->characterRepository->getById($characterId),
             );
         }

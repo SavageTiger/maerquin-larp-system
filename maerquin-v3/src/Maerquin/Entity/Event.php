@@ -39,7 +39,7 @@ class Event extends EventModel
     protected DateTimeInterface $endDate;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    protected string $notes;
+    protected null | string $notes;
 
     #[ORM\OneToMany(
         targetEntity: CharacterEventLink::class,

@@ -18,7 +18,7 @@ class DoctrineConfig
 
     public function __construct()
     {
-        if (! Type::hasType(UuidType::NAME)) {
+        if (Type::hasType(UuidType::NAME) === false) {
             Type::addType(
                 UuidType::NAME,
                 UuidType::class,
@@ -29,6 +29,8 @@ class DoctrineConfig
             paths: [__DIR__ . '/../src/' . ($_ENV['PROJECT_NAME'] ?? 'None') . '/Entity'],
             isDevMode: true,
         );
+
+        $this->config->enableNativeLazyObjects(true);
 
         $this->connection = DriverManager::getConnection([
             'driver' => 'pdo_mysql',

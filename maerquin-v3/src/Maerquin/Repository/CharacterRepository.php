@@ -44,7 +44,7 @@ class CharacterRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('c')
-            ->distinct('c')
+            ->distinct()
             ->from(Character::class, 'c')
             ->leftJoin(CharacterEventLink::class, 'cl', Join::WITH, 'c.id = cl.character and cl.event = :eventId')
             ->where('cl.event = :eventId')

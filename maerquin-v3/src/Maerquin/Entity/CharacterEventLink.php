@@ -16,7 +16,7 @@ class CharacterEventLink
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface $id;
+    private null | UuidInterface $id;
 
     #[ORM\ManyToOne(targetEntity: Character::class)]
     #[ORM\JoinColumn(name: 'character_id', referencedColumnName: 'id', nullable: false)]

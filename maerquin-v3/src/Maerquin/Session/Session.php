@@ -39,6 +39,7 @@ class Session implements FrameworkSession
         $user = $this->userRepository->findById($this->read('userId', ''));
 
         if ($user === null) {
+
             return new Anonymous();
         }
 

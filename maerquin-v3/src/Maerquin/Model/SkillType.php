@@ -27,7 +27,7 @@ class SkillType
         return $this->name;
     }
 
-    public function getOrdering(): string
+    public function getOrdering(): int
     {
         return $this->ordinal;
     }

@@ -121,7 +121,7 @@
 
         <div class="column is-6">
             <article class="message is-dark">
-                <div class="message-header ">
+                <div class="message-header">
                     Characters aanwezig
                     <button class="button is-pulled-right small-button" onclick="return false"
                             @click="manageCharacters">
@@ -159,6 +159,7 @@
                         <input type="checkbox"
                                :value="character"
                                v-model="characters"
+                               @change="orderCharacters"
                         />
                         {{ '{{ character.name }}' }}
                     </label>
@@ -220,6 +221,17 @@
                         openModal(document.getElementById('manageCharacters'));
                     });
                 },
+
+                orderCharacters() {
+                    this.characters = this.characters.sort(
+                        (left, right) => left.name.localeCompare(right.name)
+                    );
+                }
+            },
+            mounted() {
+                this.characters = this.characters.sort(
+                    (left, right) => left.name.localeCompare(right.name)
+                )
             }
         }).mount('.content');
     </script>

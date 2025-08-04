@@ -15,6 +15,7 @@ use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Entity\Race;
+use SvenHK\Maerquin\Form\CharacterFormHandler;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\CustomFieldCollection;
 use SvenHK\Maerquin\Model\DeitiesCollection;
@@ -53,8 +54,10 @@ class CharactersController extends Action
      */
     private EntityRepository $customFieldRepository;
 
-    public function __construct(EntityManager $entityManager)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        private CharacterFormHandler $characterFormHandler,
+    ) {
         $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
         $this->playerRepository = $entityManager->getRepository(Player::class);
@@ -66,12 +69,16 @@ class CharactersController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
+        $characterId = (string)($this->request->getAttribute('characterId') ?? '');
+
+        if ($this->request->getMethod() === 'POST' && Uuid::isValid($characterId)) {
+            $this->characterFormHandler->handle($characterId, $this->request);
+        }
+
         $viewContext = [
             'deities' => new DeitiesCollection($this->deityRepository->findAll()),
             'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
         ];
-
-        $characterId = $this->request->getAttribute('characterId');
 
         if (is_string($characterId) && Uuid::isValid($characterId)) {
             return $view->render(

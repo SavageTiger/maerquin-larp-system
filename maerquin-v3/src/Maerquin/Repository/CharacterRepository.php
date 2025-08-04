@@ -9,6 +9,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CharacterEventLink;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Model\Character as CharacterModel;
 
 class CharacterRepository extends EntityRepository
 {
@@ -52,5 +53,11 @@ class CharacterRepository extends EntityRepository
             ->setParameter('eventId', $eventId);
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function save(CharacterModel $skill): void
+    {
+        $this->getEntityManager()->persist($skill);
+        $this->getEntityManager()->flush();
     }
 }

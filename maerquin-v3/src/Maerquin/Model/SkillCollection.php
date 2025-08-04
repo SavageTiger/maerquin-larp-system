@@ -23,4 +23,12 @@ class SkillCollection
             $this->skills,
         );
     }
+
+    /**
+     * @return array<int, Skill>
+     */
+    public function getSkills(): array
+    {
+        return $this->skills;
+    }
 }

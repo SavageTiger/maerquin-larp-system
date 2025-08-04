@@ -40,16 +40,16 @@ class Character
 
         $linkedSkills = [];
 
-        foreach ($this->getSkills() as $linkedSkill) {
-            $linkedSkills[] = [
-                'skillName' => $linkedSkill->getSkill()->getName(),
-                'skillGroup' => $linkedSkill->getSkill()->getSkillTypeName(),
-                'skillGroupOrdering' => $linkedSkill->getSkill()->getSkillTypeOrdering(),
-                'numberOfTimes' => $linkedSkill->getAmount(),
-                'points' => $linkedSkill->getPoints(),
-                'numberOfTimesSource' => $linkedSkill->getSkill()->getNumberOfTimes(),
-                'pointsSource' => $linkedSkill->getSkill()->getPoints(),
-            ];
+        foreach ($this->getSkills() as $skillCoupling) {
+            $linkedSkill = $skillCoupling->getSkill()->serializeAsLinked();
+
+            $linkedSkills[] = array_merge(
+                $linkedSkill,
+                [
+                    'points' => $skillCoupling->getPoints(),
+                    'numberOfTimes' => $skillCoupling->getAmount(),
+                ],
+            );
         }
 
         return array_merge(
@@ -103,5 +103,13 @@ class Character
     private function isDeceased(): bool
     {
         return $this->deceased;
+    }
+
+    public function updateCharacter(
+        string $name,
+        Player $player,
+    ): void {
+        $this->name = $name;
+        $this->player = $player;
     }
 }

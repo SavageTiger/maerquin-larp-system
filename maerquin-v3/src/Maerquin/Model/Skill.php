@@ -142,6 +142,20 @@ class Skill
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }
 
+    public function serializeAsLinked(): array
+    {
+        return [
+            'skillId' => $this->getId(),
+            'skillName' => $this->getName(),
+            'skillGroup' => $this->getSkillTypeName(),
+            'skillGroupOrdering' => $this->getSkillTypeOrdering(),
+            'numberOfTimes' => $this->getNumberOfTimes(),
+            'points' => $this->getPoints(),
+            'numberOfTimesSource' => $this->getNumberOfTimes(),
+            'pointsSource' => $this->getPoints(),
+        ];
+    }
+
     public function getSkillTypeName(): string
     {
         return $this->skillType->getName();

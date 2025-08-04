@@ -68,9 +68,8 @@ class Skill extends SkillModel
     #[ORM\OneToOne(
         targetEntity: SkillSkillLink::class,
         mappedBy: 'secondSkill',
-        orphanRemoval: true,
         cascade: ['persist'],
-    )
-    ]
+        orphanRemoval: true,
+    )]
     protected null | SkillSkillLinkModel $requiredSkillLink = null;
 }

@@ -8,9 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\CustomValue as CustomValueModel;
 
 #[ORM\Entity]
-class CustomValue
+class CustomValue extends CustomValueModel
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]

@@ -8,10 +8,13 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Character;
+use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Entity\Race;
+use SvenHK\Maerquin\Model\CustomFieldCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
+use SvenHK\Maerquin\Repository\CustomFieldRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
@@ -38,16 +41,25 @@ class CharacterFormHandler
      */
     private EntityRepository $deityRepository;
 
+    /**
+     * @var CustomFieldRepository
+     */
+    private EntityRepository $customFieldRepository;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->playerRepository = $entityManager->getRepository(Player::class);
         $this->raceRepository = $entityManager->getRepository(Race::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
+        $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
     }
 
-    public function handle(string $characterId, Request $request): void
-    {
+    public function handle(
+        string $characterId,
+        CustomFieldCollection $customFields,
+        Request $request,
+    ): void {
         $formResolver = FormResolver::createFromRequest($request);
 
         $character = $this->characterRepository->getById($characterId);
@@ -67,6 +79,14 @@ class CharacterFormHandler
         $secondaryDeity = $this->deityRepository->find(
             $formResolver->getValue('secondaryDeityId', 'character'),
         );
+
+        foreach ($customFields->getCustomFields() as $customField) {
+            $this->customFieldRepository->updateFieldValue(
+                $customField->getId(),
+                $characterId,
+                $formResolver->getValue($customField->getId(), 'character'),
+            );
+        }
 
         $character->updateCharacter(
             $formResolver->getValue('name', 'character'),

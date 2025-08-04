@@ -34,4 +34,12 @@ class CustomFieldCollection
 
         return $serialized;
     }
+
+    /**
+     * @return array<int, CustomField>
+     */
+    public function getCustomFields(): array
+    {
+        return $this->customFields;
+    }
 }

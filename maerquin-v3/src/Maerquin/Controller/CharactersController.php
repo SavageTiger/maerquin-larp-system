@@ -71,8 +71,10 @@ class CharactersController extends Action
 
         $characterId = (string)($this->request->getAttribute('characterId') ?? '');
 
+        $customFields = $this->fetchCustomFields($characterId);
+
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($characterId)) {
-            $this->characterFormHandler->handle($characterId, $this->request);
+            $this->characterFormHandler->handle($characterId, $customFields, $this->request);
         }
 
         $viewContext = [
@@ -89,7 +91,7 @@ class CharactersController extends Action
                     [
                         'character' => $this->characterRepository->getById($characterId),
                         'races' => new RaceCollection($this->raceRepository->findAllSorted()),
-                        'customFields' => $this->fetchCustomFields($characterId),
+                        'customFields' => $customFields,
                     ],
                 ),
             );

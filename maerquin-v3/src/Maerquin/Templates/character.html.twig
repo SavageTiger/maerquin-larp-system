@@ -379,6 +379,29 @@
         </div>
 
 
+        <div class="modal" id="skillList">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Skills toevoegen</p>
+                    <div class="control">
+                        <input class="input" type="text" v-model="skillFilter" placeholder="Filter">
+                    </div>
+                </header>
+                <section class="modal-card-body">
+                    <div v-for="skill in skillList">
+                        {{ '{{ skill.name }}' }}
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <div class="buttons">
+                        <button class="button" onclick="return false">Sluiten</button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+
     </article>
 
     <script>
@@ -387,7 +410,10 @@
                 return {
                     activeTab: 'basic',
 
-                    character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                    character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+
+                    skillList: [],
+                    skillFilter: '',
                 }
             },
             computed: {
@@ -419,13 +445,16 @@
                 }
             },
             methods: {
-                numbersOnly: (sender, field) => {
+                numbersOnly(sender, field) {
                     sender[field] = sender[field].replace(/[^0-9]/g, '')
                 },
 
-                appendSkill: (sender) => {
-                    console.log(sender);
-                    alert('.');
+                appendSkill() {
+                    axios.get('/admin/skills/api').then((response) => {
+                        this.skillList = response.data.data ?? [];
+
+                        openModal(document.getElementById('skillList'));
+                    });
                 }
             },
             mounted() {

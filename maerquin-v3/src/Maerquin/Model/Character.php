@@ -17,6 +17,11 @@ class Character
     protected null | Player $player;
     protected Race $race;
     protected bool $deceased;
+    protected string $guild;
+    protected string $title;
+    protected string $occupation;
+    protected string $birthplace;
+    protected string $notes;
 
     /**
      * @var SkillLink[]
@@ -55,7 +60,11 @@ class Character
         return array_merge(
             $minimal,
             [
+                'guild' => $this->getGuild(),
+                'occupation' => $this->getOccupation(),
+                'birthplace' => $this->getBirthplace(),
                 'isDeceased' => $this->isDeceased(),
+                'notes' => $this->getNotes(),
                 'raceId' => $this->race->getId(),
                 'linkedSkills' => $linkedSkills,
             ],
@@ -82,12 +91,12 @@ class Character
         return $this->primaryDeity?->getId() ?? '';
     }
 
-    public function getSecondaryDeityId()
+    public function getSecondaryDeityId(): string
     {
         return $this->secondaryDeity?->getId() ?? '';
     }
 
-    public function playerId(): string
+    public function playerId(): null | string
     {
         return $this->player?->getId();
     }
@@ -100,16 +109,54 @@ class Character
         return $this->skills->toArray();
     }
 
+    public function getGuild(): string
+    {
+        return $this->guild;
+    }
+
+    public function getOccupation(): string
+    {
+        return $this->occupation;
+    }
+
+    public function getBirthplace(): string
+    {
+        return $this->birthplace;
+    }
+
     private function isDeceased(): bool
     {
         return $this->deceased;
     }
 
+    public function getNotes(): string
+    {
+        return $this->notes;
+    }
+
     public function updateCharacter(
         string $name,
-        Player $player,
+        null | Player $player,
+        Race $race,
+        bool $isDeceased,
+        null | Deity $primaryDeity,
+        null | Deity $secondaryDeity,
+        string $guild,
+        string $title,
+        string $occupation,
+        string $birthplace,
+        string $notes,
     ): void {
         $this->name = $name;
         $this->player = $player;
+        $this->race = $race;
+        $this->deceased = $isDeceased;
+        $this->primaryDeity = $primaryDeity;
+        $this->secondaryDeity = $secondaryDeity;
+        $this->guild = $guild;
+        $this->title = $title;
+        $this->occupation = $occupation;
+        $this->birthplace = $birthplace;
+        $this->notes = $notes;
     }
 }

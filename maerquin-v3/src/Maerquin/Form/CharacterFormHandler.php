@@ -8,9 +8,13 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Character;
+use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Repository\CharacterRepository;
+use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
+use SvenHK\Maerquin\Repository\RaceRepository;
 
 class CharacterFormHandler
 {
@@ -24,10 +28,22 @@ class CharacterFormHandler
      */
     private EntityRepository $playerRepository;
 
+    /**
+     * @var RaceRepository
+     */
+    private EntityRepository $raceRepository;
+
+    /**
+     * @var DeityRepository
+     */
+    private EntityRepository $deityRepository;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->playerRepository = $entityManager->getRepository(Player::class);
+        $this->raceRepository = $entityManager->getRepository(Race::class);
+        $this->deityRepository = $entityManager->getRepository(Deity::class);
     }
 
     public function handle(string $characterId, Request $request): void
@@ -36,13 +52,34 @@ class CharacterFormHandler
 
         $character = $this->characterRepository->getById($characterId);
 
-        $player = $this->playerRepository->getById(
+        $player = $this->playerRepository->find(
             $formResolver->getValue('playerId', 'character'),
+        );
+
+        $race = $this->raceRepository->getById(
+            $formResolver->getValue('raceId', 'character'),
+        );
+
+        $primaryDeity = $this->deityRepository->find(
+            $formResolver->getValue('primaryDeityId', 'character'),
+        );
+
+        $secondaryDeity = $this->deityRepository->find(
+            $formResolver->getValue('secondaryDeityId', 'character'),
         );
 
         $character->updateCharacter(
             $formResolver->getValue('name', 'character'),
             $player,
+            $race,
+            $formResolver->getBoolean('isDeceased', 'character'),
+            $primaryDeity,
+            $secondaryDeity,
+            $formResolver->getValue('guild', 'character'),
+            $formResolver->getValue('title', 'character'),
+            $formResolver->getValue('occupation', 'character'),
+            $formResolver->getValue('birthplace', 'character'),
+            $formResolver->getValue('notes', 'character'),
         );
 
         $this->characterRepository->save($character);

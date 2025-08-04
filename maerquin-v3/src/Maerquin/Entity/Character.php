@@ -43,10 +43,10 @@ class Character extends CharacterModel
     protected string $occupation = '';
 
     #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
-    protected string $guild;
+    protected string $guild = '';
 
     #[ORM\Column(type: 'string', length: 255, nullable: false, options: ['default' => ''])]
-    protected string $birthplace;
+    protected string $birthplace = '';
 
     #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: true)]

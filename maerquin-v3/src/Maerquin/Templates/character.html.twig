@@ -107,7 +107,7 @@
                                         <div class="field-body">
                                             <div class="field">
                                                 <div class="select is-fullwidth">
-                                                    <select v-model="character.raceId">
+                                                    <select name="raceId" v-model="character.raceId">
                                                         {% for race in races.serialize %}
                                                             <option value="{{ race.id }}">
                                                                 {{ race.name }}
@@ -130,7 +130,8 @@
                                         <div class="field-body">
                                             <div class="field">
                                                 <label class="checkbox">
-                                                    <input type="checkbox" v-model="character.isDeceased"/>
+                                                    <input type="checkbox" name="isDeceased"
+                                                           v-model="character.isDeceased"/>
                                                     &nbsp;<b>Overleden</b>
                                                 </label>
                                             </div>
@@ -184,8 +185,8 @@
                                         <div class="field-body">
                                             <div class="field">
                                                 <div class="control">
-                                                    <input class="input" name="accupation" type="text"
-                                                           value="{{ character.accupation }}" placeholder=""/>
+                                                    <input class="input" name="occupation" type="text"
+                                                           value="{{ character.occupation }}" placeholder=""/>
                                                 </div>
                                             </div>
                                         </div>
@@ -251,7 +252,7 @@
                                             <div class="field">
 
                                                 <div class="select is-fullwidth">
-                                                    <select v-model="character.primaryDeityId">
+                                                    <select name="primaryDeityId" v-model="character.primaryDeityId">
                                                         <option value="">(geen)</option>
                                                         {% for deity in deities.serialize %}
                                                             <option value="{{ deity.id }}">
@@ -275,7 +276,8 @@
                                         <div class="field-body">
                                             <div class="field">
                                                 <div class="select is-fullwidth">
-                                                    <select v-model="character.secondaryDeityId">
+                                                    <select name="secondaryDeityId"
+                                                            v-model="character.secondaryDeityId">
                                                         <option value="">(geen)</option>
                                                         {% for deity in deities.serialize %}
                                                             <option value="{{ deity.id }}">
@@ -299,7 +301,7 @@
                         <div class="box inner-box is-shadowless">
                             <div class="columns">
                                 <div class="column is-12">
-                                    <textarea class="input">{{ character.notes }}</textarea>
+                                    <textarea name="notes" class="input">{{ character.notes }}</textarea>
                                 </div>
                             </div>
                         </div>

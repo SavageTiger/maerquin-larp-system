@@ -62,7 +62,12 @@ class Character extends CharacterModel
     #[ORM\Column(type: 'boolean')]
     protected bool $deceased;
 
-    #[ORM\OneToMany(mappedBy: 'character', targetEntity: CharacterSkillLink::class)]
+    #[ORM\OneToMany(
+        targetEntity: CharacterSkillLink::class,
+        mappedBy: 'character',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
     protected Collection $skills;
 
     public function __construct()

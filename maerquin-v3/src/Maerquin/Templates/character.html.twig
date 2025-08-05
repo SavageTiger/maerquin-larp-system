@@ -311,6 +311,8 @@
             </div>
 
             <div v-show="activeTab === 'skills'">
+                <input type="hidden" name="linkedSkills" v-model="linkedSkills">
+
                 <button class="button is-pulled-right" @click="appendSkill" onclick="return false">
                     <i class="fa-solid fa-dice-d20">
                     </i>&nbsp;Toevoegen
@@ -345,7 +347,6 @@
                                             @change="numbersOnly(linkedSkill, 'points')"
                                             type="input"
                                             class="input skill-input"
-                                            name="skillLinkPoints[]"
                                             v-model="linkedSkill.points"/>
                                     <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
                                 </td>
@@ -354,24 +355,21 @@
                                            @change="numbersOnly(linkedSkill, 'numberOfTimes')"
                                            type="input"
                                            class="input skill-input"
-                                           name="skillLinkAmount[]"
                                            v-model="linkedSkill.numberOfTimes"/>
                                     <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
                                 </td>
                                 <td>
                                     <label class="checkbox">
-                                        <input type="checkbox" v-model="linkedSkill.fastCast"
-                                               name="fastCast[]"/>
+                                        <input type="checkbox" v-model="linkedSkill.fastCasting"/>
                                     </label>
                                 </td>
                                 <td>
                                     <label class="checkbox">
-                                        <input type="checkbox" v-model="linkedSkill.armouredCasting"
-                                               name="armouredCasting[]"/>
+                                        <input type="checkbox" v-model="linkedSkill.armouredCasting"/>
                                     </label>
                                 </td>
                                 <td>
-                                    <i class="fa fa-trash"/>
+                                    <i class="fa fa-trash" @click="deleteSkill(linkedSkill)"/>
                                 </td>
                             </tr>
                         </table>
@@ -483,6 +481,18 @@
                         ) !== false
                     });
                 },
+
+                linkedSkills: function () {
+                    return JSON.stringify(this.character.linkedSkills.map((linkedSkill) => {
+                        return {
+                            id: linkedSkill.skillId,
+                            points: parseInt(linkedSkill.points),
+                            numberOfTimes: parseInt(linkedSkill.numberOfTimes),
+                            fastCasting: !!(linkedSkill.fastCasting ?? false),
+                            armouredCasting: !!(linkedSkill.armouredCasting ?? false)
+                        }
+                    }));
+                }
             },
             methods: {
                 saveCharacter(characterId) {
@@ -516,11 +526,23 @@
                 },
 
                 buy(linkableSkill) {
-                    this.character.linkedSkills.push(linkableSkill);
+                    const boughtSkill = JSON.parse(JSON.stringify(linkableSkill));
+
+                    this.character.linkedSkills.push(boughtSkill);
 
                     this.character.linkedSkills.sort(
                         (left, right) => left.skillName.localeCompare(right.skillName)
                     );
+                },
+
+                deleteSkill(selectedSkill) {
+                    if (confirm('Wil je deze skill verwijderen?') === false) {
+                        return;
+                    }
+
+                    this.character.linkedSkills = this.character.linkedSkills.filter((skill) => {
+                        return skill !== selectedSkill;
+                    });
                 },
 
                 skillBoughtTimes(skillId) {

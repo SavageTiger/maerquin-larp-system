@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Deity;
@@ -53,6 +54,8 @@ class Character
                 [
                     'points' => $skillCoupling->getPoints(),
                     'numberOfTimes' => $skillCoupling->getAmount(),
+                    'fastCasting' => $skillCoupling->hasFastCasting(),
+                    'armouredCasting' => $skillCoupling->hasArmouredCasting(),
                 ],
             );
         }
@@ -146,6 +149,7 @@ class Character
         string $occupation,
         string $birthplace,
         string $notes,
+        SkillLinkCollection $skillLinkCollection,
     ): void {
         $this->name = $name;
         $this->player = $player;
@@ -158,5 +162,9 @@ class Character
         $this->occupation = $occupation;
         $this->birthplace = $birthplace;
         $this->notes = $notes;
+
+        $this->skills = new ArrayCollection(
+            $skillLinkCollection->getSkillLinks(),
+        );
     }
 }

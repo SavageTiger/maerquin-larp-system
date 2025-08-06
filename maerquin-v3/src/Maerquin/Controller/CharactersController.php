@@ -68,52 +68,53 @@ class CharactersController extends Action
 
     public function action(): ResponseInterface
     {
-        $view = Twig::fromRequest($this->request);
-
         $characterId = (string)($this->request->getAttribute('characterId') ?? '');
 
-        if (
-            $characterId === '' &&
-            str_ends_with($this->request->getUri()->getPath(), '/create.html')
-        ) {
-            $characterId = Uuid::uuid4()->toString();
+        $isCreateCharacterView =
+            str_ends_with($this->request->getUri()->getPath(), '/create.html');
+
+        $isEditCharacterView = $isCreateCharacterView === false && Uuid::isValid($characterId);
+
+        if ($isCreateCharacterView === true) {
+            return $this->renderNewCharacter();
         }
 
+        if ($isEditCharacterView === true) {
+            return $this->renderEditCharacter($characterId);
+        }
+
+        return $this->renderCharacterList();
+    }
+
+    private function renderNewCharacter(): ResponseInterface
+    {
+        $characterId = Uuid::uuid4()->toString();
+
+        return $this->renderEditCharacter($characterId);
+    }
+
+    private function renderEditCharacter(string $characterId): ResponseInterface
+    {
+        $view = Twig::fromRequest($this->request);
         $customFields = $this->fetchCustomFields($characterId);
 
-        if ($this->request->getMethod() === 'POST' && Uuid::isValid($characterId)) {
+        if ($this->request->getMethod() === 'POST') {
             $this->characterFormHandler->handle($characterId, $customFields, $this->request);
         }
 
-        $viewContext = [
-            'deities' => new DeitiesCollection($this->deityRepository->findAll()),
-            'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
-        ];
-
-        if (is_string($characterId) === true && Uuid::isValid($characterId)) {
-            return $view->render(
-                $this->response,
-                'character.html.twig',
-                array_merge(
-                    $viewContext,
-                    [
-                        'character' => $this->getCharacter($characterId),
-                        'races' => new RaceCollection($this->raceRepository->findAllSorted()),
-                        'customFields' => $customFields,
-                    ],
-                ),
-            );
-        }
+        $viewContext = array_merge(
+            $this->getViewContext(),
+            [
+                'character' => $this->getCharacter($characterId),
+                'races' => new RaceCollection($this->raceRepository->findAllSorted()),
+                'customFields' => $customFields,
+            ],
+        );
 
         return $view->render(
             $this->response,
-            'characters.html.twig',
-            array_merge(
-                $viewContext,
-                [
-                    'characters' => new CharacterCollection($this->characterRepository->findAllSorted()),
-                ],
-            ),
+            'character.html.twig',
+            $viewContext,
         );
     }
 
@@ -130,6 +131,20 @@ class CharactersController extends Action
         }
 
         return new CustomFieldCollection($customFields, $customValues);
+    }
+
+    /**
+     * @return array{
+     *     deities: DeitiesCollection,
+     *     players: PlayerCollection
+     * }
+     */
+    private function getViewContext(): array
+    {
+        return [
+            'deities' => new DeitiesCollection($this->deityRepository->findAll()),
+            'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
+        ];
     }
 
     private function getCharacter(string $characterId): Character
@@ -149,5 +164,25 @@ class CharactersController extends Action
         }
 
         return $character;
+    }
+
+    private function renderCharacterList(): ResponseInterface
+    {
+        $view = Twig::fromRequest($this->request);
+
+        $viewContext = array_merge(
+            $this->getViewContext(),
+            [
+                'characters' => new CharacterCollection(
+                    $this->characterRepository->findAllSorted(),
+                ),
+            ],
+        );
+
+        return $view->render(
+            $this->response,
+            'characters.html.twig',
+            $viewContext,
+        );
     }
 }

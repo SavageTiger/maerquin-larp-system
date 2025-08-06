@@ -28,6 +28,7 @@ use SvenHK\Maerquin\Repository\CustomFieldRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
+use Webmozart\Assert\Assert;
 
 class CharactersController extends Action
 {
@@ -58,7 +59,7 @@ class CharactersController extends Action
 
     public function __construct(
         EntityManager $entityManager,
-        private CharacterFormHandler $characterFormHandler,
+        private readonly CharacterFormHandler $characterFormHandler,
     ) {
         $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
@@ -67,7 +68,7 @@ class CharactersController extends Action
         $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
     }
 
-    public function action() : ResponseInterface
+    public function action(): ResponseInterface
     {
         $characterId = (string)($this->request->getAttribute('characterId') ?? '');
 
@@ -87,26 +88,33 @@ class CharactersController extends Action
         return $this->renderCharacterList();
     }
 
-    private function renderNewCharacter() : ResponseInterface
+    private function renderNewCharacter(): ResponseInterface
     {
-        $characterId = Uuid::uuid4()->toString();
+        $characterId = Uuid::uuid4();
 
-        return $this->renderEditCharacter(Uuid::fromString($characterId));
+        return $this->renderEditCharacter($characterId);
     }
 
-    private function renderEditCharacter(UuidInterface $characterId) : ResponseInterface
+    private function renderEditCharacter(UuidInterface $characterId): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
+
         $customFields = $this->fetchCustomFields($characterId);
 
+        $character = $this->getCharacter($characterId);
+
         if ($this->request->getMethod() === 'POST') {
-            $this->characterFormHandler->handle($characterId, $customFields, $this->request);
+            $this->characterFormHandler->handle(
+                $character,
+                $customFields,
+                $this->request,
+            );
         }
 
         $viewContext = array_merge(
             $this->getViewContext(),
             [
-                'character' => $this->getCharacter($characterId),
+                'character' => $character,
                 'races' => new RaceCollection($this->raceRepository->findAllSorted()),
                 'customFields' => $customFields,
             ],
@@ -119,7 +127,7 @@ class CharactersController extends Action
         );
     }
 
-    private function fetchCustomFields(UuidInterface $characterId) : CustomFieldCollection
+    private function fetchCustomFields(UuidInterface $characterId): CustomFieldCollection
     {
         $customFields = $this->customFieldRepository->findForCharacter();
         $customValues = [];
@@ -134,21 +142,7 @@ class CharactersController extends Action
         return new CustomFieldCollection($customFields, $customValues);
     }
 
-    /**
-     * @return array{
-     *     deities: DeitiesCollection,
-     *     players: PlayerCollection
-     * }
-     */
-    private function getViewContext() : array
-    {
-        return [
-            'deities' => new DeitiesCollection($this->deityRepository->findAll()),
-            'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
-        ];
-    }
-
-    private function getCharacter(UuidInterface $characterId) : Character
+    private function getCharacter(UuidInterface $characterId): Character
     {
         $character = $this->characterRepository->find($characterId);
 
@@ -159,15 +153,31 @@ class CharactersController extends Action
                 );
 
             $character = Character::createWithDefaults(
-                $characterId->toString(),
+                $characterId,
                 $defaultRace,
             );
         }
 
+        Assert::isInstanceOf($character, Character::class);
+
         return $character;
     }
 
-    private function renderCharacterList() : ResponseInterface
+    /**
+     * @return array{
+     *     deities: DeitiesCollection,
+     *     players: PlayerCollection
+     * }
+     */
+    private function getViewContext(): array
+    {
+        return [
+            'deities' => new DeitiesCollection($this->deityRepository->findAll()),
+            'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
+        ];
+    }
+
+    private function renderCharacterList(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 

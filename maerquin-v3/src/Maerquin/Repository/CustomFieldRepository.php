@@ -7,6 +7,7 @@ namespace SvenHK\Maerquin\Repository;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\CustomValue;
+use Webmozart\Assert\Assert;
 
 class CustomFieldRepository extends EntityRepository
 {
@@ -20,7 +21,7 @@ class CustomFieldRepository extends EntityRepository
 
     public function updateFieldValue(string $fieldId, string $subjectId, string $value): void
     {
-        $em = $this->getEntityManager();
+        $entityManager = $this->getEntityManager();
 
         $subjectField = $this->find($fieldId);
 
@@ -28,22 +29,25 @@ class CustomFieldRepository extends EntityRepository
             return;
         }
 
-        $existingCustomValue = $em->getRepository(CustomValue::class)->findOneBy([
-            'customField' => $fieldId,
-            'entityId' => $subjectId,
-        ]);
+        Assert::isInstanceOf($subjectField, CustomField::class);
+
+        $existingCustomValue = $entityManager->getRepository(CustomValue::class)
+            ->findOneBy([
+                'customField' => $fieldId,
+                'entityId' => $subjectId,
+            ]);
 
         if ($existingCustomValue !== null) {
-            $em->remove($existingCustomValue);
+            $entityManager->remove($existingCustomValue);
         }
 
-        $em->persist(CustomValue::create(
+        $entityManager->persist(CustomValue::create(
             $subjectId,
             $subjectField,
             $value,
         ));
 
-        $em->flush();
+        $entityManager->flush();
     }
 
     public function readFieldValue(string $fieldId, string $subjectId): string

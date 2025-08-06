@@ -6,7 +6,6 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Deity;
 
@@ -26,16 +25,17 @@ class Character
     protected string $notes;
 
     /**
-     * @var SkillLink[]
+     * @var Collection<SkillLink>
      */
     protected Collection $skills;
 
     public static function createWithDefaults(
-        string $characterId,
+        UuidInterface $characterId,
         Race $race,
     ): self {
         $character = new static();
-        $character->id = Uuid::fromString($characterId);
+        $character->id = $characterId;
+
         $character->updateCharacter(
             name: '',
             player: null,

@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CustomField;
@@ -66,7 +67,7 @@ class CharactersController extends Action
         $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
     }
 
-    public function action(): ResponseInterface
+    public function action() : ResponseInterface
     {
         $characterId = (string)($this->request->getAttribute('characterId') ?? '');
 
@@ -80,20 +81,20 @@ class CharactersController extends Action
         }
 
         if ($isEditCharacterView === true) {
-            return $this->renderEditCharacter($characterId);
+            return $this->renderEditCharacter(Uuid::fromString($characterId));
         }
 
         return $this->renderCharacterList();
     }
 
-    private function renderNewCharacter(): ResponseInterface
+    private function renderNewCharacter() : ResponseInterface
     {
         $characterId = Uuid::uuid4()->toString();
 
-        return $this->renderEditCharacter($characterId);
+        return $this->renderEditCharacter(Uuid::fromString($characterId));
     }
 
-    private function renderEditCharacter(string $characterId): ResponseInterface
+    private function renderEditCharacter(UuidInterface $characterId) : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
         $customFields = $this->fetchCustomFields($characterId);
@@ -118,7 +119,7 @@ class CharactersController extends Action
         );
     }
 
-    private function fetchCustomFields(string $characterId): CustomFieldCollection
+    private function fetchCustomFields(UuidInterface $characterId) : CustomFieldCollection
     {
         $customFields = $this->customFieldRepository->findForCharacter();
         $customValues = [];
@@ -126,7 +127,7 @@ class CharactersController extends Action
         foreach ($customFields as $customField) {
             $customValues[$customField->getId()] = $this->customFieldRepository->readFieldValue(
                 $customField->getId(),
-                $characterId,
+                $characterId->toString(),
             );
         }
 
@@ -139,7 +140,7 @@ class CharactersController extends Action
      *     players: PlayerCollection
      * }
      */
-    private function getViewContext(): array
+    private function getViewContext() : array
     {
         return [
             'deities' => new DeitiesCollection($this->deityRepository->findAll()),
@@ -147,7 +148,7 @@ class CharactersController extends Action
         ];
     }
 
-    private function getCharacter(string $characterId): Character
+    private function getCharacter(UuidInterface $characterId) : Character
     {
         $character = $this->characterRepository->find($characterId);
 
@@ -158,7 +159,7 @@ class CharactersController extends Action
                 );
 
             $character = Character::createWithDefaults(
-                $characterId,
+                $characterId->toString(),
                 $defaultRace,
             );
         }
@@ -166,7 +167,7 @@ class CharactersController extends Action
         return $character;
     }
 
-    private function renderCharacterList(): ResponseInterface
+    private function renderCharacterList() : ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 

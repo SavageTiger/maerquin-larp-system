@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Form;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Ramsey\Uuid\UuidInterface;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CustomField;
@@ -67,13 +68,13 @@ class CharacterFormHandler
     }
 
     public function handle(
-        string $characterId,
+        UuidInterface $characterId,
         CustomFieldCollection $customFields,
         Request $request,
     ): void {
         $formResolver = FormResolver::createFromRequest($request);
 
-        $character = $this->characterRepository->getById($characterId);
+        $character = $this->characterRepository->getById($characterId->toString());
 
         $player = $this->playerRepository->find(
             $formResolver->getValue('playerId', 'character'),
@@ -94,7 +95,7 @@ class CharacterFormHandler
         foreach ($customFields->getCustomFields() as $customField) {
             $this->customFieldRepository->updateFieldValue(
                 $customField->getId(),
-                $characterId,
+                $characterId->toString(),
                 $formResolver->getValue($customField->getId(), 'character'),
             );
         }

@@ -11,12 +11,10 @@ use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Race;
-use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Form\RaceFormHandler;
 use SvenHK\Maerquin\Model\RaceCollection;
 use SvenHK\Maerquin\Model\SkillRaceConnectionCollection;
 use SvenHK\Maerquin\Repository\RaceRepository;
-use SvenHK\Maerquin\Repository\SkillRepository;
 
 class RacesController extends Action
 {
@@ -25,17 +23,11 @@ class RacesController extends Action
      */
     private EntityRepository $raceRepository;
 
-    /**
-     * @var SkillRepository
-     */
-    private EntityRepository $skillRepository;
-
     public function __construct(
         private readonly RaceFormHandler $raceFormHandler,
         EntityManager $entityManager,
     ) {
         $this->raceRepository = $entityManager->getRepository(Race::class);
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
     }
 
     public function action(): ResponseInterface
@@ -55,13 +47,13 @@ class RacesController extends Action
                 [
                     'race' => $this->raceRepository->getById($raceId),
                     'mandatorySkills' => new SkillRaceConnectionCollection(
-                        $this->skillRepository->findAllMandatorySortedForRace($raceId),
+                        $this->raceRepository->findAllMandatorySortedForRace($raceId),
                     ),
                     'forbiddenSkills' => new SkillRaceConnectionCollection(
-                        $this->skillRepository->findAllForbiddenSortedForRace($raceId),
+                        $this->raceRepository->findAllForbiddenSortedForRace($raceId),
                     ),
                     'differentPointSkills' => new SkillRaceConnectionCollection(
-                        $this->skillRepository->findDifferentPointSkillsSortedForRace($raceId),
+                        $this->raceRepository->findDifferentPointSkillsSortedForRace($raceId),
                     ),
                 ],
             );

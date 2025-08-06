@@ -6,11 +6,16 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\RaceSkillLink;
 
 class Race
 {
     protected UuidInterface $id;
     protected string $name;
+
+    /**
+     * @var Collection<RaceSkillLink>
+     */
     protected Collection $skillConnections;
 
     public function updateRace(string $name, array $skillConnections): void

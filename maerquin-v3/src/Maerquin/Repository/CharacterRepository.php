@@ -10,6 +10,7 @@ use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CharacterEventLink;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Character as CharacterModel;
+use SvenHK\Maerquin\Warning\CharacterWarning;
 
 class CharacterRepository extends EntityRepository
 {
@@ -55,9 +56,21 @@ class CharacterRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function save(CharacterModel $skill): void
+    public function findAllByRace(string $raceId): array
     {
-        $this->getEntityManager()->persist($skill);
+        return $this->findBy(['race' => $raceId], ['name' => 'ASC']);
+    }
+
+    public function save(CharacterModel $character): void
+    {
+        $characterWarnings = new CharacterWarning(
+            $this->getEntityManager(),
+            $character,
+        );
+
+        $character->updateWarnings($characterWarnings->getWarnings());
+
+        $this->getEntityManager()->persist($character);
         $this->getEntityManager()->flush();
     }
 }

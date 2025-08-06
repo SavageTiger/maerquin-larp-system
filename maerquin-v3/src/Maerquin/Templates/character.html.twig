@@ -6,12 +6,36 @@
         <div class="column is-12">
             <button class="button is-pulled-right"
                     onclick="return false"
-                    @click="saveCharacter('{{ character.id }}')"/>
-            <i class="fa-solid fa-save"></i>&nbsp;Opslaan
+                    @click="saveCharacter('{{ character.id }}')">
+                <i class="fa-solid fa-save"></i>&nbsp;Opslaan
             </button>
             &nbsp;
         </div>
     </div>
+
+    {% if persisted %}
+        <article class="message is-success">
+            <div class="message-header">
+                <p>Opgeslagen</p>
+            </div>
+            <div class="message-body">
+                Het karakter is succesvol opgeslagen.
+            </div>
+        </article>
+    {% endif %}
+
+    {% if character.warnings|length > 0 %}
+        <article class="message is-warning">
+            <div class="message-header">
+                <p>Regelsysteem overteding</p>
+            </div>
+            <div class="message-body">
+                {% for warning in character.warnings %}
+                    {{ warning }}<br/>
+                {% endfor %}
+            </div>
+        </article>
+    {% endif %}
 
     <article class="message is-dark">
         <div class="message-header ">
@@ -56,7 +80,7 @@
                                 <div class="column is-12">
                                     <div class="field is-horizontal">
                                         <div class="field-label is-normal">
-                                            <label class="label">Naam</label>
+                                            <label class="label">Karakter</label>
                                         </div>
                                         <div class="field-body">
                                             <div class="field">
@@ -385,7 +409,6 @@
             </div>
         </div>
 
-
         <div class="modal" id="skillList">
             <div class="modal-background"></div>
             <div class="modal-card">
@@ -434,7 +457,6 @@
                     </div>
                 </section>
 
-                </section>
                 <footer class="modal-card-foot">
                     <div class="buttons">
                         <button class="button" onclick="return false">Sluiten</button>
@@ -492,7 +514,7 @@
                     axios
                         .post(`/admin/characters/${characterId}.html`, { character: characterForm })
                         .then(() => {
-                            document.location.href = `/admin/characters/${characterId}.html`
+                            document.location.href = `/admin/characters/persisted/${characterId}.html`
                         })
                         .catch((error) => {
                             const message = error.response.data.error.description;

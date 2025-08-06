@@ -27,6 +27,13 @@
                 </tr>
                 <tr v-for="character in filteredCharacters" :key="character.id">
                     <td class="is-clickable" @click="navigateToCharacter(character.id)">
+                        <span v-if="character.hasWarnings == true">
+                            <i class="fa-solid fa-circle circle-bad"></i>
+                        </span>
+                        <span v-else>
+                            <i class="fa-solid fa-circle circle-good"></i>
+                        </span>
+
                         <a href="#">{{ '{{ character.name }}' }}</a>
                     </td>
                     <td>

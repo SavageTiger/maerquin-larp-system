@@ -25,6 +25,11 @@ class Character
     protected string $notes;
 
     /**
+     * @param array<int, string> $warnings
+     */
+    protected array $warnings = [];
+
+    /**
      * @var Collection<SkillLink>
      */
     protected Collection $skills;
@@ -35,6 +40,8 @@ class Character
     ): self {
         $character = new static();
         $character->id = $characterId;
+
+        $character->updateWarnings([]);
 
         $character->updateCharacter(
             name: '',
@@ -52,6 +59,14 @@ class Character
         );
 
         return $character;
+    }
+
+    /**
+     * @param array<int, string> $warnings
+     */
+    public function updateWarnings(array $warnings): void
+    {
+        $this->warnings = $warnings;
     }
 
     public function updateCharacter(
@@ -94,6 +109,7 @@ class Character
             'primaryDeityId' => $this->getPrimaryDeityId(),
             'secondaryDeityId' => $this->getSecondaryDeityId(),
             'playerId' => $this->playerId(),
+            'hasWarnings' => count($this->getWarnings()) > 0,
         ];
 
         if ($compact === true) {
@@ -161,6 +177,14 @@ class Character
     }
 
     /**
+     * @return array<int, string>
+     */
+    public function getWarnings(): array
+    {
+        return $this->warnings;
+    }
+
+    /**
      * @return SkillLink[]
      */
     public function getSkills(): array
@@ -191,5 +215,29 @@ class Character
     public function getNotes(): string
     {
         return $this->notes;
+    }
+
+    public function getRace(): Race
+    {
+        return $this->race;
+    }
+
+    public function hasSkill(Skill $skill): bool
+    {
+        return array_find(
+            $this->getSkills(),
+            fn(SkillLink $skillLink): bool => $skillLink->getSkill()->getId() === $skill->getId(),
+        ) !== null;
+    }
+
+    /**
+     * @return array<int, SkillLink>
+     */
+    public function getAllLinkedSkillsForSkill(Skill $skill): array
+    {
+        return array_filter(
+            $this->getSkills(),
+            fn(SkillLink $skillLink): bool => $skillLink->getSkill()->getId() === $skill->getId(),
+        );
     }
 }

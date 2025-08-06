@@ -67,6 +67,12 @@ class Character extends CharacterModel
     )]
     protected Collection $skills;
 
+    /**
+     * @param array<int, string> $warnings
+     */
+    #[ORM\Column(type: 'json', nullable: false)]
+    protected array $warnings = [];
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();

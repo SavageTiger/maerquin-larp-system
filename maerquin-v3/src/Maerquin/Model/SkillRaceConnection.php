@@ -86,4 +86,9 @@ class SkillRaceConnection
     {
         return $this->points;
     }
+
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
 }

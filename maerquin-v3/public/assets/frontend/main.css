@@ -181,3 +181,19 @@ button.small-button {
     padding: 0;
     margin: 10px;
 }
+
+.circle-good {
+    position: relative;
+    top: -1px;
+    padding-right: 6px;
+    font-size: 8pt;
+    color: #23d160;
+}
+
+.circle-bad {
+    position: relative;
+    top: -1px;
+    font-size: 8pt;
+    padding-right: 6px;
+    color: #ff3860;
+}

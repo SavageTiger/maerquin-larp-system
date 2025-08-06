@@ -117,6 +117,7 @@ class CharactersController extends Action
                 'character' => $character,
                 'races' => new RaceCollection($this->raceRepository->findAllSorted()),
                 'customFields' => $customFields,
+                'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],
         );
 

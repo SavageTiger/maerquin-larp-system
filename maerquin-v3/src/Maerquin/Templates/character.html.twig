@@ -16,6 +16,10 @@
     <article class="message is-dark">
         <div class="message-header ">
             {{ character.name }}
+
+            {% if character.name == '' %}
+                Character Aanmaken
+            {% endif %}
         </div>
         <div class="message-body">
             <div class="tabs is-toggle is-fullwidth mr-6 ml-4">

@@ -97,8 +97,14 @@ class CharacterFormHandler
             );
         }
 
+        $characterName = $formResolver->getValue('name', 'character');
+
+        if (trim($characterName) === '') {
+            $characterName = '(Naamloos)';
+        }
+
         $character->updateCharacter(
-            $formResolver->getValue('name', 'character'),
+            $characterName,
             $player,
             $race,
             $formResolver->getBoolean('isDeceased', 'character'),

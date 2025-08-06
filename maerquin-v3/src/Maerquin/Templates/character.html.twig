@@ -328,7 +328,7 @@
 
                 <div class="column is-12">
 
-                    <div v-for="(skillGroup, skillGroupName) in groupedSkills">
+                    <div v-for="(skillGroup, skillGroupName) in groupedLinkedSkills">
                         <h3>{{ '{{ skillGroupName }}' }}</h3>
 
                         <table class="table character-skill-table is-bordered is-striped is-narrow is-fullwidth">
@@ -396,35 +396,43 @@
                     </div>
                 </header>
                 <section class="modal-card-body modal-card-body-no-padding">
-                    <table class="table is-striped is-narrow is-overview-table">
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>Naam</th>
-                            <th class="has-text-right">Kosten</th>
-                            <th class="has-text-right">Reeds aangekocht</th>
-                        </tr>
-                        <tr v-for="skill in filteredLinkableSkills" :key="skill.id">
-                            <td>
-                                <a>
-                                    <i onclick="return false" @click="buy(skill)" class="fa-solid fa-plus"></i>
-                                </a>
-                            </td>
-                            <td>
-                                {{ '{{ skill.skillName }}' }}
-                            </td>
-                            <td class="has-text-right">
-                                {{ '{{ skill.points }}' }}
-                            </td>
-                            <td class="has-text-right">
-                                <div v-if="(boughtTimes = skillBoughtTimes(skill.skillId)) && boughtTimes > 0">
-                                    <b style="color: blue">{{ '{{ boughtTimes }}' }}</b>
-                                </div>
-                                <div v-else>
-                                    {{ '{{ boughtTimes }}' }}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    <div v-for="(skillGroup, skillGroupName) in groupedSkills">
+                        <div class="pl-3 pt-2">
+                            <h4 class="m-0 p-0">{{ '{{ skillGroupName }}' }}</h4>
+                        </div>
+
+                        <table class="table is-striped is-narrow is-overview-table">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Naam</th>
+                                <th class="has-text-right">Kosten</th>
+                                <th class="has-text-right">Reeds aangekocht</th>
+                            </tr>
+                            <tr v-for="skill in skillGroup.skills" :key="skill.id">
+                                <td>
+                                    <a>
+                                        <i onclick="return false" @click="buy(skill)" class="fa-solid fa-plus"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ '{{ skill.skillName }}' }}
+                                </td>
+                                <td class="has-text-right">
+                                    {{ '{{ skill.points }}' }}
+                                </td>
+                                <td class="has-text-right">
+                                    <div v-if="(boughtTimes = skillBoughtTimes(skill.skillId)) && boughtTimes > 0">
+                                        <b style="color: blue">{{ '{{ boughtTimes }}' }}</b>
+                                    </div>
+                                    <div v-else>
+                                        {{ '{{ boughtTimes }}' }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </section>
 
                 </section>
                 <footer class="modal-card-foot">
@@ -452,38 +460,17 @@
             },
             computed: {
                 groupedSkills() {
-                    const groupCollection = {};
-
-                    for (linkedSkill of this.character.linkedSkills) {
-                        const groupName = linkedSkill.skillGroup || 'Ungrouped';
-
-                        if (groupCollection[groupName] === undefined) {
-                            groupCollection[groupName] = {
-                                skills: [],
-                                ordering: linkedSkill.skillGroupOrdering || 999
-                            };
-                        }
-
-                        groupCollection[groupName].skills.push(linkedSkill);
-                    }
-
-                    const sortedGroups = Object.entries(groupCollection)
-                        .sort((left, right) => left[1].ordering - right[1].ordering)
-                        .reduce((acc, [key, value]) => {
-                            acc[key] = value;
-
-                            return acc;
-                        }, {});
-
-                    return sortedGroups;
-                },
-
-                filteredLinkableSkills() {
-                    return this.linkableSkillList.filter((skill) => {
+                    const linkableSkills = this.linkableSkillList.filter((skill) => {
                         return skill.skillName.toLowerCase().includes(
                             this.skillFilter.toLowerCase()
                         ) !== false
                     });
+
+                    return this.groupSkills(linkableSkills);
+                },
+
+                groupedLinkedSkills() {
+                    return this.groupSkills(this.character.linkedSkills);
                 },
 
                 linkedSkills: function () {
@@ -516,6 +503,32 @@
                     return false;
                 },
 
+                groupSkills(skills) {
+                    const groupCollection = {};
+
+                    for (linkedSkill of skills) {
+                        const groupName = linkedSkill.skillGroup || 'Ungrouped';
+
+                        if (groupCollection[groupName] === undefined) {
+                            groupCollection[groupName] = {
+                                skills: [],
+                                ordering: linkedSkill.skillGroupOrdering || 999
+                            };
+                        }
+
+                        groupCollection[groupName].skills.push(linkedSkill);
+                    }
+
+                    const sortedGroups = Object.entries(groupCollection)
+                        .sort((left, right) => left[1].ordering - right[1].ordering)
+                        .reduce((acc, [key, value]) => {
+                            acc[key] = value;
+
+                            return acc;
+                        }, {});
+
+                    return sortedGroups;
+                },
 
                 numbersOnly(sender, field) {
                     sender[field] = sender[field].replace(/[^0-9]/g, '')

@@ -10,7 +10,8 @@
                     <input class="input" type="text" v-model="search" placeholder="Zoeken">
                 </div>
             </div>
-            <button class="button is-pulled-right"><i class="fa-regular fa-address-card"></i>&nbsp;Nieuwe aanmaken
+            <button @click="navigateToCreate" onclick="return false" class="button is-pulled-right">
+                <i class="fa-regular fa-address-card"></i>&nbsp;Nieuwe aanmaken
             </button>
         </div>
     </div>
@@ -70,6 +71,10 @@
             methods: {
                 navigateToCharacter(characterId) {
                     document.location.href = `/admin/characters/${characterId}.html`;
+                },
+
+                navigateToCreate() {
+                    document.location.href = `/admin/characters/create.html`;
                 },
 
                 getDeity(deityId) {

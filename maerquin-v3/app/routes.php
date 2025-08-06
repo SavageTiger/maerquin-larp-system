@@ -28,6 +28,7 @@ return function (App $app): void {
     $app->post('/login.html', LoginController::class);
 
     $app->get('/admin/characters.html', CharactersController::class);
+    $app->get('/admin/characters/create.html', CharactersController::class);
     $app->get('/admin/characters/{characterId}.html', CharactersController::class);
     $app->post('/admin/characters/{characterId}.html', CharactersController::class);
     $app->get('/admin/characters/api', CharactersApiController::class);

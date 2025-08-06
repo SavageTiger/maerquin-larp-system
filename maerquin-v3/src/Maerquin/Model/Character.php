@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Deity;
 
@@ -28,6 +29,61 @@ class Character
      * @var SkillLink[]
      */
     protected Collection $skills;
+
+    public static function createWithDefaults(
+        string $characterId,
+        Race $race,
+    ): self {
+        $character = new static();
+        $character->id = Uuid::fromString($characterId);
+        $character->updateCharacter(
+            name: '',
+            player: null,
+            race: $race,
+            isDeceased: false,
+            primaryDeity: null,
+            secondaryDeity: null,
+            guild: '',
+            title: '',
+            occupation: '',
+            birthplace: '',
+            notes: '',
+            skillLinkCollection: new SkillLinkCollection([]),
+        );
+
+        return $character;
+    }
+
+    public function updateCharacter(
+        string $name,
+        null | Player $player,
+        Race $race,
+        bool $isDeceased,
+        null | Deity $primaryDeity,
+        null | Deity $secondaryDeity,
+        string $guild,
+        string $title,
+        string $occupation,
+        string $birthplace,
+        string $notes,
+        SkillLinkCollection $skillLinkCollection,
+    ): void {
+        $this->name = $name;
+        $this->player = $player;
+        $this->race = $race;
+        $this->deceased = $isDeceased;
+        $this->primaryDeity = $primaryDeity;
+        $this->secondaryDeity = $secondaryDeity;
+        $this->guild = $guild;
+        $this->title = $title;
+        $this->occupation = $occupation;
+        $this->birthplace = $birthplace;
+        $this->notes = $notes;
+
+        $this->skills = new ArrayCollection(
+            $skillLinkCollection->getSkillLinks(),
+        );
+    }
 
     public function serialize(bool $compact): array
     {
@@ -135,36 +191,5 @@ class Character
     public function getNotes(): string
     {
         return $this->notes;
-    }
-
-    public function updateCharacter(
-        string $name,
-        null | Player $player,
-        Race $race,
-        bool $isDeceased,
-        null | Deity $primaryDeity,
-        null | Deity $secondaryDeity,
-        string $guild,
-        string $title,
-        string $occupation,
-        string $birthplace,
-        string $notes,
-        SkillLinkCollection $skillLinkCollection,
-    ): void {
-        $this->name = $name;
-        $this->player = $player;
-        $this->race = $race;
-        $this->deceased = $isDeceased;
-        $this->primaryDeity = $primaryDeity;
-        $this->secondaryDeity = $secondaryDeity;
-        $this->guild = $guild;
-        $this->title = $title;
-        $this->occupation = $occupation;
-        $this->birthplace = $birthplace;
-        $this->notes = $notes;
-
-        $this->skills = new ArrayCollection(
-            $skillLinkCollection->getSkillLinks(),
-        );
     }
 }

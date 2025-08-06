@@ -7,6 +7,7 @@ namespace SvenHK\Maerquin\Controller;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Views\Twig;
@@ -71,6 +72,13 @@ class CharactersController extends Action
 
         $characterId = (string)($this->request->getAttribute('characterId') ?? '');
 
+        if (
+            $characterId === '' &&
+            str_ends_with($this->request->getUri()->getPath(), '/create.html')
+        ) {
+            $characterId = Uuid::uuid4()->toString();
+        }
+
         $customFields = $this->fetchCustomFields($characterId);
 
         if ($this->request->getMethod() === 'POST' && Uuid::isValid($characterId)) {
@@ -82,14 +90,14 @@ class CharactersController extends Action
             'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
         ];
 
-        if (is_string($characterId) && Uuid::isValid($characterId)) {
+        if (is_string($characterId) === true && Uuid::isValid($characterId)) {
             return $view->render(
                 $this->response,
                 'character.html.twig',
                 array_merge(
                     $viewContext,
                     [
-                        'character' => $this->characterRepository->getById($characterId),
+                        'character' => $this->getCharacter($characterId),
                         'races' => new RaceCollection($this->raceRepository->findAllSorted()),
                         'customFields' => $customFields,
                     ],
@@ -122,5 +130,24 @@ class CharactersController extends Action
         }
 
         return new CustomFieldCollection($customFields, $customValues);
+    }
+
+    private function getCharacter(string $characterId): Character
+    {
+        $character = $this->characterRepository->find($characterId);
+
+        if ($character === null) {
+            $defaultRace = $this->raceRepository->findOneBy(['name' => 'Mens']) ??
+                throw new LogicException(
+                    'Make sure "Mens" race exists before creating a character',
+                );
+
+            $character = Character::createWithDefaults(
+                $characterId,
+                $defaultRace,
+            );
+        }
+
+        return $character;
     }
 }

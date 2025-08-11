@@ -13,7 +13,7 @@ class Skill
     protected null | Deity $deity;
     protected null | Element $element;
     protected SkillType $skillType;
-    protected int $points;
+    protected float $points;
     protected int $numberOfTimes;
     protected string $description;
     protected string $remarks;
@@ -92,7 +92,7 @@ class Skill
         return $this->skillType->getId();
     }
 
-    public function getPoints(): int
+    public function getPoints(): float
     {
         return $this->points;
     }

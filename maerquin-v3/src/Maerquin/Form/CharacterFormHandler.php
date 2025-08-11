@@ -133,7 +133,7 @@ class CharacterFormHandler
         foreach ($linkedSkills as $linkedSkill) {
             Assert::isArray($linkedSkill);
             Assert::string($linkedSkill['id']);
-            Assert::integer($linkedSkill['points']);
+            Assert::numeric($linkedSkill['points']);
             Assert::integer($linkedSkill['numberOfTimes']);
             Assert::boolean($linkedSkill['fastCasting']);
             Assert::boolean($linkedSkill['armouredCasting']);
@@ -141,7 +141,7 @@ class CharacterFormHandler
             $buffer[] = SkillLink::create(
                 $this->skillRepository->getById($linkedSkill['id']),
                 $character,
-                (int)$linkedSkill['points'],
+                (float)$linkedSkill['points'],
                 (int)$linkedSkill['numberOfTimes'],
                 (bool)$linkedSkill['fastCasting'],
                 (bool)$linkedSkill['armouredCasting'],

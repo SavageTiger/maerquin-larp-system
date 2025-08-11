@@ -15,7 +15,7 @@ class SkillLink
     protected UuidInterface $id;
     protected Skill $skill;
     protected Character $character;
-    protected int $points;
+    protected float $points;
     protected int $amount;
     protected bool $fastCasting;
     protected bool $armouredCasting;
@@ -23,7 +23,7 @@ class SkillLink
     public static function create(
         Skill $skill,
         Character $character,
-        int $points,
+        float $points,
         int $amount,
         bool $fastCasting,
         bool $armouredCasting,
@@ -50,7 +50,7 @@ class SkillLink
         return $this->skill;
     }
 
-    public function getPoints(): int
+    public function getPoints(): float
     {
         return $this->points;
     }

@@ -371,8 +371,8 @@
                                 </td>
                                 <td>
                                     <input
-                                            @keyup="numbersOnly(linkedSkill, 'points')"
-                                            @change="numbersOnly(linkedSkill, 'points')"
+                                            @keyup="numbersOnly(linkedSkill, 'points', true)"
+                                            @change="numbersOnly(linkedSkill, 'points', true)"
                                             type="input"
                                             class="input skill-input"
                                             v-model="linkedSkill.points"/>
@@ -381,7 +381,7 @@
                                 <td>
                                     <input @keyup="numbersOnly(linkedSkill, 'numberOfTimes')"
                                            @change="numbersOnly(linkedSkill, 'numberOfTimes')"
-                                           type="input"
+                                           type="number"
                                            class="input skill-input"
                                            v-model="linkedSkill.numberOfTimes"/>
                                     <span class="skill-original">{{ '{{ linkedSkill.numberOfTimesSource }}' }}</span>
@@ -499,7 +499,7 @@
                     return JSON.stringify(this.character.linkedSkills.map((linkedSkill) => {
                         return {
                             id: linkedSkill.skillId,
-                            points: parseInt(linkedSkill.points),
+                            points: parseFloat(linkedSkill.points),
                             numberOfTimes: parseInt(linkedSkill.numberOfTimes),
                             fastCasting: !!(linkedSkill.fastCasting ?? false),
                             armouredCasting: !!(linkedSkill.armouredCasting ?? false)
@@ -552,8 +552,10 @@
                     return sortedGroups;
                 },
 
-                numbersOnly(sender, field) {
-                    sender[field] = sender[field].replace(/[^0-9]/g, '')
+                numbersOnly(sender, field, allowDot) {
+                    const pattern = allowDot ? /[^\.0-9]/g : /[^0-9]/g;
+
+                    sender[field] = sender[field].replace(pattern, '');
                 },
 
                 appendSkill() {

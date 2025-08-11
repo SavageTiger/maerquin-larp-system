@@ -233,7 +233,7 @@
                 differentPointSkillsFormValue() {
                     return JSON.stringify({
                         skillIds: this.differentPointSkills.map((skillConnection) => skillConnection.skillId),
-                        points: this.differentPointSkills.map((skillConnection) => parseInt(skillConnection.customPoints))
+                        points: this.differentPointSkills.map((skillConnection) => parseFloat(skillConnection.customPoints))
                     })
                 },
 

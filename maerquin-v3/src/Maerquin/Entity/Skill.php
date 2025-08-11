@@ -26,8 +26,8 @@ class Skill extends SkillModel
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    protected int $points;
+    #[ORM\Column(nullable: false)]
+    protected float $points;
 
     #[ORM\Column(type: 'integer', nullable: false)]
     protected int $numberOfTimes;

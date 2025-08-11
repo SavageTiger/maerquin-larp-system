@@ -27,8 +27,8 @@ class CharacterSkillLink extends SkillLink
     #[ORM\JoinColumn(nullable: false)]
     protected Skill $skill;
 
-    #[ORM\Column(type: 'integer')]
-    protected int $points;
+    #[ORM\Column]
+    protected float $points;
 
     #[ORM\Column(type: 'integer')]
     protected int $amount;

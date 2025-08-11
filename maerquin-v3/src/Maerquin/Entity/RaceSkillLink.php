@@ -33,6 +33,6 @@ class RaceSkillLink extends SkillRaceConnection
     #[ORM\Column(type: 'boolean', nullable: false)]
     protected bool $forbidden;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    protected int $points;
+    #[ORM\Column(type: 'float', nullable: false)]
+    protected float $points;
 }

@@ -16,7 +16,7 @@ class SkillRaceConnection
     protected string $name;
     protected bool $mandatory;
     protected bool $forbidden;
-    protected int $points;
+    protected float $points;
     protected SkillEntity $skill;
 
     public static function createMandatory(Race $race, SkillEntity $skill): self
@@ -43,7 +43,7 @@ class SkillRaceConnection
         return $connection;
     }
 
-    public static function createWithCustomPoints(Race $race, SkillEntity $skill, int $points): self
+    public static function createWithCustomPoints(Race $race, SkillEntity $skill, float $points): self
     {
         $connection = new static();
         $connection->race = $race;
@@ -82,7 +82,7 @@ class SkillRaceConnection
         return $this->forbidden;
     }
 
-    public function getCustomPoints(): int
+    public function getCustomPoints(): float
     {
         return $this->points;
     }

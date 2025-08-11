@@ -43,6 +43,17 @@ class Character
 
         $character->updateWarnings([]);
 
+        foreach ($race->getMandatorySkills()->getSkills() as $mandatorySkill) {
+            $linkedSkills[] = SkillLink::create(
+                skill: $mandatorySkill,
+                character: $character,
+                points: $race->getCustomPointsForSkill($mandatorySkill),
+                amount: 1,
+                fastCasting: false,
+                armouredCasting: false,
+            );
+        }
+
         $character->updateCharacter(
             name: '',
             player: null,
@@ -55,7 +66,7 @@ class Character
             occupation: '',
             birthplace: '',
             notes: '',
-            skillLinkCollection: new SkillLinkCollection([]),
+            skillLinkCollection: new SkillLinkCollection($linkedSkills),
         );
 
         return $character;
@@ -67,6 +78,14 @@ class Character
     public function updateWarnings(array $warnings): void
     {
         $this->warnings = $warnings;
+    }
+
+    /**
+     * @return SkillLink[]
+     */
+    public function getSkills(): array
+    {
+        return $this->skills->toArray();
     }
 
     public function updateCharacter(
@@ -182,14 +201,6 @@ class Character
     public function getWarnings(): array
     {
         return $this->warnings;
-    }
-
-    /**
-     * @return SkillLink[]
-     */
-    public function getSkills(): array
-    {
-        return $this->skills->toArray();
     }
 
     public function getGuild(): string

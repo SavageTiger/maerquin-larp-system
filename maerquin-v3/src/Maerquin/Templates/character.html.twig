@@ -46,27 +46,29 @@
             {% endif %}
         </div>
         <div class="message-body">
-            <div class="tabs is-toggle is-fullwidth mr-6 ml-4">
-                <ul>
-                    <li :class="{ 'is-active': activeTab === 'basic' }">
-                        <a @click="activeTab = 'basic'">
+            {% if character.name %}
+                <div class="tabs is-toggle is-fullwidth mr-6 ml-4">
+                    <ul>
+                        <li :class="{ 'is-active': activeTab === 'basic' }">
+                            <a @click="activeTab = 'basic'">
                             <span class="icon is-small">
                                 <i class="fas fa-receipt" aria-hidden="true"></i>
                             </span>
-                            <span>Basis</span>
-                        </a>
-                    </li>
+                                <span>Basis</span>
+                            </a>
+                        </li>
 
-                    <li :class="{ 'is-active': activeTab === 'skills' }">
-                        <a @click="activeTab = 'skills'">
+                        <li :class="{ 'is-active': activeTab === 'skills' }">
+                            <a @click="activeTab = 'skills'">
                             <span class="icon is-small">
                                 <i class="fas fa-wand-sparkles" aria-hidden="true"></i>
                             </span>
-                            <span>Skills</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                                <span>Skills</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
 
             <div v-show="activeTab === 'basic'">
                 <div class="grid">

@@ -443,7 +443,11 @@
                                     {{ '{{ skill.skillName }}' }}
                                 </td>
                                 <td class="has-text-right">
-                                    {{ '{{ skill.points }}' }}
+                                    <input @keyup="numbersOnly(skill, 'points', true)"
+                                           @change="numbersOnly(skill, 'points', true)"
+                                           type="text"
+                                           class="input skill-input"
+                                           v-model="skill.points"/>
                                 </td>
                                 <td class="has-text-right">
                                     <div v-if="(boughtTimes = skillBoughtTimes(skill.skillId)) && boughtTimes > 0">
@@ -561,7 +565,9 @@
                 },
 
                 appendSkill() {
-                    axios.get('/admin/skills/linkable/api').then((response) => {
+                    axios.get(
+                        '/admin/skills/linkable/api?raceId=' + this.character.raceId
+                    ).then((response) => {
                         this.linkableSkillList = response.data.data ?? [];
 
                         openModal(document.getElementById('skillList'));

@@ -9,12 +9,17 @@ use Doctrine\ORM\QueryBuilder;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
+use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 
 class RaceRepository extends EntityRepository
 {
+    /**
+     * @throws MaerquinEntityNotFoundException
+     */
     public function getById(string $raceId): Race
     {
-        return $this->findOneBy(['id' => $raceId]);
+        return $this->findOneBy(['id' => $raceId]) ??
+            throw MaerquinEntityNotFoundException::withType(Race::class);
     }
 
     /**

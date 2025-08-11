@@ -47,7 +47,7 @@ class Race
         foreach ($this->skillConnections as $skillConnection) {
             if (
                 $skillConnection->getSkill()->getId() === $skill->getId() &&
-                $skillConnection->isCustomPoints()
+                $skillConnection->isCustomPoints() === true
             ) {
                 return $skillConnection->getCustomPoints();
             }

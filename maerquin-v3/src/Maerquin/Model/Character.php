@@ -138,12 +138,13 @@ class Character
         $linkedSkills = [];
 
         foreach ($this->getSkills() as $skillCoupling) {
-            $linkedSkill = $skillCoupling->getSkill()->serializeAsLinked();
+            $linkedSkill = $skillCoupling->getSkill()->serializeAsLinked(
+                $skillCoupling->getPoints(),
+            );
 
             $linkedSkills[] = array_merge(
                 $linkedSkill,
                 [
-                    'points' => $skillCoupling->getPoints(),
                     'numberOfTimes' => $skillCoupling->getAmount(),
                     'fastCasting' => $skillCoupling->hasFastCasting(),
                     'armouredCasting' => $skillCoupling->hasArmouredCasting(),

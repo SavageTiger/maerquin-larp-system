@@ -142,7 +142,7 @@ class Skill
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }
 
-    public function serializeAsLinked(): array
+    public function serializeAsLinked(float $points): array
     {
         return [
             'skillId' => $this->getId(),
@@ -150,7 +150,7 @@ class Skill
             'skillGroup' => $this->getSkillTypeName(),
             'skillGroupOrdering' => $this->getSkillTypeOrdering(),
             'numberOfTimes' => $this->getNumberOfTimes(),
-            'points' => $this->getPoints(),
+            'points' => $points,
             'numberOfTimesSource' => $this->getNumberOfTimes(),
             'pointsSource' => $this->getPoints(),
         ];

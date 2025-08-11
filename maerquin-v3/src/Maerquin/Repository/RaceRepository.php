@@ -59,7 +59,7 @@ class RaceRepository extends EntityRepository
     public function findDifferentPointSkillsSortedForRace(string $raceId): array
     {
         return $this->createBaseRaceSkillConnectionQuery($raceId)
-            ->andWhere('skillRaceConnection.points > 0')
+            ->andWhere('skillRaceConnection.points > -1')
             ->andWhere('skillRaceConnection.forbidden = false')
             ->andWhere('skillRaceConnection.mandatory = false')
             ->getQuery()

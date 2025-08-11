@@ -87,6 +87,12 @@ class SkillRaceConnection
         return $this->points;
     }
 
+    public function isCustomPoints(): bool
+    {
+        return $this->isMandatory() === false &&
+            $this->isForbidden() === false;
+    }
+
     public function getSkill(): Skill
     {
         return $this->skill;

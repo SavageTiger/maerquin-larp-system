@@ -30,7 +30,7 @@ class Skill extends SkillModel
     protected float $points;
 
     #[ORM\Column(type: 'integer', nullable: false)]
-    protected int $numberOfTimes;
+    protected int $maximumAmountBuyable;
 
     #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
     protected string $description = '';

@@ -577,6 +577,8 @@
                 buy(linkableSkill) {
                     const boughtSkill = JSON.parse(JSON.stringify(linkableSkill));
 
+                    boughtSkill.numberOfTimes = 1;
+
                     this.character.linkedSkills.push(boughtSkill);
 
                     this.character.linkedSkills.sort(

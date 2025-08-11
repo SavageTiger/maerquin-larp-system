@@ -14,7 +14,7 @@ class Skill
     protected null | Element $element;
     protected SkillType $skillType;
     protected float $points;
-    protected int $numberOfTimes;
+    protected int $maximumAmountBuyable;
     protected string $description;
     protected string $remarks;
     protected string $distance;
@@ -44,7 +44,7 @@ class Skill
             $minimal,
             [
                 'points' => $this->getPoints(),
-                'numberOfTimes' => $this->getNumberOfTimes(),
+                'maximumAmountBuyable' => $this->getMaximumAmountBuyable(),
                 'distance' => $this->getDistance(),
                 'duration' => $this->getDuration(),
                 'freelyAvailable' => $this->isFreelyAvailable(),
@@ -97,9 +97,9 @@ class Skill
         return $this->points;
     }
 
-    public function getNumberOfTimes(): int
+    public function getMaximumAmountBuyable(): int
     {
-        return $this->numberOfTimes;
+        return $this->maximumAmountBuyable;
     }
 
     public function getDistance(): string
@@ -149,9 +149,8 @@ class Skill
             'skillName' => $this->getName(),
             'skillGroup' => $this->getSkillTypeName(),
             'skillGroupOrdering' => $this->getSkillTypeOrdering(),
-            'numberOfTimes' => $this->getNumberOfTimes(),
+            'maximumAmountBuyable' => $this->getMaximumAmountBuyable(),
             'points' => $points,
-            'numberOfTimesSource' => $this->getNumberOfTimes(),
             'pointsSource' => $this->getPoints(),
         ];
     }
@@ -173,7 +172,7 @@ class Skill
         SkillType $skillType,
         null | SkillSkillLink $requiredSkillLink,
         int $points,
-        int $numberOfTimes,
+        int $maximumAmountBuyable,
         int $level,
         string $distance,
         string $duration,
@@ -188,7 +187,7 @@ class Skill
         $this->skillType = $skillType;
         $this->requiredSkillLink = $requiredSkillLink;
         $this->points = $points;
-        $this->numberOfTimes = $numberOfTimes;
+        $this->maximumAmountBuyable = $maximumAmountBuyable;
         $this->level = $level;
         $this->distance = $distance;
         $this->duration = $duration;

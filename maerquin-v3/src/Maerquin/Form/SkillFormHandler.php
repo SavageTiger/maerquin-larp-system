@@ -74,7 +74,7 @@ class SkillFormHandler
             $this->skillTypeRepository->getOneById($formResolver->getValue('skillTypeId', 'skill')),
             $requiredSkillLink,
             (int)$formResolver->getValue('points', 'skill'),
-            (int)$formResolver->getValue('numberOfTimes', 'skill'),
+            (int)$formResolver->getValue('maximumAmountBuyable', 'skill'),
             (int)$formResolver->getValue('level', 'skill'),
             $formResolver->getValue('distance', 'skill'),
             $formResolver->getValue('duration', 'skill'),

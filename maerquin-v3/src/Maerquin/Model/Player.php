@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Player as PlayerEntity;
 
 class Player
 {
@@ -13,12 +14,14 @@ class Player
     protected string $name;
     protected Collection $characters;
 
-    /**
-     * @return SkillType[]
-     */
-    public function getCharacters(): array
+    public static function create(UuidInterface $id): self
     {
-        return $this->characters->toArray();
+        return new PlayerEntity($id);
+    }
+
+    public function updatePlayer(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function serialize(bool $compact)

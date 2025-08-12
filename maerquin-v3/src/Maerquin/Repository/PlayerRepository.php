@@ -10,6 +10,12 @@ use SvenHK\Maerquin\Model\Player;
 
 class PlayerRepository extends EntityRepository
 {
+    public function save(Player $player): void
+    {
+        $this->getEntityManager()->persist($player);
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * @return Player[]
      */

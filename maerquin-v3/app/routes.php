@@ -35,6 +35,8 @@ return function (App $app): void {
     $app->get('/admin/characters/api', CharactersApiController::class);
 
     $app->get('/admin/players.html', PlayersController::class);
+    $app->get('/admin/player/create.html', PlayersController::class);
+    $app->get('/admin/players/persisted/{userId}.html', PlayersController::class);
     $app->get('/admin/players/{userId}.html', PlayersController::class);
     $app->post('/admin/players/{userId}.html', PlayersController::class);
 

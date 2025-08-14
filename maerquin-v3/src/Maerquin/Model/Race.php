@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Race as RaceEntity;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
 
 class Race
@@ -17,6 +18,14 @@ class Race
      * @var Collection<RaceSkillLink>
      */
     protected Collection $skillConnections;
+
+    public static function create(UuidInterface $raceId): self
+    {
+        $race = new RaceEntity();
+        $race->id = $raceId;
+
+        return $race;
+    }
 
     public function updateRace(string $name, array $skillConnections): void
     {

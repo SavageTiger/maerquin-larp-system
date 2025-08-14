@@ -22,6 +22,11 @@ class RaceRepository extends EntityRepository
             throw MaerquinEntityNotFoundException::withType(Race::class);
     }
 
+    public function findById(string $raceId): null | Race
+    {
+        return $this->findOneBy(['id' => $raceId]);
+    }
+
     /**
      * @return array<int, RaceSkillLink>
      */

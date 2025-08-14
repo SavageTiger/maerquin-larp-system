@@ -38,10 +38,8 @@ class RaceFormHandler
      * @throws MaerquinEntityNotFoundException
      * @throws JsonException
      */
-    public function handle(string $raceId, Request $request): void
+    public function handle(Race $race, Request $request): void
     {
-        $race = $this->raceRepository->getById($raceId);
-
         $formResolver = FormResolver::createFromRequest($request);
 
         $skillConnections = [];
@@ -74,8 +72,14 @@ class RaceFormHandler
             );
         }
 
+        $name = $formResolver->getValue('name', 'race');
+
+        if (trim($name) === '') {
+            $name = '(Naamloos)';
+        }
+
         $race->updateRace(
-            $formResolver->getValue('name', 'race'),
+            $name,
             $skillConnections,
         );
 

@@ -42,6 +42,7 @@ class EventsController extends Action
     public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
+
         $eventId = (string)($this->request->getAttribute('eventId') ?? '');
 
         if (str_contains($this->request->getUri()->getPath(), 'create.html') === true) {

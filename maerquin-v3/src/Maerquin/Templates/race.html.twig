@@ -16,8 +16,12 @@
     <div class="columns is-gapless">
         <div class="column is-12">
             <article class="message is-dark">
-                <div class="message-header ">
-                    {{ race.name }}
+                <div class="message-header">
+                    {% if race.name %}
+                        {{ race.name }}
+                    {% else %}
+                        Nieuwe aanmaken
+                    {% endif %}
                 </div>
                 <div class="message-body">
 

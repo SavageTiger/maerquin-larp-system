@@ -25,9 +25,9 @@ class LoginController extends Action
 
     public function __construct(
         private Session $session,
-        private EntityManager $entityManager,
+        EntityManager $entityManager,
     ) {
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->userRepository = $entityManager->getRepository(User::class);
     }
 
     public function action(): ResponseInterface
@@ -42,8 +42,18 @@ class LoginController extends Action
             );
 
             if ($loginError === false) {
-                return $this->redirectTo('/home.html');
+                $rememberMeCookie = null;
+
+                if ($form->getBoolean('rememberMe', default: false) === true) {
+                    $rememberMeCookie = $this->getRememberMeToken($form->getValue('username'));
+                }
+
+                return $this->redirectTo('/home.html', $rememberMeCookie);
             }
+        }
+
+        if ($this->loginRememberMeCookie() === true) {
+            return $this->redirectTo('/home.html');
         }
 
         return $view->render(
@@ -68,5 +78,35 @@ class LoginController extends Action
         $this->session->setUser($user);
 
         return false;
+    }
+
+    private function getRememberMeToken(string $username): string
+    {
+        $user = $this->userRepository->findByUsername($username);
+
+        $rememberMeToken = $user->generateRememberToken();
+
+        $this->userRepository->save($user);
+
+        return $rememberMeToken;
+    }
+
+    private function loginRememberMeCookie(): bool
+    {
+        $rememberMeToken = $this->request->getCookieParams()['RMT'] ?? null;
+
+        if (is_string($rememberMeToken) === false) {
+            return false;
+        }
+
+        $user = $this->userRepository->findByValidRememberMeToken($rememberMeToken);
+
+        if ($user === null) {
+            return false;
+        }
+
+        $this->session->setUser($user);
+
+        return true;
     }
 }

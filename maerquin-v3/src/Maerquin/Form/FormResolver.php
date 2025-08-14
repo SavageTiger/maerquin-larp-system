@@ -36,11 +36,15 @@ class FormResolver
     /**
      * @throws MissingFormFieldException
      */
-    public function getBoolean(string $name, null | string $namespace = null, null | string $default = null): bool
+    public function getBoolean(string $name, null | string $namespace = null, null | bool $default = null): bool
     {
         $value = is_string($namespace) === false ?
             $this->request->getParsedBody()[$name] ?? $default :
             $this->request->getParsedBody()[$namespace][$name] ?? $default;
+
+        if (is_string($value)) {
+            $value = $value === 'true';
+        }
 
         if (is_bool($value) === false) {
             throw new MissingFormFieldException(sprintf('%s is not a valid form element', $name));

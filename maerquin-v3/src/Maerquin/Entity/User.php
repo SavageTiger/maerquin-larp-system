@@ -26,20 +26,6 @@ class User extends UserModel
     #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
 
-    public function checkPassword(string $password): bool
-    {
-        $algorithm = 'sha512';
-        $iterations = 1_000;
-
-        $derivedHash = hash_pbkdf2(
-            $algorithm,
-            $password,
-            base64_decode($this->salt),
-            $iterations,
-            strlen(base64_decode($this->hash)),
-            true,
-        );
-
-        return hash_equals(base64_decode($this->hash), $derivedHash);
-    }
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected null | string $rememberToken;
 }

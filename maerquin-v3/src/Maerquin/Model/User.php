@@ -11,6 +11,7 @@ class User extends FrameworkUser
 {
     protected UuidInterface $id;
     protected string $username;
+    protected null | string $rememberToken;
 
     public function getId(): string
     {
@@ -20,6 +21,36 @@ class User extends FrameworkUser
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    public function checkPassword(string $password): bool
+    {
+        $algorithm = 'sha512';
+        $iterations = 1_000;
+
+        $derivedHash = hash_pbkdf2(
+            $algorithm,
+            $password,
+            base64_decode($this->salt),
+            $iterations,
+            strlen(base64_decode($this->hash)),
+            true,
+        );
+
+        return hash_equals(base64_decode($this->hash), $derivedHash);
+    }
+
+    public function generateRememberToken(): string
+    {
+        $rememberToken = sprintf(
+            '%s:%s',
+            time(),
+            hash('sha256', random_bytes(1_024 * 2)),
+        );
+
+        $this->rememberToken = hash('sha256', $rememberToken);
+
+        return $rememberToken;
     }
 
     public function isAdmin(): bool

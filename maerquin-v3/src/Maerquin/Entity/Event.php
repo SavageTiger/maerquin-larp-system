@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Entity;
 
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -49,8 +50,14 @@ class Event extends EventModel
     )]
     protected Collection $charactersPresent;
 
-    public function __construct()
+    public function __construct(UuidInterface $id)
     {
+        $this->id = $id;
         $this->charactersPresent = new ArrayCollection();
+        $this->name = '';
+        $this->secondaryName = '';
+        $this->points = 20;
+        $this->startDate = new DateTimeImmutable('-1 day');
+        $this->endDate = new DateTimeImmutable('now');
     }
 }

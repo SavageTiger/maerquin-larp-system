@@ -10,7 +10,10 @@
                     <input class="input" type="text" v-model="search" placeholder="Zoeken">
                 </div>
             </div>
-            <button class="button is-pulled-right"><i class="fa-solid fa-calendar-plus"></i>&nbsp;Nieuwe aanmaken
+            <button class="button is-pulled-right" @click="navigateToCreate" onclick="return false">
+                <i class="fa-solid fa-calendar-plus">
+                </i>&nbsp;
+                Nieuwe aanmaken
             </button>
         </div>
     </div>
@@ -59,7 +62,7 @@
             computed: {
                 filteredEvents() {
                     const searchTerm = this.search.toLowerCase();
-                    
+
                     return this.events.filter(event =>
                         event.name.toLowerCase().includes(searchTerm) ||
                         event.alternativeName.toLowerCase().includes(searchTerm)
@@ -69,6 +72,10 @@
             methods: {
                 navigateToEvent(eventId) {
                     document.location.href = `/admin/events/${eventId}.html`;
+                },
+
+                navigateToCreate() {
+                    document.location.href = `/admin/events/create.html`;
                 },
 
                 formatDate(dateText) {

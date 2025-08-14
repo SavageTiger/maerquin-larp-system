@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Event as EventEntity;
 
 class Event
 {
@@ -19,6 +20,11 @@ class Event
     protected int $points;
     protected null | string $notes;
     protected Collection $charactersPresent;
+
+    public static function create(UuidInterface $eventId): EventEntity
+    {
+        return new EventEntity($eventId);
+    }
 
     public function serialize(): array
     {

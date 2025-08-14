@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Event;
@@ -41,29 +42,60 @@ class EventsController extends Action
     public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
-
         $eventId = (string)($this->request->getAttribute('eventId') ?? '');
 
-        if ($this->request->getMethod() === 'POST' && Uuid::isValid($eventId)) {
-            $this->eventFormHandler->handle($eventId, $this->request);
+        if (str_contains($this->request->getUri()->getPath(), 'create.html') === true) {
+            $eventId = Uuid::uuid4()->toString();
         }
 
-        if ($eventId !== '') {
-            return $view->render(
-                $this->response,
-                'event.html.twig',
-                [
-                    'event' => $this->eventRepository->getById($eventId),
-                    'characters' => new CharacterCollection($this->characterRepository->findByEvent($eventId)),
-                ],
+        if ($this->request->getMethod() === 'POST' && Uuid::isValid($eventId)) {
+            $this->eventFormHandler->handle(
+                $this->getEvent(Uuid::fromString($eventId)),
+                $this->request,
             );
         }
 
+        return $eventId !== ''
+            ? $this->renderEvent($view, Uuid::fromString($eventId))
+            : $this->renderEventList($view);
+    }
+
+    private function getEvent(UuidInterface $eventId): Event
+    {
+        $event = $this->eventRepository->find($eventId->toString());
+
+        if ($event === null) {
+            $event = Event::create($eventId);
+        }
+
+        return $event;
+    }
+
+    private function renderEvent(Twig $view, UuidInterface $eventId): ResponseInterface
+    {
+        $event = $this->getEvent($eventId);
+
+        return $view->render(
+            $this->response,
+            'event.html.twig',
+            [
+                'event' => $event,
+                'characters' => new CharacterCollection(
+                    $this->characterRepository->findByEvent($eventId->toString()),
+                ),
+            ],
+        );
+    }
+
+    private function renderEventList(Twig $view): ResponseInterface
+    {
         return $view->render(
             $this->response,
             'events.html.twig',
             [
-                'events' => new EventCollection($this->eventRepository->findAllSorted()),
+                'events' => new EventCollection(
+                    $this->eventRepository->findAllSorted(),
+                ),
             ],
         );
     }

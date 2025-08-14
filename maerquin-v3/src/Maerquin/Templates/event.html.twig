@@ -19,8 +19,12 @@
     <div class="columns">
         <div class="column is-6">
             <article class="message is-dark">
-                <div class="message-header ">
-                    {{ event.name }}
+                <div class="message-header">
+                    {% if event.name %}
+                        {{ event.name }}
+                    {% else %}
+                        Nieuw event aanmaken
+                    {% endif %}
                 </div>
                 <div class="message-body">
                     <div class="field is-horizontal">
@@ -119,6 +123,7 @@
             </article>
         </div>
 
+        {% if event.name %}
         <div class="column is-6">
             <article class="message is-dark">
                 <div class="message-header">
@@ -172,6 +177,7 @@
             </footer>
         </div>
     </div>
+    {% endif %}
 
     <script>
         Vue.createApp({

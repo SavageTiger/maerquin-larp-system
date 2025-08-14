@@ -44,10 +44,11 @@ class EventFormHandler
      * @throws MissingFormFieldException
      * @throws DateMalformedStringException
      */
-    public function handle(string $eventId, Request $request): void
+    public function handle(Event $event, Request $request): void
     {
         $formResolver = FormResolver::createFromRequest($request);
 
+        $name = $formResolver->getValue('name', 'event');
         $startDateYear = (int)$formResolver->getValue('startDateYear', 'event');
         $startDateMonth = (int)$formResolver->getValue('startDateMonth', 'event');
         $startDateDay = (int)$formResolver->getValue('startDateDay', 'event');
@@ -74,10 +75,12 @@ class EventFormHandler
             sprintf('%04d-%02d-%02d', $endDateYear, $endDateMonth, $endDateDay),
         );
 
-        $event = $this->eventRepository->getById($eventId);
+        if (trim($name) === '') {
+            $name = '(Naamloos)';
+        }
 
         $event->updateEvent(
-            $formResolver->getValue('name', 'event'),
+            $name,
             $formResolver->getValue('secondaryName', 'event'),
             $points,
             $startDate,

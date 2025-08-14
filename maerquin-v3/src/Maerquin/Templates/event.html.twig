@@ -11,6 +11,17 @@
         </div>
     </div>
 
+    {% if persisted %}
+        <article class="message is-success">
+            <div class="message-header">
+                <p>Opgeslagen</p>
+            </div>
+            <div class="message-body">
+                Het event is succesvol opgeslagen.
+            </div>
+        </article>
+    {% endif %}
+
     <div class="spacer is-12"></div>
 
     <input class="input" name="characters" type="hidden"
@@ -128,13 +139,13 @@
             <article class="message is-dark">
                 <div class="message-header">
                     Characters aanwezig
-                    <button class="button is-pulled-right small-button" onclick="return false"
-                            @click="manageCharacters">
-                        <i class="fa-solid fa-person-military-to-person"></i>&nbsp;Aanpassen
-                    </button>
                 </div>
                 <div class="message-body">
                     <div class="box is-shadowless inner-box">
+                        <button class="button is-pulled-right" onclick="return false"
+                                @click="manageCharacters">&nbsp;Aanpassen
+                        </button>
+
                         <div class="content">
                             <ol type="1">
                                 <li v-for="character in characters">
@@ -209,7 +220,7 @@
                     axios
                         .post(`/admin/events/${eventId}.html`, { event: eventForm })
                         .then(() => {
-                            document.location.href = '/admin/events.html'
+                            document.location.href = `/admin/events/persisted/${eventId}.html`
                         })
                         .catch((error) => {
                             const message = error.response.data.error.description;

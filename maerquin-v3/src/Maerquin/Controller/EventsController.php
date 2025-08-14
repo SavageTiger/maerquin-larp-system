@@ -57,8 +57,8 @@ class EventsController extends Action
         }
 
         return $eventId !== ''
-            ? $this->renderEvent($view, Uuid::fromString($eventId))
-            : $this->renderEventList($view);
+            ? $this->renderEventEditView($view, Uuid::fromString($eventId))
+            : $this->renderEventListView($view);
     }
 
     private function getEvent(UuidInterface $eventId): Event
@@ -72,7 +72,7 @@ class EventsController extends Action
         return $event;
     }
 
-    private function renderEvent(Twig $view, UuidInterface $eventId): ResponseInterface
+    private function renderEventEditView(Twig $view, UuidInterface $eventId): ResponseInterface
     {
         $event = $this->getEvent($eventId);
 
@@ -84,11 +84,12 @@ class EventsController extends Action
                 'characters' => new CharacterCollection(
                     $this->characterRepository->findByEvent($eventId->toString()),
                 ),
+                'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],
         );
     }
 
-    private function renderEventList(Twig $view): ResponseInterface
+    private function renderEventListView(Twig $view): ResponseInterface
     {
         return $view->render(
             $this->response,

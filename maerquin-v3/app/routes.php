@@ -48,6 +48,7 @@ return function (App $app): void {
 
     $app->get('/admin/events.html', EventsController::class);
     $app->get('/admin/events/{eventId}.html', EventsController::class);
+    $app->get('/admin/events/persisted/{eventId}.html', EventsController::class);
     $app->post('/admin/events/{eventId}.html', EventsController::class);
 
     $app->get('/admin/races.html', RacesController::class);

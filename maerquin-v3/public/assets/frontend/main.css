@@ -118,6 +118,7 @@ span.skill-addon {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background-color: #ffffff;
+    min-height: 70px;
 }
 
 .box.inner-box .grid {
@@ -155,13 +156,6 @@ input.skill-input {
 
 .character-skill-table {
     font-size: 11pt;
-}
-
-button.small-button {
-    font-size: 12pt;
-    height: 22px;
-    padding: 10px;
-    margin: 0;
 }
 
 .tabs a {

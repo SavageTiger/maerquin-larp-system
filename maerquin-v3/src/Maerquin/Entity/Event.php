@@ -9,7 +9,6 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Event as EventModel;
@@ -20,8 +19,6 @@ class Event extends EventModel
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected UuidInterface $id;
 
     #[ORM\Column(length: 255)]

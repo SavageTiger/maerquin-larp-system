@@ -44,6 +44,7 @@ return function (App $app): void {
     $app->post('/admin/skills/{skillId}.html', SkillsController::class);
     $app->get('/admin/skills/{skillId}.html', SkillsController::class);
     $app->get('/admin/skills/api', SkillsApiController::class);
+    $app->get('/admin/skills/persisted/{skillId}.html', SkillsController::class);
     $app->get('/admin/skills/linkable/api', LinkableSkillsApiController::class);
 
     $app->get('/admin/events.html', EventsController::class);

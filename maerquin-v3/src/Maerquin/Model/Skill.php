@@ -24,6 +24,15 @@ class Skill
     protected int $level;
     protected null | SkillSkillLink $requiredSkillLink = null;
 
+    public static function create(UuidInterface $id, SkillType $skillType)
+    {
+        $skill = new static();
+        $skill->id = $id;
+        $skill->skillType = $skillType;
+
+        return $skill;
+    }
+
     public function serialize(bool $compact)
     {
         $minimal = [

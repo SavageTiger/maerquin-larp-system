@@ -30,16 +30,16 @@ class Skill extends SkillModel
     protected int $maximumAmountBuyable;
 
     #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
-    protected string $description = '';
+    protected string $description;
 
     #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
-    protected string $remarks = '';
+    protected string $remarks;
 
     #[ORM\Column(type: 'string', length: 64, nullable: false, options: ['default' => ''])]
-    protected string $distance = '';
+    protected string $distance;
 
     #[ORM\Column(type: 'string', length: 64, nullable: false, options: ['default' => ''])]
-    protected string $duration = '';
+    protected string $duration;
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     protected bool $nonFree;
@@ -69,4 +69,20 @@ class Skill extends SkillModel
         orphanRemoval: true,
     )]
     protected null | SkillSkillLinkModel $requiredSkillLink = null;
+
+    public function __construct()
+    {
+        $this->name = '';
+        $this->deity = null;
+        $this->element = null;
+        $this->maximumAmountBuyable = 1;
+        $this->points = 0;
+        $this->level = 0;
+        $this->hidden = false;
+        $this->nonFree = false;
+        $this->description = '';
+        $this->distance = '';
+        $this->duration = '';
+        $this->remarks = '';
+    }
 }

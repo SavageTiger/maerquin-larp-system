@@ -11,9 +11,24 @@
         </div>
     </div>
 
+    {% if persisted %}
+        <article class="message is-success">
+            <div class="message-header">
+                <p>Opgeslagen</p>
+            </div>
+            <div class="message-body">
+                De skill is succesvol opgeslagen.
+            </div>
+        </article>
+    {% endif %}
+
     <article class="message is-dark" id="skillForm">
-        <div class="message-header ">
-            {{ skill.name }}
+        <div class="message-header">
+            {% if skill.name %}
+                {{ skill.name }}
+            {% else %}
+                Nieuwe skill aanmaken
+            {% endif %}
         </div>
         <div class="message-body">
 
@@ -252,14 +267,14 @@
                     axios
                         .post(`/admin/skills/${skillId}.html`, { skill: skillForm })
                         .then(() => {
-                            document.location.href = '/admin/skills.html'
+                            document.location.href = `/admin/skills/persisted/${skillId}.html`
                         })
                         .catch((error) => {
                             alert(error.message);
                         });
 
                     return false;
-                }
+                },
             }
         }).mount('.content');
     </script>

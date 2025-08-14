@@ -52,11 +52,9 @@ class SkillFormHandler
      * @throws MissingFormFieldException
      * @throws MaerquinEntityNotFoundException
      */
-    public function handle(string $skillId, Request $request): void
+    public function handle(Skill $skill, Request $request): void
     {
         $formResolver = FormResolver::createFromRequest($request);
-
-        $skill = $this->skillRepository->getById($skillId);
 
         $requiredSkillLink = null;
         $requiredSkill = $this->skillRepository->findById(
@@ -67,8 +65,14 @@ class SkillFormHandler
             $requiredSkillLink = SkillSkillLink::createForSkill($skill, $requiredSkill);
         }
 
+        $name = $formResolver->getValue('name', 'skill');
+
+        if (trim($name) === '') {
+            $name = '(Naamloos)';
+        }
+
         $skill->updateSkill(
-            $formResolver->getValue('name', 'skill'),
+            $name,
             $this->deityRepository->findById($formResolver->getValue('deityElementId', 'skill')),
             $this->elementRepository->findById($formResolver->getValue('deityElementId', 'skill')),
             $this->skillTypeRepository->getOneById($formResolver->getValue('skillTypeId', 'skill')),

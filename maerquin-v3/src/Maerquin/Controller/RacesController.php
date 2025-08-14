@@ -85,6 +85,7 @@ class RacesController extends Action
                 'differentPointSkills' => new SkillRaceConnectionCollection(
                     $this->raceRepository->findDifferentPointSkillsSortedForRace($raceId->toString()),
                 ),
+                'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],
         );
     }

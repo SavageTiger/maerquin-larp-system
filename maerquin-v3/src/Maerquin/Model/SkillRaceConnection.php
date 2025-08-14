@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Model;
 
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\Race as RaceEntity;
@@ -22,6 +23,7 @@ class SkillRaceConnection
     public static function createMandatory(Race $race, SkillEntity $skill): self
     {
         $connection = new static();
+        $connection->id = Uuid::uuid4();
         $connection->race = $race;
         $connection->skill = $skill;
         $connection->mandatory = true;
@@ -34,6 +36,7 @@ class SkillRaceConnection
     public static function createForbidden(Race $race, SkillEntity $skill): self
     {
         $connection = new static();
+        $connection->id = Uuid::uuid4();
         $connection->race = $race;
         $connection->skill = $skill;
         $connection->mandatory = false;
@@ -46,6 +49,7 @@ class SkillRaceConnection
     public static function createWithCustomPoints(Race $race, SkillEntity $skill, float $points): self
     {
         $connection = new static();
+        $connection->id = Uuid::uuid4();
         $connection->race = $race;
         $connection->skill = $skill;
         $connection->mandatory = false;

@@ -47,7 +47,8 @@ class RaceRepository extends EntityRepository
             ->select('skillRaceConnection')
             ->from(RaceSkillLink::class, 'skillRaceConnection')
             ->where('skillRaceConnection.race = :raceId')
-            ->setParameter('raceId', $raceId);
+            ->setParameter('raceId', $raceId)
+            ->addOrderBy('skillRaceConnection.skill');
     }
 
     /**

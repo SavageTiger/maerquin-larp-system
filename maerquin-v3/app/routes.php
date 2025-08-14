@@ -52,5 +52,6 @@ return function (App $app): void {
 
     $app->get('/admin/races.html', RacesController::class);
     $app->get('/admin/races/{raceId}.html', RacesController::class);
+    $app->get('/admin/races/persisted/{raceId}.html', RacesController::class);
     $app->post('/admin/races/{raceId}.html', RacesController::class);
 };

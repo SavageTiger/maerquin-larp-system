@@ -13,6 +13,17 @@
 
     <div class="spacer is-12"></div>
 
+    {% if persisted %}
+        <article class="message is-success">
+            <div class="message-header">
+                <p>Opgeslagen</p>
+            </div>
+            <div class="message-body">
+                Ras succesvol opgeslagen.
+            </div>
+        </article>
+    {% endif %}
+
     <div class="columns is-gapless">
         <div class="column is-12">
             <article class="message is-dark">
@@ -249,7 +260,7 @@
                     axios
                         .post(`/admin/races/${raceId}.html`, { race: raceForm })
                         .then(() => {
-                            document.location.href = '/admin/races.html'
+                            document.location.href = `/admin/races/persisted/${raceId}.html`
                         })
                         .catch((error) => {
                             const message = error.response.data.error.description;

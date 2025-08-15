@@ -148,6 +148,7 @@ class Character
                     'numberOfTimes' => $skillCoupling->getAmount(),
                     'fastCasting' => $skillCoupling->hasFastCasting(),
                     'armouredCasting' => $skillCoupling->hasArmouredCasting(),
+                    'buyableAmount' => $skillCoupling->getSkill()->getMaximumAmountBuyable(),
                 ],
             );
         }

@@ -31,11 +31,12 @@
     "mpdf/mpdf": "^8.2",
     "nesbot/carbon": "^3.3",
     "php-di/php-di": "^7.0",
+    "predis/predis": "^3.2",
     "ramsey/uuid-doctrine": "^2.0",
     "slim/psr7": "^1.5",
     "slim/slim": "^4.10",
     "slim/twig-view": "^3.4",
-    "symfony/cache": "^7.0",
+    "symfony/cache": "^7.3",
     "symfony/console": "^7.0",
     "symfony/dotenv": "^7.1",
     "symfony/mailer": "^7.1"

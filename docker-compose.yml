@@ -21,6 +21,13 @@ services:
       - ./maerquin-v3:/var/www/html
     depends_on:
       - db
+      - valkey
+
+  valkey:
+    image: valkey/valkey
+    container_name: valkey_container_maerquin
+    ports:
+      - "6379:6379"
 
   db:
     image: mysql:latest

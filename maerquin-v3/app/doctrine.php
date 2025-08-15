@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -9,6 +10,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Psr\Cache\CacheItemPoolInterface;
 use Ramsey\Uuid\Doctrine\UuidType;
 
 class DoctrineConfig
@@ -16,7 +18,7 @@ class DoctrineConfig
     public Configuration $config;
     public Connection $connection;
 
-    public function __construct()
+    public function __construct(CacheItemPoolInterface $cache)
     {
         if (Type::hasType(UuidType::NAME) === false) {
             Type::addType(
@@ -27,7 +29,8 @@ class DoctrineConfig
 
         $this->config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [__DIR__ . '/../src/' . ($_ENV['PROJECT_NAME'] ?? 'None') . '/Entity'],
-            isDevMode: true,
+            isDevMode: $_ENV['DEBUG'] === 'true',
+            cache: $cache,
         );
 
         $this->config->enableNativeLazyObjects(true);
@@ -47,8 +50,9 @@ class DoctrineConfig
 
 return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
-        EntityManager::class => function () {
-            $doctrineConfig = new DoctrineConfig();
+        EntityManager::class => function (Container $container) {
+
+            $doctrineConfig = new DoctrineConfig($container->get('cache'));
 
             return new EntityManager(
                 $doctrineConfig->connection,

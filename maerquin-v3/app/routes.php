@@ -12,6 +12,7 @@ use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
+use SvenHK\Maerquin\Controller\LogoutController;
 use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
@@ -26,6 +27,8 @@ return function (App $app): void {
 
     $app->get('/login.html', LoginController::class);
     $app->post('/login.html', LoginController::class);
+
+    $app->get('/admin/logout.html', LogoutController::class);
 
     $app->get('/admin/characters.html', CharactersController::class);
     $app->get('/admin/characters/create.html', CharactersController::class);

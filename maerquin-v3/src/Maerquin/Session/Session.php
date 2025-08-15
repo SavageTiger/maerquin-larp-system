@@ -29,7 +29,7 @@ class Session implements FrameworkSession
         $this->write('userId', $user->getId());
     }
 
-    private function write(string $key, bool | int | string $value): void
+    private function write(string $key, null | bool | int | string $value): void
     {
         $_SESSION[$key] = $value;
     }
@@ -39,7 +39,6 @@ class Session implements FrameworkSession
         $user = $this->userRepository->findById($this->read('userId', ''));
 
         if ($user === null) {
-
             return new Anonymous();
         }
 
@@ -49,5 +48,10 @@ class Session implements FrameworkSession
     private function read(string $key, bool | int | string $defaultValue): bool | int | string
     {
         return $_SESSION[$key] ?? $defaultValue;
+    }
+
+    public function unsetUser(): void
+    {
+        $this->write('userId', null);
     }
 }

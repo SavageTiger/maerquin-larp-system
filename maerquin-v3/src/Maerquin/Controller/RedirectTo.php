@@ -12,18 +12,18 @@ trait RedirectTo
 {
     public function redirectTo(
         string $path,
-        null | string $cookie = null,
+        null | string $rememberMeCookie = null,
     ): ResponseInterface {
         $headers = new Headers([
             'Location' => $path,
         ]);
 
-        if ($cookie) {
+        if ($rememberMeCookie !== null) {
             $headers->addHeader(
                 'Set-Cookie',
                 sprintf(
                     'RMT=%s; Max-Age=%d; Path=/; SameSite=Lax',
-                    rawurlencode($cookie),
+                    rawurlencode($rememberMeCookie),
                     60 * 60 * 24 * 30,
                 ),
             );

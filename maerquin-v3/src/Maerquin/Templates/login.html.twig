@@ -19,7 +19,7 @@
                         <div class="column is-two-fifths">
                             <article class="message is-danger">
                                 <div class="message-header">
-                                    <p>Login failed</p>
+                                    <p>Inloggen mislukt</p>
                                 </div>
                                 <div class="message-body">
                                     {{ loginError }}
@@ -32,7 +32,7 @@
                 <div class="columns is-three-fifths is-centered">
                     <form method="POST" class="box column is-two-fifths">
                         <div class="field">
-                            <label for="" class="label">Username</label>
+                            <label for="" class="label">Gebruikersnaam</label>
                             <div class="control has-icons-left">
                                 <input type="text" value="{{ form.getValue('username', default: '') }}" name="username"
                                        placeholder="e.g. John" class="input"
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <label for="" class="label">Password</label>
+                            <label for="" class="label">Wachtwoord</label>
                             <div class="control has-icons-left">
                                 <input type="password" value="{{ form.getValue('password', default: '') }}"
                                        name="password"
@@ -57,12 +57,25 @@
                         </div>
                         <div class="field">
                             <label class="checkbox">
-                                <input type="checkbox" name="rememberMe" value="true"/>
+                                {% if form.getBoolean('rememberMe', default: false) %}
+                                    <input
+                                            type="checkbox"
+                                            name="rememberMe"
+                                            checked="checked"
+                                            value="true"
+                                    />
+                                {% else %}
+                                    <input
+                                            type="checkbox"
+                                            name="rememberMe"
+                                            value="true"
+                                    />
+                                {% endif %}
                                 &nbsp;
-                                <b>Remember me</b>
+                                <b>Herinner mij (max 30 dagen)</b>
                             </label>
                         </div>
-                        <div class="field">
+                        <div class=" field">
                             <button type="submit" class="button is-success">
                                 Login
                             </button>

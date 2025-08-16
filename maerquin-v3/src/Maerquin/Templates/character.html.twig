@@ -105,7 +105,7 @@
 
                     customFieldValues: [
                         {% for customField in customFields.serialize %}
-                        '{{ customField.value|escape }}',
+                        '{{ customField.value|escape('js') }}',
                         {% endfor %}
                     ],
 
@@ -183,7 +183,11 @@
                         spendPoints += linkedSkill.points * linkedSkill.numberOfTimes;
                     }
 
-                    return spendPoints;
+                    if (spendPoints > 0) {
+                        return spendPoints;
+                    }
+
+                    return 0;
                 },
 
                 groupSkills(skills) {

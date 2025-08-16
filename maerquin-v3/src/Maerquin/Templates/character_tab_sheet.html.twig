@@ -77,7 +77,7 @@
                 </tr>
 
                 {% for customField in customFields.serialize %}
-                    <tr>
+                    <tr v-if="customFieldValues[{{ loop.index0 }}]">
                         <td><b>{{ customField.name }}</b></td>
                         <td>{{ '{{ customFieldValues[' ~  loop.index0 ~ '] }}' }}</td>
                     </tr>

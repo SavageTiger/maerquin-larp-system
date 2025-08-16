@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Model;
 
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\CustomValue as CustomValueEntity;
@@ -21,6 +22,7 @@ class CustomValue
         string $value,
     ): self {
         $customValue = new CustomValueEntity();
+        $customValue->id = Uuid::uuid4();
         $customValue->customField = $customField;
         $customValue->value = $value;
         $customValue->entityId = $entityId;

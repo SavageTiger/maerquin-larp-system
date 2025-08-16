@@ -1,0 +1,58 @@
+<style>
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        padding: 3;
+        margin: 0;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f4efef;
+    }
+</style>
+
+
+<table style="width: 100%">
+    <tr>
+        <td style="padding-bottom: 30px; width: 70%; vertical-align: top; text-align: left">
+            <h1>
+                Maerquin Charactersheet
+            </h1>
+        </td>
+        <td style="padding-bottom: 30px; width: 30%; vertical-align: top; text-align: right">
+            {{ now }}
+        </td>
+    </tr>
+</table>
+
+
+<table style="width: 100%">
+    <tr>
+        <td>
+            <img style="height: 200px; padding-right: 20px;" src="frontend/maerquin-logo-transparant.png"/>
+        </td>
+
+        <td style="width: 49%; vertical-align: top;">
+            <h2>Personage</h2>
+            <br/>
+
+            {{ characterTable|raw }}
+        </td>
+        <td style="width: 2%; vertical-align: top;">
+            &nbsp;
+        </td>
+        <td style="width: 49%; vertical-align: top;">
+            <h2>Achtergrond</h2>
+            <br/>
+
+            {{ backgroundTable|raw }}
+        </td>
+    </tr>
+</table>
+
+
+{{ body|raw }}

@@ -1,11 +1,27 @@
-<div class="fixed-grid box inner-box is-shadowless">
+<div class="grid has-4-cols">
+    <div class="grid">
+    </div>
+    <div class="grid">
+    </div>
+    <div class="grid">
+    </div>
+    <div class="grid">
+        <button class="button is-pulled-right"
+                onclick="return false"
+                @click="printCharacter()">
+            <i class="fa-solid fa-print"></i>&nbsp;Printen
+        </button>
+    </div>
+</div>
+
+<div class="fixed-grid box inner-box is-shadowless" ref="characterSheet">
     <div class="grid">
         <div class="cell">
             <h2>Personage</h2>
 
-            <table class="table is-fullwidth">
+            <table class="table is-fullwidth" id="characterTable">
                 <tr>
-                    <td><b>Speler</b></td>
+                    <td style="width: 35%"><b>Speler</b></td>
                     <td>{{ '{{ dropdownText(\'playerSelect\') }}' }}</td>
                 </tr>
 
@@ -37,9 +53,9 @@
         <div class="cell">
             <h2>Achtergrond</h2>
 
-            <table class="table is-fullwidth">
+            <table class="table is-fullwidth" id="backgroundTable">
                 <tr>
-                    <td><b>Geloof</b></td>
+                    <td style="width: 35%"><b>Geloof</b></td>
                     <td>
                         <span v-if="dropdownText('deityPrimarySelect') !== '' && dropdownText('deitySecondarySelect') === ''">
                             {{ '{{ dropdownText(\'deityPrimarySelect\') }}' }}
@@ -91,7 +107,6 @@
             <div class="cell">
                 <h2>Vaardigheden</h2>
 
-                <span class="box box-square is-shadowless">
                 <span class="inner-box " v-for="(skillGroup, skillGroupName) in groupedLinkedSkills">
                     <h4 class="m-0">{{ '{{ skillGroupName }}' }}</h4>
 
@@ -108,7 +123,7 @@
                                     {{ '{{ linkedSkill.numberOfTimes }}' }}x
                                 </span>
                                 <span v-else>
-                                    ∞
+                                    &#x221E;
                                 </span>
                             </td>
                             <td>{{ '{{ linkedSkill.skillName }}' }}</td>
@@ -123,7 +138,7 @@
 
                     </table>
                 </span>
-            </span>
+                </span>
             </div>
             <div class="cell">
                 <h2>Evenementen</h2>
@@ -149,6 +164,5 @@
                 </table>
             </div>
         </div>
-
     </div>
 </div>

@@ -14,6 +14,7 @@ use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\LogoutController;
 use SvenHK\Maerquin\Controller\PlayersController;
+use SvenHK\Maerquin\Controller\PrintCharacter;
 use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
 
@@ -36,6 +37,8 @@ return function (App $app): void {
     $app->post('/admin/characters/{characterId}.html', CharactersController::class);
     $app->get('/admin/characters/persisted/{characterId}.html', CharactersController::class);
     $app->get('/admin/characters/api', CharactersApiController::class);
+
+    $app->post('/admin/character/print.pdf', PrintCharacter::class);
 
     $app->get('/admin/players.html', PlayersController::class);
     $app->get('/admin/player/create.html', PlayersController::class);

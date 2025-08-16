@@ -162,6 +162,41 @@
                     return false;
                 },
 
+                printCharacter() {
+                    const characterHtml = this.$refs['characterSheet'].innerHTML;
+
+                    axios
+                        .post(`/admin/character/print.pdf`, {
+                                html: { body: encodeUnicodeBase64(characterHtml) }
+                            },
+                            { responseType: 'blob' }
+                        )
+                        .then((response) => {
+                            const pdfBinary = new Blob([response.data], { type: 'application/pdf' });
+                            const pdfBinaryElement = window.URL.createObjectURL(pdfBinary);
+
+                            const now = new Date();
+                            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                            const formattedDate = now.toLocaleDateString('nl-NL', options);
+
+                            const downloadLink = document.createElement('a');
+                            document.body.appendChild(downloadLink);
+
+                            downloadLink.href = pdfBinaryElement;
+                            downloadLink.download = this.character.name + '-' + formattedDate + '.pdf';
+                            downloadLink.click();
+
+                            document.body.removeChild(downloadLink);
+
+                            window.URL.revokeObjectURL(url);
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+                },
+
                 totalPoints() {
                     let totalPoints = 100;
 

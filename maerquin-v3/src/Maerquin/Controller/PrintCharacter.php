@@ -30,7 +30,7 @@ class PrintCharacter extends Action
 
         $pdfGenerator = PdfGeneratorFactory::create();
         $pdfGenerator->WriteHTML($view->fetch(
-            'pdf/character.html.twig',
+            'Pdf/character.html.twig',
             [
                 'characterTable' => $this->getTableContent($htmlDocument, 'characterTable'),
                 'backgroundTable' => $this->getTableContent($htmlDocument, 'backgroundTable'),

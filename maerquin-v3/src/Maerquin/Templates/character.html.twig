@@ -101,7 +101,14 @@
 
                     character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
 
-                    playerName: '',
+                    presentAtEvents: {{ eventsForCharacter.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+
+                    customFieldValues: [
+                        {% for customField in customFields.serialize %}
+                        '{{ customField.value|escape }}',
+                        {% endfor %}
+                    ],
+
                     linkableSkillList: [],
                     skillFilter: '',
                 }
@@ -132,6 +139,10 @@
                         }
                     }));
                 },
+
+                spendablePoints() {
+                    return this.totalPoints() - this.spendPoints();
+                },
             },
             methods: {
                 saveCharacter(characterId) {
@@ -151,11 +162,28 @@
                     return false;
                 },
 
-                changePlayerName(sender) {
-                    if (sender.target.options.selectedIndex > -1) {
-                        this.playerName =
-                            sender.target.options[sender.target.options.selectedIndex].text;
+                totalPoints() {
+                    let totalPoints = 100;
+
+                    for (const event of this.presentAtEvents) {
+                        totalPoints += event.points;
                     }
+
+                    if (totalPoints > 800) {
+                        return 800;
+                    }
+
+                    return totalPoints;
+                },
+
+                spendPoints() {
+                    let spendPoints = 0;
+
+                    for (const linkedSkill of this.character.linkedSkills) {
+                        spendPoints += linkedSkill.points * linkedSkill.numberOfTimes;
+                    }
+
+                    return spendPoints;
                 },
 
                 groupSkills(skills) {
@@ -189,6 +217,21 @@
                     const pattern = allowDot ? /[^\.0-9]/g : /[^0-9]/g;
 
                     sender[field] = sender[field].replace(pattern, '');
+                },
+
+                dropdownText(dropdownName) {
+                    const dropdownElement = this.$refs[dropdownName];
+
+                    if (
+                        dropdownElement &&
+                        dropdownElement.options.selectedIndex > -1
+                    ) {
+                        const options = dropdownElement.options;
+
+                        return options[options.selectedIndex].text.replace('(geen)', '');
+                    }
+
+                    return '';
                 },
 
                 appendSkill() {
@@ -253,8 +296,6 @@
                 this.character.linkedSkills.sort(
                     (left, right) => left.skillName.localeCompare(right.skillName)
                 );
-
-                this.changePlayerName({ target: this.$refs.playerSelect });
             }
         }).mount('.content');
     </script>

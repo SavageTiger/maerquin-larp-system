@@ -16,10 +16,10 @@ class EventCollection
         $this->events = $events;
     }
 
-    public function serialize(): array
+    public function serialize(bool $compact): array
     {
         return array_map(
-            fn(Event $event) => $event->serialize(),
+            fn(Event $event) => $event->serialize($compact),
             $this->events,
         );
     }

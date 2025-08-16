@@ -15,17 +15,20 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\Deity;
+use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Form\CharacterFormHandler;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\CustomFieldCollection;
 use SvenHK\Maerquin\Model\DeitiesCollection;
+use SvenHK\Maerquin\Model\EventCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
 use SvenHK\Maerquin\Model\RaceCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\CustomFieldRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
+use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use Webmozart\Assert\Assert;
@@ -36,6 +39,11 @@ class CharactersController extends Action
      * @var CharacterRepository
      */
     private EntityRepository $characterRepository;
+
+    /**
+     * @var EventRepository
+     */
+    private EntityRepository $eventRepository;
 
     /**
      * @var DeityRepository
@@ -62,6 +70,7 @@ class CharactersController extends Action
         private readonly CharacterFormHandler $characterFormHandler,
     ) {
         $this->characterRepository = $entityManager->getRepository(Character::class);
+        $this->eventRepository = $entityManager->getRepository(Event::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
         $this->playerRepository = $entityManager->getRepository(Player::class);
         $this->raceRepository = $entityManager->getRepository(Race::class);
@@ -115,6 +124,9 @@ class CharactersController extends Action
             $this->getViewContext(),
             [
                 'character' => $character,
+                'eventsForCharacter' => new EventCollection($this->eventRepository->findAllForCharacter(
+                    (string)$characterId,
+                )),
                 'races' => new RaceCollection($this->raceRepository->findAllSorted()),
                 'customFields' => $customFields,
                 'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),

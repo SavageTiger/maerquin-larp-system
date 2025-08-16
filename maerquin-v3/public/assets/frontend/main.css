@@ -200,3 +200,7 @@ input.skill-input {
     padding-right: 6px;
     color: #ff3860;
 }
+
+.xp-table {
+    min-height: 0 !important;
+}

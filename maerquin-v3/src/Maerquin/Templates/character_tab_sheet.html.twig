@@ -1,11 +1,59 @@
-<div class="fixed-grid">
+<div class="fixed-grid box inner-box is-shadowless">
     <div class="grid">
         <div class="cell">
             <h2>Personage</h2>
-            <table>
+
+            <table class="table is-fullwidth">
                 <tr>
                     <td><b>Speler</b></td>
-                    <td>{{ '{{ playerName }}' }}</td>
+                    <td>{{ '{{ dropdownText(\'playerSelect\') }}' }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>Karakter</b></td>
+                    <td>{{ '{{ character.name }}' }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>Ras</b></td>
+                    <td>{{ '{{ dropdownText(\'raceSelect\') }}' }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>Totaal Punten</b></td>
+                    <td><b>{{ '{{ totalPoints() }}' }}</b></td>
+                </tr>
+                <tr>
+                    <td><b>Punten gespendeerd</b></td>
+                    <td><b>{{ '{{ spendPoints() }}' }}</b></td>
+                </tr>
+                <tr>
+                    <td><b>Punten besteedbaar</b></td>
+                    <td><b>{{ '{{ spendablePoints }}' }}</b></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="cell">
+            <h2>Achtergrond</h2>
+
+            <table class="table is-fullwidth">
+                <tr>
+                    <td><b>Geloof</b></td>
+                    <td>
+                        <span v-if="dropdownText('deityPrimarySelect') !== '' && dropdownText('deitySecondarySelect') === ''">
+                            {{ '{{ dropdownText(\'deityPrimarySelect\') }}' }}
+                        </span>
+
+                        <span v-if="dropdownText('deityPrimarySelect') !== '' && dropdownText('deitySecondarySelect') !== ''">
+                            {{ '{{ dropdownText(\'deityPrimarySelect\') }}' }},
+                            {{ '{{ dropdownText(\'deitySecondarySelect\') }}' }}
+                        </span>
+
+                        <span v-if="dropdownText('deityPrimarySelect') === '' && dropdownText('deitySecondarySelect') === ''">
+                            (geen)
+                        </span>
+                    </td>
                 </tr>
 
                 <tr v-if="character.title">
@@ -17,11 +65,90 @@
                     <td><b>Gilde</b></td>
                     <td>{{ '{{ character.guild }}' }}</td>
                 </tr>
+
+                <tr v-if="character.occupation">
+                    <td><b>Beroep</b></td>
+                    <td>{{ '{{ character.occupation }}' }}</td>
+                </tr>
+
+                <tr v-if="character.birthplace">
+                    <td><b>Gebroorteplaats</b></td>
+                    <td>{{ '{{ character.birthplace }}' }}</td>
+                </tr>
+
+                {% for customField in customFields.serialize %}
+                    <tr>
+                        <td><b>{{ customField.name }}</b></td>
+                        <td>{{ '{{ customFieldValues[' ~  loop.index0 ~ '] }}' }}</td>
+                    </tr>
+                {% endfor %}
             </table>
         </div>
+    </div>
+    <hr/>
+    <div class="fixed-grid has-2-cols">
+        <div class="grid">
+            <div class="cell">
+                <h2>Vaardigheden</h2>
 
-        <div class="cell">
+                <span class="box box-square is-shadowless">
+                <span class="inner-box " v-for="(skillGroup, skillGroupName) in groupedLinkedSkills">
+                    <h4 class="m-0">{{ '{{ skillGroupName }}' }}</h4>
 
+                    <table class="table is-fullwidth m-2">
+                        <tr>
+                            <td width="8%"><b>Aantal</b></td>
+                            <td><b>Naam</b></td>
+                            <td><b>Kosten (punten)</b></td>
+                        </tr>
+
+                        <tr v-for="linkedSkill in skillGroup.skills">
+                            <td>
+                                <span v-if="linkedSkill.buyableAmount > 1">
+                                    {{ '{{ linkedSkill.numberOfTimes }}' }}x
+                                </span>
+                                <span v-else>
+                                    ∞
+                                </span>
+                            </td>
+                            <td>{{ '{{ linkedSkill.skillName }}' }}</td>
+                            <td>
+                                <b>{{ '{{ linkedSkill.points }}' }}
+                                    <span v-if="linkedSkill.numberOfTimes > 1">
+                                        ({{ '{{ linkedSkill.points * linkedSkill.numberOfTimes }}' }})
+                                    </span>
+                                </b>
+                            </td>
+                        </tr>
+
+                    </table>
+                </span>
+            </span>
+            </div>
+            <div class="cell">
+                <h2>Evenementen</h2>
+                <table class="table is-fullwidth">
+                    <tr>
+                        <td>
+                            Naam
+                        </td>
+                        <td valign="right">
+                            Punten
+                        </td>
+                    </tr>
+
+                    <tr v-for="event in presentAtEvents">
+                        <td>
+                            {{ '{{ event.name }}' }}
+                        </td>
+                        <td valign="right">
+                            <b>{{ '{{ event.points }}' }}</b>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
         </div>
+
     </div>
 </div>

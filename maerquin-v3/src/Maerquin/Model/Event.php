@@ -26,8 +26,16 @@ class Event
         return new EventEntity($eventId);
     }
 
-    public function serialize(): array
+    public function serialize(bool $compact): array
     {
+        if ($compact === true) {
+            return [
+                'id' => $this->getId(),
+                'name' => $this->getName(),
+                'points' => $this->getPoints(),
+            ];
+        }
+
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
@@ -49,6 +57,11 @@ class Event
         return $this->name;
     }
 
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
     public function getSecondaryName(): string
     {
         return $this->secondaryName;
@@ -62,11 +75,6 @@ class Event
     public function getEndDate(): DateTimeInterface
     {
         return $this->endDate;
-    }
-
-    public function getPoints(): int
-    {
-        return $this->points;
     }
 
     public function getNotes(): string

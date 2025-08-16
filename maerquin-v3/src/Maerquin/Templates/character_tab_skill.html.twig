@@ -5,6 +5,20 @@
     </i>&nbsp;Toevoegen
 </button>
 
+<div class="is-pulled-right mr-3">
+    <table class="table box inner-box is-shadowless xp-table m-0 p-0">
+        <tr>
+            <td>Totaal XP</td>
+            <td style="text-align: right"><b>{{ '{{ totalPoints() }}' }}</b></td>
+            <td>Gespendeerd</td>
+            <td style="text-align: right"><b>{{ '{{ spendPoints() }}' }}</b></td>
+            <td>Besteedbaar</td>
+            <td style="text-align: right"><b>{{ '{{ spendablePoints }}' }}</b></td>
+        </tr>
+
+    </table>
+</div>
+
 <div class="column is-12 pl-3 pb-3 p-0">
     <h3 class="mb-0">Skills</h3>
 </div>
@@ -38,18 +52,18 @@
                     <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
                 </td>
                 <td>
-                                    <span v-if="linkedSkill.buyableAmount > 1">
-                                        {{ '{{ linkedSkill.numberOfTimes }}' }}
-                                        &nbsp;
-                                        <a><i @click="increaseSkillBought(linkedSkill)"
-                                              class="fa-solid fa-circle-plus"></i></a>
-                                        &nbsp;
-                                        <a><i @click="decreaseSkillBought(linkedSkill)"
-                                              class="fa-solid fa-circle-minus"></i></a>
-                                    </span>
+                    <span v-if="linkedSkill.buyableAmount > 1">
+                        {{ '{{ linkedSkill.numberOfTimes }}' }}
+                        &nbsp;
+                        <a><i @click="increaseSkillBought(linkedSkill)"
+                              class="fa-solid fa-circle-plus"></i></a>
+                        &nbsp;
+                        <a><i @click="decreaseSkillBought(linkedSkill)"
+                              class="fa-solid fa-circle-minus"></i></a>
+                    </span>
                     <span v-else>
-                                        ∞
-                                    </span>
+                        ∞
+                    </span>
                 </td>
                 <td>
                     <label class="checkbox">

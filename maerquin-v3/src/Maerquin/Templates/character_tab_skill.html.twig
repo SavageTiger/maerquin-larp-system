@@ -1,0 +1,136 @@
+<input type="hidden" name="linkedSkills" v-model="linkedSkills">
+
+<button class="button is-pulled-right" @click="appendSkill" onclick="return false">
+    <i class="fa-solid fa-dice-d20">
+    </i>&nbsp;Toevoegen
+</button>
+
+<div class="column is-12 pl-3 pb-3 p-0">
+    <h3 class="mb-0">Skills</h3>
+</div>
+
+<div class="column is-12">
+
+    <div v-for="(skillGroup, skillGroupName) in groupedLinkedSkills">
+        <h3>{{ '{{ skillGroupName }}' }}</h3>
+
+        <table class="table character-skill-table is-bordered is-striped is-narrow is-fullwidth">
+            <tr>
+                <th>Naam</th>
+                <th>Kosten (punten)</th>
+                <th>Aantal keer bruikbaar</th>
+                <th>Fast Casting</th>
+                <th>Armor Class</th>
+                <th></th>
+            </tr>
+
+            <tr v-for="linkedSkill in skillGroup.skills">
+                <td>
+                    {{ '{{ linkedSkill.skillName }}' }}
+                </td>
+                <td>
+                    <input
+                            @keyup="numbersOnly(linkedSkill, 'points', true)"
+                            @change="numbersOnly(linkedSkill, 'points', true)"
+                            type="input"
+                            class="input skill-input"
+                            v-model="linkedSkill.points"/>
+                    <span class="skill-original">{{ '{{ linkedSkill.pointsSource }}' }}</span>
+                </td>
+                <td>
+                                    <span v-if="linkedSkill.buyableAmount > 1">
+                                        {{ '{{ linkedSkill.numberOfTimes }}' }}
+                                        &nbsp;
+                                        <a><i @click="increaseSkillBought(linkedSkill)"
+                                              class="fa-solid fa-circle-plus"></i></a>
+                                        &nbsp;
+                                        <a><i @click="decreaseSkillBought(linkedSkill)"
+                                              class="fa-solid fa-circle-minus"></i></a>
+                                    </span>
+                    <span v-else>
+                                        ∞
+                                    </span>
+                </td>
+                <td>
+                    <label class="checkbox">
+                        <input type="checkbox" v-model="linkedSkill.fastCasting"/>
+                    </label>
+                </td>
+                <td>
+                    <label class="checkbox">
+                        <input type="checkbox" v-model="linkedSkill.armouredCasting"/>
+                    </label>
+                </td>
+                <td>
+                    <a>
+                        <i class="fa fa-trash" @click="deleteSkill(linkedSkill)"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <div>&nbsp;</div>
+    </div>
+</div>
+
+<div class="modal" id="skillList">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Skills toevoegen</p>
+            <div class="control">
+                <input class="input" type="text" v-model="skillFilter" placeholder="Filter">
+            </div>
+        </header>
+        <section class="modal-card-body modal-card-body-no-padding">
+            <div v-for="(skillGroup, skillGroupName) in groupedSkills">
+                <div class="pl-3 pt-2">
+                    <h4 class="m-0 p-0">{{ '{{ skillGroupName }}' }}</h4>
+                </div>
+
+                <table class="table is-striped is-narrow is-overview-table">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Naam</th>
+                        <th class="has-text-right">Kosten</th>
+                        <th class="has-text-right">Reeds aangekocht</th>
+                    </tr>
+                    <tr v-for="skill in skillGroup.skills" :key="skill.id">
+                        <td>
+                            <span v-if="(boughtTimes = skillBoughtTimes(skill.skillId))"></span>
+                            <a v-if="boughtTimes < skill.maximumAmountBuyable">
+                                <i onclick="return false" @click="buy(skill)" class="fa-solid fa-plus"></i>
+                            </a>
+                        </td>
+                        <td>
+                            {{ '{{ skill.skillName }}' }}
+                        </td>
+                        <td class="has-text-right">
+                            <input @keyup="numbersOnly(skill, 'points', true)"
+                                   @change="numbersOnly(skill, 'points', true)"
+                                   type="text"
+                                   class="input skill-input"
+                                   v-model="skill.points"/>
+                        </td>
+                        <td class="has-text-right">
+                            <div v-if="boughtTimes > 0">
+                                <b style="color: blue">{{ '{{ boughtTimes }}' }}</b>
+                            </div>
+                            <div v-else>
+                                {{ '{{ boughtTimes }}' }}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </section>
+
+        <footer class="modal-card-foot">
+            <div class="buttons">
+                <button class="button" onclick="return false">Sluiten</button>
+            </div>
+        </footer>
+    </div>
+</div>
+

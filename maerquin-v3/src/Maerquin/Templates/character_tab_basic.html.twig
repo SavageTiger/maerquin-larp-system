@@ -1,0 +1,267 @@
+<div class="grid">
+    <div class="cell">
+        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+            <h3 class="mb-0">Basis</h3>
+        </div>
+
+        <div class="box inner-box is-shadowless">
+            <div class="columns is-gapless">
+                <div class="column is-12">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Karakter</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="name" type="text"
+                                           value="{{ character.name }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-gapless">
+                <div class="column is-12">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Speler</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="select is-fullwidth">
+                                            <select name="playerId">
+                                                <option value="{{ player.id }}">
+                                                    (ontkoppeld)
+                                                </option>
+
+                                                {% for player in players.serialize(true) %}
+                                                    <option value="{{ player.id }}"
+                                                            {% if player.id == character.playerId %}selected="selected"{% endif %}>
+                                                        {{ player.name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-gapless">
+                <div class="column is-12">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Ras</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="select is-fullwidth">
+                                    <select name="raceId" v-model="character.raceId">
+                                        {% for race in races.serialize %}
+                                            <option value="{{ race.id }}">
+                                                {{ race.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-gapless">
+                <div class="column is-12">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">&nbsp;</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="isDeceased"
+                                           v-model="character.isDeceased"/>
+                                    &nbsp;<b>Overleden</b>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cell">
+        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+            <h3 class="mb-0">Achtergrond</h3>
+        </div>
+
+        <div class="box inner-box is-shadowless">
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="field">
+                        <label class="label">Titel</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="title" type="text"
+                                           value="{{ character.title }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-6">
+                    <div class="field">
+                        <label class="label">Gilde</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="guild" type="text"
+                                           value="{{ character.guild }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="field">
+                        <label class="label">Beroep</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="occupation" type="text"
+                                           value="{{ character.occupation }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-6">
+                    <div class="field">
+                        <label class="label">Geboorteplaats</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="birthplace" type="text"
+                                           value="{{ character.birthplace }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for customField in customFields.serialize %}
+                {% if loop.index0 % 2 == 0 %}
+                    <div class="columns">
+                {% endif %}
+
+                <div class="column is-6">
+                    <div class="field">
+                        <label class="label">{{ customField.name }}</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="{{ customField.id }}" type="text"
+                                           value="{{ customField.value }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if loop.index0 % 2 == 1 %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="cell">
+        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+            <h3 class="mb-0">Geloof</h3>
+        </div>
+
+        <div class="box inner-box is-shadowless">
+            <div class="columns">
+                <div class="column is-12">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Primair</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+
+                                <div class="select is-fullwidth">
+                                    <select name="primaryDeityId" v-model="character.primaryDeityId">
+                                        <option value="">(geen)</option>
+                                        {% for deity in deities.serialize %}
+                                            <option value="{{ deity.id }}">
+                                                {{ deity.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-12">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Secondair</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="select is-fullwidth">
+                                    <select name="secondaryDeityId"
+                                            v-model="character.secondaryDeityId">
+                                        <option value="">(geen)</option>
+                                        {% for deity in deities.serialize %}
+                                            <option value="{{ deity.id }}">
+                                                {{ deity.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cell">
+        <div class="column is-12 pl-1 pb-5 pt-0 p-0">
+            <h3 class="mb-0">Notities</h3>
+        </div>
+
+        <div class="box inner-box is-shadowless">
+            <div class="columns">
+                <div class="column is-12">
+                    <textarea name="notes" class="input">{{ character.notes }}</textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

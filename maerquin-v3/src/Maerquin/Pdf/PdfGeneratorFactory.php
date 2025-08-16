@@ -22,7 +22,7 @@ class PdfGeneratorFactory
                 __DIR__ . '/Fonts',
             ]),
             'default_font' => 'Verdana',
-            'default_font_size' => 7,
+            'default_font_size' => 10,
         ]);
 
         $mpdf->showImageErrors = true;

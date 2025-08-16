@@ -52,6 +52,10 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
 
+// Set up Twig
+$twig = require __DIR__ . '/../app/twig.php';
+$twig($app);
+
 // Register middleware
 $middleware = require __DIR__ . '/../app/middleware.php';
 $middleware($app);

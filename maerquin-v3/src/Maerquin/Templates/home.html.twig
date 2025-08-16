@@ -3,6 +3,6 @@
 {% block container %}
     <br/>
     <div class="hero">
-        <h4 class="title is-1">Hallo {{ user.username|capitalize }} 👋</h4>
+        <h4 class="title is-1">Hallo {{ getUser().username|capitalize }} 👋</h4>
     </div>
 {% endblock %}

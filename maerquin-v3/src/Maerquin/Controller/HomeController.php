@@ -13,8 +13,9 @@ class HomeController extends Action
 {
     use RedirectTo;
 
-    public function __construct(private Session $session)
-    {
+    public function __construct(
+        private Session $session,
+    ) {
     }
 
     public function action(): ResponseInterface
@@ -28,7 +29,6 @@ class HomeController extends Action
         return $view->render(
             $this->response,
             'home.html.twig',
-            ['user' => $this->session->getUser()],
         );
     }
 }

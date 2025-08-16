@@ -66,6 +66,15 @@
                                 <span>Skills</span>
                             </a>
                         </li>
+
+                        <li :class="{ 'is-active': activeTab === 'sheet' }">
+                            <a @click="activeTab = 'sheet'">
+                            <span class="icon is-small">
+                                <i class="fas fa-sheet-plastic" aria-hidden="true"></i>
+                            </span>
+                                <span>Sheet</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             {% endif %}
@@ -76,6 +85,10 @@
 
             <div v-show="activeTab === 'skills'">
                 {% include'character_tab_skill.html.twig' %}
+            </div>
+
+            <div v-show="activeTab === 'sheet'">
+                {% include'character_tab_sheet.html.twig' %}
             </div>
         </div>
     </article>
@@ -88,6 +101,7 @@
 
                     character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
 
+                    playerName: '',
                     linkableSkillList: [],
                     skillFilter: '',
                 }
@@ -117,7 +131,7 @@
                             armouredCasting: !!(linkedSkill.armouredCasting ?? false)
                         }
                     }));
-                }
+                },
             },
             methods: {
                 saveCharacter(characterId) {
@@ -135,6 +149,13 @@
                         });
 
                     return false;
+                },
+
+                changePlayerName(sender) {
+                    if (sender.target.options.selectedIndex > -1) {
+                        this.playerName =
+                            sender.target.options[sender.target.options.selectedIndex].text;
+                    }
                 },
 
                 groupSkills(skills) {
@@ -232,6 +253,8 @@
                 this.character.linkedSkills.sort(
                     (left, right) => left.skillName.localeCompare(right.skillName)
                 );
+
+                this.changePlayerName({ target: this.$refs.playerSelect });
             }
         }).mount('.content');
     </script>

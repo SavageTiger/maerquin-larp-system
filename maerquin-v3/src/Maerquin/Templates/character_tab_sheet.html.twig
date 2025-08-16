@@ -1,0 +1,27 @@
+<div class="fixed-grid">
+    <div class="grid">
+        <div class="cell">
+            <h2>Personage</h2>
+            <table>
+                <tr>
+                    <td><b>Speler</b></td>
+                    <td>{{ '{{ playerName }}' }}</td>
+                </tr>
+
+                <tr v-if="character.title">
+                    <td><b>Titel</b></td>
+                    <td>{{ '{{ character.title }}' }}</td>
+                </tr>
+
+                <tr v-if="character.guild">
+                    <td><b>Gilde</b></td>
+                    <td>{{ '{{ character.guild }}' }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="cell">
+
+        </div>
+    </div>
+</div>

@@ -252,6 +252,21 @@
                     return sortedGroups;
                 },
 
+                getSkillName(skillId) {
+                    if (!skillId) {
+                        return '';
+                    }
+
+                    for (linkedSkill of this.linkableSkillList) {
+                        if (linkedSkill.skillId === skillId) {
+                            return linkedSkill.skillName;
+                        }
+                    }
+
+                    return skillId;
+                },
+
+
                 numbersOnly(sender, field, allowDot) {
                     const pattern = allowDot ? /[^\.0-9]/g : /[^0-9]/g;
 
@@ -335,6 +350,12 @@
                 this.character.linkedSkills.sort(
                     (left, right) => left.skillName.localeCompare(right.skillName)
                 );
+
+                axios.get(
+                    '/admin/skills/linkable/api?raceId=' + this.character.raceId
+                ).then((response) => {
+                    this.linkableSkillList = response.data.data ?? [];
+                });
             }
         }).mount('.content');
     </script>

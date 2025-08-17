@@ -159,6 +159,7 @@ class Skill
             'skillGroup' => $this->getSkillTypeName(),
             'skillGroupOrdering' => $this->getSkillTypeOrdering(),
             'maximumAmountBuyable' => $this->getMaximumAmountBuyable(),
+            'requiresParentSkill' => $this->getParentRequirementSkillId(),
             'points' => $points,
             'pointsSource' => $this->getPoints(),
         ];

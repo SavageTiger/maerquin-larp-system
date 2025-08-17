@@ -143,6 +143,8 @@ final readonly class CharacterWarning
      */
     private function checkExceedsPoints(Character $character): array
     {
+        $warnings = [];
+
         $eventsForCharacter = $this->eventRepository->findAllForCharacter($character->getId());
 
         $totalPoints = Character::BASE_XP;

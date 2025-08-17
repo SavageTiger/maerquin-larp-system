@@ -16,7 +16,10 @@ class PdfGeneratorFactory
         $fontDirs = $defaultConfig['fontDir'];
 
         $mpdf = new Mpdf([
-            'margin_top' => 8,
+            'margin_top' => 4,
+            'margin_left' => 4,
+            'margin_right' => 4,
+            'margin_bottiom' => 4,
             'tempDir' => sys_get_temp_dir(),
             'fontDir' => array_merge($fontDirs, [
                 __DIR__ . '/Fonts',

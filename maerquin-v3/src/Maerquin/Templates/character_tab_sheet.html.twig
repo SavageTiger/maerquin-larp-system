@@ -110,15 +110,16 @@
                 <span class="inner-box " v-for="(skillGroup, skillGroupName) in groupedLinkedSkills">
                     <h4 class="m-0">{{ '{{ skillGroupName }}' }}</h4>
 
-                    <table class="table is-fullwidth m-2">
+                    <table class="table is-fullwidth m-2" :data-caption="skillGroupName"
+                           :id="'skillsTable-' + skillGroupName">
                         <tr>
-                            <td width="8%"><b>Aantal</b></td>
+                            <td width="15%" class="has-text-right"><b>Aantal</b></td>
                             <td><b>Naam</b></td>
-                            <td><b>Kosten (punten)</b></td>
+                            <td width="20%" class="has-text-right"><b>Kosten</b></td>
                         </tr>
 
                         <tr v-for="linkedSkill in skillGroup.skills">
-                            <td>
+                            <td class="has-text-right">
                                 <span v-if="linkedSkill.buyableAmount > 1">
                                     {{ '{{ linkedSkill.numberOfTimes }}' }}x
                                 </span>
@@ -127,7 +128,7 @@
                                 </span>
                             </td>
                             <td>{{ '{{ linkedSkill.skillName }}' }}</td>
-                            <td>
+                            <td class="has-text-right">
                                 <b>{{ '{{ linkedSkill.points }}' }}
                                     <span v-if="linkedSkill.numberOfTimes > 1">
                                         ({{ '{{ linkedSkill.points * linkedSkill.numberOfTimes }}' }})
@@ -142,13 +143,13 @@
             </div>
             <div class="cell">
                 <h2>Evenementen</h2>
-                <table class="table is-fullwidth">
+                <table class="table is-fullwidth" id="eventsTable">
                     <tr>
                         <td>
-                            Naam
+                            <b>Naam</b>
                         </td>
-                        <td valign="right">
-                            Punten
+                        <td class="has-text-right">
+                            <b>Punten</b>
                         </td>
                     </tr>
 
@@ -156,11 +157,11 @@
                         <td>
                             {{ '{{ event.name }}' }}
                         </td>
-                        <td valign="right">
+                        <td class="has-text-right">
                             <b>{{ '{{ event.points }}' }}</b>
                         </td>
-
                     </tr>
+
                 </table>
             </div>
         </div>

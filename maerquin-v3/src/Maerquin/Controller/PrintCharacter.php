@@ -34,6 +34,8 @@ class PrintCharacter extends Action
             [
                 'characterTable' => $this->getTableContent($htmlDocument, 'characterTable'),
                 'backgroundTable' => $this->getTableContent($htmlDocument, 'backgroundTable'),
+                'skillsTable' => $this->getTableContent($htmlDocument, 'skillsTable'),
+                'eventsTable' => $this->getTableContent($htmlDocument, 'eventsTable'),
                 'now' => new DateTimeImmutable()->format('d-m-Y'),
             ],
         ));
@@ -52,13 +54,22 @@ class PrintCharacter extends Action
     {
         $tables = $htmlDocument->getElementsByTagName('table');
 
+        $content = '';
+
         /** @var DOMNode $table */
         foreach ($tables as $table) {
-            if ($table->attributes->getNamedItem('id')?->nodeValue === $tableName) {
-                return str_replace('<table', '<table colspan="10"', $htmlDocument->saveHTML($table));
+            $tableId = $table->attributes->getNamedItem('id')?->nodeValue;
+            $tableCaption = $table->attributes->getNamedItem('data-caption')?->nodeValue;
+
+            if (str_starts_with($tableId, $tableName) === true) {
+                if ($tableCaption !== null) {
+                    $content .= '<h2 class="caption">' . $tableCaption . '</h2>';
+                }
+
+                $content .= $htmlDocument->saveHTML($table);
             }
         }
 
-        return '';
+        return $content;
     }
 }

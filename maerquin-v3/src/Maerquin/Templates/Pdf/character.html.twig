@@ -6,12 +6,33 @@
     }
 
     td, th {
-        padding: 3;
+        padding: 3px;
         margin: 0;
+        font-size: 8pt;
     }
 
     tr:nth-child(even) {
         background-color: #f4efef;
+    }
+
+    .has-text-right {
+        text-align: right;
+    }
+
+    .caption {
+        border-bottom: 1px solid black;
+        text-align: center;
+        font-size: 9pt;
+        padding-top: 10px;
+        padding-bottom: 3px;
+        margin: 0;
+    }
+
+    .header {
+        font-size: 11pt;
+        padding-top: 5px;
+        padding-bottom: 3px;
+        margin: 0;
     }
 </style>
 
@@ -37,7 +58,7 @@
         </td>
 
         <td style="width: 49%; vertical-align: top;">
-            <h2>Personage</h2>
+            <h2 class="header">Personage</h2>
             <br/>
 
             {{ characterTable|raw }}
@@ -46,7 +67,7 @@
             &nbsp;
         </td>
         <td style="width: 49%; vertical-align: top;">
-            <h2>Achtergrond</h2>
+            <h2 class="header">Achtergrond</h2>
             <br/>
 
             {{ backgroundTable|raw }}
@@ -54,5 +75,14 @@
     </tr>
 </table>
 
+<hr/>
 
-{{ body|raw }}
+<div style="width: 49%; float: left;">
+    {{ skillsTable|raw }}
+</div>
+
+<div style="width: 50%; float: right;">
+    <h2 class="caption">Aanwezig op evenement</h2>
+
+    {{ eventsTable|raw }}
+</div>

@@ -35,6 +35,10 @@ class DoctrineConfig
 
         $this->config->enableNativeLazyObjects(true);
 
+        if (($_ENV['DEBUG'] === 'true') === false) {
+            $this->config->setQueryCache($cache);
+        }
+
         $this->connection = DriverManager::getConnection([
             'driver' => 'pdo_mysql',
             'host' => $_ENV['DATABASE_HOSTNAME'] ?? '',

@@ -198,14 +198,14 @@
                 },
 
                 totalPoints() {
-                    let totalPoints = 100;
+                    let totalPoints = {{ constant('SvenHK\\Maerquin\\Model\\Character::BASE_XP') }};
 
                     for (const event of this.presentAtEvents) {
                         totalPoints += event.points;
                     }
 
-                    if (totalPoints > 800) {
-                        return 800;
+                    if (totalPoints > {{ constant('SvenHK\\Maerquin\\Model\\Character::MAX_XP') }}) {
+                        return {{ constant('SvenHK\\Maerquin\\Model\\Character::MAX_XP') }};
                     }
 
                     return totalPoints;

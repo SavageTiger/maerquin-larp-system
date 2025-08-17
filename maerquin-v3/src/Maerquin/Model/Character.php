@@ -11,6 +11,9 @@ use SvenHK\Maerquin\Entity\Deity;
 
 class Character
 {
+    public const BASE_XP = 100;
+    public const MAX_XP = 800;
+
     protected UuidInterface $id;
     protected string $name;
     protected null | Deity $primaryDeity;
@@ -235,22 +238,28 @@ class Character
         return $this->race;
     }
 
-    public function hasSkill(Skill $skill): bool
+    public function hasSkill(Skill | string $skill): bool
     {
+        if (is_string($skill) === true) {
+            $skillId = $skill;
+        } else {
+            $skillId = $skill->getId();
+        }
+
         return array_find(
             $this->getSkills(),
-            fn(SkillLink $skillLink): bool => $skillLink->getSkill()->getId() === $skill->getId(),
+            fn(SkillLink $skillLink): bool => $skillLink->getSkill()->getId() === $skillId,
         ) !== null;
     }
 
-    /**
-     * @return array<int, SkillLink>
-     */
-    public function getAllLinkedSkillsForSkill(Skill $skill): array
+    public function spendPoints(): float
     {
-        return array_filter(
-            $this->getSkills(),
-            fn(SkillLink $skillLink): bool => $skillLink->getSkill()->getId() === $skill->getId(),
-        );
+        $spendPoints = 0;
+
+        foreach ($this->skills as $skillLink) {
+            $spendPoints += $skillLink->getPoints() * $skillLink->getAmount();
+        }
+
+        return $spendPoints;
     }
 }

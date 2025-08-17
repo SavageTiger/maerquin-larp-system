@@ -6,9 +6,13 @@ namespace SvenHK\Maerquin\Warning;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Entity\Race;
+use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\Character;
+use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
+use SvenHK\Maerquin\Repository\SkillRepository;
 
 final readonly class CharacterWarning
 {
@@ -22,11 +26,23 @@ final readonly class CharacterWarning
      */
     private EntityRepository $raceRepository;
 
+    /**
+     * @var SkillRepository
+     */
+    private EntityRepository $skillRepository;
+
+    /**
+     * @var EventRepository
+     */
+    private EntityRepository $eventRepository;
+
     public function __construct(
         EntityManager $entityManager,
         Character $character,
     ) {
         $this->raceRepository = $entityManager->getRepository(Race::class);
+        $this->skillRepository = $entityManager->getRepository(Skill::class);
+        $this->eventRepository = $entityManager->getRepository(Event::class);
 
         $this->warnings = $this->analyzeCharacter($character);
     }
@@ -39,7 +55,8 @@ final readonly class CharacterWarning
         return array_merge(
             $this->checkForbiddenSkills($character),
             $this->checkMandatorySkills($character),
-            $this->checkSkillCosts($character),
+            $this->checkSkillRequirements($character),
+            $this->checkExceedsPoints($character),
         );
     }
 
@@ -98,34 +115,55 @@ final readonly class CharacterWarning
     /**
      * @return array<int, string>
      */
-    private function checkSkillCosts(Character $character): array
+    private function checkSkillRequirements(Character $character): array
     {
         $warnings = [];
 
-        $differentCostSkillLinks = $this->raceRepository->findDifferentPointSkillsSortedForRace(
-            $character->getRace()->getId(),
-        );
+        foreach ($character->getSkills() as $linkedSkill) {
+            $requiredParentSkillId = $linkedSkill->getSkill()->getParentRequirementSkillId();
 
-        foreach ($differentCostSkillLinks as $differentCostSkillLink) {
-            $skill = $differentCostSkillLink->getSkill();
+            if ($requiredParentSkillId === null) {
+                continue;
+            }
 
-            $characterLinkedSkills = $character->getAllLinkedSkillsForSkill($skill);
-
-            foreach ($characterLinkedSkills as $linkedSkill) {
-                if ($linkedSkill->getPoints() > $differentCostSkillLink->getCustomPoints()) {
-                    $warnings[] = sprintf(
-                        'De skill "%s" heeft kosten "%s", maar kost voor een character met ras "%s" maximaal "%s".',
-                        $skill->getName(),
-                        $linkedSkill->getPoints(),
-                        $character->getRace()->getName(),
-                        $differentCostSkillLink->getCustomPoints(),
-                    );
-                }
+            if ($character->hasSkill($requiredParentSkillId) === false) {
+                $warnings[] = sprintf(
+                    'De skill "%s" vereist eerst "%s", maar die ontbreekt nog.',
+                    $linkedSkill->getSkill()->getName(),
+                    $this->skillRepository->getById($requiredParentSkillId)->getName(),
+                );
             }
         }
 
         return $warnings;
+    }
 
+    /**
+     * @return array<int, string>
+     */
+    private function checkExceedsPoints(Character $character): array
+    {
+        $eventsForCharacter = $this->eventRepository->findAllForCharacter($character->getId());
+
+        $totalPoints = Character::BASE_XP;
+
+        foreach ($eventsForCharacter as $presentAtEvent) {
+            $totalPoints += $presentAtEvent->getPoints();
+        }
+
+        if ($totalPoints > Character::MAX_XP) {
+            $totalPoints = Character::MAX_XP;
+        }
+
+        if ($character->spendPoints() > $totalPoints) {
+            $warnings[] = sprintf(
+                'Het karakter heeft niet genoeg punten: %s spendeerbaar, %s vereist.',
+                $totalPoints,
+                $character->spendPoints(),
+            );
+        }
+
+        return $warnings;
     }
 
     /**

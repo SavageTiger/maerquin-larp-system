@@ -15,10 +15,6 @@ use SvenHK\Maerquin\Pdf\PdfGeneratorFactory;
 
 class PrintCharacter extends Action
 {
-    public function __construct(private PdfGeneratorFactory $pdfFactory)
-    {
-    }
-
     public function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);

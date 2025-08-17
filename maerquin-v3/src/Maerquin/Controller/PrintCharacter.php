@@ -36,6 +36,7 @@ class PrintCharacter extends Action
                 'backgroundTable' => $this->getTableContent($htmlDocument, 'backgroundTable'),
                 'skillsTable' => $this->getTableContent($htmlDocument, 'skillsTable'),
                 'eventsTable' => $this->getTableContent($htmlDocument, 'eventsTable'),
+                'notesTable' => $this->getTableContent($htmlDocument, 'notesTable'),
                 'now' => new DateTimeImmutable()->format('d-m-Y'),
             ],
         ));

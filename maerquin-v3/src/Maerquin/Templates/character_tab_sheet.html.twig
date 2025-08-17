@@ -99,6 +99,15 @@
                     </tr>
                 {% endfor %}
             </table>
+            
+            <table class="table is-fullwidth" id="notesTable" v-if="character.notes">
+                <tr>
+                    <td class="header"><b>Aantekening</b></td>
+                </tr>
+                <tr>
+                    <td v-html="nl2br(character.notes)"></td>
+                </tr>
+            </table>
         </div>
     </div>
     <hr/>

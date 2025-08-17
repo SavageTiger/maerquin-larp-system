@@ -344,6 +344,10 @@
                         skillLink.numberOfTimes = 1;
                     }
                 },
+
+                nl2br(input) {
+                    return input.replace(/\n/, '<br />');
+                }
             },
 
             mounted() {

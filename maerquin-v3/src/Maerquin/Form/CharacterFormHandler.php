@@ -67,6 +67,7 @@ class CharacterFormHandler
     }
 
     public function handle(
+        bool $isNewCharacter,
         Character $character,
         CustomFieldCollection $customFields,
         Request $request,
@@ -115,7 +116,9 @@ class CharacterFormHandler
             $formResolver->getValue('occupation', 'character'),
             $formResolver->getValue('birthplace', 'character'),
             $formResolver->getValue('notes', 'character'),
-            $this->createLinkedSkillCollection($formResolver, $character),
+            $isNewCharacter === true ?
+                new SkillLinkCollection($character->getskills()) :
+                $this->createLinkedSkillCollection($formResolver, $character),
         );
 
         $this->characterRepository->save($character);
@@ -127,7 +130,7 @@ class CharacterFormHandler
     ): SkillLinkCollection {
         $buffer = [];
 
-        $linkedSkills = $formResolver->getValue('linkedSkills', 'character');
+        $linkedSkills = $formResolver->getValue('linkedSkills', 'character', 'invalid');
         $linkedSkills = json_decode($linkedSkills, true, 512, JSON_THROW_ON_ERROR);
 
         foreach ($linkedSkills as $linkedSkill) {

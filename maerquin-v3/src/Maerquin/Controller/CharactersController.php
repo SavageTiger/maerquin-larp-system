@@ -7,7 +7,6 @@ namespace SvenHK\Maerquin\Controller;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -19,6 +18,7 @@ use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Form\CharacterFormHandler;
+use SvenHK\Maerquin\Form\FormResolver;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\CustomFieldCollection;
 use SvenHK\Maerquin\Model\DeitiesCollection;
@@ -114,6 +114,7 @@ class CharactersController extends Action
 
         if ($this->request->getMethod() === 'POST') {
             $this->characterFormHandler->handle(
+                $this->isNewCharacter($character),
                 $character,
                 $customFields,
                 $this->request,
@@ -160,20 +161,36 @@ class CharactersController extends Action
         $character = $this->characterRepository->find($characterId);
 
         if ($character === null) {
-            $defaultRace = $this->raceRepository->findOneBy(['name' => 'Mens']) ??
-                throw new LogicException(
-                    'Make sure "Mens" race exists before creating a character',
-                );
-
             $character = Character::createWithDefaults(
                 $characterId,
-                $defaultRace,
+                $this->getRace(),
             );
         }
 
         Assert::isInstanceOf($character, Character::class);
 
         return $character;
+    }
+
+    private function getRace(): Race
+    {
+        $formResolver = FormResolver::createFromRequest($this->request);
+
+        $raceId = $formResolver->getValue('raceId', 'character', '');
+
+        if ($raceId !== '') {
+            return $this->raceRepository->getById($raceId);
+        }
+
+        return $this->raceRepository->findOneBy(['name' => 'Mens']) ??
+            throw new LogicException(
+                'Make sure "Mens" race exists before creating a character',
+            );
+    }
+
+    private function isNewCharacter(Character $character): bool
+    {
+        return $this->characterRepository->find($character->getId()) === null;
     }
 
     /**

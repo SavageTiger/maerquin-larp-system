@@ -46,6 +46,8 @@ class Character
 
         $character->updateWarnings([]);
 
+        $linkedSkills = [];
+
         foreach ($race->getMandatorySkills()->getSkills() as $mandatorySkill) {
             $linkedSkills[] = SkillLink::create(
                 skill: $mandatorySkill,

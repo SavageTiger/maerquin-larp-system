@@ -83,13 +83,15 @@
                 {% include'character_tab_basic.html.twig' %}
             </div>
 
-            <div v-show="activeTab === 'skills'">
-                {% include'character_tab_skill.html.twig' %}
-            </div>
+            {% if character.name %}
+                <div v-show="activeTab === 'skills'">
+                    {% include'character_tab_skill.html.twig' %}
+                </div>
 
-            <div v-show="activeTab === 'sheet'">
-                {% include'character_tab_sheet.html.twig' %}
-            </div>
+                <div v-show="activeTab === 'sheet'">
+                    {% include'character_tab_sheet.html.twig' %}
+                </div>
+            {% endif %}
         </div>
     </article>
 

@@ -1,0 +1,223 @@
+<div class="box inner-box is-shadowless">
+    <div class="grid">
+        <div class="cell">
+            <div class="field">
+                <label class="label">Soort</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="skillTypeId">
+                                        {% for skillType in skillTypes.serialize %}
+                                            <option value="{{ skillType.id }}"
+                                                    {% if skillType.id == skill.skillTypeId %}
+                                                        selected="selected"
+                                                    {% endif %}
+                                            >{{ skillType.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cell">
+            <div class="field">
+                <label class="label">Element / Geloof</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select name="deityElementId">
+                                    <option value="">(geen)</option>
+                                    <optgroup label="Geloof">
+                                        {% for deity in deities %}
+                                            <option value="{{ deity.id }}"
+                                                    {% if skill.deityId == deity.id %}
+                                                        selected="selected"
+                                                    {% endif %}
+                                            >{{ deity.name }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                    <optgroup label="Element">
+                                        {% for element in elements %}
+                                            <option value="{{ element.id }}"
+                                                    {% if skill.elementId == element.id %}
+                                                        selected="selected"
+                                                    {% endif %}
+                                            >{{ element.name }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="cell">
+            <div class="field">
+                <label class="label">Naam</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" name="name" type="text"
+                                   value="{{ skill.name }}" placeholder=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cell">
+            <div class="field">
+                <label class="label">Benodigde skill</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select name="requiredSkillId">
+                                    <option value="">(geen)</option>
+                                    {% for requiredSkill in skills %}
+                                        <option value="{{ requiredSkill.id }}"
+                                                {% if requiredSkill.id == skill.parentRequirementSkillId %}selected="selected"{% endif %}
+                                        >{{ requiredSkill.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box inner-box is-shadowless">
+    <div class="grid">
+        <div class="cell">
+            <div class="field">
+                <label class="label">Aantal keer aankoopbaar</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" name="maximumAmountBuyable" type="text"
+                                   value="{{ skill.maximumAmountBuyable }}" placeholder=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cell">
+            <div class="field">
+                <label class="label">Afstand</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" name="distance" type="text"
+                                   value="{{ skill.distance }}" placeholder=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid">
+        <div class="cell">
+            <div class="field">
+                <label class="label">Kosten (punten)</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" name="points" type="text"
+                                   value="{{ skill.points }}" placeholder=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cell">
+            <div class="field">
+                <label class="label">Duratie</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" name="duration" type="text"
+                                   value="{{ skill.duration }}" placeholder=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="cell">
+            <div class="field">
+                <label class="label">Niveau</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" name="level" type="text"
+                                   value="{{ skill.level }}" placeholder=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cell checkbox-group">
+            <div class="field">
+                <label class="checkbox">
+                    <input type="checkbox" name="isHidden"
+                           {% if skill.hidden %}checked="checked"{% endif %} />
+                    &nbsp;Verborgen
+                </label>
+            </div>
+            <div class="field">
+                <label class="checkbox">
+                    <input type="checkbox" name="isNotFreelyAvailable"
+                           {% if skill.isFreelyAvailable == false %}checked="checked"{% endif %}/>
+
+                    &nbsp;<b>Niet</b> vrij verkrijgbaar
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box inner-box is-shadowless">
+    <div class="grid">
+        <div class="cell">
+            <div class="field">
+                <label class="label">Omschrijving</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <textarea name="description" class="input">{{ skill.description }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cell">
+            <div class="field">
+                <label class="label">Opmerking</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <textarea name="remarks" class="input">{{ skill.remarks }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

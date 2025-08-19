@@ -13,7 +13,7 @@ class CharacterCollection
      */
     private array $characters;
 
-    public function __construct(array $characters)
+    public function __construct(Character ...$characters)
     {
         $this->characters = $characters;
     }
@@ -24,5 +24,13 @@ class CharacterCollection
             fn(Character $character) => $character->serialize($compact),
             $this->characters,
         );
+    }
+
+    /**
+     * @return Character[]
+     */
+    public function getAll(): array
+    {
+        return $this->characters;
     }
 }

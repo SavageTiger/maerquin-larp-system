@@ -1,0 +1,16 @@
+<div class="field card ml-5 mr-5 m-1 p-3">
+
+    {% if coupledCharacters.all|length == 0 %}
+        Geen
+    {% endif %}
+
+    {% for character in coupledCharacters.all %}
+
+        <div @click="navigateToCharacter('{{ character.id }}')">
+            <label class="is-clickable">
+                <i class="fa-solid fa-id-badge"></i> {{ character.name }}
+            </label>
+        </div>
+
+    {% endfor %}
+</div>

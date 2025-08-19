@@ -215,7 +215,7 @@ class CharactersController extends Action
             $this->getViewContext(),
             [
                 'characters' => new CharacterCollection(
-                    $this->characterRepository->findAllSorted(),
+                    ...$this->characterRepository->findAllSorted(),
                 ),
             ],
         );

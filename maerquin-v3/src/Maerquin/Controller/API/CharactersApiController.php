@@ -29,7 +29,9 @@ class CharactersApiController extends Action
         $compact = (($this->request->getQueryParams()['compact'] ?? '') === 'true');
 
         return $this->respondWithData(
-            new CharacterCollection($this->characterRepository->findAllSorted())->serialize(
+            new CharacterCollection(
+                ...$this->characterRepository->findAllSorted(),
+            )->serialize(
                 $compact,
             ),
         );

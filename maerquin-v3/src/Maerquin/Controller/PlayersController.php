@@ -62,7 +62,7 @@ class PlayersController extends Action
             [
                 'player' => $player,
                 'playerCharacters' => new CharacterCollection(
-                    $this->characterRepository->forPlayer($player->getId()),
+                    ...$this->characterRepository->forPlayer($player->getId()),
                 ),
                 'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],

@@ -11,13 +11,16 @@ use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
+use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Deity;
 use SvenHK\Maerquin\Entity\Element;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Entity\SkillType;
 use SvenHK\Maerquin\Form\SkillFormHandler;
+use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\SkillCollection;
 use SvenHK\Maerquin\Model\SkillTypeCollection;
+use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\ElementRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
@@ -29,6 +32,11 @@ class SkillsController extends Action
      * @var SkillRepository
      */
     private EntityRepository $skillRepository;
+
+    /**
+     * @var CharacterRepository
+     */
+    private EntityRepository $characterRepository;
 
     /**
      * @var SkillTypeRepository
@@ -50,6 +58,7 @@ class SkillsController extends Action
         EntityManager $entityManager,
     ) {
         $this->skillRepository = $entityManager->getRepository(Skill::class);
+        $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->skillTypeRepository = $entityManager->getRepository(SkillType::class);
         $this->deityRepository = $entityManager->getRepository(Deity::class);
         $this->elementRepository = $entityManager->getRepository(Element::class);
@@ -104,6 +113,9 @@ class SkillsController extends Action
                     'skill' => $this->getSkill($skillId),
                     'deities' => $this->deityRepository->findAllSorted(),
                     'elements' => $this->elementRepository->findAllSorted(),
+                    'coupledCharacters' => new CharacterCollection(
+                        ...$this->characterRepository->findAllCoupledToSkill((string)$skillId),
+                    ),
                     'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
                 ],
             ),

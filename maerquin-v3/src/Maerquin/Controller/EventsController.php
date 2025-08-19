@@ -82,7 +82,7 @@ class EventsController extends Action
             [
                 'event' => $event,
                 'characters' => new CharacterCollection(
-                    $this->characterRepository->findByEvent($eventId->toString()),
+                    ...$this->characterRepository->findByEvent($eventId->toString()),
                 ),
                 'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],

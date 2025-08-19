@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CharacterEventLink;
+use SvenHK\Maerquin\Entity\CharacterSkillLink;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Character as CharacterModel;
 use SvenHK\Maerquin\Warning\CharacterWarning;
@@ -52,6 +53,24 @@ class CharacterRepository extends EntityRepository
             ->where('cl.event = :eventId')
             ->orderBy('c.name')
             ->setParameter('eventId', $eventId);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Character[]
+     */
+    public function findAllCoupledToSkill(string $skillId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('c')
+            ->distinct()
+            ->from(Character::class, 'c')
+            ->leftJoin(CharacterSkillLink::class, 'sl', Join::WITH, 'c.id = sl.character')
+            ->where('sl.skill = :skillId')
+            ->orderBy('c.name')
+            ->setParameter('skillId', $skillId);
 
         return $qb->getQuery()->getResult();
     }

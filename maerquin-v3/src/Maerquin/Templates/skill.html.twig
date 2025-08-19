@@ -32,6 +32,27 @@
         </div>
         <div class="message-body">
 
+            <div class="tabs is-toggle is-fullwidth mr-6 ml-4">
+                <ul>
+                    <li :class="{ 'is-active': activeTab === 'settings' }">
+                        <a @click="activeTab = 'settings'">
+                            <span class="icon is-small">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                            </span>
+                            <span>Instellingen</span>
+                        </a>
+                    </li>
+
+                    <li :class="{ 'is-active': activeTab === 'coupledPlayers' }">
+                        <a @click="activeTab = 'coupledPlayers'">
+                            <span class="icon is-small">
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            </span>
+                            <span>Gekoppelde gebruikers</span>
+                        </a>
+                    </li>
+            </div>
+
             <div class="box inner-box is-shadowless">
                 <div class="grid">
                     <div class="cell">
@@ -260,6 +281,11 @@
 
     <script type="module">
         Vue.createApp({
+            data() {
+                return {
+                    activeTab: 'settings',
+                }
+            },
             methods: {
                 saveSkill(skillId) {
                     const skillForm = serializeForm('containerForm');

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 require 'vendor/autoload.php';
 require __DIR__ . '/app/load-env.php';
 
@@ -11,6 +13,9 @@ use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 
 $containerBuilder = new ContainerBuilder();
 
+$cache = require __DIR__ . '/app/cache.php';
+$cache($containerBuilder);
+
 $entityManager = require 'app/doctrine.php';
 $entityManager($containerBuilder);
 
@@ -19,5 +24,5 @@ $container = $containerBuilder->build();
 $entityManager = $container->get(EntityManager::class);
 
 ConsoleRunner::run(
-    new SingleManagerProvider($entityManager)
+    new SingleManagerProvider($entityManager),
 );

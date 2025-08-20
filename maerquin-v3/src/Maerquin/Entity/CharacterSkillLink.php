@@ -28,7 +28,7 @@ class CharacterSkillLink extends SkillLink
     protected float $points;
 
     #[ORM\Column(type: 'integer')]
-    protected int $amount;
+    protected int $numberOfTimes;
 
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $armouredCasting = false;

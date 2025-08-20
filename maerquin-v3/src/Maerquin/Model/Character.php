@@ -53,7 +53,7 @@ class Character
                 skill: $mandatorySkill,
                 character: $character,
                 points: $race->getCustomPointsForSkill($mandatorySkill),
-                amount: 1,
+                numberOfTimes: 1,
                 fastCasting: false,
                 armouredCasting: false,
             );
@@ -150,7 +150,7 @@ class Character
             $linkedSkills[] = array_merge(
                 $linkedSkill,
                 [
-                    'numberOfTimes' => $skillCoupling->getAmount(),
+                    'numberOfTimes' => $skillCoupling->getNumberOfTimes(),
                     'fastCasting' => $skillCoupling->hasFastCasting(),
                     'armouredCasting' => $skillCoupling->hasArmouredCasting(),
                     'buyableAmount' => $skillCoupling->getSkill()->getMaximumAmountBuyable(),
@@ -259,7 +259,7 @@ class Character
         $spendPoints = 0;
 
         foreach ($this->skills as $skillLink) {
-            $spendPoints += $skillLink->getPoints() * $skillLink->getAmount();
+            $spendPoints += $skillLink->getPoints() * $skillLink->getNumberOfTimes();
         }
 
         return $spendPoints;

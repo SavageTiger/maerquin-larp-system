@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
@@ -34,6 +35,13 @@ class SkillRepository extends EntityRepository
 
     public function save(SkillModel $skill): void
     {
+        /** @var CharacterRepository $characterRepository */
+        $characterRepository = $this->getEntityManager()->getRepository(Character::class);
+
+        foreach ($characterRepository->findAllCoupledToSkill($skill->getId()) as $characters) {
+            $characterRepository->save($characters);
+        }
+
         $this->getEntityManager()->persist($skill);
         $this->getEntityManager()->flush();
     }

@@ -89,7 +89,6 @@ class RaceRepository extends EntityRepository
     {
         /** @var CharacterRepository $characterRepository */
         $characterRepository = $this->getEntityManager()->getRepository(Character::class);
-        $characterRepository->findAllByRace($race->getId());
 
         foreach ($characterRepository->findAllByRace($race->getId()) as $characters) {
             $characterRepository->save($characters);

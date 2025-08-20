@@ -16,7 +16,7 @@ class SkillLink
     protected Skill $skill;
     protected Character $character;
     protected float $points;
-    protected int $amount;
+    protected int $numberOfTimes;
     protected bool $fastCasting;
     protected bool $armouredCasting;
 
@@ -24,7 +24,7 @@ class SkillLink
         Skill $skill,
         Character $character,
         float $points,
-        int $amount,
+        int $numberOfTimes,
         bool $fastCasting,
         bool $armouredCasting,
     ): CharacterSkillLink {
@@ -33,7 +33,7 @@ class SkillLink
         $skillLink->skill = $skill;
         $skillLink->character = $character;
         $skillLink->points = $points;
-        $skillLink->amount = $amount;
+        $skillLink->numberOfTimes = $numberOfTimes;
         $skillLink->fastCasting = $fastCasting;
         $skillLink->armouredCasting = $armouredCasting;
 
@@ -55,9 +55,9 @@ class SkillLink
         return $this->points;
     }
 
-    public function getAmount(): int
+    public function getNumberOfTimes(): int
     {
-        return $this->amount;
+        return $this->numberOfTimes;
     }
 
     public function hasFastCasting(): bool

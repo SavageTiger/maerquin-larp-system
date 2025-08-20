@@ -57,6 +57,7 @@ final readonly class CharacterWarning
             $this->checkMandatorySkills($character),
             $this->checkSkillRequirements($character),
             $this->checkExceedsPoints($character),
+            $this->checkExceedsBoughtSkills($character),
         );
     }
 
@@ -163,6 +164,43 @@ final readonly class CharacterWarning
                 $totalPoints,
                 $character->spendPoints(),
             );
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function checkExceedsBoughtSkills(Character $character)
+    {
+        $warnings = [];
+
+        $boughtSkillCount = [];
+        $allowedAmount = [];
+
+        foreach ($character->getSkills() as $skillLink) {
+            $skillId = $skillLink->getSkill()->getId();
+
+            if (isset($boughtSkillCount[$skillId]) === false) {
+                $boughtSkillCount[$skillId] = 0;
+
+                $allowedAmount[$skillId] =
+                    $skillLink->getSkill()->getMaximumAmountBuyable();
+            }
+
+            $boughtSkillCount[$skillId] += $skillLink->getNumberOfTimes();
+        }
+
+        foreach ($boughtSkillCount as $skillId => $amountBought) {
+            if ($amountBought > $allowedAmount[$skillId]) {
+                $warnings[] = sprintf(
+                    'De skill ‘%s’ is %d× aangeschaft; toegestaan maximum is %d.',
+                    $this->skillRepository->getById($skillId)->getName(),
+                    $amountBought,
+                    $allowedAmount[$skillId],
+                );
+            }
         }
 
         return $warnings;

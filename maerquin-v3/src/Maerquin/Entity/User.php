@@ -26,6 +26,12 @@ class User extends UserModel
     #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
 
+    #[ORM\OneToOne(
+        targetEntity: Player::class,
+    )]
+    #[ORM\JoinColumn(name: 'player_id', referencedColumnName: 'id')]
+    protected Player $player;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected null | string $rememberToken;
 }

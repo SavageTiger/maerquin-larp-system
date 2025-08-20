@@ -29,7 +29,11 @@ class User extends UserModel
     #[ORM\OneToOne(
         targetEntity: Player::class,
     )]
-    #[ORM\JoinColumn(name: 'player_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(
+        name: 'player_id',
+        referencedColumnName: 'id',
+        nullable: false,
+    )]
     protected Player $player;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

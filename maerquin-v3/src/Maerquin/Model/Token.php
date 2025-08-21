@@ -7,12 +7,13 @@ namespace SvenHK\Maerquin\Model;
 use DateTimeImmutable;
 use Exception;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class Token
 {
     public const string TYPE_REMEMBER_ME = 'REMEMBER_ME';
 
-    protected string $id;
+    protected UuidInterface $id;
     protected User $user;
     protected string $type;
     protected string $value;

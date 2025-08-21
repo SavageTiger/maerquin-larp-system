@@ -6,20 +6,27 @@ namespace SvenHK\Maerquin\Entity;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Token as TokenModel;
 use SvenHK\Maerquin\Model\User as UserModel;
 use SvenHK\Maerquin\Repository\TokenRepository;
 
+#[ORM\Table(name: '`Token`')]
 #[ORM\Entity(repositoryClass: TokenRepository::class)]
 class Token extends TokenModel
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME)]
-    protected string $id;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    protected UuidInterface $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(
+        targetEntity: User::class,
+    )]
+    #[ORM\JoinColumn(
+        name: 'user_id',
+        referencedColumnName: 'id',
+        nullable: false,
+    )]
     protected UserModel $user;
 
     #[ORM\Column(type: 'string', length: 16)]

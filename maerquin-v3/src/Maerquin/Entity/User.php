@@ -35,7 +35,4 @@ class User extends UserModel
         nullable: false,
     )]
     protected Player $player;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected null | string $rememberToken;
 }

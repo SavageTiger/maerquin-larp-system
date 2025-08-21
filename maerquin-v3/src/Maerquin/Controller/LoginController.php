@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
+use SvenHK\Maerquin\Entity\Token;
 use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Form\FormResolver;
+use SvenHK\Maerquin\Repository\TokenRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
 use SvenHK\Maerquin\Session\Session;
 
@@ -23,11 +25,17 @@ class LoginController extends Action
      */
     private EntityRepository $userRepository;
 
+    /**
+     * @var TokenRepository
+     */
+    private EntityRepository $tokenRepository;
+
     public function __construct(
         private Session $session,
         EntityManager $entityManager,
     ) {
         $this->userRepository = $entityManager->getRepository(User::class);
+        $this->tokenRepository = $entityManager->getRepository(Token::class);
     }
 
     public function action(): ResponseInterface
@@ -82,13 +90,13 @@ class LoginController extends Action
 
     private function getRememberMeToken(string $username): string
     {
-        $user = $this->userRepository->findByUsername($username);
+        $token = Token::generateForUser(
+            $this->userRepository->findByUsername($username),
+        );
 
-        $rememberMeToken = $user->generateRememberToken();
+        $this->tokenRepository->save($token);
 
-        $this->userRepository->save($user);
-
-        return $rememberMeToken;
+        return $token->getUnhashedValue();
     }
 
     private function loginRememberMeCookie(): bool
@@ -99,14 +107,14 @@ class LoginController extends Action
             return false;
         }
 
-        $user = $this->userRepository->findByValidRememberMeToken($rememberMeToken);
+        $rememberMeToken = $this->tokenRepository->findByCookieValue($rememberMeToken);
 
-        if ($user === null) {
-            return false;
+        if ($rememberMeToken !== null && $rememberMeToken->isValid() === true) {
+            $this->session->setUser($rememberMeToken->getUser());
+
+            return true;
         }
 
-        $this->session->setUser($user);
-
-        return true;
+        return false;
     }
 }

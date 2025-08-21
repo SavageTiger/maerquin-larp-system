@@ -40,19 +40,6 @@ class User extends FrameworkUser
         return hash_equals(base64_decode($this->hash), $derivedHash);
     }
 
-    public function generateRememberToken(): string
-    {
-        $rememberToken = sprintf(
-            '%s:%s',
-            time(),
-            hash('sha256', random_bytes(1_024 * 2)),
-        );
-
-        $this->rememberToken = hash('sha256', $rememberToken);
-
-        return $rememberToken;
-    }
-
     public function isAdmin(): bool
     {
         return true;

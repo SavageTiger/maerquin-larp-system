@@ -25,18 +25,4 @@ class UserRepository extends EntityRepository
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-
-    public function findByValidRememberMeToken(string $rememberMeToken): null | User
-    {
-        $hashedToken = hash('sha256', $rememberMeToken);
-
-        $rememberMeTokenParts = explode(':', $rememberMeToken);
-        $rememberMeTokenTime = (int)$rememberMeTokenParts[0] ?? 0;
-
-        if (time() - (60 * 60 * 24 * 30) < $rememberMeTokenTime) {
-            return $this->findOneBy(['rememberToken' => $hashedToken]);
-        }
-
-        return null;
-    }
 }

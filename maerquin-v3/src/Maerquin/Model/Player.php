@@ -12,6 +12,7 @@ class Player
 {
     protected UuidInterface $id;
     protected string $name;
+    protected string $email;
     protected Collection $characters;
 
     public static function create(UuidInterface $id): self
@@ -19,9 +20,10 @@ class Player
         return new PlayerEntity($id);
     }
 
-    public function updatePlayer(string $name): void
+    public function updatePlayer(string $name, string $email): void
     {
         $this->name = $name;
+        $this->email = $email;
     }
 
     public function serialize(bool $compact)
@@ -48,5 +50,10 @@ class Player
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 }

@@ -33,7 +33,10 @@ class PlayerFormHandler
             $name = '(Naamloos)';
         }
 
-        $player->updatePlayer($name);
+        $player->updatePlayer(
+            $name,
+            $formResolver->getValue('email', 'player'),
+        );
 
         $this->playerRepository->save($player);
     }

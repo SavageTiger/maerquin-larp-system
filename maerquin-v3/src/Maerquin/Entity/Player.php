@@ -20,7 +20,10 @@ class Player extends PlayerModel
     protected UuidInterface $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected string $name;
+    protected string $name = '';
+
+    #[ORM\Column(type: 'string', length: 255)]
+    protected string $email = '';
 
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'player')]
     protected Collection $characters;
@@ -29,6 +32,5 @@ class Player extends PlayerModel
     {
         $this->id = $id;
         $this->characters = new ArrayCollection();
-        $this->name = '';
     }
 }

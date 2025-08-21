@@ -19,7 +19,7 @@ class Token extends TokenModel
     #[ORM\Column(type: 'uuid', unique: true)]
     protected UuidInterface $id;
 
-    #[ORM\OneToOne(
+    #[ORM\ManyToOne(
         targetEntity: User::class,
     )]
     #[ORM\JoinColumn(

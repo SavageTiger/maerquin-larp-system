@@ -84,8 +84,34 @@
                 </div>
             </article>
         </div>
-
     </div>
+
+    {% if player.name %}
+        <div class="columns is-gapless">
+            <div class="column is-12">
+                <article class="message is-dark">
+                    <div class="message-header">
+                        Account
+                    </div>
+                    <div class="message-body">
+
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Actief</label>
+                            </div>
+                            <div class="field-body mt-1">
+                                {% if account %}
+                                    <font color="green"><b>Beheerder</b></font>
+                                {% else %}
+                                    Nee
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    {% endif %}
 
     <script type="module">
         Vue.createApp({

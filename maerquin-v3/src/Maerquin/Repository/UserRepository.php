@@ -20,6 +20,11 @@ class UserRepository extends EntityRepository
         return $this->findOneBy(['username' => $username]);
     }
 
+    public function findByPlayer(string $playerId): null | User
+    {
+        return $this->findOneBy(['player' => $playerId]);
+    }
+
     public function save(UserModel $user): void
     {
         $this->getEntityManager()->persist($user);

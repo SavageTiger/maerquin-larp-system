@@ -13,15 +13,31 @@ use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Player as PlayerEntity;
+use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Form\PlayerFormHandler;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\Player;
 use SvenHK\Maerquin\Model\PlayerCollection;
+use SvenHK\Maerquin\Repository\CharacterRepository;
+use SvenHK\Maerquin\Repository\PlayerRepository;
+use SvenHK\Maerquin\Repository\UserRepository;
 
 class PlayersController extends Action
 {
+    /**
+     * @var PlayerRepository
+     */
     private EntityRepository $playerRepository;
+
+    /**
+     * @var CharacterRepository
+     */
     private EntityRepository $characterRepository;
+
+    /**
+     * @var UserRepository
+     */
+    private EntityRepository $userRepository;
 
     public function __construct(
         EntityManager $entityManager,
@@ -29,6 +45,7 @@ class PlayersController extends Action
     ) {
         $this->playerRepository = $entityManager->getRepository(PlayerEntity::class);
         $this->characterRepository = $entityManager->getRepository(Character::class);
+        $this->userRepository = $entityManager->getRepository(User::class);
     }
 
     public function action(): ResponseInterface
@@ -56,11 +73,14 @@ class PlayersController extends Action
             $this->formHandler->handle($player, $this->request);
         }
 
+        $account = $this->userRepository->findByPlayer($player->getId());
+
         return $view->render(
             $this->response,
             'player.html.twig',
             [
                 'player' => $player,
+                'account' => $account,
                 'playerCharacters' => new CharacterCollection(
                     ...$this->characterRepository->forPlayer($player->getId()),
                 ),

@@ -30,7 +30,7 @@ class DoctrineConfig
         $this->config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [__DIR__ . '/../src/' . ($_ENV['PROJECT_NAME'] ?? 'None') . '/Entity'],
             isDevMode: $_ENV['DEBUG'] === 'true',
-            cache: $cache,
+            // cache: $cache,
         );
 
         $this->config->enableNativeLazyObjects(true);

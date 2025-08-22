@@ -172,7 +172,7 @@ final readonly class CharacterWarning
     /**
      * @return array<int, string>
      */
-    private function checkExceedsBoughtSkills(Character $character)
+    private function checkExceedsBoughtSkills(Character $character): array
     {
         $warnings = [];
 

@@ -25,12 +25,12 @@ class EventFormHandler
     /**
      * @var EventRepository
      */
-    private EntityRepository $eventRepository;
+    private readonly EntityRepository $eventRepository;
 
     /**
      * @var CharacterRepository
      */
-    private EntityRepository $characterRepository;
+    private readonly EntityRepository $characterRepository;
 
     public function __construct(EntityManager $entityManager)
     {

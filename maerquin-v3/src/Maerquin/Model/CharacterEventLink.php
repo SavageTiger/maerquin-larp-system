@@ -13,19 +13,13 @@ use SvenHK\Maerquin\Entity\Event;
 class CharacterEventLink
 {
     protected UuidInterface $id;
-    protected Character $character;
-    protected Event $event;
-    protected int $points;
 
     private function __construct(
-        Event $event,
-        int $points,
-        Character $character,
+        protected Event $event,
+        protected int $points,
+        protected Character $character,
     ) {
         $this->id = Uuid::uuid4();
-        $this->event = $event;
-        $this->character = $character;
-        $this->points = $points;
     }
 
     public static function createEventAndCharacter(

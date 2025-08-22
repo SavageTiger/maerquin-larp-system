@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller\API;
 
+use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -21,12 +22,12 @@ class LinkableSkillsApiController extends Action
     /**
      * @var SkillRepository
      */
-    private EntityRepository $skillRepository;
+    private readonly EntityRepository $skillRepository;
 
     /**
      * @var RaceRepository
      */
-    private EntityRepository $raceRepository;
+    private readonly EntityRepository $raceRepository;
 
     public function __construct(EntityManager $entityManager)
     {
@@ -34,7 +35,8 @@ class LinkableSkillsApiController extends Action
         $this->raceRepository = $entityManager->getRepository(Race::class);
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         $buffer = [];
 

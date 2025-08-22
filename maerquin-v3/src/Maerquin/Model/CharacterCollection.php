@@ -11,7 +11,7 @@ class CharacterCollection
     /**
      * @var Character[]
      */
-    private array $characters;
+    private readonly array $characters;
 
     public function __construct(Character ...$characters)
     {
@@ -21,7 +21,7 @@ class CharacterCollection
     public function serialize(bool $compact): array
     {
         return array_map(
-            fn(Character $character) => $character->serialize($compact),
+            fn(Character $character): array => $character->serialize($compact),
             $this->characters,
         );
     }

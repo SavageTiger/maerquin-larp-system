@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class FormResolver
 {
-    private function __construct(private Request $request)
+    private function __construct(private readonly Request $request)
     {
     }
 

@@ -6,20 +6,19 @@ namespace SvenHK\Maerquin\Model;
 
 class DeitiesCollection
 {
-    /**
-     * @var Deity[]
-     */
-    private array $deities;
-
-    public function __construct(array $deities)
+    public function __construct(
+        /**
+         * @var Deity[]
+         */
+        private readonly array $deities
+    )
     {
-        $this->deities = $deities;
     }
 
     public function serialize(): array
     {
         return array_map(
-            fn(Deity $deity) => $deity->serialize(),
+            fn(Deity $deity): array => $deity->serialize(),
             $this->deities,
         );
     }

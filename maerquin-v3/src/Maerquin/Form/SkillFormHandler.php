@@ -23,22 +23,22 @@ class SkillFormHandler
     /**
      * @var SkillRepository
      */
-    private EntityRepository $skillRepository;
+    private readonly EntityRepository $skillRepository;
 
     /**
      * @var SkillTypeRepository
      */
-    private EntityRepository $skillTypeRepository;
+    private readonly EntityRepository $skillTypeRepository;
 
     /**
      * @var DeityRepository
      */
-    private EntityRepository $deityRepository;
+    private readonly EntityRepository $deityRepository;
 
     /**
      * @var ElementRepository
      */
-    private EntityRepository $elementRepository;
+    private readonly EntityRepository $elementRepository;
 
     public function __construct(EntityManager $entityManager)
     {

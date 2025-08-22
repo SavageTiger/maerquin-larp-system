@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
+use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -23,7 +24,7 @@ class RacesController extends Action
     /**
      * @var RaceRepository
      */
-    private EntityRepository $raceRepository;
+    private readonly EntityRepository $raceRepository;
 
     public function __construct(
         private readonly RaceFormHandler $raceFormHandler,
@@ -32,7 +33,8 @@ class RacesController extends Action
         $this->raceRepository = $entityManager->getRepository(Race::class);
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         $raceId = (string)($this->request->getAttribute('raceId') ?? '');
 
@@ -59,7 +61,7 @@ class RacesController extends Action
         $race = $this->raceRepository->findById($raceId->toString());
 
         if ($race === null) {
-            $race = RaceModel::create(
+            return RaceModel::create(
                 raceId: $raceId,
             );
         }

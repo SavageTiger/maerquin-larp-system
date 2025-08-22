@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
+use Override;
 use App\Application\Actions\Action;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
@@ -18,7 +19,8 @@ class HomeController extends Action
     ) {
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         if ($this->session->getUser()->isAnonymous() === true) {
             return $this->redirectTo('/login.html');

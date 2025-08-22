@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
+use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -27,28 +28,29 @@ class PlayersController extends Action
     /**
      * @var PlayerRepository
      */
-    private EntityRepository $playerRepository;
+    private readonly EntityRepository $playerRepository;
 
     /**
      * @var CharacterRepository
      */
-    private EntityRepository $characterRepository;
+    private readonly EntityRepository $characterRepository;
 
     /**
      * @var UserRepository
      */
-    private EntityRepository $userRepository;
+    private readonly EntityRepository $userRepository;
 
     public function __construct(
         EntityManager $entityManager,
-        private PlayerFormHandler $formHandler,
+        private readonly PlayerFormHandler $formHandler,
     ) {
         $this->playerRepository = $entityManager->getRepository(PlayerEntity::class);
         $this->characterRepository = $entityManager->getRepository(Character::class);
         $this->userRepository = $entityManager->getRepository(User::class);
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         $userId = $this->request->getAttribute('userId');
 
@@ -94,7 +96,7 @@ class PlayersController extends Action
         $player = $this->playerRepository->find($userId->toString());
 
         if ($player === null) {
-            $player = Player::create($userId);
+            return Player::create($userId);
         }
 
         return $player;

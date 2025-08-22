@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
+use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -24,12 +25,12 @@ class EventsController extends Action
     /**
      * @var EventRepository
      */
-    private EntityRepository $eventRepository;
+    private readonly EntityRepository $eventRepository;
 
     /**
      * @var CharacterRepository
      */
-    private EntityRepository $characterRepository;
+    private readonly EntityRepository $characterRepository;
 
     public function __construct(
         private readonly EventFormHandler $eventFormHandler,
@@ -39,7 +40,8 @@ class EventsController extends Action
         $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
@@ -66,7 +68,7 @@ class EventsController extends Action
         $event = $this->eventRepository->find($eventId->toString());
 
         if ($event === null) {
-            $event = Event::create($eventId);
+            return Event::create($eventId);
         }
 
         return $event;

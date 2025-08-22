@@ -20,12 +20,12 @@ class RaceFormHandler
     /**
      * @var RaceRepository
      */
-    private EntityRepository $raceRepository;
+    private readonly EntityRepository $raceRepository;
 
     /**
      * @var SkillRepository
      */
-    private EntityRepository $skillRepository;
+    private readonly EntityRepository $skillRepository;
 
     public function __construct(EntityManager $entityManager)
     {

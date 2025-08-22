@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Session;
 
+use Override;
 use App\Application\Session\Session as FrameworkSession;
 use App\Domain\Entity\User as FrameworkUser;
 use Doctrine\ORM\EntityManager;
@@ -17,13 +18,14 @@ class Session implements FrameworkSession
     /**
      * @var UserRepository
      */
-    private EntityRepository $userRepository;
+    private readonly EntityRepository $userRepository;
 
     public function __construct(EntityManager $entityManager)
     {
         $this->userRepository = $entityManager->getRepository(User::class);
     }
 
+    #[Override]
     public function setUser(FrameworkUser $user): void
     {
         $this->write('userId', $user->getId());
@@ -34,6 +36,7 @@ class Session implements FrameworkSession
         $_SESSION[$key] = $value;
     }
 
+    #[Override]
     public function getUser(): FrameworkUser
     {
         $user = $this->userRepository->findById($this->read('userId', ''));

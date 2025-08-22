@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
+use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -38,7 +39,8 @@ class LoginController extends Action
         $this->tokenRepository = $entityManager->getRepository(Token::class);
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
         $form = FormResolver::createFromRequest($this->request);

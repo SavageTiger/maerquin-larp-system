@@ -29,32 +29,32 @@ class CharacterFormHandler
     /**
      * @var CharacterRepository
      */
-    private EntityRepository $characterRepository;
+    private readonly EntityRepository $characterRepository;
 
     /**
      * @var SkillRepository
      */
-    private EntityRepository $skillRepository;
+    private readonly EntityRepository $skillRepository;
 
     /**
      * @var PlayerRepository
      */
-    private EntityRepository $playerRepository;
+    private readonly EntityRepository $playerRepository;
 
     /**
      * @var RaceRepository
      */
-    private EntityRepository $raceRepository;
+    private readonly EntityRepository $raceRepository;
 
     /**
      * @var DeityRepository
      */
-    private EntityRepository $deityRepository;
+    private readonly EntityRepository $deityRepository;
 
     /**
      * @var CustomFieldRepository
      */
-    private EntityRepository $customFieldRepository;
+    private readonly EntityRepository $customFieldRepository;
 
     public function __construct(EntityManager $entityManager)
     {
@@ -71,7 +71,7 @@ class CharacterFormHandler
         Character $character,
         CustomFieldCollection $customFields,
         Request $request,
-    ): void {
+    ) : void {
         $formResolver = FormResolver::createFromRequest($request);
 
         $player = $this->playerRepository->find(
@@ -127,7 +127,7 @@ class CharacterFormHandler
     private function createLinkedSkillCollection(
         FormResolver $formResolver,
         Character $character,
-    ): SkillLinkCollection {
+    ) : SkillLinkCollection {
         $buffer = [];
 
         $linkedSkills = $formResolver->getValue('linkedSkills', 'character', 'invalid');

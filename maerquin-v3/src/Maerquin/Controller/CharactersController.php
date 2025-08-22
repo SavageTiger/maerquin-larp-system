@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
+use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -38,32 +39,32 @@ class CharactersController extends Action
     /**
      * @var CharacterRepository
      */
-    private EntityRepository $characterRepository;
+    private readonly EntityRepository $characterRepository;
 
     /**
      * @var EventRepository
      */
-    private EntityRepository $eventRepository;
+    private readonly EntityRepository $eventRepository;
 
     /**
      * @var DeityRepository
      */
-    private EntityRepository $deityRepository;
+    private readonly EntityRepository $deityRepository;
 
     /**
      * @var PlayerRepository
      */
-    private EntityRepository $playerRepository;
+    private readonly EntityRepository $playerRepository;
 
     /**
      * @var RaceRepository
      */
-    private EntityRepository $raceRepository;
+    private readonly EntityRepository $raceRepository;
 
     /**
      * @var CustomFieldRepository
      */
-    private EntityRepository $customFieldRepository;
+    private readonly EntityRepository $customFieldRepository;
 
     public function __construct(
         EntityManager $entityManager,
@@ -77,7 +78,8 @@ class CharactersController extends Action
         $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
     }
 
-    public function action(): ResponseInterface
+    #[Override]
+    protected function action(): ResponseInterface
     {
         $characterId = (string)($this->request->getAttribute('characterId') ?? '');
 

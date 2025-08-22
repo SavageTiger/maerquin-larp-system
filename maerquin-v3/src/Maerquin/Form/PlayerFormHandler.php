@@ -16,7 +16,7 @@ class PlayerFormHandler
     /**
      * @var PlayerRepository
      */
-    private EntityRepository $playerRepository;
+    private readonly EntityRepository $playerRepository;
 
     public function __construct(EntityManager $entityManager)
     {

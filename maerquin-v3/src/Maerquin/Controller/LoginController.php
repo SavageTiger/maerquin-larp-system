@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
-use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Token;
@@ -85,9 +85,18 @@ class LoginController extends Action
             return 'Password incorrect';
         }
 
-        $this->session->setUser($user);
+        $this->loginUser($user);
 
         return false;
+    }
+
+    private function loginUser(User $user): void
+    {
+        $this->session->setUser($user);
+
+        $user->loggedIn();
+
+        $this->userRepository->save($user);
     }
 
     private function getRememberMeToken(string $username): string
@@ -112,7 +121,7 @@ class LoginController extends Action
         $rememberMeToken = $this->tokenRepository->findByCookieValue($rememberMeToken);
 
         if ($rememberMeToken !== null && $rememberMeToken->isValid() === true) {
-            $this->session->setUser($rememberMeToken->getUser());
+            $this->loginUser($rememberMeToken->getUser());
 
             return true;
         }

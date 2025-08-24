@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Model;
 
 use App\Domain\Entity\User as FrameworkUser;
+use DateTimeImmutable;
 use Ramsey\Uuid\UuidInterface;
 
 class User extends FrameworkUser
 {
     protected UuidInterface $id;
     protected string $username;
-    protected null | string $rememberToken;
+    protected DateTimeImmutable $lastLogin;
 
     public function getId(): string
     {
@@ -38,6 +39,11 @@ class User extends FrameworkUser
         );
 
         return hash_equals(base64_decode($this->hash), $derivedHash);
+    }
+
+    public function loggedIn(): void
+    {
+        $this->lastLogin = new DateTimeImmutable();
     }
 
     public function isAdmin(): bool

@@ -17,6 +17,10 @@ class UserRepository extends EntityRepository
 
     public function findByUsername(string $username): null | User
     {
+        if (strlen(trim($username)) === 0) {
+            return null;
+        }
+
         return $this->findOneBy(['username' => $username]);
     }
 

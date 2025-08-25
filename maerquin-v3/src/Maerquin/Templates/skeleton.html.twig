@@ -10,32 +10,35 @@
 
         <div class="navbar-menu">
             <div class="navbar-start">
-                <a href="/admin/players.html"
-                   class="navbar-item {% if 'player' in current_url() %}is-active{% endif %}">
-                    <i class="fa-solid fa-user-group"></i> Spelers
-                </a>
+                {% if getUser().isAdmin %}
+                    <a href="/admin/players.html"
+                       class="navbar-item {% if 'player' in current_url() %}is-active{% endif %}">
+                        <i class="fa-solid fa-user-group"></i> Spelers
+                    </a>
 
-                <a href="/admin/characters.html"
-                   class="navbar-item {% if 'character' in current_url() %}is-active{% endif %}">
-                    <i class="fa-solid fa-hat-wizard"></i> Karakters
-                </a>
+                    <a href="/admin/characters.html"
+                       class="navbar-item {% if 'character' in current_url() %}is-active{% endif %}">
+                        <i class="fa-solid fa-hat-wizard"></i> Karakters
+                    </a>
 
-                <a href="/admin/events.html"
-                   class="navbar-item {% if 'event' in current_url() %}is-active{% endif %}">
-                    <i class="fa-regular fa-calendar-days"></i> Evenementen
-                </a>
+                    <a href="/admin/events.html"
+                       class="navbar-item {% if 'event' in current_url() %}is-active{% endif %}">
+                        <i class="fa-regular fa-calendar-days"></i> Evenementen
+                    </a>
 
-                <a href="/admin/skills.html"
-                   class="navbar-item {% if 'skills' in current_url() %}is-active{% endif %}">
-                    <i class="fa-solid fa-scroll"></i> Skills
-                </a>
+                    <a href="/admin/skills.html"
+                       class="navbar-item {% if 'skills' in current_url() %}is-active{% endif %}">
+                        <i class="fa-solid fa-scroll"></i> Skills
+                    </a>
 
-                <a href="/admin/races.html"
-                   class="navbar-item {% if 'races' in current_url() %}is-active{% endif %}">
-                    <i class="fa-solid fa-hand-spock"></i> Rassen
-                </a>
+                    <a href="/admin/races.html"
+                       class="navbar-item {% if 'races' in current_url() %}is-active{% endif %}">
+                        <i class="fa-solid fa-hand-spock"></i> Rassen
+                    </a>
+                {% endif %}
             </div>
-            <a href="/admin/logout.html"
+
+            <a href="/logout.html"
                class="navbar-item is-pulled-right">
                 <i class="fa-solid fa-door-open"></i> Uitloggen ({{ getUser().username|capitalize }})
             </a>

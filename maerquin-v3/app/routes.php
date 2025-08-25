@@ -29,7 +29,7 @@ return function (App $app): void {
     $app->get('/login.html', LoginController::class);
     $app->post('/login.html', LoginController::class);
 
-    $app->get('/admin/logout.html', LogoutController::class);
+    $app->get('/logout.html', LogoutController::class);
 
     $app->get('/admin/characters.html', CharactersController::class);
     $app->get('/admin/characters/create.html', CharactersController::class);

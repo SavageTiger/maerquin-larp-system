@@ -13,6 +13,7 @@ class User extends FrameworkUser
     protected UuidInterface $id;
     protected string $username;
     protected DateTimeImmutable $lastLogin;
+    protected bool $admin;
 
     public function getId(): string
     {
@@ -41,6 +42,16 @@ class User extends FrameworkUser
         return hash_equals(base64_decode($this->hash), $derivedHash);
     }
 
+    public function getName(): string
+    {
+        return $this->username;
+    }
+
+    public function getLastLogin(): DateTimeImmutable
+    {
+        return $this->lastLogin;
+    }
+
     public function loggedIn(): void
     {
         $this->lastLogin = new DateTimeImmutable();
@@ -48,7 +59,17 @@ class User extends FrameworkUser
 
     public function isAdmin(): bool
     {
-        return true;
+        return $this->admin;
+    }
+
+    public function promote(): void
+    {
+        $this->admin = true;
+    }
+
+    public function demote(): void
+    {
+        $this->admin = false;
     }
 
     public function isAnonymous(): bool

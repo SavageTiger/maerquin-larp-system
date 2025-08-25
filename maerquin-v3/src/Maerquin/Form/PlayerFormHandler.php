@@ -8,8 +8,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Repository\PlayerRepository;
+use SvenHK\Maerquin\Repository\UserRepository;
 
 class PlayerFormHandler
 {
@@ -18,8 +20,14 @@ class PlayerFormHandler
      */
     private readonly EntityRepository $playerRepository;
 
+    /**
+     * @var UserRepository
+     */
+    private readonly EntityRepository $userRepository;
+
     public function __construct(EntityManager $entityManager)
     {
+        $this->userRepository = $entityManager->getRepository(User::class);
         $this->playerRepository = $entityManager->getRepository(Player::class);
     }
 
@@ -38,6 +46,17 @@ class PlayerFormHandler
             $formResolver->getValue('email', 'player'),
         );
 
+        $coupledAccount = $this->userRepository->findByPlayer($player->getId());
+
+        if ($coupledAccount !== null) {
+            $coupledAccount->demote();
+
+            if ($formResolver->getBoolean('isAdmin', 'player') === true) {
+                $coupledAccount->promote();
+            }
+        }
+
+        $this->userRepository->save($coupledAccount);
         $this->playerRepository->save($player);
     }
 }

@@ -97,16 +97,46 @@
 
                         <div class="field is-horizontal">
                             <div class="field-label is-normal">
-                                <label class="label">Actief</label>
+                                <label class="label">Gebruikersnaam</label>
                             </div>
                             <div class="field-body mt-1">
                                 {% if account %}
-                                    <font color="green"><b>Beheerder</b></font>
+                                    <font color="green"><b>{{ account.name }}</b></font>
                                 {% else %}
-                                    Nee
+                                    (geen)
                                 {% endif %}
                             </div>
                         </div>
+
+                        {% if account.name %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Laatste login</label>
+                                </div>
+                                <div class="field-body mt-1">
+                                    {% if account.lastLogin %}
+                                        {{ account.lastLogin|date('d-m-Y H:i:s') }}
+                                    {% else %}
+                                        Nooit
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if account.name %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Beheerder</label>
+                                </div>
+                                <div class="field-body mt-1">
+                                    {% if account.beheer %}
+                                        <input name="isAdmin" type="checkbox" checked="checked"/>
+                                    {% else %}
+                                        <input name="isAdmin" type="checkbox" checked="checked"/>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </article>
             </div>

@@ -28,6 +28,9 @@ class User extends UserModel
     #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
 
+    #[ORM\Column(options: ['default' => false])]
+    protected bool $admin;
+
     #[ORM\OneToOne(
         targetEntity: Player::class,
     )]

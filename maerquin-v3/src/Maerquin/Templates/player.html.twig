@@ -183,7 +183,7 @@
 
                 sendAccountCreationInvite(playerId) {
                     axios
-                        .post(`/admin/players/${playerId}/account_settings_email/api`, {})
+                        .post(`/admin/players/${playerId}/reset_password_email/api`, {})
                         .then(() => {
                             alert('Email verstuurd');
                         })

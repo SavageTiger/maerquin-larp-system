@@ -10,7 +10,7 @@ class MailerFactory
 {
     public static function create(): Mailer\Mailer
     {
-        $dsn = '...';
+        $dsn = $_ENV['EMAIL_SERVER_DSN'];
         $transport = Transport::fromDsn($dsn);
 
         return new Mailer\Mailer($transport);

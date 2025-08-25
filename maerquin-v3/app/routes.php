@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use SvenHK\Maerquin\Controller\API\CharactersApiController;
 use SvenHK\Maerquin\Controller\API\LinkableSkillsApiController;
-use SvenHK\Maerquin\Controller\API\PlayerAccountEmailController;
+use SvenHK\Maerquin\Controller\API\PlayerResetPasswordEmailController;
 use SvenHK\Maerquin\Controller\API\SkillsApiController;
 use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
@@ -46,7 +46,7 @@ return function (App $app): void {
     $app->get('/admin/players/persisted/{playerId}.html', PlayersController::class);
     $app->get('/admin/players/{playerId}.html', PlayersController::class);
     $app->post('/admin/players/{playerId}.html', PlayersController::class);
-    $app->post('/admin/players/{playerId}/create_account_email/api', PlayerAccountEmailController::class);
+    $app->post('/admin/players/{playerId}/reset_password_email/api', PlayerResetPasswordEmailController::class);
 
     $app->get('/admin/skills.html', SkillsController::class);
     $app->post('/admin/skills/{skillId}.html', SkillsController::class);

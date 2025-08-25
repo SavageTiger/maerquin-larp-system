@@ -11,7 +11,7 @@ return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
         SettingsInterface::class => function () {
             return new Settings([
-                'displayErrorDetails' => ($_ENV['DEBUG'] ?? 'true') === 'true',
+                'displayErrorDetails' => true,
                 'logError' => false,
                 'logErrorDetails' => false,
                 'logger' => [

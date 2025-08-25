@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Player;
 
 class PlayerRepository extends EntityRepository
@@ -13,6 +14,11 @@ class PlayerRepository extends EntityRepository
     {
         $this->getEntityManager()->persist($player);
         $this->getEntityManager()->flush();
+    }
+
+    public function getById(string $playerId): Player
+    {
+        return $this->findOneBy(['id' => $playerId]) ?? throw MaerquinEntityNotFoundException::withType(Player::class);
     }
 
     /**

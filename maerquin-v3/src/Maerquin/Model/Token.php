@@ -12,6 +12,7 @@ use Ramsey\Uuid\UuidInterface;
 class Token
 {
     public const string TYPE_REMEMBER_ME = 'REMEMBER_ME';
+    public const string TYPE_RESET_PASSWORD = 'RESET_PASSWORD';
 
     protected UuidInterface $id;
     protected User $user;
@@ -25,11 +26,7 @@ class Token
     ): self {
         $token = new static();
 
-        $tokenValue = sprintf(
-            '%s:%s',
-            time(),
-            hash('sha256', random_bytes(1_024 * 2)),
-        );
+        $tokenValue = self::generateToken();
 
         $token->id = Uuid::uuid4();
         $token->user = $user;
@@ -37,6 +34,30 @@ class Token
         $token->value = hash('sha256', $tokenValue);
         $token->createdAt = new DateTimeImmutable();
         $token->unhashedValue = $tokenValue;
+
+        return $token;
+    }
+
+    private static function generateToken(): string
+    {
+        return sprintf(
+            '%s:%s',
+            time(),
+            hash('sha256', random_bytes(1_024 * 2)),
+        );
+    }
+
+    public static function generateForPasswordReset(
+        User $user,
+    ): self {
+        $token = new static();
+
+        $token->id = Uuid::uuid4();
+        $token->user = $user;
+        $token->type = self::TYPE_RESET_PASSWORD;
+        $token->value = hash('sha256', self::generateToken());
+        $token->createdAt = new DateTimeImmutable();
+        $token->unhashedValue = $token->value;
 
         return $token;
     }

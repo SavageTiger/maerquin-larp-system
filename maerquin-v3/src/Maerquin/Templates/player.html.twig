@@ -92,6 +92,16 @@
                 <article class="message is-dark">
                     <div class="message-header">
                         Account
+                        <button class="button is-pulled-right m-0 pl-2 pr-2 p-0"
+                                {% if player.email == '' or account.name == '' %}
+                                    disabled="disabled"
+                                {% else %}
+                                    @click="sendAccountCreationInvite('{{ player.id }}')"
+                                {% endif %}
+                                onclick="return false">
+                            <i class="fa-solid fa-envelope-open-text"></i>&nbsp;Stuur wachtwoordinstelmail
+                        </button>
+
                     </div>
                     <div class="message-body">
 
@@ -101,9 +111,11 @@
                             </div>
                             <div class="field-body mt-1">
                                 {% if account %}
-                                    <font color="green"><b>{{ account.name }}</b></font>
+                                    <input class="input" name="accountName" type="text"
+                                           value="{{ account.name }}" placeholder=""/>
                                 {% else %}
-                                    (geen)
+                                    <input class="input" name="accountName" type="text"
+                                           placeholder="(geen)" placeholder=""/>
                                 {% endif %}
                             </div>
                         </div>
@@ -129,10 +141,10 @@
                                     <label class="label">Beheerder</label>
                                 </div>
                                 <div class="field-body mt-1">
-                                    {% if account.beheer %}
+                                    {% if account.isAdmin %}
                                         <input name="isAdmin" type="checkbox" checked="checked"/>
                                     {% else %}
-                                        <input name="isAdmin" type="checkbox" checked="checked"/>
+                                        <input name="isAdmin" type="checkbox"/>
                                     {% endif %}
                                 </div>
                             </div>
@@ -159,6 +171,21 @@
                         .post(`/admin/players/${playerId}.html`, { player: playerForm })
                         .then(() => {
                             document.location.href = `/admin/players/persisted/${playerId}.html`
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+
+                    return false;
+                },
+
+                sendAccountCreationInvite(playerId) {
+                    axios
+                        .post(`/admin/players/${playerId}/account_settings_email/api`, {})
+                        .then(() => {
+                            alert('Email verstuurd');
                         })
                         .catch((error) => {
                             const message = error.response.data.error.description;

@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Model\User as UserModel;
 use SvenHK\Maerquin\Repository\UserRepository;
 
@@ -39,7 +40,7 @@ class User extends UserModel
         referencedColumnName: 'id',
         nullable: false,
     )]
-    protected Player $player;
+    protected PlayerModel $player;
 
     #[ORM\Column(options: ['default' => '1970-1-1'])]
     protected DateTimeImmutable $lastLogin;

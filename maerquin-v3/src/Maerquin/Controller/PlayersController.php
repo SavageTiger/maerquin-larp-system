@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
-use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Override;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -52,24 +52,24 @@ class PlayersController extends Action
     #[Override]
     protected function action(): ResponseInterface
     {
-        $userId = $this->request->getAttribute('userId');
+        $playerId = $this->request->getAttribute('playerId');
 
         if (str_contains($this->request->getUri()->getPath(), 'create.html') === true) {
-            $userId = Uuid::uuid4()->toString();
+            $playerId = Uuid::uuid4()->toString();
         }
 
-        if (is_string($userId) && Uuid::isValid($userId)) {
-            return $this->renderEditView(Uuid::fromString($userId));
+        if (is_string($playerId) && Uuid::isValid($playerId)) {
+            return $this->renderEditView(Uuid::fromString($playerId));
         }
 
         return $this->renderListView();
     }
 
-    private function renderEditView(UuidInterface $userId): ResponseInterface
+    private function renderEditView(UuidInterface $playerId): ResponseInterface
     {
         $view = Twig::fromRequest($this->request);
 
-        $player = $this->getPlayers($userId);
+        $player = $this->getPlayers($playerId);
 
         if ($this->request->getMethod() === 'POST') {
             $this->formHandler->handle($player, $this->request);
@@ -91,12 +91,12 @@ class PlayersController extends Action
         );
     }
 
-    private function getPlayers(UuidInterface $userId): Player
+    private function getPlayers(UuidInterface $playerId): Player
     {
-        $player = $this->playerRepository->find($userId->toString());
+        $player = $this->playerRepository->find($playerId->toString());
 
         if ($player === null) {
-            return Player::create($userId);
+            return Player::create($playerId);
         }
 
         return $player;

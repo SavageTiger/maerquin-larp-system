@@ -81,6 +81,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">&nbsp;</label>
+                        </div>
+
+                        <div class="field-body">
+                            <div class="pl-5">
+                                <button class="button"
+                                        @click="createCharacterForPlayer('{{ player.id }}')"
+                                        onclick="return false">
+                                    <i class="fa-solid fa-circle-plus"></i>&nbsp;Nieuws karakter aanmaken
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </article>
         </div>
@@ -96,12 +112,11 @@
                                 {% if player.email == '' or account.name == '' %}
                                     disabled="disabled"
                                 {% else %}
-                                    @click="sendAccountCreationInvite('{{ player.id }}')"
+                                    @click="sendPasswordResetEmail('{{ player.id }}')"
                                 {% endif %}
                                 onclick="return false">
                             <i class="fa-solid fa-envelope-open-text"></i>&nbsp;Stuur wachtwoordinstelmail
                         </button>
-
                     </div>
                     <div class="message-body">
 
@@ -181,7 +196,7 @@
                     return false;
                 },
 
-                sendAccountCreationInvite(playerId) {
+                sendPasswordResetEmail(playerId) {
                     axios
                         .post(`/admin/players/${playerId}/reset_password_email/api`, {})
                         .then(() => {
@@ -194,6 +209,13 @@
                         });
 
                     return false;
+                },
+
+                createCharacterForPlayer(playerId) {
+                    window.open(
+                        `/admin/characters/create.html?playerId=` + playerId,
+                        '_blank'
+                    );
                 },
 
                 navigateToCharacter(characterId) {

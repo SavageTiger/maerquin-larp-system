@@ -40,6 +40,7 @@ class Character
     public static function createWithDefaults(
         UuidInterface $characterId,
         Race $race,
+        null | Player $player,
     ): self {
         $character = new static();
         $character->id = $characterId;
@@ -61,7 +62,7 @@ class Character
 
         $character->updateCharacter(
             name: '',
-            player: null,
+            player: $player,
             race: $race,
             isDeceased: false,
             primaryDeity: null,

@@ -21,6 +21,11 @@ class PlayerRepository extends EntityRepository
         return $this->findOneBy(['id' => $playerId]) ?? throw MaerquinEntityNotFoundException::withType(Player::class);
     }
 
+    public function findById(string $playerId): null | Player
+    {
+        return $this->findOneBy(['id' => $playerId]);
+    }
+
     /**
      * @return Player[]
      */

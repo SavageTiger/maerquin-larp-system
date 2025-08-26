@@ -49,6 +49,8 @@ return function (App $app): void {
     $app->post('/admin/players/{playerId}.html', PlayersController::class);
     $app->post('/admin/players/{playerId}/reset_password_email/api', PlayerResetPasswordEmailController::class);
     $app->get('/reset-password/{hash}.html', PlayerResetPasswordController::class);
+    $app->get('/reset-password/persisted/{hash}.html', PlayerResetPasswordController::class);
+    $app->post('/reset-password/{hash}.html', PlayerResetPasswordController::class);
 
     $app->get('/admin/skills.html', SkillsController::class);
     $app->post('/admin/skills/{skillId}.html', SkillsController::class);

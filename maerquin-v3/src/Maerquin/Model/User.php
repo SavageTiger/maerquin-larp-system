@@ -46,7 +46,7 @@ class User extends FrameworkUser
             $password,
             base64_decode($this->salt),
             $iterations,
-            strlen($password),
+            64,
             true,
         ));
     }

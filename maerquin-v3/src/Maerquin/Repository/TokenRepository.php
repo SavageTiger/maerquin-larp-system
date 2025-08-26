@@ -15,6 +15,11 @@ class TokenRepository extends EntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function findByHash(string $hash): null | Token
+    {
+        return $this->findOneBy(['value' => $hash]);
+    }
+
     public function findByCookieValue(string $cookieValue): null | Token
     {
         return $this->findOneBy(['value' => hash('sha256', $cookieValue)]);

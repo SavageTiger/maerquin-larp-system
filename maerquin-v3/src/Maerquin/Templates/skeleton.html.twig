@@ -38,10 +38,12 @@
                 {% endif %}
             </div>
 
-            <a href="/logout.html"
-               class="navbar-item is-pulled-right">
-                <i class="fa-solid fa-door-open"></i> Uitloggen ({{ getUser().username|capitalize }})
-            </a>
+            {% if getUser().username %}
+                <a href="/logout.html"
+                   class="navbar-item is-pulled-right">
+                    <i class="fa-solid fa-door-open"></i> Uitloggen ({{ getUser().username|capitalize }})
+                </a>
+            {% endif %}
         </div>
     </nav>
 

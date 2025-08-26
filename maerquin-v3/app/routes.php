@@ -14,6 +14,7 @@ use SvenHK\Maerquin\Controller\EventsController;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\LogoutController;
+use SvenHK\Maerquin\Controller\PlayerResetPasswordController;
 use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\PrintCharacter;
 use SvenHK\Maerquin\Controller\RacesController;
@@ -47,6 +48,7 @@ return function (App $app): void {
     $app->get('/admin/players/{playerId}.html', PlayersController::class);
     $app->post('/admin/players/{playerId}.html', PlayersController::class);
     $app->post('/admin/players/{playerId}/reset_password_email/api', PlayerResetPasswordEmailController::class);
+    $app->get('/reset-password/{hash}.html', PlayerResetPasswordController::class);
 
     $app->get('/admin/skills.html', SkillsController::class);
     $app->post('/admin/skills/{skillId}.html', SkillsController::class);

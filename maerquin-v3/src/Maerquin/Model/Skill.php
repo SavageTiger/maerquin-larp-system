@@ -176,6 +176,8 @@ class Skill
             'requiresParentSkill' => $this->getParentRequirementSkillId(),
             'points' => $points,
             'pointsSource' => $this->getPoints(),
+            'canFastCast' => $this->hasFastCasting(),
+            'canArmorCast' => $this->hasArmorCasting(),
         ];
     }
 

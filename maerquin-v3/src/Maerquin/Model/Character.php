@@ -155,6 +155,8 @@ class Character
                     'fastCasting' => $skillCoupling->hasFastCasting(),
                     'armouredCasting' => $skillCoupling->hasArmouredCasting(),
                     'buyableAmount' => $skillCoupling->getSkill()->getMaximumAmountBuyable(),
+                    'canFastCast' => $skillCoupling->getSkill()->hasFastCasting(),
+                    'canArmorCast' => $skillCoupling->getSkill()->hasArmorCasting(),
                 ],
             );
         }

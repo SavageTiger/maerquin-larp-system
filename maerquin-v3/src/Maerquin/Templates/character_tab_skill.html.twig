@@ -67,12 +67,14 @@
                 </td>
                 <td>
                     <label class="checkbox">
-                        <input type="checkbox" v-model="linkedSkill.fastCasting"/>
+                        <input type="checkbox" v-if="linkedSkill.canFastCast"
+                               v-model="linkedSkill.fastCasting"/>
                     </label>
                 </td>
                 <td>
                     <label class="checkbox">
-                        <input type="checkbox" v-model="linkedSkill.armouredCasting"/>
+                        <input type="checkbox" v-if="linkedSkill.canArmorCast"
+                               v-model="linkedSkill.armouredCasting"/>
                     </label>
                 </td>
                 <td>

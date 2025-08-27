@@ -86,6 +86,8 @@ class SkillFormHandler
             $formResolver->getBoolean('isHidden', 'skill'),
             $formResolver->getValue('description', 'skill'),
             $formResolver->getValue('remarks', 'skill'),
+            $formResolver->getBoolean('hasFastCasting', 'skill'),
+            $formResolver->getBoolean('hasArmorCasting', 'skill'),
         );
 
         $this->skillRepository->save($skill);

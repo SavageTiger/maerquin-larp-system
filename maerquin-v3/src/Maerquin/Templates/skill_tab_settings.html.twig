@@ -174,21 +174,52 @@
             </div>
         </div>
         <div class="cell checkbox-group">
-            <div class="field">
-                <label class="checkbox">
-                    <input type="checkbox" name="isHidden"
-                           {% if skill.hidden %}checked="checked"{% endif %} />
-                    &nbsp;Verborgen
-                </label>
-            </div>
-            <div class="field">
-                <label class="checkbox">
-                    <input type="checkbox" name="isNotFreelyAvailable"
-                           {% if skill.isFreelyAvailable == false %}checked="checked"{% endif %}/>
+            <table class="checkbox-table">
+                <tr>
+                    <td>
+                        <div class="field">
+                            <label class="checkbox">
+                                <input type="checkbox" name="isHidden"
+                                       {% if skill.hidden %}checked="checked"{% endif %} />
+                                &nbsp;Verborgen
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field">
+                            <label class="checkbox">
+                                <input type="checkbox" name="hasFastCasting"
+                                       {% if skill.hasFastCasting %}checked="checked"{% endif %} />
+                                &nbsp;Fast casting
+                            </label>
+                        </div>
+                    </td>
+                </tr>
 
-                    &nbsp;<b>Niet</b> vrij verkrijgbaar
-                </label>
-            </div>
+                <tr>
+                    <td>
+                        <div class="field">
+                            <div class="field">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="isNotFreelyAvailable"
+                                           {% if skill.isFreelyAvailable == false %}checked="checked"{% endif %}/>
+
+                                    &nbsp;<b>Niet</b> vrij verkrijgbaar
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field">
+                            <label class="checkbox">
+                                <input type="checkbox" name="hasArmorCasting"
+                                       {% if skill.hasArmorCasting %}checked="checked"{% endif %} />
+                                &nbsp;Armor casting
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

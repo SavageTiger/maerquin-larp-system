@@ -23,6 +23,8 @@ class Skill
     protected bool $hidden;
     protected int $level;
     protected null | SkillSkillLink $requiredSkillLink = null;
+    protected bool $canFastCast;
+    protected bool $canArmorCast;
 
     public static function create(UuidInterface $id, SkillType $skillType)
     {
@@ -62,6 +64,8 @@ class Skill
                 'description' => $this->getDescription(),
                 'remarks' => $this->getRemarks(),
                 'requiresParentSkill' => $this->getParentRequirementSkillId(),
+                'hasFastCasting' => $this->hasFastCasting(),
+                'hasArmorCasting' => $this->hasArmorCasting(),
             ],
         );
     }
@@ -151,6 +155,16 @@ class Skill
         return $this->requiredSkillLink?->requiredSkillId() ?? null;
     }
 
+    public function hasFastCasting()
+    {
+        return $this->canFastCast;
+    }
+
+    public function hasArmorCasting()
+    {
+        return $this->canArmorCast;
+    }
+
     public function serializeAsLinked(float $points): array
     {
         return [
@@ -190,6 +204,8 @@ class Skill
         bool $isHidden,
         string $description,
         string $remarks,
+        bool $hasFastCasting,
+        bool $hasArmorCasting,
     ): void {
         $this->name = $name;
         $this->deity = $deity;
@@ -205,5 +221,7 @@ class Skill
         $this->hidden = $isHidden;
         $this->description = $description;
         $this->remarks = $remarks;
+        $this->canFastCast = $hasFastCasting;
+        $this->canArmorCast = $hasArmorCasting;
     }
 }

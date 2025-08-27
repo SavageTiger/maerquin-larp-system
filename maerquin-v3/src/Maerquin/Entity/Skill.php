@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Deity as DeityModel;
 use SvenHK\Maerquin\Model\Element as ElementModel;
@@ -17,37 +18,37 @@ use SvenHK\Maerquin\Repository\SkillRepository;
 class Skill extends SkillModel
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', unique: true)]
+    #[Column(type: 'uuid', unique: true)]
     protected UuidInterface $id;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[Column(type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    #[ORM\Column(nullable: false)]
+    #[Column(nullable: false)]
     protected float $points;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[Column(type: 'integer', nullable: false)]
     protected int $maximumAmountBuyable;
 
-    #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
+    #[Column(type: 'text', nullable: false, options: ['default' => ''])]
     protected string $description;
 
-    #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
+    #[Column(type: 'text', nullable: false, options: ['default' => ''])]
     protected string $remarks;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: false, options: ['default' => ''])]
+    #[Column(type: 'string', length: 64, nullable: false, options: ['default' => ''])]
     protected string $distance;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: false, options: ['default' => ''])]
+    #[Column(type: 'string', length: 64, nullable: false, options: ['default' => ''])]
     protected string $duration;
 
-    #[ORM\Column(type: 'boolean', nullable: false)]
+    #[Column(type: 'boolean', nullable: false)]
     protected bool $nonFree;
 
-    #[ORM\Column(type: 'boolean', nullable: false)]
+    #[Column(type: 'boolean', nullable: false)]
     protected bool $hidden;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[Column(type: 'integer', nullable: false)]
     protected int $level;
 
     #[ORM\ManyToOne(targetEntity: Element::class)]
@@ -70,6 +71,12 @@ class Skill extends SkillModel
     )]
     protected null | SkillSkillLinkModel $requiredSkillLink = null;
 
+    #[Column(options: ['default' => false])]
+    protected bool $canFastCast;
+
+    #[Column(options: ['default' => false])]
+    protected bool $canArmorCast;
+
     public function __construct()
     {
         $this->name = '';
@@ -80,6 +87,8 @@ class Skill extends SkillModel
         $this->level = 0;
         $this->hidden = false;
         $this->nonFree = false;
+        $this->canArmorCast = false;
+        $this->canFastCast = false;
         $this->description = '';
         $this->distance = '';
         $this->duration = '';

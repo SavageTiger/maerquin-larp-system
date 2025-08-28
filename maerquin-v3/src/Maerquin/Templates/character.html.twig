@@ -200,7 +200,8 @@
                 },
 
                 totalPoints() {
-                    let totalPoints = {{ constant('SvenHK\\Maerquin\\Model\\Character::BASE_XP') }};
+                    let totalPoints = ({{ constant('SvenHK\\Maerquin\\Model\\Character::BASE_XP') }}) + parseFloat(this.character.bonusXp);
+
 
                     for (const event of this.presentAtEvents) {
                         totalPoints += event.points;
@@ -272,7 +273,7 @@
                 numbersOnly(sender, field, allowDot) {
                     const pattern = allowDot ? /[^\.0-9]/g : /[^0-9]/g;
 
-                    sender[field] = sender[field].replace(pattern, '');
+                    sender[field] = sender[field].replace(',', '.').replace(pattern, '');
                 },
 
                 dropdownText(dropdownName) {

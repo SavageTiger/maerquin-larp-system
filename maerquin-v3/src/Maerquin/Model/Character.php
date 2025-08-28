@@ -26,6 +26,7 @@ class Character
     protected string $occupation;
     protected string $birthplace;
     protected string $notes;
+    protected float $bonusXp;
 
     /**
      * @param array<int, string> $warnings
@@ -73,6 +74,7 @@ class Character
             birthplace: '',
             notes: '',
             skillLinkCollection: new SkillLinkCollection($linkedSkills),
+            bonusXp: 0,
         );
 
         return $character;
@@ -106,6 +108,7 @@ class Character
         string $occupation,
         string $birthplace,
         string $notes,
+        float $bonusXp,
         SkillLinkCollection $skillLinkCollection,
     ): void {
         $this->name = $name;
@@ -119,6 +122,7 @@ class Character
         $this->occupation = $occupation;
         $this->birthplace = $birthplace;
         $this->notes = $notes;
+        $this->bonusXp = $bonusXp;
 
         $this->skills = new ArrayCollection(
             $skillLinkCollection->getSkillLinks(),
@@ -170,6 +174,7 @@ class Character
                 'isDeceased' => $this->isDeceased(),
                 'notes' => $this->getNotes(),
                 'raceId' => $this->race->getId(),
+                'bonusXp' => $this->getBonusXp(),
                 'linkedSkills' => $linkedSkills,
             ],
         );
@@ -236,6 +241,11 @@ class Character
     public function getNotes(): string
     {
         return $this->notes;
+    }
+
+    public function getBonusXp(): float
+    {
+        return $this->bonusXp;
     }
 
     public function getRace(): Race

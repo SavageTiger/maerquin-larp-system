@@ -16,7 +16,6 @@ class CharacterEventLink
 
     private function __construct(
         protected Event $event,
-        protected int $points,
         protected Character $character,
     ) {
         $this->id = Uuid::uuid4();
@@ -24,12 +23,10 @@ class CharacterEventLink
 
     public static function createEventAndCharacter(
         Event $event,
-        int $points,
         Character $character,
     ): self {
         return new CharacterEventLinkEntity(
             $event,
-            $points,
             $character,
         );
     }

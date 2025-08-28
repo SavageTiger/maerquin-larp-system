@@ -23,7 +23,4 @@ class CharacterEventLink extends CharacterEventLinkModel
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn(name: 'event_id', nullable: false)]
     protected Event $event;
-
-    #[ORM\Column(type: 'integer')]
-    protected int $points;
 }

@@ -71,7 +71,7 @@ class CharacterFormHandler
         Character $character,
         CustomFieldCollection $customFields,
         Request $request,
-    ) : void {
+    ): void {
         $formResolver = FormResolver::createFromRequest($request);
 
         $player = $this->playerRepository->find(
@@ -116,6 +116,7 @@ class CharacterFormHandler
             $formResolver->getValue('occupation', 'character'),
             $formResolver->getValue('birthplace', 'character'),
             $formResolver->getValue('notes', 'character'),
+            (float)$formResolver->getValue('bonusXp', 'character', '0'),
             $isNewCharacter === true ?
                 new SkillLinkCollection($character->getskills()) :
                 $this->createLinkedSkillCollection($formResolver, $character),
@@ -127,7 +128,7 @@ class CharacterFormHandler
     private function createLinkedSkillCollection(
         FormResolver $formResolver,
         Character $character,
-    ) : SkillLinkCollection {
+    ): SkillLinkCollection {
         $buffer = [];
 
         $linkedSkills = $formResolver->getValue('linkedSkills', 'character', 'invalid');

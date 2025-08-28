@@ -73,6 +73,9 @@ class Character extends CharacterModel
     #[ORM\Column(type: 'json', nullable: false)]
     protected array $warnings = [];
 
+    #[ORM\Column(nullable: false, options: ['default' => 0])]
+    protected float $bonusXp;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();

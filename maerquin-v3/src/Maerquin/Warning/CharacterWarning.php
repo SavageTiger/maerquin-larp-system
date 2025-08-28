@@ -149,6 +149,7 @@ final readonly class CharacterWarning
         $eventsForCharacter = $this->eventRepository->findAllForCharacter($character->getId());
 
         $totalPoints = Character::BASE_XP;
+        $totalPoints += $character->getBonusXp();
 
         foreach ($eventsForCharacter as $presentAtEvent) {
             $totalPoints += $presentAtEvent->getPoints();

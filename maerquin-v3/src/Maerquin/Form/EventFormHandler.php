@@ -86,7 +86,7 @@ class EventFormHandler
             $startDate,
             $endDate,
             $notes,
-            $this->createCharacterPresenceList($event, $points, $characterIds),
+            $this->createCharacterPresenceList($event, $characterIds),
         );
 
         $this->eventRepository->save($event);
@@ -113,7 +113,6 @@ class EventFormHandler
      */
     private function createCharacterPresenceList(
         Event $event,
-        int $points,
         array $characterIds,
     ): Collection {
         $charactersPresent = [];
@@ -121,7 +120,6 @@ class EventFormHandler
         foreach ($characterIds as $characterId) {
             $charactersPresent[] = CharacterEventLink::createEventAndCharacter(
                 $event,
-                $points,
                 $this->characterRepository->getById($characterId),
             );
         }

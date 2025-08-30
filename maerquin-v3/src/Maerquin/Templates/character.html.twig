@@ -209,7 +209,6 @@
                 totalPoints() {
                     let totalPoints = ({{ constant('SvenHK\\Maerquin\\Model\\Character::BASE_XP') }}) + parseFloat(this.character.bonusXp);
 
-
                     for (const event of this.presentAtEvents) {
                         totalPoints += event.points;
                     }
@@ -222,10 +221,21 @@
                 },
 
                 spendPoints() {
+                    const costFastCasting = {{ constant('SvenHK\\Maerquin\\Model\\Skill::COST_FAST_CASTING') }};
+                    const costArmorCasting = {{ constant('SvenHK\\Maerquin\\Model\\Skill::COST_ARMOR_CASTING') }};
+
                     let spendPoints = 0;
 
                     for (const linkedSkill of this.character.linkedSkills) {
                         spendPoints += linkedSkill.points * linkedSkill.numberOfTimes;
+
+                        if (linkedSkill.armouredCasting === true) {
+                            spendPoints += costArmorCasting;
+                        }
+
+                        if (linkedSkill.fastCasting === true) {
+                            spendPoints += costFastCasting;
+                        }
                     }
 
                     if (spendPoints > 0) {

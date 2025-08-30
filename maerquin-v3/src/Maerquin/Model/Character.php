@@ -274,6 +274,14 @@ class Character
 
         foreach ($this->skills as $skillLink) {
             $spendPoints += $skillLink->getPoints() * $skillLink->getNumberOfTimes();
+
+            if ($skillLink->hasArmouredCasting() === true) {
+                $spendPoints += Skill::COST_ARMOR_CASTING;
+            }
+
+            if ($skillLink->hasFastCasting() === true) {
+                $spendPoints += Skill::COST_FAST_CASTING;
+            }
         }
 
         return $spendPoints;

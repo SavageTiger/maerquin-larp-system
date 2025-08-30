@@ -9,6 +9,9 @@ use Ramsey\Uuid\UuidInterface;
 
 class Skill
 {
+    public const COST_FAST_CASTING = 10;
+    public const COST_ARMOR_CASTING = 10;
+
     protected UuidInterface $id;
     protected string $name;
     protected null | Deity $deity;

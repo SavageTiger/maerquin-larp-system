@@ -13,7 +13,22 @@
             <button @click="navigateToCreate" onclick="return false" class="button is-pulled-right">
                 <i class="fa-regular fa-address-card"></i>&nbsp;Nieuwe aanmaken
             </button>
+
+            <button v-if="printCharacters.length > 0" class="button is-pulled-left ml-3"
+                    onclick="return false"
+                    @click="printSelectedCharacters()">
+                <i class="fa-solid fa-print"></i>&nbsp;Printen
+            </button>
+
         </div>
+    </div>
+
+    <div id="print-iframes">
+        <iframe style="display: none;" v-for="characterId in printCharacters"
+                :key="characterId"
+                :id="'print-frame-' + characterId"
+                :src="`/admin/characters/${characterId}.html`">
+        </iframe>
     </div>
 
     <div class="columns is-gapless">
@@ -21,12 +36,16 @@
 
             <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
                 <tr>
+                    <th></th>
                     <th>Naam</th>
                     <th>Geloof</th>
                     <th>Ras</th>
                     <th>Speler</th>
                 </tr>
                 <tr v-for="character in filteredCharacters" :key="character.id">
+                    <td>
+                        <input type="checkbox" :value="character.id" v-model="printCharacters">
+                    </td>
                     <td class="is-clickable" @click="navigateToCharacter(character.id)">
                         <span v-if="character.hasWarnings == true">
                             <i class="fa-solid fa-circle circle-bad"></i>
@@ -66,7 +85,8 @@
                     search: '',
                     characters: {{ characters.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
                     players: {{ players.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-                    deities: {{ deities.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                    deities: {{ deities.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    printCharacters: []
                 }
             },
             computed: {
@@ -94,7 +114,45 @@
                     });
 
                     return deity ? deity.name : '';
-                }
+                },
+
+                printSelectedCharacters() {
+                    const frames = document.querySelectorAll('#print-iframes iframe');
+
+                    let printPostBody = { html: { characterCount: '0' } };
+                    let printPostOffset = 0;
+
+                    frames.forEach(frame => {
+                        printPostOffset++;
+
+                        printPostBody['html']['body' + printPostOffset] = frame.contentWindow.printCharacterSheetHtml();
+                    });
+
+                    printPostBody['html']['characterCount'] = printPostOffset.toString();
+
+                    axios
+                        .post(
+                            `/admin/character/print.pdf`,
+                            printPostBody,
+                            { responseType: 'blob' }
+                        )
+                        .then((response) => {
+                            const pdfBinary = new Blob([response.data], { type: 'application/pdf' });
+                            const pdfBinaryElement = window.URL.createObjectURL(pdfBinary);
+
+                            setTimeout(() => {
+                                const printWindow = window.open(pdfBinaryElement);
+
+                                setTimeout(() => {
+                                    printWindow.print();
+                                }, 300);
+                            }, 300);
+                        })
+                        .catch((error) => {
+                            const message = error.response?.data?.error?.description || "PDF generation failed";
+                            alert(message);
+                        });
+                },
             },
             mounted() {
                 for (let index = 0; index < this.characters.length; index++) {

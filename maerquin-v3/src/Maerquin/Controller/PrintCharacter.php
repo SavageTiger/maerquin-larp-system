@@ -21,21 +21,37 @@ class PrintCharacter extends Action
 
         $formResolver = FormResolver::createFromRequest($this->request);
 
-        $htmlDocument = new DOMDocument('1.0', 'UTF-8');
-        $htmlDocument->loadHTML(base64_decode($formResolver->getValue('body', 'html')));
+        $amountOfCharacters = (int)$formResolver->getValue('characterCount', 'html');
+        $characterOffset = 0;
 
         $pdfGenerator = PdfGeneratorFactory::create();
-        $pdfGenerator->WriteHTML($view->fetch(
-            'Pdf/character.html.twig',
-            [
-                'characterTable' => $this->getTableContent($htmlDocument, 'characterTable'),
-                'backgroundTable' => $this->getTableContent($htmlDocument, 'backgroundTable'),
-                'skillsTable' => $this->getTableContent($htmlDocument, 'skillsTable'),
-                'eventsTable' => $this->getTableContent($htmlDocument, 'eventsTable'),
-                'notesTable' => $this->getTableContent($htmlDocument, 'notesTable'),
-                'now' => new DateTimeImmutable()->format('d-m-Y'),
-            ],
-        ));
+
+        while ($amountOfCharacters > 0) {
+            ++$characterOffset;
+
+            $htmlDocument = new DOMDocument('1.0', 'UTF-8');
+            $htmlDocument->loadHTML(
+                base64_decode($formResolver->getValue('body' . $characterOffset, 'html')),
+            );
+
+            $pdfGenerator->WriteHTML($view->fetch(
+                'Pdf/character.html.twig',
+                [
+                    'characterTable' => $this->getTableContent($htmlDocument, 'characterTable'),
+                    'backgroundTable' => $this->getTableContent($htmlDocument, 'backgroundTable'),
+                    'skillsTable' => $this->getTableContent($htmlDocument, 'skillsTable'),
+                    'eventsTable' => $this->getTableContent($htmlDocument, 'eventsTable'),
+                    'notesTable' => $this->getTableContent($htmlDocument, 'notesTable'),
+                    'now' => new DateTimeImmutable()->format('d-m-Y'),
+                ],
+            ));
+
+            if ($amountOfCharacters !== 1) {
+                $pdfGenerator->WriteHTML('<pagebreak/>');
+            }
+
+            --$amountOfCharacters;
+        }
 
         $pdfBinary = $pdfGenerator->OutputBinaryData();
 

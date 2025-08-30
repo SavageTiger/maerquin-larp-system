@@ -23,6 +23,7 @@
                 <tr>
                     <th>Naam</th>
                     <th>Geloof</th>
+                    <th>Ras</th>
                     <th>Speler</th>
                 </tr>
                 <tr v-for="character in filteredCharacters" :key="character.id">
@@ -45,6 +46,9 @@
                                 {{ '{{ getDeity(character.secondaryDeityId) }}' }}
                             </span>
                         </div>
+                    </td>
+                    <td>
+                        {{ '{{ character.raceName }}' }}
                     </td>
                     <td>
                         {{ '{{ character.playerName }}' }}

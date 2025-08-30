@@ -73,8 +73,8 @@ class Character
             occupation: '',
             birthplace: '',
             notes: '',
-            skillLinkCollection: new SkillLinkCollection($linkedSkills),
             bonusXp: 0,
+            skillLinkCollection: new SkillLinkCollection($linkedSkills),
         );
 
         return $character;
@@ -138,6 +138,7 @@ class Character
             'primaryDeityId' => $this->getPrimaryDeityId(),
             'secondaryDeityId' => $this->getSecondaryDeityId(),
             'playerId' => $this->playerId(),
+            'raceName' => $this->getRace()->getName(),
             'hasWarnings' => count($this->getWarnings()) > 0,
         ];
 
@@ -210,6 +211,11 @@ class Character
         return $this->player?->getId();
     }
 
+    public function getRace(): Race
+    {
+        return $this->race;
+    }
+
     /**
      * @return array<int, string>
      */
@@ -246,11 +252,6 @@ class Character
     public function getBonusXp(): float
     {
         return $this->bonusXp;
-    }
-
-    public function getRace(): Race
-    {
-        return $this->race;
     }
 
     public function hasSkill(Skill | string $skill): bool

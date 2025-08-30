@@ -24,4 +24,7 @@ class SkillSkillLink extends SkillSkillLinkModel
     #[ORM\ManyToOne(targetEntity: Skill::class)]
     #[ORM\JoinColumn(name: 'secondskill_id', referencedColumnName: 'id', nullable: false)]
     protected SkillModel $secondSkill;
+
+    #[ORM\Column(length: 32, options: ['default' => 'PRIMARY_SKILL'])]
+    protected string $requirementType = 'PRIMARY_SKILL';
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Deity as DeityModel;
 use SvenHK\Maerquin\Model\Element as ElementModel;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
-use SvenHK\Maerquin\Model\SkillSkillLink as SkillSkillLinkModel;
 use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
 use SvenHK\Maerquin\Repository\SkillRepository;
 
@@ -63,13 +63,13 @@ class Skill extends SkillModel
     #[ORM\JoinColumn(name: 'skilltype_id', referencedColumnName: 'id', nullable: false)]
     protected SkillTypeModel $skillType;
 
-    #[ORM\OneToOne(
+    #[ORM\OneToMany(
         targetEntity: SkillSkillLink::class,
         mappedBy: 'secondSkill',
         cascade: ['persist'],
         orphanRemoval: true,
     )]
-    protected null | SkillSkillLinkModel $requiredSkillLink = null;
+    protected null | Collection $requiredSkills = null;
 
     #[Column(options: ['default' => false])]
     protected bool $canFastCast;

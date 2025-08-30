@@ -12,6 +12,7 @@ use SvenHK\Maerquin\Entity\Element;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Entity\SkillType;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Model\RequirementType;
 use SvenHK\Maerquin\Model\SkillSkillLink;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\ElementRepository;
@@ -56,14 +57,8 @@ class SkillFormHandler
     {
         $formResolver = FormResolver::createFromRequest($request);
 
-        $requiredSkillLink = null;
-        $requiredSkill = $this->skillRepository->findById(
-            $formResolver->getValue('requiredSkillId', 'skill'),
-        );
-
-        if ($requiredSkill !== null) {
-            $requiredSkillLink = SkillSkillLink::createForSkill($skill, $requiredSkill);
-        }
+        $primaryRequiredSkillLink = $this->getRequiredSkillLink(true, $formResolver, $skill);
+        $secondaryRequiredSkillLink = $this->getRequiredSkillLink(false, $formResolver, $skill);
 
         $name = $formResolver->getValue('name', 'skill');
 
@@ -76,7 +71,8 @@ class SkillFormHandler
             $this->deityRepository->findById($formResolver->getValue('deityElementId', 'skill')),
             $this->elementRepository->findById($formResolver->getValue('deityElementId', 'skill')),
             $this->skillTypeRepository->getOneById($formResolver->getValue('skillTypeId', 'skill')),
-            $requiredSkillLink,
+            $primaryRequiredSkillLink,
+            $secondaryRequiredSkillLink,
             (int)$formResolver->getValue('points', 'skill'),
             (int)$formResolver->getValue('maximumAmountBuyable', 'skill'),
             (int)$formResolver->getValue('level', 'skill'),
@@ -91,5 +87,28 @@ class SkillFormHandler
         );
 
         $this->skillRepository->save($skill);
+    }
+
+    /**
+     * @throws MissingFormFieldException
+     */
+    public function getRequiredSkillLink(bool $primary, FormResolver $formResolver, Skill $skill): null | SkillSkillLink
+    {
+        $requiredSkill = $this->skillRepository->findById(
+            $formResolver->getValue(
+                $primary === true ? 'requiredSkillIdPrimary' : 'requiredSkillIdSecondary',
+                'skill',
+            ),
+        );
+
+        if ($requiredSkill === null) {
+            return null;
+        }
+
+        return SkillSkillLink::createForSkill(
+            $skill,
+            $requiredSkill,
+            $primary === true ? RequirementType::PrimarySkill : RequirementType::SecondarySkill,
+        );
     }
 }

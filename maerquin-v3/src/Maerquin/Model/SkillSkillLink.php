@@ -13,17 +13,29 @@ class SkillSkillLink
     protected UuidInterface $id;
     protected Skill $firstSkill;
     protected Skill $secondSkill;
+    protected string $requirementType;
 
-    private function __construct(Skill $subjectSkill, Skill $requiredSkill)
-    {
+    private function __construct(
+        Skill $subjectSkill,
+        Skill $requiredSkill,
+        RequirementType $requirementType,
+    ) {
         $this->id = Uuid::uuid4();
         $this->firstSkill = $requiredSkill;
         $this->secondSkill = $subjectSkill;
+        $this->requirementType = $requirementType->value;
     }
 
-    public static function createForSkill(Skill $subjectSkill, Skill $requiredSkill): self
-    {
-        return new SkillSkillLinkEntity($subjectSkill, $requiredSkill);
+    public static function createForSkill(
+        Skill $subjectSkill,
+        Skill $requiredSkill,
+        RequirementType $requirementType,
+    ): self {
+        return new SkillSkillLinkEntity(
+            $subjectSkill,
+            $requiredSkill,
+            $requirementType,
+        );
     }
 
     public function requiredSkillId(): string
@@ -34,5 +46,10 @@ class SkillSkillLink
     public function getId(): string
     {
         return (string)$this->id;
+    }
+
+    public function getRequirementType(): RequirementType
+    {
+        return RequirementType::from($this->requirementType);
     }
 }

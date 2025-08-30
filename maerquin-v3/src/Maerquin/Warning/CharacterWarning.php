@@ -121,18 +121,23 @@ final readonly class CharacterWarning
         $warnings = [];
 
         foreach ($character->getSkills() as $linkedSkill) {
-            $requiredParentSkillId = $linkedSkill->getSkill()->getParentRequirementSkillId();
+            $requiredParentSkillIds = [
+                $linkedSkill->getSkill()->getParentRequirementSkillId(),
+                $linkedSkill->getSkill()->getSecondaryParentRequirementSkillId(),
+            ];
 
-            if ($requiredParentSkillId === null) {
-                continue;
-            }
+            foreach ($requiredParentSkillIds as $requiredParentSkillId) {
+                if ($requiredParentSkillId === null) {
+                    continue;
+                }
 
-            if ($character->hasSkill($requiredParentSkillId) === false) {
-                $warnings[] = sprintf(
-                    'De skill "%s" vereist eerst "%s", maar die ontbreekt nog.',
-                    $linkedSkill->getSkill()->getName(),
-                    $this->skillRepository->getById($requiredParentSkillId)->getName(),
-                );
+                if ($character->hasSkill($requiredParentSkillId) === false) {
+                    $warnings[] = sprintf(
+                        'De skill "%s" vereist eerst "%s", maar die ontbreekt nog.',
+                        $linkedSkill->getSkill()->getName(),
+                        $this->skillRepository->getById($requiredParentSkillId)->getName(),
+                    );
+                }
             }
         }
 

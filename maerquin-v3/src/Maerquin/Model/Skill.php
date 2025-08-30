@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 
 class Skill
@@ -22,9 +23,13 @@ class Skill
     protected bool $nonFree;
     protected bool $hidden;
     protected int $level;
-    protected null | SkillSkillLink $requiredSkillLink = null;
     protected bool $canFastCast;
     protected bool $canArmorCast;
+
+    /**
+     * @var null|Collection<SkillSkillLink>
+     */
+    protected null | Collection $requiredSkills;
 
     public static function create(UuidInterface $id, SkillType $skillType)
     {
@@ -150,9 +155,20 @@ class Skill
         return $this->remarks;
     }
 
-    public function getParentRequirementSkillId(): null | string
-    {
-        return $this->requiredSkillLink?->requiredSkillId() ?? null;
+    public function getParentRequirementSkillId(
+        RequirementType $requirementType = RequirementType::PrimarySkill,
+    ): null | string {
+        if ($this->requiredSkills === null) {
+            return null;
+        }
+
+        foreach ($this->requiredSkills as $requiredSkillLink) {
+            if ($requiredSkillLink->getRequirementType() === $requirementType) {
+                return $requiredSkillLink->requiredSkillId();
+            }
+        }
+
+        return null;
     }
 
     public function hasFastCasting()
@@ -163,6 +179,11 @@ class Skill
     public function hasArmorCasting()
     {
         return $this->canArmorCast;
+    }
+
+    public function getSecondaryParentRequirementSkillId(): null | string
+    {
+        return $this->getParentRequirementSkillId(RequirementType::SecondarySkill);
     }
 
     public function serializeAsLinked(float $points): array
@@ -196,7 +217,8 @@ class Skill
         null | Deity $deity,
         null | Element $element,
         SkillType $skillType,
-        null | SkillSkillLink $requiredSkillLink,
+        null | SkillSkillLink $primaryRequiredSkillLink,
+        null | SkillSkillLink $secondaryRequiredSkillLink,
         int $points,
         int $maximumAmountBuyable,
         int $level,
@@ -213,7 +235,6 @@ class Skill
         $this->deity = $deity;
         $this->element = $element;
         $this->skillType = $skillType;
-        $this->requiredSkillLink = $requiredSkillLink;
         $this->points = $points;
         $this->maximumAmountBuyable = $maximumAmountBuyable;
         $this->level = $level;
@@ -225,5 +246,15 @@ class Skill
         $this->remarks = $remarks;
         $this->canFastCast = $hasFastCasting;
         $this->canArmorCast = $hasArmorCasting;
+
+        $this->requiredSkills->clear();
+
+        if ($primaryRequiredSkillLink !== null) {
+            $this->requiredSkills->add($primaryRequiredSkillLink);
+        }
+
+        if ($secondaryRequiredSkillLink !== null) {
+            $this->requiredSkills->add($secondaryRequiredSkillLink);
+        }
     }
 }

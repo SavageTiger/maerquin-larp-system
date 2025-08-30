@@ -82,7 +82,9 @@
                             document.location.href = `/admin/skills/persisted/${skillId}.html`
                         })
                         .catch((error) => {
-                            alert(error.message);
+                            const message = error.response.data.error.description;
+
+                            alert(message);
                         });
 
                     return false;

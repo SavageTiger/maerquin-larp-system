@@ -216,3 +216,9 @@ input.skill-input {
 .xp-table {
     min-height: 0 !important;
 }
+
+.show-hidden {
+    font-weight: bold;
+    position: absolute !important;
+    right: 10px;
+}

@@ -120,7 +120,12 @@
                             </a>
                         </td>
                         <td>
-                            {{ '{{ skill.skillName }}' }}
+                            <font color="gray" v-if="skill.hidden === true">
+                                {{ '{{ skill.skillName }}' }}
+                            </font>
+                            <font v-if="skill.hidden === false">
+                                {{ '{{ skill.skillName }}' }}
+                            </font>
                         </td>
                         <td class="has-text-right">
                             <input @keyup="numbersOnly(skill, 'points', true)"
@@ -148,6 +153,11 @@
         </section>
 
         <footer class="modal-card-foot">
+            <label class="checkbox show-hidden">
+                <input type="checkbox" v-model="showHiddenSkills"/>
+                Toon verborgen
+            </label>
+
             <div class="buttons">
                 <button class="button" onclick="return false">Sluiten</button>
             </div>

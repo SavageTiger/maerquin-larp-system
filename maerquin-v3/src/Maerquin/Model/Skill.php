@@ -204,6 +204,7 @@ class Skill
             'canArmorCast' => $this->hasArmorCasting(),
             'deityName' => $this->getDeityName(),
             'elementName' => $this->getElementName(),
+            'hidden' => $this->isHidden(),
         ];
     }
 

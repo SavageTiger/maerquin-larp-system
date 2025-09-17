@@ -89,7 +89,7 @@
     </div>
 </div>
 
-<div class="modal" id="skillList">
+<div class="modal modal-skill" id="skillList">
     <div class="modal-background"></div>
     <div class="modal-card">
         <header class="modal-card-head">
@@ -107,8 +107,9 @@
                 <table class="table is-striped is-narrow is-overview-table">
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Naam</th>
+                        <th width="35%">Naam</th>
                         <th class="has-text-right">Kosten</th>
+                        <th width="25%" class="has-text-right">Element / Geloof</th>
                         <th class="has-text-right">Reeds aangekocht</th>
                     </tr>
                     <tr v-for="skill in skillGroup.skills" :key="skill.id">
@@ -127,6 +128,10 @@
                                    type="text"
                                    class="input skill-input"
                                    v-model="skill.points"/>
+                        </td>
+                        <td>
+                            {{ '{{ skill.elementName }}' }}
+                            {{ '{{ skill.deityName }}' }}
                         </td>
                         <td class="has-text-right">
                             <div v-if="boughtTimes > 0">

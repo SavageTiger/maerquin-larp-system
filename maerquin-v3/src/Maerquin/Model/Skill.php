@@ -202,6 +202,8 @@ class Skill
             'pointsSource' => $this->getPoints(),
             'canFastCast' => $this->hasFastCasting(),
             'canArmorCast' => $this->hasArmorCasting(),
+            'deityName' => $this->getDeityName(),
+            'elementName' => $this->getElementName(),
         ];
     }
 

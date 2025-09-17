@@ -167,6 +167,10 @@ input.skill-input {
     color: blue;
 }
 
+.modal-skill .modal-card {
+    width: 50rem !important;
+}
+
 .tabs a {
     text-decoration: none !important;
 }

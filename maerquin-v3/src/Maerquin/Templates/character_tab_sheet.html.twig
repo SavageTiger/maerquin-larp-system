@@ -106,10 +106,12 @@
                     <table class="table is-fullwidth m-2" :data-caption="skillGroupName"
                            :id="'skillsTable-' + skillGroupName">
                         <tr>
-                            <td width="15%" class="has-text-right"><b>Aantal</b></td>
-                            <td width="35%"><b>Naam</b></td>
-                            <td width="30%"><b>Benodigd</b></td>
-                            <td width="20%" class="has-text-right"><b>Kosten</b></td>
+                            <td width="12%" class="has-text-right"><b>Aantal</b></td>
+                            <td width="46%"><b>Naam</b></td>
+                            <td width="5%"><b>FC</b></td>
+                            <td width="5%"><b>AC</b></td>
+                            <td width="22%"><b>Benodigd</b></td>
+                            <td width="10%" class="has-text-right"><b>Kosten</b></td>
                         </tr>
 
                         <tr v-for="linkedSkill in skillGroup.skills">
@@ -123,6 +125,14 @@
                             </td>
                             <td>
                                 {{ '{{ linkedSkill.skillName }}' }}
+                            </td>
+                            <td class="has-text-centered">
+                                <span v-if="linkedSkill.canFastCast">{{ '{{ linkedSkill.fastCasting ? "Y" : "" }}' }}</span>
+                                <span v-else>&nbsp;</span>
+                            </td>
+                            <td class="has-text-centered">
+                                <span v-if="linkedSkill.canArmorCast">{{ '{{ linkedSkill.armouredCasting ? "Y" : "" }}' }}</span>
+                                <span v-else>&nbsp;</span>
                             </td>
                             <td>
                                 {{ '{{ getSkillName(linkedSkill.requiresParentSkill) }}' }}

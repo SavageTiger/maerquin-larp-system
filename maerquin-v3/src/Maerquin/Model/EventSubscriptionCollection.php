@@ -6,7 +6,9 @@ namespace SvenHK\Maerquin\Model;
 
 class EventSubscriptionCollection
 {
-    /** @var EventSubscription[] */
+    /**
+     * @var EventSubscription[]
+     */
     private array $subscriptions;
 
     public function __construct(EventSubscription ...$subscriptions)
@@ -14,10 +16,10 @@ class EventSubscriptionCollection
         $this->subscriptions = $subscriptions;
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return array_map(
-            static fn(EventSubscription $subscription) : array => $subscription->serialize(),
+            static fn(EventSubscription $subscription): array => $subscription->serialize(),
             $this->subscriptions,
         );
     }

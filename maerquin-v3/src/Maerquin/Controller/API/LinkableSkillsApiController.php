@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller\API;
 
-use Override;
 use App\Application\Actions\Action;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Override;
 use Psr\Http\Message\ResponseInterface;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\Skill;

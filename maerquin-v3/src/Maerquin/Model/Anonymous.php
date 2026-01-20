@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Model;
 
-use Override;
 use App\Domain\Entity\User as FrameworkUser;
+use Override;
 
 class Anonymous extends FrameworkUser
 {

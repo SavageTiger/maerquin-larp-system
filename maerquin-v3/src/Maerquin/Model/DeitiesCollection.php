@@ -10,9 +10,8 @@ class DeitiesCollection
         /**
          * @var Deity[]
          */
-        private readonly array $deities
-    )
-    {
+        private readonly array $deities,
+    ) {
     }
 
     public function serialize(): array

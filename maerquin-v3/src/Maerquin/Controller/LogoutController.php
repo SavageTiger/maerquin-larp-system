@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Controller;
 
-use Override;
 use App\Application\Actions\Action;
+use Override;
 use Psr\Http\Message\ResponseInterface;
 use SvenHK\Maerquin\Session\Session;
 

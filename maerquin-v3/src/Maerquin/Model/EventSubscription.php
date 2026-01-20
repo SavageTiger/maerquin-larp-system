@@ -29,12 +29,12 @@ class EventSubscription
         $this->subscribedAt = new DateTimeImmutable();
     }
 
-    public static function create(Event $event, Player $player) : self
+    public static function create(Event $event, Player $player): self
     {
         return new EventSubscriptionEntity($event, $player);
     }
 
-    public function serialize() : array
+    public function serialize(): array
     {
         return [
             'id' => $this->getId(),
@@ -44,7 +44,7 @@ class EventSubscription
         ];
     }
 
-    public function getId() : string
+    public function getId(): string
     {
         return (string)$this->id;
     }

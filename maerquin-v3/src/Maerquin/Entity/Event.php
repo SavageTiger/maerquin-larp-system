@@ -47,10 +47,19 @@ class Event extends EventModel
     )]
     protected Collection $charactersPresent;
 
+    #[ORM\OneToMany(
+        targetEntity: EventSubscription::class,
+        mappedBy: 'event',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
+    protected Collection $subscriptions;
+
     public function __construct(UuidInterface $id)
     {
         $this->id = $id;
         $this->charactersPresent = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
         $this->name = '';
         $this->secondaryName = '';
         $this->points = 20;

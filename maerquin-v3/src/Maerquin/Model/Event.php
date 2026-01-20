@@ -20,6 +20,7 @@ class Event
     protected int $points;
     protected null | string $notes;
     protected Collection $charactersPresent;
+    protected Collection $subscriptions;
 
     public static function create(UuidInterface $eventId): EventEntity
     {

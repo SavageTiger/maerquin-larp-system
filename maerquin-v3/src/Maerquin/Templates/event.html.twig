@@ -157,6 +157,54 @@
                     </div>
                 </div>
             </article>
+
+            <article class="message is-dark">
+                <div class="message-header">
+                    Inschrijving
+                </div>
+                <div class="message-body">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label" style="width: 120px;">Openingsdatum</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input input-date" name="subscriptionsOpensAtDay" type="text"
+                                           value="{{ event.subscriptionsOpensAt.format('d') }}"
+                                    />
+
+                                    <input class="input input-date" name="subscriptionsOpensAtMonth" type="text"
+                                           value="{{ event.subscriptionsOpensAt.format('m') }}"
+                                    />
+
+                                    <input class="input input-date" name="subscriptionsOpensAtYear" type="text"
+                                           value="{{ event.subscriptionsOpensAt.format('Y') }}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label" style="width: 120px;">
+                                <nobr>Spelers cap</nobr>
+                            </label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="playerSubscriptionCap" type="number"
+                                           value="{{ event.playerSubscriptionCap == 0 ? '' : event.playerSubscriptionCap }}"
+                                           placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
         </div>
     </div>
 

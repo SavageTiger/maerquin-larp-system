@@ -39,6 +39,20 @@ class Event extends EventModel
     #[ORM\Column(type: 'text', nullable: true)]
     protected null | string $notes;
 
+    #[ORM\Column(
+        type: 'datetime_immutable',
+        nullable: true,
+        options: ['default' => '1970-01-01 00:00:00'],
+    )]
+    protected DateTimeInterface $subscriptionsOpensAt;
+
+    #[ORM\Column(
+        type: 'integer',
+        nullable: true,
+        options: ['default' => 0],
+    )]
+    protected int $playerSubscriptionCap;
+
     #[ORM\OneToMany(
         targetEntity: CharacterEventLink::class,
         mappedBy: 'event',
@@ -65,5 +79,7 @@ class Event extends EventModel
         $this->points = 20;
         $this->startDate = new DateTimeImmutable('-1 day');
         $this->endDate = new DateTimeImmutable('now');
+        $this->subscriptionsOpensAt = new DateTimeImmutable('+14 days');
+        $this->playerSubscriptionCap = 0;
     }
 }

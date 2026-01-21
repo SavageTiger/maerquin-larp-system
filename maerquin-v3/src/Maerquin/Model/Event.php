@@ -19,6 +19,8 @@ class Event
     protected DateTimeInterface $endDate;
     protected int $points;
     protected null | string $notes;
+    protected DateTimeInterface $subscriptionsOpensAt;
+    protected int $playerSubscriptionCap;
     protected Collection $charactersPresent;
     protected Collection $subscriptions;
 
@@ -91,6 +93,8 @@ class Event
         DateTimeImmutable $endDate,
         string $notes,
         Collection $charactersPresent,
+        DateTimeImmutable $subscriptionsOpensAt,
+        int $playerSubscriptionCap,
     ): void {
         $this->name = $name;
         $this->secondaryName = $secondaryName;
@@ -99,5 +103,7 @@ class Event
         $this->endDate = $endDate;
         $this->notes = $notes;
         $this->charactersPresent = $charactersPresent;
+        $this->subscriptionsOpensAt = $subscriptionsOpensAt;
+        $this->playerSubscriptionCap = $playerSubscriptionCap;
     }
 }

@@ -19,6 +19,7 @@ use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\PrintCharacter;
 use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
+use SvenHK\Maerquin\Controller\SubscriptionsController;
 
 return function (App $app): void {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -68,4 +69,6 @@ return function (App $app): void {
     $app->get('/admin/races/{raceId}.html', RacesController::class);
     $app->get('/admin/races/persisted/{raceId}.html', RacesController::class);
     $app->post('/admin/races/{raceId}.html', RacesController::class);
+
+    $app->get('/admin/subscriptions.html', SubscriptionsController::class);
 };

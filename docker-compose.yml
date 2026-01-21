@@ -37,6 +37,8 @@ services:
       MYSQL_DATABASE: src
       MYSQL_USER: user
       MYSQL_PASSWORD: userpass
+    expose:
+      - "3306"
     ports:
       - "3306:3306"
     volumes:

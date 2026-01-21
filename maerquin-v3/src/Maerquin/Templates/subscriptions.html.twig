@@ -1,0 +1,26 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12 is-gapless">
+            <div class="field is-pulled-right has-addons">
+                &nbsp;
+                <div class="control">
+                    <input class="input" type="text" v-model="search" placeholder="Zoeken">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {};
+            },
+            computed: {},
+            methods: {}
+        }).mount('#containerForm');
+    </script>
+
+{% endblock %}

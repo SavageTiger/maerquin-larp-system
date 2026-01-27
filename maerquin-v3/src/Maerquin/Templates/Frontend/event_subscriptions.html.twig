@@ -1,0 +1,32 @@
+{% extends 'Frontend/skeleton.html.twig' %}
+
+{% block container %}
+    {% block main %}
+
+        <div class="container">
+            {% for event in events %}
+
+                <div class="columns">
+                    <div class="column is-two-thirds">
+                        <div class="box">
+                            <h4 id="const" class="title is-4">
+                                {{ event.name }}
+                                <span class="is-pulled-right">
+                                    <font style="font-size: 13pt">
+                                        {{ event.startDate|date('d/m/Y') }}
+                                    </font>
+                                </span>
+                            </h4>
+
+                            <div class="message-body">
+                                ...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+
+    {% endblock %}
+{% endblock %}

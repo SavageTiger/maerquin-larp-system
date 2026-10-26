@@ -18,6 +18,17 @@
                                 </span>
                             </h4>
 
+                            {% set state = event.subscriptionState.value %}
+                            {% if state == 'OPEN' %}
+                                <span class="tag is-success">Inschrijving open</span>
+                            {% elseif state == 'PENDING' %}
+                                <span class="tag is-warning">
+                                    Inschrijving opent op {{ event.subscriptionsOpensAt|date('d/m/Y') }}
+                                </span>
+                            {% else %}
+                                <span class="tag is-danger">Inschrijving verlopen</span>
+                            {% endif %}
+
                             <div class="message-body">
                                 ...
                             </div>

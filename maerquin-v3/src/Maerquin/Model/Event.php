@@ -85,6 +85,26 @@ class Event
         return $this->notes ?? '';
     }
 
+    public function getSubscriptionsOpensAt(): DateTimeInterface
+    {
+        return $this->subscriptionsOpensAt;
+    }
+
+    public function getSubscriptionState(?DateTimeInterface $now = null): SubscriptionState
+    {
+        $now ??= new DateTimeImmutable();
+
+        if ($now >= $this->startDate) {
+            return SubscriptionState::Expired;
+        }
+
+        if ($now >= $this->subscriptionsOpensAt) {
+            return SubscriptionState::Open;
+        }
+
+        return SubscriptionState::Pending;
+    }
+
     public function updateEvent(
         string $name,
         string $secondaryName,

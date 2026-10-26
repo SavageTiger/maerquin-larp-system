@@ -5,7 +5,19 @@ declare(strict_types=1);
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 
-Dotenv::createImmutable(__DIR__ . '/..')->safeLoad();
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+$dotenv->required([
+    'PROJECT_NAME',
+    'DATABASE_HOSTNAME',
+    'DATABASE_NAME',
+    'DATABASE_USERNAME',
+    'DATABASE_PASSWORD',
+    'VALKEY_HOSTNAME',
+    'EMAIL_SERVER_DSN',
+])->notEmpty();
+$dotenv->required('DEBUG')->isBoolean();
+$dotenv->required('VALKEY_PASSWORD');
 
 $containerBuilder = new ContainerBuilder();
 

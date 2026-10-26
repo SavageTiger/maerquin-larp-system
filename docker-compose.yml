@@ -34,7 +34,7 @@ services:
     container_name: mysql_container_maerquin
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: src
+      MYSQL_DATABASE: maerquin
       MYSQL_USER: user
       MYSQL_PASSWORD: userpass
     expose:

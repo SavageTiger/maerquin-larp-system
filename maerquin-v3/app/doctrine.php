@@ -28,24 +28,24 @@ class DoctrineConfig
         }
 
         $this->config = ORMSetup::createAttributeMetadataConfiguration(
-            paths: [__DIR__ . '/../src/' . ($_ENV['PROJECT_NAME'] ?? 'None') . '/Entity'],
-            isDevMode: ($_ENV['DEBUG'] ?? 'false') === 'true',
+            paths: [__DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Entity'],
+            isDevMode: $_ENV['DEBUG'] === 'true',
             cache: $cache,
         );
 
         $this->config->enableNativeLazyObjects(true);
 
-        if ((($_ENV['DEBUG'] ?? 'false') === 'true') === false) {
+        if (($_ENV['DEBUG'] === 'true') === false) {
             $this->config->setQueryCache($cache);
         }
 
         $this->connection = DriverManager::getConnection([
             'driver' => 'pdo_mysql',
-            'host' => $_ENV['DATABASE_HOSTNAME'] ?? '',
+            'host' => $_ENV['DATABASE_HOSTNAME'],
             'port' => 3_306,
-            'dbname' => $_ENV['DATABASE_NAME'] ?? '',
-            'user' => $_ENV['DATABASE_USERNAME'] ?? '',
-            'password' => $_ENV['DATABASE_PASSWORD'] ?? '',
+            'dbname' => $_ENV['DATABASE_NAME'],
+            'user' => $_ENV['DATABASE_USERNAME'],
+            'password' => $_ENV['DATABASE_PASSWORD'],
             'charset' => 'utf8',
             'collation' => 'utf8mb3_general_ci',
         ], $this->config);

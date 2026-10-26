@@ -15,6 +15,7 @@ use SvenHK\Maerquin\Mail\AccountMailer;
 use SvenHK\Maerquin\Repository\TokenRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
 use SvenHK\Maerquin\Session\Session;
+use SvenHK\Maerquin\Translation\Translator;
 
 class LoginController extends Action
 {
@@ -25,6 +26,7 @@ class LoginController extends Action
         private readonly UserRepository $userRepository,
         private readonly TokenRepository $tokenRepository,
         private readonly AccountMailer $accountMailer,
+        private readonly Translator $translator,
     ) {
     }
 
@@ -78,17 +80,17 @@ class LoginController extends Action
         $user = $this->userRepository->findByUsername($username);
 
         if ($user === null) {
-            return 'User not found';
+            return $this->translator->trans('login.error.user_not_found');
         }
 
         if ($user->checkPassword($password) === false) {
-            return 'Password incorrect';
+            return $this->translator->trans('login.error.password_incorrect');
         }
 
         if ($user->isEmailVerified() === false) {
             $this->accountMailer->sendEmailVerification(Twig::fromRequest($this->request), $user);
 
-            return 'Je e-mailadres is nog niet bevestigd. We hebben je een nieuwe bevestigingslink gestuurd.';
+            return $this->translator->trans('login.error.email_not_verified');
         }
 
         $this->loginUser($user);

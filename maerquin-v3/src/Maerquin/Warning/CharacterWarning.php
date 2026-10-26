@@ -8,6 +8,7 @@ use SvenHK\Maerquin\Model\Character;
 use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
+use SvenHK\Maerquin\Translation\Translator;
 
 final readonly class CharacterWarning
 {
@@ -15,6 +16,7 @@ final readonly class CharacterWarning
         private RaceRepository $raceRepository,
         private SkillRepository $skillRepository,
         private EventRepository $eventRepository,
+        private Translator $translator,
     ) {
     }
 
@@ -55,11 +57,10 @@ final readonly class CharacterWarning
             $skill = $forbiddenSkillLink->getSkill();
 
             if ($character->hasSkill($skill) === true) {
-                $warnings[] = sprintf(
-                    'De skill "%s" is niet toegestaan voor een character met ras "%s".',
-                    $skill->getName(),
-                    $character->getRace()->getName(),
-                );
+                $warnings[] = $this->translator->trans('character.warning.forbidden_skill', [
+                    'skill' => $skill->getName(),
+                    'race' => $character->getRace()->getName(),
+                ]);
             }
         }
 
@@ -81,11 +82,10 @@ final readonly class CharacterWarning
             $skill = $forbiddenSkillLink->getSkill();
 
             if ($character->hasSkill($skill) === false) {
-                $warnings[] = sprintf(
-                    'De skill "%s" is verplicht voor een character met ras "%s".',
-                    $skill->getName(),
-                    $character->getRace()->getName(),
-                );
+                $warnings[] = $this->translator->trans('character.warning.mandatory_skill', [
+                    'skill' => $skill->getName(),
+                    'race' => $character->getRace()->getName(),
+                ]);
             }
         }
 
@@ -111,11 +111,10 @@ final readonly class CharacterWarning
                 }
 
                 if ($character->hasSkill($requiredParentSkillId) === false) {
-                    $warnings[] = sprintf(
-                        'De skill "%s" vereist eerst "%s", maar die ontbreekt nog.',
-                        $linkedSkill->getSkill()->getName(),
-                        $this->skillRepository->getById($requiredParentSkillId)->getName(),
-                    );
+                    $warnings[] = $this->translator->trans('character.warning.missing_required_skill', [
+                        'skill' => $linkedSkill->getSkill()->getName(),
+                        'requiredSkill' => $this->skillRepository->getById($requiredParentSkillId)->getName(),
+                    ]);
                 }
             }
         }
@@ -144,11 +143,10 @@ final readonly class CharacterWarning
         }
 
         if ($character->spendPoints() > $totalPoints) {
-            $warnings[] = sprintf(
-                'Het karakter heeft niet genoeg punten: %s spendeerbaar, %s vereist.',
-                $totalPoints,
-                $character->spendPoints(),
-            );
+            $warnings[] = $this->translator->trans('character.warning.not_enough_points', [
+                'available' => $totalPoints,
+                'required' => $character->spendPoints(),
+            ]);
         }
 
         return $warnings;
@@ -179,12 +177,11 @@ final readonly class CharacterWarning
 
         foreach ($boughtSkillCount as $skillId => $amountBought) {
             if ($amountBought > $allowedAmount[$skillId]) {
-                $warnings[] = sprintf(
-                    'De skill ‘%s’ is %d× aangeschaft; toegestaan maximum is %d.',
-                    $this->skillRepository->getById($skillId)->getName(),
-                    $amountBought,
-                    $allowedAmount[$skillId],
-                );
+                $warnings[] = $this->translator->trans('character.warning.skill_bought_too_often', [
+                    'skill' => $this->skillRepository->getById($skillId)->getName(),
+                    'amount' => $amountBought,
+                    'maximum' => $allowedAmount[$skillId],
+                ]);
             }
         }
 

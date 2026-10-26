@@ -15,6 +15,7 @@ use SvenHK\Maerquin\Form\FormResolver;
 use SvenHK\Maerquin\Form\RegistrationFormHandler;
 use SvenHK\Maerquin\Mail\AccountMailer;
 use SvenHK\Maerquin\Session\Session;
+use SvenHK\Maerquin\Translation\Translator;
 
 class RegisterController extends Action
 {
@@ -24,6 +25,7 @@ class RegisterController extends Action
         private readonly Session $session,
         private readonly RegistrationFormHandler $registrationFormHandler,
         private readonly AccountMailer $accountMailer,
+        private readonly Translator $translator,
     ) {
     }
 
@@ -46,7 +48,7 @@ class RegisterController extends Action
         try {
             $user = $this->registrationFormHandler->handle($this->request);
         } catch (MaerquinRegistrationException $exception) {
-            return $this->renderRegisterView('form', $exception->getMessage());
+            return $this->renderRegisterView('form', $this->translator->trans($exception->getTranslationKey()));
         } catch (MaerquinEmailAlreadyInUseException) {
             return $this->renderRegisterView('emailTaken');
         }

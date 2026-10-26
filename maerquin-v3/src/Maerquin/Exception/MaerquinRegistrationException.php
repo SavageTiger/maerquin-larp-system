@@ -8,23 +8,38 @@ use RuntimeException;
 
 final class MaerquinRegistrationException extends RuntimeException
 {
+    private function __construct(
+        string $message,
+        private readonly string $translationKey,
+    ) {
+        parent::__construct($message);
+    }
+
     public static function nameMissing(): self
     {
-        return new self('Vul je naam in.');
+        return new self('Name is missing.', 'registration.error.name_missing');
     }
 
     public static function invalidEmail(): self
     {
-        return new self('Vul een geldig e-mailadres in.');
+        return new self('Email address is invalid.', 'registration.error.invalid_email');
     }
 
     public static function passwordTooShort(): self
     {
-        return new self('Het wachtwoord moet minimaal 8 tekens lang zijn.');
+        return new self(
+            'Password is too short. Minimum 8 characters required.',
+            'registration.error.password_too_short',
+        );
     }
 
     public static function passwordsNotMatching(): self
     {
-        return new self('De wachtwoorden komen niet overeen.');
+        return new self('Passwords do not match.', 'registration.error.passwords_not_matching');
+    }
+
+    public function getTranslationKey(): string
+    {
+        return $this->translationKey;
     }
 }

@@ -8,6 +8,7 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Token;
 use SvenHK\Maerquin\Model\User;
 use SvenHK\Maerquin\Repository\TokenRepository;
+use SvenHK\Maerquin\Translation\Translator;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
@@ -16,6 +17,7 @@ class AccountMailer
     public function __construct(
         private readonly TokenRepository $tokenRepository,
         private readonly Mailer $mailer,
+        private readonly Translator $translator,
     ) {
     }
 
@@ -26,7 +28,7 @@ class AccountMailer
 
         $this->send(
             $user,
-            'Maerquin wachtwoord instellen',
+            $this->translator->trans('mail.subject.password_setup'),
             $view->fetch('Mail/reset_password.html.twig', [
                 'name' => $user->getPlayer()->getName(),
                 'hash' => $token->getUnhashedValue(),
@@ -41,7 +43,7 @@ class AccountMailer
 
         $this->send(
             $user,
-            'Maerquin account bevestigen',
+            $this->translator->trans('mail.subject.email_verification'),
             $view->fetch('Mail/verify_email.html.twig', [
                 'name' => $user->getPlayer()->getName(),
                 'hash' => $token->getUnhashedValue(),

@@ -58,12 +58,12 @@ class LoginController extends Action
                     $rememberMeCookie = $this->getRememberMeToken($form->getValue('username'));
                 }
 
-                return $this->redirectTo('/home.html', $rememberMeCookie);
+                return $this->redirectTo($this->getRedirectPath(), $rememberMeCookie);
             }
         }
 
         if ($this->loginRememberMeCookie() === true) {
-            return $this->redirectTo('/home.html');
+            return $this->redirectTo($this->getRedirectPath());
         }
 
         return $view->render(
@@ -71,6 +71,17 @@ class LoginController extends Action
             'login.html.twig',
             ['form' => $form, 'loginError' => $loginError ?? null],
         );
+    }
+
+    private function getRedirectPath(): string
+    {
+        $redirect = $this->request->getQueryParams()['redirect'] ?? null;
+
+        if (is_string($redirect) === false || preg_match('#^/(?![/\\\\])[A-Za-z0-9/._~?=&%-]*$#', $redirect) !== 1) {
+            return '/home.html';
+        }
+
+        return $redirect;
     }
 
     public function login(string $username, string $password): false | string

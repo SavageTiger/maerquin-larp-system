@@ -88,6 +88,11 @@ class User extends FrameworkUser
         return $this->username;
     }
 
+    public function getPlayer(): PlayerModel
+    {
+        return $this->player;
+    }
+
     public function getLastLogin(): DateTimeImmutable
     {
         return $this->lastLogin;

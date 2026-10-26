@@ -11,6 +11,7 @@ use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Entity\EventSubscription as EventSubscriptionEntity;
 use SvenHK\Maerquin\Entity\Player;
+use SvenHK\Maerquin\Model\Player as PlayerModel;
 
 class EventSubscription
 {
@@ -47,5 +48,10 @@ class EventSubscription
     public function getId(): string
     {
         return (string)$this->id;
+    }
+
+    public function isFor(PlayerModel $player): bool
+    {
+        return $this->player->getId() === $player->getId();
     }
 }

@@ -286,4 +286,9 @@ class Character
 
         return $spendPoints;
     }
+
+    public function isOwnedBy(Player $player): bool
+    {
+        return $this->player?->getId() === $player->getId();
+    }
 }

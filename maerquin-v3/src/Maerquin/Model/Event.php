@@ -90,6 +90,20 @@ class Event
         return $this->subscriptionsOpensAt;
     }
 
+    public function isSubscribed(Player $player): bool
+    {
+        return $this->subscriptions->exists(
+            static fn(int $key, EventSubscription $subscription): bool => $subscription->isFor($player),
+        );
+    }
+
+    public function hasParticipated(Player $player): bool
+    {
+        return $this->charactersPresent->exists(
+            static fn(int $key, CharacterEventLink $link): bool => $link->isPlayedBy($player),
+        );
+    }
+
     public function getSubscriptionState(?DateTimeInterface $now = null): SubscriptionState
     {
         $now ??= new DateTimeImmutable();

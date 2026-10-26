@@ -30,4 +30,9 @@ class CharacterEventLink
             $character,
         );
     }
+
+    public function isPlayedBy(Player $player): bool
+    {
+        return $this->character->isOwnedBy($player);
+    }
 }

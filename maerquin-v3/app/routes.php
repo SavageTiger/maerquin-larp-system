@@ -11,19 +11,19 @@ use SvenHK\Maerquin\Controller\API\PlayerResetPasswordEmailController;
 use SvenHK\Maerquin\Controller\API\SkillsApiController;
 use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
+use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
+use SvenHK\Maerquin\Controller\Frontend\RegisterController;
 use SvenHK\Maerquin\Controller\Frontend\SubscriptionsController as FrontendSubscriptionsController;
+use SvenHK\Maerquin\Controller\Frontend\VerifyEmailController;
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\LogoutController;
-use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
 use SvenHK\Maerquin\Controller\PlayerResetPasswordController;
 use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\PrintCharacter;
 use SvenHK\Maerquin\Controller\RacesController;
-use SvenHK\Maerquin\Controller\Frontend\RegisterController;
 use SvenHK\Maerquin\Controller\SkillsController;
 use SvenHK\Maerquin\Controller\SubscriptionsController;
-use SvenHK\Maerquin\Controller\Frontend\VerifyEmailController;
 
 return function (App $app): void {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {

@@ -28,19 +28,20 @@ final class Translator
      * Replaces `%name%` placeholders with the given parameters.
      *
      * @param array<string, string|int|float> $parameters
+     *
      * @throws InvalidArgumentException
      */
     public function trans(string $key, array $parameters = []): string
     {
         $message = $this->cache->get(
             sprintf('translation.%s.%s', $this->locale, $key),
-            fn (): string => $this->getMessages()[$key] ?? $key,
+            fn(): string => $this->getMessages()[$key] ?? $key,
         );
 
         $replacements = [];
 
         foreach ($parameters as $name => $value) {
-            $replacements['%' . $name . '%'] = (string) $value;
+            $replacements['%' . $name . '%'] = (string)$value;
         }
 
         return strtr($message, $replacements);

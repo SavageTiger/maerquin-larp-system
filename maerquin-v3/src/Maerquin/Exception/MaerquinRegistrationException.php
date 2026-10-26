@@ -15,9 +15,14 @@ final class MaerquinRegistrationException extends RuntimeException
         parent::__construct($message);
     }
 
-    public static function nameMissing(): self
+    public static function firstNameMissing(): self
     {
-        return new self('Name is missing.', 'registration.error.name_missing');
+        return new self('First name is missing.', 'registration.error.first_name_missing');
+    }
+
+    public static function lastNameMissing(): self
+    {
+        return new self('Last name is missing.', 'registration.error.last_name_missing');
     }
 
     public static function invalidEmail(): self

@@ -32,15 +32,21 @@ readonly class RegistrationFormHandler
     {
         $formResolver = FormResolver::createFromRequest($request);
 
-        $name = str_name_case(
-            (string) preg_replace('/\s+/u', ' ', trim($formResolver->getValue('name', 'registration'))),
-        );
+        $firstName = trim($formResolver->getValue('firstName', 'registration'));
+        $infix = trim($formResolver->getValue('infix', 'registration', ''));
+        $lastName = trim($formResolver->getValue('lastName', 'registration'));
 
         $email = mb_strtolower(trim($formResolver->getValue('email', 'registration')));
         $password = $formResolver->getValue('password', 'registration');
         $passwordRepeat = $formResolver->getValue('passwordRepeat', 'registration');
 
-        $this->guardRegistration($name, $email, $password, $passwordRepeat);
+        $this->guardRegistration($firstName, $lastName, $email, $password, $passwordRepeat);
+
+        $name = str_name_case(
+            $this->normalizeWhitespace(
+                implode(' ', [$firstName, $infix, $lastName]),
+            ),
+        );
 
         $player = PlayerModel::create(Uuid::uuid4());
         $player->updatePlayer($name, $email);
@@ -52,17 +58,35 @@ readonly class RegistrationFormHandler
         return $user;
     }
 
-    private function guardRegistration(string $name, string $email, string $password, string $passwordRepeat): void
+    private function normalizeWhitespace(string $value): string
     {
-        if ($name === '') {
-            throw MaerquinRegistrationException::nameMissing();
+        return (string)preg_replace('/\s+/u', ' ', trim($value));
+    }
+
+    /**
+     * @throws MaerquinRegistrationException
+     * @throws MaerquinEmailAlreadyInUseException
+     */
+    private function guardRegistration(
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $password,
+        string $passwordRepeat,
+    ): void {
+        if ($firstName === '') {
+            throw MaerquinRegistrationException::firstNameMissing();
+        }
+
+        if ($lastName === '') {
+            throw MaerquinRegistrationException::lastNameMissing();
         }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw MaerquinRegistrationException::invalidEmail();
         }
 
-        if (strlen($password) < 8) {
+        if (mb_strlen($password) < 8) {
             throw MaerquinRegistrationException::passwordTooShort();
         }
 

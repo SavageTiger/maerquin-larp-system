@@ -41,11 +41,34 @@
             <h4 class="title is-4">Account aanmaken</h4>
 
             <div class="field">
-                <label class="label" for="name">Naam</label>
+                <label class="label" for="firstName">Voornaam</label>
                 <div class="control has-icons-left">
-                    <input id="name" type="text" name="registration[name]" class="input" required
-                           value="{{ form.getValue('name', 'registration', '') }}" placeholder="e.g. John Doe">
+                    <input id="firstName" type="text" name="registration[firstName]" class="input" required
+                           autocomplete="given-name"
+                           value="{{ form.getValue('firstName', 'registration', '') }}" placeholder="e.g. Jan">
                     <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                </div>
+            </div>
+
+            <div class="columns is-mobile is-variable is-2">
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label" for="infix">Tussenvoegsel</label>
+                        <div class="control">
+                            <input id="infix" type="text" name="registration[infix]" class="input"
+                                   value="{{ form.getValue('infix', 'registration', '') }}" placeholder="e.g. van der">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label" for="lastName">Achternaam</label>
+                        <div class="control">
+                            <input id="lastName" type="text" name="registration[lastName]" class="input" required
+                                   autocomplete="family-name"
+                                   value="{{ form.getValue('lastName', 'registration', '') }}" placeholder="e.g. Berg">
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -16,7 +16,7 @@ class RaceSkillLink extends SkillRaceConnection
     #[ORM\Column(type: 'uuid', unique: true)]
     protected UuidInterface $id;
 
-    #[ORM\ManyToOne(targetEntity: Race::class)]
+    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'skillConnections')]
     #[ORM\JoinColumn(nullable: false)]
     protected Race $race;
 

@@ -20,7 +20,7 @@ class CharacterEventLink extends CharacterEventLinkModel
     #[ORM\JoinColumn(name: 'character_id', referencedColumnName: 'id', nullable: false)]
     protected Character $character;
 
-    #[ORM\ManyToOne(targetEntity: Event::class)]
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'charactersPresent')]
     #[ORM\JoinColumn(name: 'event_id', nullable: false)]
     protected Event $event;
 }

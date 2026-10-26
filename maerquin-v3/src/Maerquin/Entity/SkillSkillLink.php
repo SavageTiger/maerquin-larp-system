@@ -21,7 +21,7 @@ class SkillSkillLink extends SkillSkillLinkModel
     #[ORM\JoinColumn(name: 'firstskill_id', referencedColumnName: 'id', nullable: false)]
     protected SkillModel $firstSkill;
 
-    #[ORM\ManyToOne(targetEntity: Skill::class)]
+    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'requiredSkills')]
     #[ORM\JoinColumn(name: 'secondskill_id', referencedColumnName: 'id', nullable: false)]
     protected SkillModel $secondSkill;
 

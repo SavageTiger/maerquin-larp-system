@@ -6,6 +6,7 @@ declare(strict_types=1);
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use SvenHK\Maerquin\CLI\CacheClearCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -13,6 +14,8 @@ require __DIR__ . '/../vendor/autoload.php';
 $container = require __DIR__ . '/../app/container.php';
 
 $application = new Application('Maerquin');
+
+$application->addCommand(new CacheClearCommand($container->get('cache')));
 
 ConsoleRunner::addCommands($application, new SingleManagerProvider($container->get(EntityManager::class)));
 

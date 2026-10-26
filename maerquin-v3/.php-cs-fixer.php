@@ -168,4 +168,11 @@ return (new PhpCsFixer\Config())
     )
     ->setCacheFile(sys_get_temp_dir() . '/.php_cs.cache')
     ->setRiskyAllowed(true)
-    ->setRules($rules);
+    ->setRules($rules)
+    ->setFinder(
+        PhpCsFixer\Finder::create()->in([
+            __DIR__ . '/app',
+            __DIR__ . '/src',
+            __DIR__ . '/tests',
+        ]),
+    );

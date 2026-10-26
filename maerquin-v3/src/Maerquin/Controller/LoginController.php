@@ -64,7 +64,7 @@ class LoginController extends Action
     {
         $redirect = $this->request->getQueryParams()['redirect'] ?? null;
 
-        if (is_string($redirect) === false || preg_match('#^/(?![/\\\\])[A-Za-z0-9/._~?=&%-]*$#', $redirect) !== 1) {
+        if (is_string($redirect) === false || preg_match('#^/(?![/\\\])[A-Za-z0-9/._~?=&%-]*$#', $redirect) !== 1) {
             return '/home.html';
         }
 

@@ -104,7 +104,7 @@ class Event
         );
     }
 
-    public function getSubscriptionState(?DateTimeInterface $now = null): SubscriptionState
+    public function getSubscriptionState(null | DateTimeInterface $now = null): SubscriptionState
     {
         $now ??= new DateTimeImmutable();
 

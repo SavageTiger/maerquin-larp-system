@@ -13,6 +13,8 @@ use SvenHK\Maerquin\Model\User as UserModel;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
 
+use function Tamtamchik\NameCase\str_name_case;
+
 readonly class RegistrationFormHandler
 {
     public function __construct(
@@ -30,7 +32,10 @@ readonly class RegistrationFormHandler
     {
         $formResolver = FormResolver::createFromRequest($request);
 
-        $name = trim($formResolver->getValue('name', 'registration'));
+        $name = str_name_case(
+            (string) preg_replace('/\s+/u', ' ', trim($formResolver->getValue('name', 'registration'))),
+        );
+
         $email = mb_strtolower(trim($formResolver->getValue('email', 'registration')));
         $password = $formResolver->getValue('password', 'registration');
         $passwordRepeat = $formResolver->getValue('passwordRepeat', 'registration');

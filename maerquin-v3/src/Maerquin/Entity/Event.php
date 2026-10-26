@@ -47,10 +47,15 @@ class Event extends EventModel
 
     #[ORM\Column(
         type: 'integer',
-        nullable: true,
         options: ['default' => 0],
     )]
-    protected null | int $playerSubscriptionCap;
+    protected int $playerSubscriptionCap;
+
+    #[ORM\Column(
+        type: 'integer',
+        options: ['default' => 0],
+    )]
+    protected int $npcSubscriptionCap;
 
     #[ORM\OneToMany(
         targetEntity: CharacterEventLink::class,
@@ -80,5 +85,6 @@ class Event extends EventModel
         $this->endDate = new DateTimeImmutable('now');
         $this->subscriptionsOpensAt = new DateTimeImmutable('+14 days');
         $this->playerSubscriptionCap = 0;
+        $this->npcSubscriptionCap = 0;
     }
 }

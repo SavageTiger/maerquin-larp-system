@@ -49,6 +49,7 @@ class EventFormHandler
         $subscriptionsOpensAtMonth = (int)$formResolver->getValue('subscriptionsOpensAtMonth', 'event', (string)$startDateMonth);
         $subscriptionsOpensAtDay = (int)$formResolver->getValue('subscriptionsOpensAtDay', 'event', (string)$startDateDay);
         $playerSubscriptionCap = (int)$formResolver->getValue('playerSubscriptionCap', 'event', '0');
+        $npcSubscriptionCap = (int)$formResolver->getValue('npcSubscriptionCap', 'event', '0');
 
         $characterIds = json_decode($formResolver->getValue('characters', 'event'), true);
 
@@ -86,6 +87,7 @@ class EventFormHandler
             $this->createCharacterPresenceList($event, $characterIds),
             $subscriptionsOpensAt,
             max(0, $playerSubscriptionCap),
+            max(0, $npcSubscriptionCap),
         );
 
         $this->eventRepository->save($event);

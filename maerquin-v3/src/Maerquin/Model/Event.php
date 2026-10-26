@@ -20,7 +20,8 @@ class Event
     protected int $points;
     protected null | string $notes;
     protected DateTimeInterface $subscriptionsOpensAt;
-    protected null | int $playerSubscriptionCap;
+    protected int $playerSubscriptionCap;
+    protected int $npcSubscriptionCap;
     protected Collection $charactersPresent;
     protected Collection $subscriptions;
 
@@ -92,7 +93,12 @@ class Event
 
     public function getPlayerSubscriptionCap(): int
     {
-        return $this->playerSubscriptionCap ?? 0;
+        return $this->playerSubscriptionCap;
+    }
+
+    public function getNpcSubscriptionCap(): int
+    {
+        return $this->npcSubscriptionCap;
     }
 
     public function isSubscribed(Player $player): bool
@@ -134,6 +140,7 @@ class Event
         Collection $charactersPresent,
         DateTimeImmutable $subscriptionsOpensAt,
         int $playerSubscriptionCap,
+        int $npcSubscriptionCap,
     ): void {
         $this->name = $name;
         $this->secondaryName = $secondaryName;
@@ -144,5 +151,6 @@ class Event
         $this->charactersPresent = $charactersPresent;
         $this->subscriptionsOpensAt = $subscriptionsOpensAt;
         $this->playerSubscriptionCap = $playerSubscriptionCap;
+        $this->npcSubscriptionCap = $npcSubscriptionCap;
     }
 }

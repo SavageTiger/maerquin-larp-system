@@ -11,6 +11,7 @@ use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Token;
 use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Form\FormResolver;
+use SvenHK\Maerquin\Mail\AccountMailer;
 use SvenHK\Maerquin\Repository\TokenRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
 use SvenHK\Maerquin\Session\Session;
@@ -23,6 +24,7 @@ class LoginController extends Action
         private Session $session,
         private readonly UserRepository $userRepository,
         private readonly TokenRepository $tokenRepository,
+        private readonly AccountMailer $accountMailer,
     ) {
     }
 
@@ -81,6 +83,12 @@ class LoginController extends Action
 
         if ($user->checkPassword($password) === false) {
             return 'Password incorrect';
+        }
+
+        if ($user->isEmailVerified() === false) {
+            $this->accountMailer->sendEmailVerification(Twig::fromRequest($this->request), $user);
+
+            return 'Je e-mailadres is nog niet bevestigd. We hebben je een nieuwe bevestigingslink gestuurd.';
         }
 
         $this->loginUser($user);

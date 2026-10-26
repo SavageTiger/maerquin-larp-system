@@ -1,0 +1,87 @@
+{% extends 'Frontend/account_skeleton.html.twig' %}
+
+{% block account_content %}
+    {% if state == 'registered' %}
+        <article class="message is-success">
+            <div class="message-header"><p>Account aangemaakt</p></div>
+            <div class="message-body">
+                We hebben een e-mail gestuurd naar <b>{{ form.getValue('email', 'registration', '') }}</b>.
+                Klik op de link in die e-mail om je account te bevestigen, daarna kun je
+                <a href="/login.html?redirect=/subscriptions.html">inloggen</a>.
+            </div>
+        </article>
+
+    {% elseif state == 'emailTaken' %}
+        <article class="message is-warning">
+            <div class="message-header"><p>E-mailadres is al bekend</p></div>
+            <div class="message-body">
+                <p>
+                    Er bestaat al een account of speler met het e-mailadres
+                    <b>{{ form.getValue('email', 'registration', '') }}</b>.
+                    Je kunt een e-mail ontvangen waarmee je (opnieuw) een wachtwoord instelt.
+                </p>
+                <form method="POST" action="/password-email.html">
+                    <input type="hidden" name="passwordEmail[email]" value="{{ form.getValue('email', 'registration', '') }}"/>
+                    <button type="submit" class="button is-warning">
+                        <i class="fa-solid fa-envelope"></i>&nbsp;Stuur mij een wachtwoord e-mail
+                    </button>
+                </form>
+            </div>
+        </article>
+
+    {% else %}
+        {% if error is not null %}
+            <article class="message is-danger">
+                <div class="message-header"><p>Registreren mislukt</p></div>
+                <div class="message-body">{{ error }}</div>
+            </article>
+        {% endif %}
+
+        <form method="POST" class="box">
+            <h4 class="title is-4">Account aanmaken</h4>
+
+            <div class="field">
+                <label class="label" for="name">Naam</label>
+                <div class="control has-icons-left">
+                    <input id="name" type="text" name="registration[name]" class="input" required
+                           value="{{ form.getValue('name', 'registration', '') }}" placeholder="e.g. John Doe">
+                    <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="email">E-mailadres</label>
+                <div class="control has-icons-left">
+                    <input id="email" type="email" name="registration[email]" class="input" required
+                           value="{{ form.getValue('email', 'registration', '') }}" placeholder="john@example.com">
+                    <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+                </div>
+                <p class="help">Dit is ook je gebruikersnaam.</p>
+            </div>
+
+            <div class="field">
+                <label class="label" for="password">Wachtwoord</label>
+                <div class="control has-icons-left">
+                    <input id="password" type="password" name="registration[password]" class="input" required minlength="8"
+                           placeholder="*******">
+                    <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="passwordRepeat">Herhaal wachtwoord</label>
+                <div class="control has-icons-left">
+                    <input id="passwordRepeat" type="password" name="registration[passwordRepeat]" class="input" required
+                           minlength="8" placeholder="*******">
+                    <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                </div>
+            </div>
+
+            <div class="field">
+                <button type="submit" class="button is-success">Registreren</button>
+            </div>
+
+            <p>Heb je al een account? <a href="/login.html?redirect=/subscriptions.html">Inloggen</a></p>
+        </form>
+    {% endif %}
+{% endblock %}

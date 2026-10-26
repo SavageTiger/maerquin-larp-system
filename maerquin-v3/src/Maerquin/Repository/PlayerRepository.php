@@ -35,6 +35,15 @@ class PlayerRepository
         return $this->entities()->findOneBy(['id' => $playerId]);
     }
 
+    public function findByEmail(string $email): null | Player
+    {
+        if (trim($email) === '') {
+            return null;
+        }
+
+        return $this->entities()->findOneBy(['email' => $email]);
+    }
+
     /**
      * @return Player[]
      */

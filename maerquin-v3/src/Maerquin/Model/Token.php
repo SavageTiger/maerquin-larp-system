@@ -14,6 +14,7 @@ class Token
 {
     public const string TYPE_REMEMBER_ME = 'REMEMBER_ME';
     public const string TYPE_RESET_PASSWORD = 'RESET_PASSWORD';
+    public const string TYPE_VERIFY_EMAIL = 'VERIFY_EMAIL';
 
     protected UuidInterface $id;
     protected User $user;
@@ -56,6 +57,21 @@ class Token
         $token->id = Uuid::uuid4();
         $token->user = $user;
         $token->type = self::TYPE_RESET_PASSWORD;
+        $token->value = hash('sha256', self::generateToken());
+        $token->createdAt = new DateTimeImmutable();
+        $token->unhashedValue = $token->value;
+
+        return $token;
+    }
+
+    public static function generateForEmailVerification(
+        User $user,
+    ): TokenEntity {
+        $token = new TokenEntity();
+
+        $token->id = Uuid::uuid4();
+        $token->user = $user;
+        $token->type = self::TYPE_VERIFY_EMAIL;
         $token->value = hash('sha256', self::generateToken());
         $token->createdAt = new DateTimeImmutable();
         $token->unhashedValue = $token->value;

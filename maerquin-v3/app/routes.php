@@ -15,12 +15,15 @@ use SvenHK\Maerquin\Controller\Frontend\SubscriptionsController as FrontendSubsc
 use SvenHK\Maerquin\Controller\HomeController;
 use SvenHK\Maerquin\Controller\LoginController;
 use SvenHK\Maerquin\Controller\LogoutController;
+use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
 use SvenHK\Maerquin\Controller\PlayerResetPasswordController;
 use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\PrintCharacter;
 use SvenHK\Maerquin\Controller\RacesController;
+use SvenHK\Maerquin\Controller\Frontend\RegisterController;
 use SvenHK\Maerquin\Controller\SkillsController;
 use SvenHK\Maerquin\Controller\SubscriptionsController;
+use SvenHK\Maerquin\Controller\Frontend\VerifyEmailController;
 
 return function (App $app): void {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -34,6 +37,12 @@ return function (App $app): void {
     $app->post('/login.html', LoginController::class);
 
     $app->get('/logout.html', LogoutController::class);
+
+    $app->get('/register.html', RegisterController::class);
+    $app->post('/register.html', RegisterController::class);
+    $app->get('/verify-email/{hash}.html', VerifyEmailController::class);
+    $app->get('/password-email.html', PasswordEmailController::class);
+    $app->post('/password-email.html', PasswordEmailController::class);
 
     $app->get('/admin/characters.html', CharactersController::class);
     $app->get('/admin/characters/create.html', CharactersController::class);

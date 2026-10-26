@@ -36,6 +36,7 @@ class PasswordResetFormHandler
         }
 
         $token->getUser()->updatePassword($password);
+        $token->getUser()->verifyEmail();
 
         $this->userRepository->save($token->getUser());
         $this->tokenRepository->delete($token);

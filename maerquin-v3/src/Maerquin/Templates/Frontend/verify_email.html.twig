@@ -1,0 +1,21 @@
+{% extends 'Frontend/account_skeleton.html.twig' %}
+
+{% block account_content %}
+    {% if verified %}
+        <article class="message is-success">
+            <div class="message-header"><p>E-mailadres bevestigd</p></div>
+            <div class="message-body">
+                Je account is bevestigd. Je kunt nu
+                <a href="/login.html?redirect=/subscriptions.html">inloggen</a>.
+            </div>
+        </article>
+    {% else %}
+        <article class="message is-danger">
+            <div class="message-header"><p>Link ongeldig</p></div>
+            <div class="message-body">
+                Deze bevestigingslink is ongeldig of verlopen.
+                Log in met je e-mailadres en wachtwoord om een nieuwe link te ontvangen.
+            </div>
+        </article>
+    {% endif %}
+{% endblock %}

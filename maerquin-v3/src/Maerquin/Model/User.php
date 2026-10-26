@@ -20,6 +20,7 @@ class User extends FrameworkUser
     protected bool $admin;
     protected string $salt;
     protected string $hash;
+    protected bool $emailVerified;
 
     public static function create(PlayerModel $player): UserEntity
     {
@@ -30,9 +31,29 @@ class User extends FrameworkUser
         $user->player = $player;
         $user->lastLogin = new DateTimeImmutable('1970-1-1');
         $user->admin = false;
+        $user->emailVerified = false;
         $user->updatePassword(random_bytes(36));
 
         return $user;
+    }
+
+    public static function register(PlayerModel $player, string $password): UserEntity
+    {
+        $user = self::create($player);
+        $user->username = $player->getEmail();
+        $user->updatePassword($password);
+
+        return $user;
+    }
+
+    public function isEmailVerified(): bool
+    {
+        return $this->emailVerified;
+    }
+
+    public function verifyEmail(): void
+    {
+        $this->emailVerified = true;
     }
 
     public function updatePassword(string $password): void

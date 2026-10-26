@@ -28,6 +28,14 @@ class TokenRepository
         ]);
     }
 
+    public function findByEmailVerificationHash(string $hash): null | Token
+    {
+        return $this->entities()->findOneBy([
+            'type' => Token::TYPE_VERIFY_EMAIL,
+            'value' => $hash,
+        ]);
+    }
+
     public function findByCookieValue(string $cookieValue): null | Token
     {
         return $this->entities()->findOneBy([

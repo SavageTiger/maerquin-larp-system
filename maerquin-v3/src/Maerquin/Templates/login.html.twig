@@ -32,7 +32,7 @@
                 <div class="columns is-three-fifths is-centered">
                     <form method="POST" class="box column is-two-fifths">
                         <div class="field">
-                            <label for="" class="label">Gebruikersnaam</label>
+                            <label for="" class="label">E-mailadres of gebruikersnaam</label>
                             <div class="control has-icons-left">
                                 <input type="text" value="{{ form.getValue('username', default: '') }}" name="username"
                                        placeholder="e.g. John" class="input"
@@ -80,6 +80,11 @@
                                 Login
                             </button>
                         </div>
+                        <p>
+                            <a href="/register.html">Account aanmaken</a>
+                            &nbsp;|&nbsp;
+                            <a href="/password-email.html">Wachtwoord vergeten?</a>
+                        </p>
                     </form>
                 </div>
             </div>

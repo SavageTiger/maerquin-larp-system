@@ -31,6 +31,9 @@ class User extends UserModel
     #[ORM\Column(options: ['default' => false])]
     protected bool $admin;
 
+    #[ORM\Column(options: ['default' => false])]
+    protected bool $emailVerified;
+
     #[ORM\OneToOne(
         targetEntity: Player::class,
     )]

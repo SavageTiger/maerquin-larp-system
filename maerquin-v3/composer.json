@@ -23,6 +23,7 @@
   ],
   "require": {
     "php": "^8.5",
+    "ext-dom": "*",
     "ext-gd": "*",
     "ext-json": "*",
     "doctrine/orm": "^3.1",
@@ -38,9 +39,8 @@
     "slim/twig-view": "^3.4",
     "symfony/cache": "^7.3",
     "symfony/console": "^7.0",
-    "symfony/dotenv": "^7.1",
     "symfony/mailer": "^7.1",
-    "ext-dom": "*"
+    "vlucas/phpdotenv": "^5.6"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3",

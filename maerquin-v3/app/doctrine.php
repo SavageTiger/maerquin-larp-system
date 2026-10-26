@@ -29,13 +29,13 @@ class DoctrineConfig
 
         $this->config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [__DIR__ . '/../src/' . ($_ENV['PROJECT_NAME'] ?? 'None') . '/Entity'],
-            isDevMode: $_ENV['DEBUG'] === 'true',
+            isDevMode: ($_ENV['DEBUG'] ?? 'false') === 'true',
             cache: $cache,
         );
 
         $this->config->enableNativeLazyObjects(true);
 
-        if (($_ENV['DEBUG'] === 'true') === false) {
+        if ((($_ENV['DEBUG'] ?? 'false') === 'true') === false) {
             $this->config->setQueryCache($cache);
         }
 

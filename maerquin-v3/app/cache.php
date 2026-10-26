@@ -5,8 +5,8 @@ declare(strict_types=1);
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder): void {
-    $valkeyHostname = (string)$_ENV['VALKEY_HOSTNAME'];
-    $valkeyPassword = (string)$_ENV['VALKEY_PASSWORD'];
+    $valkeyHostname = (string)($_ENV['VALKEY_HOSTNAME'] ?? 'valkey');
+    $valkeyPassword = (string)($_ENV['VALKEY_PASSWORD'] ?? '');
 
     $client = new Predis\Client(
         [

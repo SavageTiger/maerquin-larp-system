@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use Symfony\Component\Console\Application;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$container = require __DIR__ . '/../app/container.php';
+
+$application = new Application('Maerquin');
+
+ConsoleRunner::addCommands($application, new SingleManagerProvider($container->get(EntityManager::class)));
+
+$application->run();

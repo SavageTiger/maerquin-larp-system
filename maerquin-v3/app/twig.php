@@ -55,7 +55,7 @@ return function (App $app): void {
         __DIR__ . '/../src/' . $_ENV['PROJECT_NAME'] . '/Templates',
         [
             'cache' => $twigCache,
-            'debug' => $_ENV['DEBUG'] === 'true',
+            'debug' => ($_ENV['DEBUG'] ?? 'false') === 'true',
             'auto_reload' => true,
         ],
     );

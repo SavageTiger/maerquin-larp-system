@@ -12,9 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Event as EventModel;
-use SvenHK\Maerquin\Repository\EventRepository;
 
-#[ORM\Entity(repositoryClass: EventRepository::class)]
+#[ORM\Entity]
 class Event extends EventModel
 {
     #[ORM\Id]

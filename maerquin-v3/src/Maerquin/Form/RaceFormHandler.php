@@ -4,33 +4,22 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Form;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use JsonException;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
-use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
+use SvenHK\Maerquin\Warning\CharacterWarningUpdater;
 
 class RaceFormHandler
 {
-    /**
-     * @var RaceRepository
-     */
-    private readonly EntityRepository $raceRepository;
-
-    /**
-     * @var SkillRepository
-     */
-    private readonly EntityRepository $skillRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->raceRepository = $entityManager->getRepository(Race::class);
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
+    public function __construct(
+        private readonly RaceRepository $raceRepository,
+        private readonly SkillRepository $skillRepository,
+        private readonly CharacterWarningUpdater $characterWarningUpdater,
+    ) {
     }
 
     /**
@@ -82,6 +71,8 @@ class RaceFormHandler
             $name,
             $skillConnections,
         );
+
+        $this->characterWarningUpdater->updateAndSaveAllByRace($race->getId());
 
         $this->raceRepository->save($race);
     }

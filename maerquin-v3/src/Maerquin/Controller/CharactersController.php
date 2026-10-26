@@ -5,18 +5,12 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Character;
-use SvenHK\Maerquin\Entity\CustomField;
-use SvenHK\Maerquin\Entity\Deity;
-use SvenHK\Maerquin\Entity\Event;
-use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Form\CharacterFormHandler;
 use SvenHK\Maerquin\Form\FormResolver;
@@ -36,46 +30,15 @@ use Webmozart\Assert\Assert;
 
 class CharactersController extends Action
 {
-    /**
-     * @var CharacterRepository
-     */
-    private readonly EntityRepository $characterRepository;
-
-    /**
-     * @var EventRepository
-     */
-    private readonly EntityRepository $eventRepository;
-
-    /**
-     * @var DeityRepository
-     */
-    private readonly EntityRepository $deityRepository;
-
-    /**
-     * @var PlayerRepository
-     */
-    private readonly EntityRepository $playerRepository;
-
-    /**
-     * @var RaceRepository
-     */
-    private readonly EntityRepository $raceRepository;
-
-    /**
-     * @var CustomFieldRepository
-     */
-    private readonly EntityRepository $customFieldRepository;
-
     public function __construct(
-        EntityManager $entityManager,
+        private readonly CharacterRepository $characterRepository,
+        private readonly EventRepository $eventRepository,
+        private readonly DeityRepository $deityRepository,
+        private readonly PlayerRepository $playerRepository,
+        private readonly RaceRepository $raceRepository,
+        private readonly CustomFieldRepository $customFieldRepository,
         private readonly CharacterFormHandler $characterFormHandler,
     ) {
-        $this->characterRepository = $entityManager->getRepository(Character::class);
-        $this->eventRepository = $entityManager->getRepository(Event::class);
-        $this->deityRepository = $entityManager->getRepository(Deity::class);
-        $this->playerRepository = $entityManager->getRepository(Player::class);
-        $this->raceRepository = $entityManager->getRepository(Race::class);
-        $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
     }
 
     #[Override]
@@ -160,7 +123,7 @@ class CharactersController extends Action
 
     private function getCharacter(UuidInterface $characterId): Character
     {
-        $character = $this->characterRepository->find($characterId);
+        $character = $this->characterRepository->findById($characterId);
 
         if ($character === null) {
             $player = $this->playerRepository->findById(
@@ -189,7 +152,7 @@ class CharactersController extends Action
             return $this->raceRepository->getById($raceId);
         }
 
-        return $this->raceRepository->findOneBy(['name' => 'Mens']) ??
+        return $this->raceRepository->findByName('Mens') ??
             throw new LogicException(
                 'Make sure "Mens" race exists before creating a character',
             );
@@ -197,7 +160,7 @@ class CharactersController extends Action
 
     private function isNewCharacter(Character $character): bool
     {
-        return $this->characterRepository->find($character->getId()) === null;
+        return $this->characterRepository->findById($character->getId()) === null;
     }
 
     /**

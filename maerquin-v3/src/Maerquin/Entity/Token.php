@@ -9,10 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Token as TokenModel;
 use SvenHK\Maerquin\Model\User as UserModel;
-use SvenHK\Maerquin\Repository\TokenRepository;
 
 #[ORM\Table(name: '`Token`')]
-#[ORM\Entity(repositoryClass: TokenRepository::class)]
+#[ORM\Entity]
 class Token extends TokenModel
 {
     #[ORM\Id]

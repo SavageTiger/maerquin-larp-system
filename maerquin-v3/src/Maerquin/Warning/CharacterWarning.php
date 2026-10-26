@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Warning;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use SvenHK\Maerquin\Entity\Event;
-use SvenHK\Maerquin\Entity\Race;
-use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\Character;
 use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
@@ -16,35 +11,19 @@ use SvenHK\Maerquin\Repository\SkillRepository;
 
 final readonly class CharacterWarning
 {
-    /**
-     * @var array<int, string>
-     */
-    private array $warnings;
-
-    /**
-     * @var RaceRepository
-     */
-    private EntityRepository $raceRepository;
-
-    /**
-     * @var SkillRepository
-     */
-    private EntityRepository $skillRepository;
-
-    /**
-     * @var EventRepository
-     */
-    private EntityRepository $eventRepository;
-
     public function __construct(
-        EntityManager $entityManager,
-        Character $character,
+        private RaceRepository $raceRepository,
+        private SkillRepository $skillRepository,
+        private EventRepository $eventRepository,
     ) {
-        $this->raceRepository = $entityManager->getRepository(Race::class);
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
-        $this->eventRepository = $entityManager->getRepository(Event::class);
+    }
 
-        $this->warnings = $this->analyzeCharacter($character);
+    /**
+     * @return array<int, string>
+     */
+    public function getWarnings(Character $character): array
+    {
+        return $this->analyzeCharacter($character);
     }
 
     /**
@@ -210,13 +189,5 @@ final readonly class CharacterWarning
         }
 
         return $warnings;
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    public function getWarnings(): array
-    {
-        return $this->warnings;
     }
 }

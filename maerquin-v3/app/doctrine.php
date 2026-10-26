@@ -9,6 +9,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Psr\Cache\CacheItemPoolInterface;
 use Ramsey\Uuid\Doctrine\UuidType;
@@ -63,5 +64,6 @@ return function (ContainerBuilder $containerBuilder): void {
                 $doctrineConfig->config,
             );
         },
+        EntityManagerInterface::class => DI\get(EntityManager::class),
     ]);
 };

@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Model\User as UserModel;
 
-class UserRepository extends EntityRepository
+class UserRepository
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     public function findById(string $uuid): null | User
     {
-        return $this->findOneBy(['id' => $uuid]);
+        return $this->entities()->findOneBy(['id' => $uuid]);
     }
 
     public function findByUsername(string $username): null | User
@@ -21,17 +26,25 @@ class UserRepository extends EntityRepository
             return null;
         }
 
-        return $this->findOneBy(['username' => $username]);
+        return $this->entities()->findOneBy(['username' => $username]);
     }
 
     public function findByPlayer(string $playerId): null | User
     {
-        return $this->findOneBy(['player' => $playerId]);
+        return $this->entities()->findOneBy(['player' => $playerId]);
     }
 
     public function save(UserModel $user): void
     {
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @return EntityRepository<User>
+     */
+    private function entities(): EntityRepository
+    {
+        return $this->entityManager->getRepository(User::class);
     }
 }

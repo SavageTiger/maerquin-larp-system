@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller\API;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Psr7\Response;
 use Slim\Views\Twig;
-use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Entity\Token;
 use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
@@ -22,28 +19,12 @@ use Symfony\Component\Mime\Email;
 
 class PlayerResetPasswordEmailController extends Action
 {
-    /**
-     * @var PlayerRepository
-     */
-    private EntityRepository $playerRepository;
-
-    /**
-     * @var TokenRepository
-     */
-    private EntityRepository $tokenRepository;
-
-    /**
-     * @var UserRepository
-     */
-    private EntityRepository $userRepository;
-
     public function __construct(
-        EntityManager $entityManager,
+        private readonly PlayerRepository $playerRepository,
+        private readonly TokenRepository $tokenRepository,
+        private readonly UserRepository $userRepository,
         private Mailer $mailer,
     ) {
-        $this->playerRepository = $entityManager->getRepository(Player::class);
-        $this->tokenRepository = $entityManager->getRepository(Token::class);
-        $this->userRepository = $entityManager->getRepository(User::class);
     }
 
     public function action(): ResponseInterface

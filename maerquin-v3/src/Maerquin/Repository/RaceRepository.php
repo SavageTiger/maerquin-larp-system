@@ -4,27 +4,36 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 
-class RaceRepository extends EntityRepository
+class RaceRepository
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     /**
      * @throws MaerquinEntityNotFoundException
      */
     public function getById(string $raceId): Race
     {
-        return $this->findOneBy(['id' => $raceId]) ??
+        return $this->entities()->findOneBy(['id' => $raceId]) ??
             throw MaerquinEntityNotFoundException::withType(Race::class);
     }
 
     public function findById(string $raceId): null | Race
     {
-        return $this->findOneBy(['id' => $raceId]);
+        return $this->entities()->findOneBy(['id' => $raceId]);
+    }
+
+    public function findByName(string $name): null | Race
+    {
+        return $this->entities()->findOneBy(['name' => $name]);
     }
 
     /**
@@ -38,17 +47,6 @@ class RaceRepository extends EntityRepository
             ->setParameter('mandatory', true)
             ->getQuery()
             ->getResult();
-    }
-
-    private function createBaseRaceSkillConnectionQuery(string $raceId): QueryBuilder
-    {
-        return $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('skillRaceConnection')
-            ->from(RaceSkillLink::class, 'skillRaceConnection')
-            ->where('skillRaceConnection.race = :raceId')
-            ->setParameter('raceId', $raceId)
-            ->addOrderBy('skillRaceConnection.skill');
     }
 
     /**
@@ -82,19 +80,31 @@ class RaceRepository extends EntityRepository
      */
     public function findAllSorted(): array
     {
-        return $this->findBy([], ['name' => 'ASC']);
+        return $this->entities()->findBy([], ['name' => 'ASC']);
     }
 
     public function save(Race $race): void
     {
-        /** @var CharacterRepository $characterRepository */
-        $characterRepository = $this->getEntityManager()->getRepository(Character::class);
+        $this->entityManager->persist($race);
+        $this->entityManager->flush();
+    }
 
-        foreach ($characterRepository->findAllByRace($race->getId()) as $characters) {
-            $characterRepository->save($characters);
-        }
+    private function createBaseRaceSkillConnectionQuery(string $raceId): QueryBuilder
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('skillRaceConnection')
+            ->from(RaceSkillLink::class, 'skillRaceConnection')
+            ->where('skillRaceConnection.race = :raceId')
+            ->setParameter('raceId', $raceId)
+            ->addOrderBy('skillRaceConnection.skill');
+    }
 
-        $this->getEntityManager()->persist($race);
-        $this->getEntityManager()->flush();
+    /**
+     * @return EntityRepository<Race>
+     */
+    private function entities(): EntityRepository
+    {
+        return $this->entityManager->getRepository(Race::class);
     }
 }

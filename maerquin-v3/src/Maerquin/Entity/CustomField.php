@@ -8,9 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\CustomField as CustomFieldModel;
-use SvenHK\Maerquin\Repository\CustomFieldRepository;
 
-#[ORM\Entity(repositoryClass: CustomFieldRepository::class)]
+#[ORM\Entity]
 class CustomField extends CustomFieldModel
 {
     #[ORM\Id]

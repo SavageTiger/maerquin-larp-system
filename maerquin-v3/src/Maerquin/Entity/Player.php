@@ -10,9 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
-use SvenHK\Maerquin\Repository\PlayerRepository;
 
-#[ORM\Entity(repositoryClass: PlayerRepository::class)]
+#[ORM\Entity]
 class Player extends PlayerModel
 {
     #[ORM\Id]

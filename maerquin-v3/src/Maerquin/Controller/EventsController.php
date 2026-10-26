@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
-use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Form\EventFormHandler;
 use SvenHK\Maerquin\Model\CharacterCollection;
@@ -22,22 +19,11 @@ use SvenHK\Maerquin\Repository\EventRepository;
 
 class EventsController extends Action
 {
-    /**
-     * @var EventRepository
-     */
-    private readonly EntityRepository $eventRepository;
-
-    /**
-     * @var CharacterRepository
-     */
-    private readonly EntityRepository $characterRepository;
-
     public function __construct(
         private readonly EventFormHandler $eventFormHandler,
-        EntityManager $entityManager,
+        private readonly EventRepository $eventRepository,
+        private readonly CharacterRepository $characterRepository,
     ) {
-        $this->eventRepository = $entityManager->getRepository(Event::class);
-        $this->characterRepository = $entityManager->getRepository(Character::class);
     }
 
     #[Override]
@@ -65,7 +51,7 @@ class EventsController extends Action
 
     private function getEvent(UuidInterface $eventId): Event
     {
-        $event = $this->eventRepository->find($eventId->toString());
+        $event = $this->eventRepository->findById($eventId->toString());
 
         if ($event === null) {
             return Event::create($eventId);

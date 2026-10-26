@@ -10,9 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Race as RaceModel;
-use SvenHK\Maerquin\Repository\RaceRepository;
 
-#[ORM\Entity(repositoryClass: RaceRepository::class)]
+#[ORM\Entity]
 class Race extends RaceModel
 {
     #[ORM\Id]

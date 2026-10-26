@@ -4,57 +4,55 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\CustomValue;
-use Webmozart\Assert\Assert;
 
-class CustomFieldRepository extends EntityRepository
+class CustomFieldRepository
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     /**
      * @return CustomField[]
      */
     public function findForCharacter(): array
     {
-        return $this->findBy(['tableName' => 'character'], ['ordinal' => 'ASC']);
+        return $this->entities()->findBy(['tableName' => 'character'], ['ordinal' => 'ASC']);
     }
 
     public function updateFieldValue(string $fieldId, string $subjectId, string $value): void
     {
-        $entityManager = $this->getEntityManager();
-
-        $subjectField = $this->find($fieldId);
+        $subjectField = $this->entities()->find($fieldId);
 
         if ($subjectField === null) {
             return;
         }
 
-        Assert::isInstanceOf($subjectField, CustomField::class);
-
-        $existingCustomValue = $entityManager->getRepository(CustomValue::class)
+        $existingCustomValue = $this->entityManager->getRepository(CustomValue::class)
             ->findOneBy([
                 'customField' => $fieldId,
                 'entityId' => $subjectId,
             ]);
 
         if ($existingCustomValue !== null) {
-            $entityManager->remove($existingCustomValue);
+            $this->entityManager->remove($existingCustomValue);
         }
 
-        $entityManager->persist(CustomValue::create(
+        $this->entityManager->persist(CustomValue::create(
             $subjectId,
             $subjectField,
             $value,
         ));
 
-        $entityManager->flush();
+        $this->entityManager->flush();
     }
 
     public function readFieldValue(string $fieldId, string $subjectId): string
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $value = $qb
+        $value = $this->entityManager->createQueryBuilder()
             ->select('c.value')
             ->from(CustomValue::class, 'c')
             ->where('c.customField = :fieldId AND c.entityId = :subjectId')
@@ -64,5 +62,13 @@ class CustomFieldRepository extends EntityRepository
             ->getArrayResult();
 
         return $value[0]['value'] ?? '';
+    }
+
+    /**
+     * @return EntityRepository<CustomField>
+     */
+    private function entities(): EntityRepository
+    {
+        return $this->entityManager->getRepository(CustomField::class);
     }
 }

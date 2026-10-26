@@ -6,23 +6,15 @@ namespace SvenHK\Maerquin\Session;
 
 use App\Application\Session\Session as FrameworkSession;
 use App\Domain\Entity\User as FrameworkUser;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Override;
-use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Model\Anonymous;
 use SvenHK\Maerquin\Repository\UserRepository;
 
 class Session implements FrameworkSession
 {
-    /**
-     * @var UserRepository
-     */
-    private readonly EntityRepository $userRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->userRepository = $entityManager->getRepository(User::class);
+    public function __construct(
+        private readonly UserRepository $userRepository,
+    ) {
     }
 
     #[Override]

@@ -6,3 +6,4 @@ public/fotos
 app/doctrine.php
 .env
 .idea
+.env.docker

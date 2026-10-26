@@ -19,6 +19,7 @@ services:
       - "9000:9000"
     volumes:
       - ./maerquin-v3:/var/www/html
+      - ./maerquin-v3/.env.docker:/var/www/html/.env:ro
     depends_on:
       - db
       - valkey

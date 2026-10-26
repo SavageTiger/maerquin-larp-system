@@ -14,6 +14,9 @@ return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
         App\Application\Session\Session::class => DI\get(SvenHK\Maerquin\Session\Session::class),
 
+        SvenHK\Maerquin\Translation\Translator::class => DI\autowire()
+            ->constructorParameter('cache', DI\get('cache')),
+
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);
 

@@ -5,3 +5,4 @@ vendor
 public/fotos
 app/doctrine.php
 .env
+.idea

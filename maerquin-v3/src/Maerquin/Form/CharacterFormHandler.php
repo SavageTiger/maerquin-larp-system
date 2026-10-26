@@ -4,66 +4,29 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Form;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Character;
-use SvenHK\Maerquin\Entity\CustomField;
-use SvenHK\Maerquin\Entity\Deity;
-use SvenHK\Maerquin\Entity\Player;
-use SvenHK\Maerquin\Entity\Race;
-use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\CustomFieldCollection;
 use SvenHK\Maerquin\Model\SkillLink;
 use SvenHK\Maerquin\Model\SkillLinkCollection;
-use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\CustomFieldRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
+use SvenHK\Maerquin\Warning\CharacterWarningUpdater;
 use Webmozart\Assert\Assert;
 
 class CharacterFormHandler
 {
-    /**
-     * @var CharacterRepository
-     */
-    private readonly EntityRepository $characterRepository;
-
-    /**
-     * @var SkillRepository
-     */
-    private readonly EntityRepository $skillRepository;
-
-    /**
-     * @var PlayerRepository
-     */
-    private readonly EntityRepository $playerRepository;
-
-    /**
-     * @var RaceRepository
-     */
-    private readonly EntityRepository $raceRepository;
-
-    /**
-     * @var DeityRepository
-     */
-    private readonly EntityRepository $deityRepository;
-
-    /**
-     * @var CustomFieldRepository
-     */
-    private readonly EntityRepository $customFieldRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->characterRepository = $entityManager->getRepository(Character::class);
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
-        $this->playerRepository = $entityManager->getRepository(Player::class);
-        $this->raceRepository = $entityManager->getRepository(Race::class);
-        $this->deityRepository = $entityManager->getRepository(Deity::class);
-        $this->customFieldRepository = $entityManager->getRepository(CustomField::class);
+    public function __construct(
+        private readonly SkillRepository $skillRepository,
+        private readonly PlayerRepository $playerRepository,
+        private readonly RaceRepository $raceRepository,
+        private readonly DeityRepository $deityRepository,
+        private readonly CustomFieldRepository $customFieldRepository,
+        private readonly CharacterWarningUpdater $characterWarningUpdater,
+    ) {
     }
 
     public function handle(
@@ -74,7 +37,7 @@ class CharacterFormHandler
     ): void {
         $formResolver = FormResolver::createFromRequest($request);
 
-        $player = $this->playerRepository->find(
+        $player = $this->playerRepository->findById(
             $formResolver->getValue('playerId', 'character'),
         );
 
@@ -82,11 +45,11 @@ class CharacterFormHandler
             $formResolver->getValue('raceId', 'character'),
         );
 
-        $primaryDeity = $this->deityRepository->find(
+        $primaryDeity = $this->deityRepository->findById(
             $formResolver->getValue('primaryDeityId', 'character'),
         );
 
-        $secondaryDeity = $this->deityRepository->find(
+        $secondaryDeity = $this->deityRepository->findById(
             $formResolver->getValue('secondaryDeityId', 'character'),
         );
 
@@ -122,7 +85,7 @@ class CharacterFormHandler
                 $this->createLinkedSkillCollection($formResolver, $character),
         );
 
-        $this->characterRepository->save($character);
+        $this->characterWarningUpdater->updateAndSave($character);
     }
 
     private function createLinkedSkillCollection(

@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller\API;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Override;
 use Psr\Http\Message\ResponseInterface;
-use SvenHK\Maerquin\Entity\Race;
-use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Model\Race as RaceModel;
 use SvenHK\Maerquin\Model\SkillCollection;
 use SvenHK\Maerquin\Repository\RaceRepository;
@@ -19,20 +15,10 @@ use Webmozart\Assert\Assert;
 
 class LinkableSkillsApiController extends Action
 {
-    /**
-     * @var SkillRepository
-     */
-    private readonly EntityRepository $skillRepository;
-
-    /**
-     * @var RaceRepository
-     */
-    private readonly EntityRepository $raceRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
-        $this->raceRepository = $entityManager->getRepository(Race::class);
+    public function __construct(
+        private readonly SkillRepository $skillRepository,
+        private readonly RaceRepository $raceRepository,
+    ) {
     }
 
     #[Override]

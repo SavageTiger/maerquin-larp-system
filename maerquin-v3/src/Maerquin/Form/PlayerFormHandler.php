@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Form;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Slim\Psr7\Request;
-use SvenHK\Maerquin\Entity\Player;
-use SvenHK\Maerquin\Entity\User;
 use SvenHK\Maerquin\Exception\MaerquinUserAlreadyExists;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Model\User as UserModel;
@@ -17,20 +13,10 @@ use SvenHK\Maerquin\Repository\UserRepository;
 
 readonly class PlayerFormHandler
 {
-    /**
-     * @var PlayerRepository
-     */
-    private EntityRepository $playerRepository;
-
-    /**
-     * @var UserRepository
-     */
-    private EntityRepository $userRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->userRepository = $entityManager->getRepository(User::class);
-        $this->playerRepository = $entityManager->getRepository(Player::class);
+    public function __construct(
+        private readonly UserRepository $userRepository,
+        private readonly PlayerRepository $playerRepository,
+    ) {
     }
 
     public function handle(PlayerModel $player, Request $request): void

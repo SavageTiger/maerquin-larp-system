@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Slim\Views\Twig;
-use SvenHK\Maerquin\Entity\Character;
-use SvenHK\Maerquin\Entity\Deity;
-use SvenHK\Maerquin\Entity\Element;
 use SvenHK\Maerquin\Entity\Skill;
-use SvenHK\Maerquin\Entity\SkillType;
 use SvenHK\Maerquin\Form\SkillFormHandler;
 use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\SkillCollection;
@@ -28,40 +22,14 @@ use SvenHK\Maerquin\Repository\SkillTypeRepository;
 
 class SkillsController extends Action
 {
-    /**
-     * @var SkillRepository
-     */
-    private EntityRepository $skillRepository;
-
-    /**
-     * @var CharacterRepository
-     */
-    private EntityRepository $characterRepository;
-
-    /**
-     * @var SkillTypeRepository
-     */
-    private EntityRepository $skillTypeRepository;
-
-    /**
-     * @var DeityRepository
-     */
-    private EntityRepository $deityRepository;
-
-    /**
-     * @var ElementRepository
-     */
-    private EntityRepository $elementRepository;
-
     public function __construct(
         private readonly SkillFormHandler $skillFormHandler,
-        EntityManager $entityManager,
+        private readonly SkillRepository $skillRepository,
+        private readonly CharacterRepository $characterRepository,
+        private readonly SkillTypeRepository $skillTypeRepository,
+        private readonly DeityRepository $deityRepository,
+        private readonly ElementRepository $elementRepository,
     ) {
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
-        $this->characterRepository = $entityManager->getRepository(Character::class);
-        $this->skillTypeRepository = $entityManager->getRepository(SkillType::class);
-        $this->deityRepository = $entityManager->getRepository(Deity::class);
-        $this->elementRepository = $entityManager->getRepository(Element::class);
     }
 
     public function action(): ResponseInterface

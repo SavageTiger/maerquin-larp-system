@@ -4,26 +4,35 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
-use SvenHK\Maerquin\Model\Player;
+use SvenHK\Maerquin\Model\Player as PlayerModel;
 
-class PlayerRepository extends EntityRepository
+class PlayerRepository
 {
-    public function save(Player $player): void
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->getEntityManager()->persist($player);
-        $this->getEntityManager()->flush();
     }
 
+    public function save(PlayerModel $player): void
+    {
+        $this->entityManager->persist($player);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @throws MaerquinEntityNotFoundException
+     */
     public function getById(string $playerId): Player
     {
-        return $this->findOneBy(['id' => $playerId]) ?? throw MaerquinEntityNotFoundException::withType(Player::class);
+        return $this->entities()->findOneBy(['id' => $playerId]) ?? throw MaerquinEntityNotFoundException::withType(Player::class);
     }
 
     public function findById(string $playerId): null | Player
     {
-        return $this->findOneBy(['id' => $playerId]);
+        return $this->entities()->findOneBy(['id' => $playerId]);
     }
 
     /**
@@ -31,6 +40,14 @@ class PlayerRepository extends EntityRepository
      */
     public function findAllSorted(): array
     {
-        return $this->findBy([], ['name' => 'ASC']);
+        return $this->entities()->findBy([], ['name' => 'ASC']);
+    }
+
+    /**
+     * @return EntityRepository<Player>
+     */
+    private function entities(): EntityRepository
+    {
+        return $this->entityManager->getRepository(Player::class);
     }
 }

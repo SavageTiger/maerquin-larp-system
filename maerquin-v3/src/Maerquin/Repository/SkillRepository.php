@@ -4,45 +4,50 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Skill;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
 
-class SkillRepository extends EntityRepository
+class SkillRepository
 {
-    public function findById(string $skillId): null | SkillModel
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        return $this->find($skillId);
+    }
+
+    public function findById(string $skillId): null | Skill
+    {
+        return $this->entities()->find($skillId);
     }
 
     /**
-     * @return SkillModel[]
+     * @return Skill[]
      */
     public function findAllSorted(): array
     {
-        return $this->findBy([], ['name' => 'ASC']);
+        return $this->entities()->findBy([], ['name' => 'ASC']);
     }
 
     /**
      * @throws MaerquinEntityNotFoundException
      */
-    public function getById(string $skillId): SkillModel
+    public function getById(string $skillId): Skill
     {
-        return $this->findOneBy(['id' => $skillId]) ?? throw MaerquinEntityNotFoundException::withType(Skill::class);
+        return $this->entities()->findOneBy(['id' => $skillId]) ?? throw MaerquinEntityNotFoundException::withType(Skill::class);
     }
 
     public function save(SkillModel $skill): void
     {
-        /** @var CharacterRepository $characterRepository */
-        $characterRepository = $this->getEntityManager()->getRepository(Character::class);
+        $this->entityManager->persist($skill);
+        $this->entityManager->flush();
+    }
 
-        foreach ($characterRepository->findAllCoupledToSkill($skill->getId()) as $characters) {
-            $characterRepository->save($characters);
-        }
-
-        $this->getEntityManager()->persist($skill);
-        $this->getEntityManager()->flush();
+    /**
+     * @return EntityRepository<Skill>
+     */
+    private function entities(): EntityRepository
+    {
+        return $this->entityManager->getRepository(Skill::class);
     }
 }

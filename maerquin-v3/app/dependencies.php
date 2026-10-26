@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
-use Doctrine\ORM\EntityManager;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use SvenHK\Maerquin\Session\Session;
 
 return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
-        App\Application\Session\Session::class => function (ContainerInterface $c) {
-            return new Session(
-                $c->get(EntityManager::class),
-            );
-        },
+        App\Application\Session\Session::class => DI\get(SvenHK\Maerquin\Session\Session::class),
 
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);

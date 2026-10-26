@@ -10,9 +10,8 @@ use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Model\User as UserModel;
-use SvenHK\Maerquin\Repository\UserRepository;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user')]
 class User extends UserModel
 {

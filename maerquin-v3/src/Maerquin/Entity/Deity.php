@@ -8,9 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\Deity as DeityModel;
-use SvenHK\Maerquin\Repository\DeityRepository;
 
-#[ORM\Entity(repositoryClass: DeityRepository::class)]
+#[ORM\Entity]
 class Deity extends DeityModel
 {
     #[ORM\Id]

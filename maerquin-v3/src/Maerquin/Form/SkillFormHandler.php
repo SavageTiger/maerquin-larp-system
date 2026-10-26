@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Form;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Slim\Psr7\Request;
-use SvenHK\Maerquin\Entity\Deity;
-use SvenHK\Maerquin\Entity\Element;
 use SvenHK\Maerquin\Entity\Skill;
-use SvenHK\Maerquin\Entity\SkillType;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\RequirementType;
 use SvenHK\Maerquin\Model\SkillSkillLink;
@@ -18,35 +13,17 @@ use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\ElementRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
 use SvenHK\Maerquin\Repository\SkillTypeRepository;
+use SvenHK\Maerquin\Warning\CharacterWarningUpdater;
 
 class SkillFormHandler
 {
-    /**
-     * @var SkillRepository
-     */
-    private readonly EntityRepository $skillRepository;
-
-    /**
-     * @var SkillTypeRepository
-     */
-    private readonly EntityRepository $skillTypeRepository;
-
-    /**
-     * @var DeityRepository
-     */
-    private readonly EntityRepository $deityRepository;
-
-    /**
-     * @var ElementRepository
-     */
-    private readonly EntityRepository $elementRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->skillRepository = $entityManager->getRepository(Skill::class);
-        $this->skillTypeRepository = $entityManager->getRepository(SkillType::class);
-        $this->deityRepository = $entityManager->getRepository(Deity::class);
-        $this->elementRepository = $entityManager->getRepository(Element::class);
+    public function __construct(
+        private readonly SkillRepository $skillRepository,
+        private readonly SkillTypeRepository $skillTypeRepository,
+        private readonly DeityRepository $deityRepository,
+        private readonly ElementRepository $elementRepository,
+        private readonly CharacterWarningUpdater $characterWarningUpdater,
+    ) {
     }
 
     /**
@@ -85,6 +62,8 @@ class SkillFormHandler
             $formResolver->getBoolean('hasFastCasting', 'skill'),
             $formResolver->getBoolean('hasArmorCasting', 'skill'),
         );
+
+        $this->characterWarningUpdater->updateAndSaveAllCoupledToSkill($skill->getId());
 
         $this->skillRepository->save($skill);
     }

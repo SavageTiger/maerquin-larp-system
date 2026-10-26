@@ -7,9 +7,8 @@ namespace SvenHK\Maerquin\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
-use SvenHK\Maerquin\Repository\SkillTypeRepository;
 
-#[ORM\Entity(repositoryClass: SkillTypeRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'skilltype')]
 class SkillType extends SkillTypeModel
 {

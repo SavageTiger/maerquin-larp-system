@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
@@ -21,16 +19,10 @@ use SvenHK\Maerquin\Repository\RaceRepository;
 
 class RacesController extends Action
 {
-    /**
-     * @var RaceRepository
-     */
-    private readonly EntityRepository $raceRepository;
-
     public function __construct(
         private readonly RaceFormHandler $raceFormHandler,
-        EntityManager $entityManager,
+        private readonly RaceRepository $raceRepository,
     ) {
-        $this->raceRepository = $entityManager->getRepository(Race::class);
     }
 
     #[Override]

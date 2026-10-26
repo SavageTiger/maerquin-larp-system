@@ -8,9 +8,8 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\EventSubscription as EventSubscriptionModel;
-use SvenHK\Maerquin\Repository\EventSubscriptionRepository;
 
-#[ORM\Entity(repositoryClass: EventSubscriptionRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'event_subscription')]
 #[ORM\UniqueConstraint(name: 'unique_event_player', columns: ['event_id', 'player_id'])]
 class EventSubscription extends EventSubscriptionModel

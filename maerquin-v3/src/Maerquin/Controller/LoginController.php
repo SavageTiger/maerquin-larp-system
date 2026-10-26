@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
@@ -21,22 +19,11 @@ class LoginController extends Action
 {
     use RedirectTo;
 
-    /**
-     * @var UserRepository
-     */
-    private EntityRepository $userRepository;
-
-    /**
-     * @var TokenRepository
-     */
-    private EntityRepository $tokenRepository;
-
     public function __construct(
         private Session $session,
-        EntityManager $entityManager,
+        private readonly UserRepository $userRepository,
+        private readonly TokenRepository $tokenRepository,
     ) {
-        $this->userRepository = $entityManager->getRepository(User::class);
-        $this->tokenRepository = $entityManager->getRepository(Token::class);
     }
 
     #[Override]

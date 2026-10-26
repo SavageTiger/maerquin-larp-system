@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use SvenHK\Maerquin\Entity\Character;
@@ -11,16 +12,24 @@ use SvenHK\Maerquin\Entity\CharacterEventLink;
 use SvenHK\Maerquin\Entity\CharacterSkillLink;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Model\Character as CharacterModel;
-use SvenHK\Maerquin\Warning\CharacterWarning;
 
-class CharacterRepository extends EntityRepository
+class CharacterRepository
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
+    public function findById(string $characterId): null | Character
+    {
+        return $this->entities()->find($characterId);
+    }
+
     /**
      * @return Character[]
      */
     public function findAllSorted(): array
     {
-        return $this->findBy([], ['name' => 'ASC']);
+        return $this->entities()->findBy([], ['name' => 'ASC']);
     }
 
     /**
@@ -28,7 +37,7 @@ class CharacterRepository extends EntityRepository
      */
     public function forPlayer(string $playerId): array
     {
-        return $this->findBy(['player' => $playerId], ['name' => 'ASC']);
+        return $this->entities()->findBy(['player' => $playerId], ['name' => 'ASC']);
     }
 
     /**
@@ -36,7 +45,7 @@ class CharacterRepository extends EntityRepository
      */
     public function getById(string $characterId): Character
     {
-        return $this->findOneBy(['id' => $characterId]) ?? throw MaerquinEntityNotFoundException::withType(Character::class);
+        return $this->entities()->findOneBy(['id' => $characterId]) ?? throw MaerquinEntityNotFoundException::withType(Character::class);
     }
 
     /**
@@ -44,17 +53,16 @@ class CharacterRepository extends EntityRepository
      */
     public function findByEvent(string $eventId): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
+        return $this->entityManager->createQueryBuilder()
             ->select('c')
             ->distinct()
             ->from(Character::class, 'c')
             ->leftJoin(CharacterEventLink::class, 'cl', Join::WITH, 'c.id = cl.character and cl.event = :eventId')
             ->where('cl.event = :eventId')
             ->orderBy('c.name')
-            ->setParameter('eventId', $eventId);
-
-        return $qb->getQuery()->getResult();
+            ->setParameter('eventId', $eventId)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -62,34 +70,37 @@ class CharacterRepository extends EntityRepository
      */
     public function findAllCoupledToSkill(string $skillId): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
+        return $this->entityManager->createQueryBuilder()
             ->select('c')
             ->distinct()
             ->from(Character::class, 'c')
             ->leftJoin(CharacterSkillLink::class, 'sl', Join::WITH, 'c.id = sl.character')
             ->where('sl.skill = :skillId')
             ->orderBy('c.name')
-            ->setParameter('skillId', $skillId);
-
-        return $qb->getQuery()->getResult();
+            ->setParameter('skillId', $skillId)
+            ->getQuery()
+            ->getResult();
     }
 
+    /**
+     * @return Character[]
+     */
     public function findAllByRace(string $raceId): array
     {
-        return $this->findBy(['race' => $raceId], ['name' => 'ASC']);
+        return $this->entities()->findBy(['race' => $raceId], ['name' => 'ASC']);
     }
 
     public function save(CharacterModel $character): void
     {
-        $characterWarnings = new CharacterWarning(
-            $this->getEntityManager(),
-            $character,
-        );
+        $this->entityManager->persist($character);
+        $this->entityManager->flush();
+    }
 
-        $character->updateWarnings($characterWarnings->getWarnings());
-
-        $this->getEntityManager()->persist($character);
-        $this->getEntityManager()->flush();
+    /**
+     * @return EntityRepository<Character>
+     */
+    private function entities(): EntityRepository
+    {
+        return $this->entityManager->getRepository(Character::class);
     }
 }

@@ -8,11 +8,8 @@ use DateMalformedStringException;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use LogicException;
 use Slim\Psr7\Request;
-use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CharacterEventLink;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Exception\Event\EventDateUnparsableException;
@@ -22,20 +19,10 @@ use SvenHK\Maerquin\Repository\EventRepository;
 
 class EventFormHandler
 {
-    /**
-     * @var EventRepository
-     */
-    private readonly EntityRepository $eventRepository;
-
-    /**
-     * @var CharacterRepository
-     */
-    private readonly EntityRepository $characterRepository;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->characterRepository = $entityManager->getRepository(Character::class);
-        $this->eventRepository = $entityManager->getRepository(Event::class);
+    public function __construct(
+        private readonly CharacterRepository $characterRepository,
+        private readonly EventRepository $eventRepository,
+    ) {
     }
 
     /**

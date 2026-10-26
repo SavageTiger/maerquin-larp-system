@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
-class EventSubscriptionRepository extends EntityRepository
+class EventSubscriptionRepository
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
 }

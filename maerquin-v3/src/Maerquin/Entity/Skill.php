@@ -12,9 +12,8 @@ use SvenHK\Maerquin\Model\Deity as DeityModel;
 use SvenHK\Maerquin\Model\Element as ElementModel;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
 use SvenHK\Maerquin\Model\SkillType as SkillTypeModel;
-use SvenHK\Maerquin\Repository\SkillRepository;
 
-#[ORM\Entity(repositoryClass: SkillRepository::class)]
+#[ORM\Entity]
 class Skill extends SkillModel
 {
     #[ORM\Id]

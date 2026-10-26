@@ -44,9 +44,10 @@ class EventFormHandler
         $endDateDay = (int)$formResolver->getValue('endDateDay', 'event');
         $points = (int)$formResolver->getValue('points', 'event');
         $notes = $formResolver->getValue('notes', 'event');
-        $subscriptionsOpensAtYear = (int)$formResolver->getValue('subscriptionsOpensAtYear', 'event');
-        $subscriptionsOpensAtMonth = (int)$formResolver->getValue('subscriptionsOpensAtMonth', 'event');
-        $subscriptionsOpensAtDay = (int)$formResolver->getValue('subscriptionsOpensAtDay', 'event');
+
+        $subscriptionsOpensAtYear = (int)$formResolver->getValue('subscriptionsOpensAtYear', 'event', (string)$startDateYear);
+        $subscriptionsOpensAtMonth = (int)$formResolver->getValue('subscriptionsOpensAtMonth', 'event', (string)$startDateMonth);
+        $subscriptionsOpensAtDay = (int)$formResolver->getValue('subscriptionsOpensAtDay', 'event', (string)$startDateDay);
         $playerSubscriptionCap = (int)$formResolver->getValue('playerSubscriptionCap', 'event', '0');
 
         $characterIds = json_decode($formResolver->getValue('characters', 'event'), true);

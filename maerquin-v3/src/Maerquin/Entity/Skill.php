@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
@@ -92,5 +93,6 @@ class Skill extends SkillModel
         $this->distance = '';
         $this->duration = '';
         $this->remarks = '';
+        $this->requiredSkills = new ArrayCollection();
     }
 }

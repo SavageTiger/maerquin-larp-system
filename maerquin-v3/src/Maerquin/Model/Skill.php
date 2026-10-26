@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Skill as SkillEntity;
 
 class Skill
 {
@@ -34,9 +35,9 @@ class Skill
      */
     protected null | Collection $requiredSkills;
 
-    public static function create(UuidInterface $id, SkillType $skillType)
+    public static function create(UuidInterface $id, SkillType $skillType): SkillEntity
     {
-        $skill = new static();
+        $skill = new SkillEntity();
         $skill->id = $id;
         $skill->skillType = $skillType;
 

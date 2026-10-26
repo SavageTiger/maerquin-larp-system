@@ -7,6 +7,7 @@ namespace SvenHK\Maerquin\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Character as CharacterEntity;
 use SvenHK\Maerquin\Entity\Deity;
 
 class Character
@@ -42,8 +43,8 @@ class Character
         UuidInterface $characterId,
         Race $race,
         null | Player $player,
-    ): self {
-        $character = new static();
+    ): CharacterEntity {
+        $character = new CharacterEntity();
         $character->id = $characterId;
 
         $character->updateWarnings([]);

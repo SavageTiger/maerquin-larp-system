@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Controller;
 
 use App\Application\Actions\Action;
+use LogicException;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;

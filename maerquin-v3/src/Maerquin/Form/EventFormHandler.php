@@ -44,6 +44,10 @@ class EventFormHandler
         $endDateDay = (int)$formResolver->getValue('endDateDay', 'event');
         $points = (int)$formResolver->getValue('points', 'event');
         $notes = $formResolver->getValue('notes', 'event');
+        $subscriptionsOpensAtYear = (int)$formResolver->getValue('subscriptionsOpensAtYear', 'event');
+        $subscriptionsOpensAtMonth = (int)$formResolver->getValue('subscriptionsOpensAtMonth', 'event');
+        $subscriptionsOpensAtDay = (int)$formResolver->getValue('subscriptionsOpensAtDay', 'event');
+        $playerSubscriptionCap = (int)$formResolver->getValue('playerSubscriptionCap', 'event', '0');
 
         $characterIds = json_decode($formResolver->getValue('characters', 'event'), true);
 
@@ -53,6 +57,7 @@ class EventFormHandler
 
         $this->guardDate($startDateYear, $startDateMonth, $startDateDay);
         $this->guardDate($endDateYear, $endDateMonth, $endDateDay);
+        $this->guardDate($subscriptionsOpensAtYear, $subscriptionsOpensAtMonth, $subscriptionsOpensAtDay);
 
         $startDate = new DateTimeImmutable(
             sprintf('%04d-%02d-%02d', $startDateYear, $startDateMonth, $startDateDay),
@@ -60,6 +65,10 @@ class EventFormHandler
 
         $endDate = new DateTimeImmutable(
             sprintf('%04d-%02d-%02d', $endDateYear, $endDateMonth, $endDateDay),
+        );
+
+        $subscriptionsOpensAt = new DateTimeImmutable(
+            sprintf('%04d-%02d-%02d', $subscriptionsOpensAtYear, $subscriptionsOpensAtMonth, $subscriptionsOpensAtDay),
         );
 
         if (trim($name) === '') {
@@ -74,6 +83,8 @@ class EventFormHandler
             $endDate,
             $notes,
             $this->createCharacterPresenceList($event, $characterIds),
+            $subscriptionsOpensAt,
+            max(0, $playerSubscriptionCap),
         );
 
         $this->eventRepository->save($event);

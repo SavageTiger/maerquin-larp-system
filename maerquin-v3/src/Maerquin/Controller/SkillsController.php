@@ -99,7 +99,7 @@ class SkillsController extends Action
     private function getBaseSkillsContext(): array
     {
         return [
-            'skills' => new SkillCollection($this->skillRepository->findAllSorted())->serialize(true),
+            'skills' => new SkillCollection($this->skillRepository->findAllSorted()),
             'skillTypes' => new SkillTypeCollection($this->skillTypeRepository->findAllSorted()),
         ];
     }

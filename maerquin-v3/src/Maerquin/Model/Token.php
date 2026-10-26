@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Token as TokenEntity;
 
 class Token
 {
@@ -23,8 +24,8 @@ class Token
 
     public static function generateForUser(
         User $user,
-    ): self {
-        $token = new static();
+    ): TokenEntity {
+        $token = new TokenEntity();
 
         $tokenValue = self::generateToken();
 
@@ -49,8 +50,8 @@ class Token
 
     public static function generateForPasswordReset(
         User $user,
-    ): self {
-        $token = new static();
+    ): TokenEntity {
+        $token = new TokenEntity();
 
         $token->id = Uuid::uuid4();
         $token->user = $user;

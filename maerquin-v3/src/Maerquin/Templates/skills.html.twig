@@ -45,7 +45,7 @@
             data() {
                 return {
                     search: '',
-                    skills: {{ skills|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    skills: {{ skills.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
                     skillGroups: {{ skillTypes.serialize|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
 

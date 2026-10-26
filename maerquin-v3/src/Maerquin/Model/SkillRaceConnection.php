@@ -8,6 +8,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\Race as RaceEntity;
+use SvenHK\Maerquin\Entity\RaceSkillLink;
 use SvenHK\Maerquin\Entity\Skill as SkillEntity;
 
 class SkillRaceConnection
@@ -20,9 +21,9 @@ class SkillRaceConnection
     protected float $points;
     protected SkillEntity $skill;
 
-    public static function createMandatory(Race $race, SkillEntity $skill): self
+    public static function createMandatory(Race $race, SkillEntity $skill): RaceSkillLink
     {
-        $connection = new static();
+        $connection = new RaceSkillLink();
         $connection->id = Uuid::uuid4();
         $connection->race = $race;
         $connection->skill = $skill;
@@ -33,9 +34,9 @@ class SkillRaceConnection
         return $connection;
     }
 
-    public static function createForbidden(Race $race, SkillEntity $skill): self
+    public static function createForbidden(Race $race, SkillEntity $skill): RaceSkillLink
     {
-        $connection = new static();
+        $connection = new RaceSkillLink();
         $connection->id = Uuid::uuid4();
         $connection->race = $race;
         $connection->skill = $skill;
@@ -46,9 +47,9 @@ class SkillRaceConnection
         return $connection;
     }
 
-    public static function createWithCustomPoints(Race $race, SkillEntity $skill, float $points): self
+    public static function createWithCustomPoints(Race $race, SkillEntity $skill, float $points): RaceSkillLink
     {
-        $connection = new static();
+        $connection = new RaceSkillLink();
         $connection->id = Uuid::uuid4();
         $connection->race = $race;
         $connection->skill = $skill;

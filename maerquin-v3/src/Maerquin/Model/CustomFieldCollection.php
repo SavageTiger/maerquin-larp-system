@@ -26,6 +26,8 @@ class CustomFieldCollection
 
     public function serialize(): array
     {
+        $serialized = [];
+
         foreach ($this->customFields as $customField) {
             $serialized[] = array_merge([
                 'value' => $this->customFieldValues[$customField->getId()],

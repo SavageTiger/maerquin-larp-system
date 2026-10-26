@@ -19,7 +19,7 @@ class Race
      */
     protected Collection $skillConnections;
 
-    public static function create(UuidInterface $raceId): self
+    public static function create(UuidInterface $raceId): RaceEntity
     {
         $race = new RaceEntity();
         $race->id = $raceId;

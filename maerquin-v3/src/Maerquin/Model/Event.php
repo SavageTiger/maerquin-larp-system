@@ -20,7 +20,7 @@ class Event
     protected int $points;
     protected null | string $notes;
     protected DateTimeInterface $subscriptionsOpensAt;
-    protected int $playerSubscriptionCap;
+    protected null | int $playerSubscriptionCap;
     protected Collection $charactersPresent;
     protected Collection $subscriptions;
 
@@ -88,6 +88,11 @@ class Event
     public function getSubscriptionsOpensAt(): DateTimeInterface
     {
         return $this->subscriptionsOpensAt;
+    }
+
+    public function getPlayerSubscriptionCap(): int
+    {
+        return $this->playerSubscriptionCap ?? 0;
     }
 
     public function isSubscribed(Player $player): bool

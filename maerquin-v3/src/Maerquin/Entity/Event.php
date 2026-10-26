@@ -50,7 +50,7 @@ class Event extends EventModel
         nullable: true,
         options: ['default' => 0],
     )]
-    protected int $playerSubscriptionCap;
+    protected null | int $playerSubscriptionCap;
 
     #[ORM\OneToMany(
         targetEntity: CharacterEventLink::class,

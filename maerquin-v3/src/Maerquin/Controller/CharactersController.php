@@ -123,7 +123,7 @@ class CharactersController extends Action
 
     private function getCharacter(UuidInterface $characterId): Character
     {
-        $character = $this->characterRepository->findById($characterId);
+        $character = $this->characterRepository->findById($characterId->toString());
 
         if ($character === null) {
             $player = $this->playerRepository->findById(

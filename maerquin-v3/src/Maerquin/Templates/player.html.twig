@@ -148,6 +148,19 @@
                                     {% endif %}
                                 </div>
                             </div>
+
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">E-mail bevestigd</label>
+                                </div>
+                                <div class="field-body mt-1">
+                                    {% if account.emailVerified %}
+                                        <span class="tag is-success">Ja</span>
+                                    {% else %}
+                                        <span class="tag is-warning">Nee</span>
+                                    {% endif %}
+                                </div>
+                            </div>
                         {% endif %}
 
                         {% if account.name %}

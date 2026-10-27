@@ -9,6 +9,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Event as EventEntity;
+use SvenHK\Maerquin\Entity\Form as FormEntity;
 
 class Event
 {
@@ -24,6 +25,7 @@ class Event
     protected int $npcSubscriptionCap;
     protected Collection $charactersPresent;
     protected Collection $subscriptions;
+    protected null | FormEntity $form;
 
     public static function create(UuidInterface $eventId): EventEntity
     {

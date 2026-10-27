@@ -10,6 +10,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Entity\EventSubscription as EventSubscriptionEntity;
+use SvenHK\Maerquin\Entity\FormSubmission as FormSubmissionEntity;
 use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 
@@ -19,20 +20,23 @@ class EventSubscription
     protected Event $event;
     protected Player $player;
     protected DateTimeInterface $subscribedAt;
+    protected FormSubmissionEntity $formSubmission;
 
     private function __construct(
         Event $event,
         Player $player,
+        FormSubmissionEntity $formSubmission,
     ) {
         $this->id = Uuid::uuid4();
         $this->event = $event;
         $this->player = $player;
         $this->subscribedAt = new DateTimeImmutable();
+        $this->formSubmission = $formSubmission;
     }
 
-    public static function create(Event $event, Player $player): self
+    public static function create(Event $event, Player $player, FormSubmissionEntity $formSubmission): self
     {
-        return new EventSubscriptionEntity($event, $player);
+        return new EventSubscriptionEntity($event, $player, $formSubmission);
     }
 
     public function serialize(): array

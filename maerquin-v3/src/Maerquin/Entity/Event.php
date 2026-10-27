@@ -73,9 +73,14 @@ class Event extends EventModel
     )]
     protected Collection $subscriptions;
 
+    #[ORM\ManyToOne(targetEntity: Form::class)]
+    #[ORM\JoinColumn(name: 'form_id', referencedColumnName: 'id', nullable: true)]
+    protected null | Form $form;
+
     public function __construct(UuidInterface $id)
     {
         $this->id = $id;
+        $this->form = null;
         $this->charactersPresent = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
         $this->name = '';

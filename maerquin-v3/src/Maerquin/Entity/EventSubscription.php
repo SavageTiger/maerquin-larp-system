@@ -28,4 +28,8 @@ class EventSubscription extends EventSubscriptionModel
 
     #[ORM\Column(type: 'datetime_immutable')]
     protected DateTimeInterface $subscribedAt;
+
+    #[ORM\OneToOne(targetEntity: FormSubmission::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'form_submission_id', referencedColumnName: 'id', nullable: false)]
+    protected FormSubmission $formSubmission;
 }

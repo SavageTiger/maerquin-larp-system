@@ -103,6 +103,11 @@ class Event
         return $this->npcSubscriptionCap;
     }
 
+    public function getForm(): null | FormEntity
+    {
+        return $this->form;
+    }
+
     public function isSubscribed(Player $player): bool
     {
         return $this->subscriptions->exists(
@@ -143,7 +148,9 @@ class Event
         DateTimeImmutable $subscriptionsOpensAt,
         int $playerSubscriptionCap,
         int $npcSubscriptionCap,
+        null | FormEntity $form,
     ): void {
+        $this->form = $form;
         $this->name = $name;
         $this->secondaryName = $secondaryName;
         $this->points = $points;

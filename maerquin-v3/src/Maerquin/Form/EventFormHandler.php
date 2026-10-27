@@ -16,12 +16,14 @@ use SvenHK\Maerquin\Exception\Event\EventDateUnparsableException;
 use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
+use SvenHK\Maerquin\Repository\FormRepository;
 
 class EventFormHandler
 {
     public function __construct(
         private readonly CharacterRepository $characterRepository,
         private readonly EventRepository $eventRepository,
+        private readonly FormRepository $formRepository,
     ) {
     }
 
@@ -50,6 +52,7 @@ class EventFormHandler
         $subscriptionsOpensAtDay = (int)$formResolver->getValue('subscriptionsOpensAtDay', 'event', (string)$startDateDay);
         $playerSubscriptionCap = (int)$formResolver->getValue('playerSubscriptionCap', 'event', '0');
         $npcSubscriptionCap = (int)$formResolver->getValue('npcSubscriptionCap', 'event', '0');
+        $formId = $formResolver->getValue('formId', 'event', '');
 
         $characterIds = json_decode($formResolver->getValue('characters', 'event'), true);
 
@@ -88,6 +91,7 @@ class EventFormHandler
             $subscriptionsOpensAt,
             max(0, $playerSubscriptionCap),
             max(0, $npcSubscriptionCap),
+            $formId === '' ? null : $this->formRepository->getById($formId),
         );
 
         $this->eventRepository->save($event);

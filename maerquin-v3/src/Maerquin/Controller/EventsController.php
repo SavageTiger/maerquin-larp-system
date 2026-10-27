@@ -16,6 +16,7 @@ use SvenHK\Maerquin\Model\CharacterCollection;
 use SvenHK\Maerquin\Model\EventCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
+use SvenHK\Maerquin\Repository\FormRepository;
 
 class EventsController extends Action
 {
@@ -23,6 +24,7 @@ class EventsController extends Action
         private readonly EventFormHandler $eventFormHandler,
         private readonly EventRepository $eventRepository,
         private readonly CharacterRepository $characterRepository,
+        private readonly FormRepository $formRepository,
     ) {
     }
 
@@ -72,6 +74,7 @@ class EventsController extends Action
                 'characters' => new CharacterCollection(
                     ...$this->characterRepository->findByEvent($eventId->toString()),
                 ),
+                'forms' => $this->formRepository->findAllSorted(),
                 'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],
         );

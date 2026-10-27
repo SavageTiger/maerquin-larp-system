@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use SvenHK\Maerquin\CLI\CacheClearCommand;
+use SvenHK\Maerquin\CLI\FormCreateCommand;
+use SvenHK\Maerquin\Repository\FormRepository;
 use Symfony\Component\Console\Application;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -16,6 +18,7 @@ $container = require __DIR__ . '/../app/container.php';
 $application = new Application('Maerquin');
 
 $application->addCommand(new CacheClearCommand($container->get('cache')));
+$application->addCommand(new FormCreateCommand($container->get(FormRepository::class)));
 
 ConsoleRunner::addCommands($application, new SingleManagerProvider($container->get(EntityManagerInterface::class)));
 

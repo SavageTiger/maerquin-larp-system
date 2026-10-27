@@ -6,7 +6,7 @@ return [
     'character.warning.forbidden_skill' => 'De skill "%skill%" is niet toegestaan voor een character met ras "%race%".',
     'character.warning.mandatory_skill' => 'De skill "%skill%" is verplicht voor een character met ras "%race%".',
     'character.warning.missing_required_skill' => 'De skill "%skill%" vereist eerst "%requiredSkill%", maar die ontbreekt nog.',
-    'character.warning.not_enough_points' => 'Het karakter heeft niet genoeg punten: %available% spendeerbaar, %required% vereist.',
+    'character.warning.not_enough_points' => 'Het personage heeft niet genoeg punten: %available% spendeerbaar, %required% vereist.',
     'character.warning.skill_bought_too_often' => 'De skill ‘%skill%’ is %amount%× aangeschaft; toegestaan maximum is %maximum%.',
 
     'registration.error.first_name_missing' => 'We missen nog je voornaam.',

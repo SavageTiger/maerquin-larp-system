@@ -26,6 +26,10 @@ return [
     'menu.settings.status' => 'Status',
     'menu.settings.forms' => 'Forms',
 
+    'forms.name' => 'Naam',
+    'forms.field_count' => 'Aantal velden',
+    'forms.empty' => 'Er zijn nog geen formulieren aangemaakt.',
+
     'status.state.online' => 'Online',
     'status.state.offline' => 'Offline',
     'status.not_available' => 'Niet beschikbaar.',

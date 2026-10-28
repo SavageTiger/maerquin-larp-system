@@ -1,4 +1,24 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
+                <tr>
+                    <th>{{ 'forms.name'|trans }}</th>
+                    <th>{{ 'forms.field_count'|trans }}</th>
+                </tr>
+                {% for form in forms %}
+                    <tr>
+                        <td>{{ form.name }}</td>
+                        <td>{{ form.fields|length }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">{{ 'forms.empty'|trans }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

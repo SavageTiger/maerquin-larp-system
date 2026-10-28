@@ -8,9 +8,15 @@ use App\Application\Actions\Action;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
+use SvenHK\Maerquin\Repository\FormRepository;
 
 class FormsController extends Action
 {
+    public function __construct(
+        private readonly FormRepository $formRepository,
+    ) {
+    }
+
     #[Override]
     protected function action(): ResponseInterface
     {
@@ -19,6 +25,9 @@ class FormsController extends Action
         return $view->render(
             $this->response,
             'forms.html.twig',
+            [
+                'forms' => $this->formRepository->findAllSorted(),
+            ],
         );
     }
 }

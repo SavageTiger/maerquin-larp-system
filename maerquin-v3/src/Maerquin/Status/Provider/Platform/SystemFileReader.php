@@ -30,8 +30,9 @@ class SystemFileReader
     /**
      * Reads a cgroup limit file, where "max" means unlimited.
      *
-     * @return int The limit, 0 when unlimited
      * @throws SystemInfoNotAvailable
+     *
+     * @return int The limit, 0 when unlimited
      */
     public function readLimit(string $path): int
     {

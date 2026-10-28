@@ -16,7 +16,7 @@ final readonly class MemoryStatus implements StatusSection
         public int $swapFree,
         public int $phpUsage,
         public int $phpPeak,
-        public ContainerMemoryStatus|Unavailable $container,
+        public ContainerMemoryStatus | Unavailable $container,
     ) {
     }
 

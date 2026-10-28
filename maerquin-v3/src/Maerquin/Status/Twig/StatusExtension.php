@@ -40,7 +40,7 @@ class StatusExtension extends AbstractExtension
 
         while ($size >= 1_000 && $unit < count(self::BYTE_UNITS) - 1) {
             $size /= 1_024;
-            $unit++;
+            ++$unit;
         }
 
         return number_format($size, $unit === 0 ? 0 : 2, ',', '.') . ' ' . self::BYTE_UNITS[$unit];

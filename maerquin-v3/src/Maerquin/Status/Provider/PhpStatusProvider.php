@@ -34,7 +34,7 @@ class PhpStatusProvider
         return new PhpStatus(
             version: PHP_VERSION,
             sapi: PHP_SAPI,
-            memoryLimit: (string)ini_get('memory_limit'),
+            memoryLimit: ini_get('memory_limit') ?: '',
             extensions: array_map(
                 fn(string $name): ExtensionStatus => $this->getExtension($name),
                 $this->getRequiredExtensionNames(),
@@ -48,7 +48,9 @@ class PhpStatusProvider
             return ExtensionStatus::missing($name);
         }
 
-        return ExtensionStatus::installed($name, (string)phpversion($name));
+        $version = phpversion($name);
+
+        return ExtensionStatus::installed($name, $version === false ? '' : $version);
     }
 
     /**
@@ -79,12 +81,14 @@ class PhpStatusProvider
             return [];
         }
 
-        $composer = json_decode((string)file_get_contents($this->composerFile), true);
+        $content = file_get_contents($this->composerFile);
 
-        if (is_array($composer) === false || is_array($composer['require'] ?? false) === false) {
+        if ($content === false) {
             return [];
         }
 
-        return array_map('strval', array_keys($composer['require']));
+        $composer = json_decode($content, true);
+
+        return ScalarMap::fromArray(is_array($composer) ? ($composer['require'] ?? []) : [])->keys();
     }
 }

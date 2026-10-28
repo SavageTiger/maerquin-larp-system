@@ -16,21 +16,22 @@ class CacheStatusProvider
     ) {
     }
 
-    public function getStatus(): CacheStatus|Unavailable
+    public function getStatus(): CacheStatus | Unavailable
     {
         try {
-            $info = $this->flattenInfo((array)$this->cacheClient->info());
+            $info = $this->getInfo();
+            $isValkey = $info->has('valkey_version');
 
             return new CacheStatus(
-                server: isset($info['valkey_version']) ? 'Valkey' : 'Redis',
-                version: (string)($info['valkey_version'] ?? $info['redis_version'] ?? ''),
-                uptime: (int)($info['uptime_in_seconds'] ?? 0),
-                keys: (int)$this->cacheClient->dbsize(),
-                usedMemory: (int)($info['used_memory'] ?? 0),
-                peakMemory: (int)($info['used_memory_peak'] ?? 0),
-                maxMemory: (int)($info['maxmemory'] ?? 0),
-                hits: (int)($info['keyspace_hits'] ?? 0),
-                misses: (int)($info['keyspace_misses'] ?? 0),
+                server: $isValkey ? 'Valkey' : 'Redis',
+                version: $info->getString($isValkey ? 'valkey_version' : 'redis_version'),
+                uptime: $info->getInt('uptime_in_seconds'),
+                keys: $this->getKeyCount(),
+                usedMemory: $info->getInt('used_memory'),
+                peakMemory: $info->getInt('used_memory_peak'),
+                maxMemory: $info->getInt('maxmemory'),
+                hits: $info->getInt('keyspace_hits'),
+                misses: $info->getInt('keyspace_misses'),
             );
         } catch (Throwable $exception) {
             return new Unavailable('status.unavailable.cache', [
@@ -41,25 +42,35 @@ class CacheStatusProvider
 
     /**
      * Predis returns INFO either flat or grouped per section ("Server", "Memory", ...),
-     * depending on the server version.
-     *
-     * @param array<mixed> $info
-     * @return array<string, mixed>
+     * depending on the server version; the sections are merged into one map.
      */
-    private function flattenInfo(array $info): array
+    private function getInfo(): ScalarMap
     {
+        $info = $this->cacheClient->info();
+
+        if (is_array($info) === false) {
+            return ScalarMap::fromArray([]);
+        }
+
         $flat = [];
 
         foreach ($info as $key => $value) {
-            if (is_array($value) && ctype_upper(substr((string)$key, 0, 1))) {
+            if (is_array($value)) {
                 $flat = array_merge($flat, $value);
 
                 continue;
             }
 
-            $flat[(string)$key] = $value;
+            $flat[$key] = $value;
         }
 
-        return $flat;
+        return ScalarMap::fromArray($flat);
+    }
+
+    private function getKeyCount(): int
+    {
+        $keys = $this->cacheClient->dbsize();
+
+        return is_int($keys) ? $keys : 0;
     }
 }

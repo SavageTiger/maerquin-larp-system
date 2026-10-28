@@ -183,7 +183,9 @@
                             <tr><th>{{ 'status.database.host'|trans }}</th><td>{{ database.host }}</td></tr>
                             <tr><th>{{ 'status.database.name'|trans }}</th><td>{{ database.name }}</td></tr>
                             <tr><th>{{ 'status.database.version'|trans }}</th><td>{{ database.version }}</td></tr>
-                            <tr><th>{{ 'status.database.uptime'|trans }}</th><td>{{ database.uptime|duration }}</td></tr>
+                            {% if database.hasUptime %}
+                                <tr><th>{{ 'status.database.uptime'|trans }}</th><td>{{ database.uptime|duration }}</td></tr>
+                            {% endif %}
                             <tr><th>{{ 'status.database.tables'|trans }}</th><td>{{ database.tableCount }}</td></tr>
                             <tr><th>{{ 'status.database.data_size'|trans }}</th><td>{{ database.dataSize|bytes }}</td></tr>
                             <tr><th>{{ 'status.database.index_size'|trans }}</th><td>{{ database.indexSize|bytes }}</td></tr>

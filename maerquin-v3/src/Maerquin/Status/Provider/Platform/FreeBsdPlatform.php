@@ -26,7 +26,7 @@ class FreeBsdPlatform implements Platform
     }
 
     #[Override]
-    public function getCpuStatus(): CpuStatus|Unavailable
+    public function getCpuStatus(): CpuStatus | Unavailable
     {
         try {
             $values = $this->sysctl->read(['hw.ncpu', 'hw.model']);
@@ -48,7 +48,7 @@ class FreeBsdPlatform implements Platform
     }
 
     #[Override]
-    public function getMemoryStatus(): MemoryStatus|Unavailable
+    public function getMemoryStatus(): MemoryStatus | Unavailable
     {
         try {
             $values = $this->sysctl->read([

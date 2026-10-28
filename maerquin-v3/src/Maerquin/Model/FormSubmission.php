@@ -43,7 +43,7 @@ class FormSubmission
         return $this->form;
     }
 
-    public function getAnswer(string $fieldName): ?string
+    public function getAnswer(string $fieldName): null | string
     {
         return $this->getAnswers()[$fieldName] ?? null;
     }
@@ -54,6 +54,7 @@ class FormSubmission
     public function getAnswers(): array
     {
         $answers = [];
+
         foreach ($this->answers as $answer) {
             $answers[$answer->getFieldName()] = $answer->getValue();
         }

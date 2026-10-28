@@ -25,6 +25,11 @@ final readonly class DatabaseStatus implements StatusSection
         return true;
     }
 
+    public function hasUptime(): bool
+    {
+        return $this->uptime > 0;
+    }
+
     public function totalSize(): int
     {
         return $this->dataSize + $this->indexSize;

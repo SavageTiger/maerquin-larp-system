@@ -17,13 +17,13 @@ final readonly class UnsupportedPlatform implements Platform
     }
 
     #[Override]
-    public function getCpuStatus(): CpuStatus|Unavailable
+    public function getCpuStatus(): CpuStatus | Unavailable
     {
         return $this->unavailable();
     }
 
     #[Override]
-    public function getMemoryStatus(): MemoryStatus|Unavailable
+    public function getMemoryStatus(): MemoryStatus | Unavailable
     {
         return $this->unavailable();
     }

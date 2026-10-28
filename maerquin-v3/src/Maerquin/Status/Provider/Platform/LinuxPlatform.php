@@ -22,7 +22,7 @@ class LinuxPlatform implements Platform
     }
 
     #[Override]
-    public function getCpuStatus(): CpuStatus|Unavailable
+    public function getCpuStatus(): CpuStatus | Unavailable
     {
         try {
             $cpuInfo = $this->fileReader->read('/proc/cpuinfo');
@@ -44,7 +44,7 @@ class LinuxPlatform implements Platform
     }
 
     #[Override]
-    public function getMemoryStatus(): MemoryStatus|Unavailable
+    public function getMemoryStatus(): MemoryStatus | Unavailable
     {
         try {
             $memInfo = $this->parseMemInfo($this->fileReader->read('/proc/meminfo'));
@@ -96,7 +96,7 @@ class LinuxPlatform implements Platform
         return round((int)$matches[1] / (int)$matches[2], 2);
     }
 
-    private function getContainerMemoryStatus(): ContainerMemoryStatus|Unavailable
+    private function getContainerMemoryStatus(): ContainerMemoryStatus | Unavailable
     {
         try {
             return new ContainerMemoryStatus(

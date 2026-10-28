@@ -13,7 +13,7 @@ use SvenHK\Maerquin\Status\Results\Unavailable;
  */
 interface Platform
 {
-    public function getCpuStatus(): CpuStatus|Unavailable;
+    public function getCpuStatus(): CpuStatus | Unavailable;
 
-    public function getMemoryStatus(): MemoryStatus|Unavailable;
+    public function getMemoryStatus(): MemoryStatus | Unavailable;
 }

@@ -20,9 +20,10 @@ class Sysctl
      * Reads several values with a single sysctl call. Unknown names are left out of the result.
      *
      * @param non-empty-list<string> $names
-     * @return array<string, string>
      *
      * @throws SystemInfoNotAvailable
+     *
+     * @return array<string, string>
      */
     public function read(array $names): array
     {

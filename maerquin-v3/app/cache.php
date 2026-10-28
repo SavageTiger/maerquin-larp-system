@@ -20,5 +20,6 @@ return function (ContainerBuilder $containerBuilder): void {
 
     $containerBuilder->addDefinitions([
         'cache' => $cache,
+        'cache.client' => $client,
     ]);
 };

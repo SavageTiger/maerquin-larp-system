@@ -7,6 +7,8 @@ use App\Application\TwigExtension\UserExtension;
 use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use SvenHK\Maerquin\Status\Twig\StatusExtension;
+use SvenHK\Maerquin\Translation\TranslationExtension;
 
 use Twig\Cache\CacheInterface;
 
@@ -63,6 +65,9 @@ return function (App $app): void {
     $twig->addExtension(new UserExtension(
         $app->getContainer()->get(Session::class),
     ));
+
+    $twig->addExtension($app->getContainer()->get(TranslationExtension::class));
+    $twig->addExtension($app->getContainer()->get(StatusExtension::class));
 
     $app->add(TwigMiddleware::create($app, $twig));
 };

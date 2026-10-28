@@ -17,6 +17,13 @@ return function (ContainerBuilder $containerBuilder): void {
         SvenHK\Maerquin\Translation\Translator::class => DI\autowire()
             ->constructorParameter('cache', DI\get('cache')),
 
+        SvenHK\Maerquin\Status\Provider\Platform\Platform::class => DI\factory(
+            [SvenHK\Maerquin\Status\Provider\Platform\PlatformFactory::class, 'create'],
+        ),
+
+        SvenHK\Maerquin\Status\Provider\CacheStatusProvider::class => DI\autowire()
+            ->constructorParameter('cacheClient', DI\get('cache.client')),
+
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);
 

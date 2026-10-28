@@ -56,6 +56,48 @@ body::after {
     background-color: rgb(7, 78, 61) !important;
 }
 
+.navbar-item.has-dropdown {
+    padding: 0;
+}
+
+.navbar-link {
+    color: white !important;
+    background-color: transparent !important;
+}
+
+.navbar-link.is-active, .navbar-item.has-dropdown:hover .navbar-link {
+    background-color: rgb(7, 78, 61) !important;
+    border-radius: 5px;
+}
+
+.navbar-link:not(.is-arrowless)::after {
+    border-color: white !important;
+}
+
+.navbar-dropdown {
+    background-color: rgb(0, 133, 113) !important;
+    border-top: 0 !important;
+}
+
+.navbar-dropdown .navbar-item {
+    background-color: transparent !important;
+}
+
+.navbar-dropdown .navbar-item:hover, .navbar-dropdown .navbar-item.is-active {
+    background-color: rgb(7, 78, 61) !important;
+}
+
+.message-header p {
+    margin: 0 !important;
+}
+
+.message-header .tag {
+    height: auto;
+    padding: 0 0.6em;
+    font-size: 0.7rem;
+    line-height: 1.6;
+}
+
 .navbar-brand div.logo {
     color: white;
     padding: 10px;

@@ -43,12 +43,32 @@
                 {% endif %}
             </div>
 
-            {% if getUser().username %}
-                <a href="/logout.html"
-                   class="navbar-item is-pulled-right">
-                    <i class="fa-solid fa-door-open"></i> Uitloggen ({{ getUser().username|capitalize }})
-                </a>
-            {% endif %}
+            <div class="navbar-end">
+                {% if getUser().isAdmin %}
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link {% if 'status' in current_url() or 'forms' in current_url() %}is-active{% endif %}">
+                            <i class="fa-solid fa-gear"></i>&nbsp;{{ 'menu.settings'|trans }}
+                        </a>
+
+                        <div class="navbar-dropdown is-right">
+                            <a href="/admin/status.html"
+                               class="navbar-item {% if 'status' in current_url() %}is-active{% endif %}">
+                                <i class="fa-solid fa-signal"></i>&nbsp;{{ 'menu.settings.status'|trans }}
+                            </a>
+                            <a href="/admin/forms.html"
+                               class="navbar-item {% if 'forms' in current_url() %}is-active{% endif %}">
+                                <i class="fa-solid fa-list-check"></i>&nbsp;{{ 'menu.settings.forms'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if getUser().username %}
+                    <a href="/logout.html" class="navbar-item">
+                        <i class="fa-solid fa-door-open"></i> Uitloggen ({{ getUser().username|capitalize }})
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </nav>
 

@@ -1,0 +1,224 @@
+{% extends 'skeleton.html.twig' %}
+
+{% macro state(section) %}
+    {% if section.isAvailable() %}
+        <span class="tag is-success"><i class="fa-solid fa-circle-check"></i>&nbsp;{{ 'status.state.online'|trans }}</span>
+    {% else %}
+        <span class="tag is-danger"><i class="fa-solid fa-circle-xmark"></i>&nbsp;{{ 'status.state.offline'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro usage(percentage, warning, danger) %}
+    <progress class="progress is-small {{ percentage > danger ? 'is-danger' : (percentage > warning ? 'is-warning' : 'is-success') }}"
+              value="{{ percentage }}" max="100">{{ percentage }}%</progress>
+{% endmacro %}
+
+{% macro unavailable(section) %}
+    <p>{{ 'status.not_available'|trans }}</p>
+    <pre>{{ section.translationKey|trans(section.parameters) }}</pre>
+{% endmacro %}
+
+{% macro header(icon, title, section = false) %}
+    <div class="message-header">
+        <p><i class="{{ icon }}"></i>&nbsp;{{ title|trans }}</p>
+        {% if section %}
+            {{ _self.state(section) }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro number(value, decimals) %}{{ value|number_format(decimals, ',', '.') }}{% endmacro %}
+
+{% block container %}
+    {% import _self as ui %}
+    {% set php = status.php %}
+    {% set server = status.server %}
+    {% set cpu = status.cpu %}
+    {% set memory = status.memory %}
+    {% set database = status.database %}
+    {% set cache = status.cache %}
+
+    <div class="columns">
+        <div class="column is-6">
+            <article class="message is-dark">
+                {{ ui.header('fa-brands fa-php', 'status.php.title') }}
+                <div class="message-body">
+                    <table class="table is-narrow is-fullwidth">
+                        <tr><th>{{ 'status.php.version'|trans }}</th><td>{{ php.version }}</td></tr>
+                        <tr><th>{{ 'status.php.sapi'|trans }}</th><td>{{ php.sapi }}</td></tr>
+                        <tr><th>{{ 'status.php.memory_limit'|trans }}</th><td>{{ php.memoryLimit }}</td></tr>
+                    </table>
+                </div>
+            </article>
+
+            <article class="message is-dark">
+                {{ ui.header('fa-solid fa-server', 'status.server.title') }}
+                <div class="message-body">
+                    <table class="table is-narrow is-fullwidth">
+                        <tr><th>{{ 'status.server.os'|trans }}</th><td>{{ server.os }}</td></tr>
+                        <tr><th>{{ 'status.server.hostname'|trans }}</th><td>{{ server.hostname }}</td></tr>
+                        <tr><th>{{ 'status.server.kernel'|trans }}</th><td>{{ server.kernel }}</td></tr>
+                        <tr><th>{{ 'status.server.kernel_build'|trans }}</th><td>{{ server.kernelBuild }}</td></tr>
+                        <tr><th>{{ 'status.server.architecture'|trans }}</th><td>{{ server.architecture }}</td></tr>
+                    </table>
+                </div>
+            </article>
+
+            <article class="message is-dark">
+                {{ ui.header('fa-solid fa-microchip', 'status.cpu.title') }}
+                <div class="message-body">
+                    {% if cpu.isAvailable() %}
+                        <table class="table is-narrow is-fullwidth">
+                            {% if cpu.hasModel %}
+                                <tr><th>{{ 'status.cpu.model'|trans }}</th><td>{{ cpu.model }}</td></tr>
+                            {% endif %}
+                            <tr><th>{{ 'status.cpu.cores'|trans }}</th><td>{{ cpu.cores }}</td></tr>
+                            {% if cpu.limited %}
+                                <tr>
+                                    <th>{{ 'status.cpu.quota'|trans }}</th>
+                                    <td>{{ 'status.cpu.quota_value'|trans({'quota': ui.number(cpu.quota, 2)}) }}</td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <th>{{ 'status.cpu.load'|trans }}</th>
+                                <td>
+                                    {{ ui.number(cpu.load.oneMinute, 2) }} /
+                                    {{ ui.number(cpu.load.fiveMinutes, 2) }} /
+                                    {{ ui.number(cpu.load.fifteenMinutes, 2) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'status.cpu.load_percentage'|trans }}</th>
+                                <td>
+                                    {{ ui.usage(cpu.loadPercentage, 50, 80) }}
+                                    {{ cpu.loadPercentage }}%
+                                </td>
+                            </tr>
+                        </table>
+                    {% else %}
+                        {{ ui.unavailable(cpu) }}
+                    {% endif %}
+                </div>
+            </article>
+
+            <article class="message is-dark">
+                {{ ui.header('fa-solid fa-memory', 'status.memory.title') }}
+                <div class="message-body">
+                    {% if memory.isAvailable() %}
+                        <table class="table is-narrow is-fullwidth">
+                            <tr>
+                                <th>{{ 'status.memory.used'|trans }}</th>
+                                <td>
+                                    {{ ui.usage(memory.usedPercentage, 65, 85) }}
+                                    {{ 'status.memory.used_value'|trans({
+                                        'used': memory.used|bytes,
+                                        'total': memory.total|bytes,
+                                        'percentage': memory.usedPercentage,
+                                    }) }}
+                                </td>
+                            </tr>
+                            <tr><th>{{ 'status.memory.available'|trans }}</th><td>{{ memory.available|bytes }}</td></tr>
+                            {% if memory.hasSwap %}
+                                <tr>
+                                    <th>{{ 'status.memory.swap'|trans }}</th>
+                                    <td>{{ 'status.memory.of'|trans({'used': memory.swapUsed|bytes, 'total': memory.swapTotal|bytes}) }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if memory.container.isAvailable() %}
+                                <tr>
+                                    <th>{{ 'status.memory.container'|trans }}</th>
+                                    <td>
+                                        {% if memory.container.limited %}
+                                            {{ 'status.memory.of'|trans({'used': memory.container.usage|bytes, 'total': memory.container.limit|bytes}) }}
+                                        {% else %}
+                                            {{ 'status.memory.container_unlimited'|trans({'used': memory.container.usage|bytes}) }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <th>{{ 'status.memory.php'|trans }}</th>
+                                <td>{{ 'status.memory.php_value'|trans({'usage': memory.phpUsage|bytes, 'peak': memory.phpPeak|bytes}) }}</td>
+                            </tr>
+                        </table>
+                    {% else %}
+                        {{ ui.unavailable(memory) }}
+                    {% endif %}
+                </div>
+            </article>
+
+            <article class="message is-dark">
+                {{ ui.header('fa-solid fa-puzzle-piece', 'status.extensions.title') }}
+                <div class="message-body">
+                    <table class="table is-narrow is-fullwidth">
+                        <tr>
+                            <th>{{ 'status.extensions.name'|trans }}</th>
+                            <th>{{ 'status.extensions.version'|trans }}</th>
+                            <th>{{ 'status.extensions.status'|trans }}</th>
+                        </tr>
+                        {% for extension in php.extensions %}
+                            <tr>
+                                <td>{{ extension.name }}</td>
+                                <td>{{ extension.installed ? extension.version : '-' }}</td>
+                                <td>
+                                    {% if extension.installed %}
+                                        <span class="tag is-success">{{ 'status.extensions.installed'|trans }}</span>
+                                    {% else %}
+                                        <span class="tag is-danger">{{ 'status.extensions.missing'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </article>
+        </div>
+
+        <div class="column is-6">
+            <article class="message is-dark">
+                {{ ui.header('fa-solid fa-database', 'status.database.title', database) }}
+                <div class="message-body">
+                    {% if database.isAvailable() %}
+                        <table class="table is-narrow is-fullwidth">
+                            <tr><th>{{ 'status.database.host'|trans }}</th><td>{{ database.host }}</td></tr>
+                            <tr><th>{{ 'status.database.name'|trans }}</th><td>{{ database.name }}</td></tr>
+                            <tr><th>{{ 'status.database.version'|trans }}</th><td>{{ database.version }}</td></tr>
+                            <tr><th>{{ 'status.database.uptime'|trans }}</th><td>{{ database.uptime|duration }}</td></tr>
+                            <tr><th>{{ 'status.database.tables'|trans }}</th><td>{{ database.tableCount }}</td></tr>
+                            <tr><th>{{ 'status.database.data_size'|trans }}</th><td>{{ database.dataSize|bytes }}</td></tr>
+                            <tr><th>{{ 'status.database.index_size'|trans }}</th><td>{{ database.indexSize|bytes }}</td></tr>
+                            <tr><th>{{ 'status.database.total_size'|trans }}</th><td><strong>{{ database.totalSize|bytes }}</strong></td></tr>
+                        </table>
+                    {% else %}
+                        {{ ui.unavailable(database) }}
+                    {% endif %}
+                </div>
+            </article>
+
+            <article class="message is-dark">
+                {{ ui.header('fa-solid fa-bolt', 'status.cache.title', cache) }}
+                <div class="message-body">
+                    {% if cache.isAvailable() %}
+                        <table class="table is-narrow is-fullwidth">
+                            <tr><th>{{ 'status.cache.server'|trans }}</th><td>{{ cache.server }} {{ cache.version }}</td></tr>
+                            <tr><th>{{ 'status.cache.uptime'|trans }}</th><td>{{ cache.uptime|duration }}</td></tr>
+                            <tr><th>{{ 'status.cache.keys'|trans }}</th><td>{{ cache.keys }}</td></tr>
+                            <tr><th>{{ 'status.cache.used_memory'|trans }}</th><td><strong>{{ cache.usedMemory|bytes }}</strong></td></tr>
+                            <tr><th>{{ 'status.cache.peak_memory'|trans }}</th><td>{{ cache.peakMemory|bytes }}</td></tr>
+                            <tr>
+                                <th>{{ 'status.cache.max_memory'|trans }}</th>
+                                <td>{{ cache.limited ? cache.maxMemory|bytes : 'status.cache.unlimited'|trans }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'status.cache.hit_rate'|trans }}</th>
+                                <td>{{ cache.lookups > 0 ? ui.number(cache.hitRate, 1) ~ '%' : '-' }}</td>
+                            </tr>
+                        </table>
+                    {% else %}
+                        {{ ui.unavailable(cache) }}
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+    </div>
+{% endblock %}

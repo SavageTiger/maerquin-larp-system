@@ -11,6 +11,7 @@ use SvenHK\Maerquin\Controller\API\PlayerResetPasswordEmailController;
 use SvenHK\Maerquin\Controller\API\SkillsApiController;
 use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
+use SvenHK\Maerquin\Controller\FormsController;
 use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
 use SvenHK\Maerquin\Controller\Frontend\RegisterController;
 use SvenHK\Maerquin\Controller\Frontend\SubscriptionsController as FrontendSubscriptionsController;
@@ -23,6 +24,7 @@ use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\PrintCharacter;
 use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
+use SvenHK\Maerquin\Controller\StatusController;
 use SvenHK\Maerquin\Controller\SubscriptionsController;
 
 return function (App $app): void {
@@ -79,6 +81,9 @@ return function (App $app): void {
     $app->get('/admin/races/{raceId}.html', RacesController::class);
     $app->get('/admin/races/persisted/{raceId}.html', RacesController::class);
     $app->post('/admin/races/{raceId}.html', RacesController::class);
+
+    $app->get('/admin/status.html', StatusController::class);
+    $app->get('/admin/forms.html', FormsController::class);
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);

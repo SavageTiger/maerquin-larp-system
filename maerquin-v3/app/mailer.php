@@ -15,6 +15,13 @@ class MailerFactory
         $transport = Transport::fromDsn($_ENV['EMAIL_SERVER_DSN']);
 
         if ($transport instanceof EsmtpTransport) {
+            $username = (string)($_ENV['EMAIL_SERVER_USERNAME'] ?? '');
+
+            if ($username !== '') {
+                $transport->setUsername($username);
+                $transport->setPassword((string)($_ENV['EMAIL_SERVER_PASSWORD'] ?? ''));
+            }
+
             $stream = $transport->getStream();
 
             if ($stream instanceof SocketStream) {

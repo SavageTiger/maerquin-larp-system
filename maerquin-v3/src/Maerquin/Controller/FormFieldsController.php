@@ -8,11 +8,8 @@ use App\Application\Actions\Action;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Response;
-use SvenHK\Maerquin\Entity\Form;
-use SvenHK\Maerquin\Entity\FormSection;
 use SvenHK\Maerquin\Exception\Form\FormFieldException;
 use SvenHK\Maerquin\Form\FormFieldHandler;
 use SvenHK\Maerquin\Repository\FormRepository;
@@ -37,10 +34,7 @@ class FormFieldsController extends Action
         ) ?? throw new HttpNotFoundException($this->request);
 
         try {
-            return match ($this->request->getMethod()) {
-                'POST' => $this->replaceFields($form, $section),
-                default => throw new HttpMethodNotAllowedException($this->request),
-            };
+            $this->formFieldHandler->replace($form, $section, $this->request);
         } catch (FormFieldException $exception) {
             throw new HttpBadRequestException(
                 $this->request,
@@ -48,11 +42,6 @@ class FormFieldsController extends Action
                 $exception,
             );
         }
-    }
-
-    private function replaceFields(Form $form, FormSection $section): ResponseInterface
-    {
-        $this->formFieldHandler->replace($form, $section, $this->request);
 
         return new Response();
     }

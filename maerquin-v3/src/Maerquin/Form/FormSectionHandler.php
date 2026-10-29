@@ -31,9 +31,6 @@ readonly class FormSectionHandler
         $this->formRepository->save($form);
     }
 
-    /**
-     * @throws FormSectionException
-     */
     public function delete(Form $form, FormSection $section): void
     {
         $form->deleteSection($section);

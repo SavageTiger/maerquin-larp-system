@@ -68,19 +68,15 @@ class Form
         return $section;
     }
 
+    /**
+     * @return list<FormSectionEntity>
+     */
     public function getSections(): array
     {
-        $sections = array_values(array_filter(
+        return array_values(array_filter(
             $this->sections->toArray(),
             static fn(FormSectionEntity $section): bool => $section->isDeleted() === false,
         ));
-
-        usort(
-            $sections,
-            static fn(FormSectionEntity $a, FormSectionEntity $b): int => $a->getPosition() <=> $b->getPosition(),
-        );
-
-        return $sections;
     }
 
     /**
@@ -90,67 +86,16 @@ class Form
      */
     public function replaceSectionFields(FormSectionEntity $section, array $rows): void
     {
-        if ($this->sections->contains($section) === false) {
-            throw FormFieldException::sectionNotInForm();
-        }
-
-        $fieldIdsInOtherSections = [];
-
-        foreach ($this->sections as $otherSection) {
-            if ($otherSection === $section) {
-                continue;
-            }
-
-            foreach ($otherSection->getFields() as $field) {
-                $fieldIdsInOtherSections[$field->getId()] = true;
-            }
-        }
-
-        $seenFieldIds = [];
-
-        foreach ($rows as $rowIndex => $fields) {
-            if ($fields === []) {
-                throw FormFieldException::layoutInvalid();
-            }
-
-            if (count($fields) > FormSection::MAX_FIELDS_PER_ROW) {
-                throw FormFieldException::rowFull(FormSection::MAX_FIELDS_PER_ROW);
-            }
-
-            foreach ($fields as $columnIndex => $field) {
-                $fieldId = $field['id']->toString();
-
-                if (isset($seenFieldIds[$fieldId]) || isset($fieldIdsInOtherSections[$fieldId])) {
-                    throw FormFieldException::layoutInvalid();
-                }
-
-                $seenFieldIds[$fieldId] = true;
-
-                $label = trim($field['label']);
-
-                if ($label === '') {
-                    throw FormFieldException::labelMissing();
-                }
-
-                $rows[$rowIndex][$columnIndex]['label'] = $label;
-            }
-        }
-
         $section->replaceFields($rows);
     }
 
-    /**
-     * @throws FormSectionException
-     */
     public function deleteSection(FormSectionEntity $section): void
     {
-        if (in_array($section, $this->getSections(), true) === false) {
-            throw FormSectionException::sectionNotInForm();
-        }
-
         $section->delete();
 
-        $this->recalculateSectionPositions($this->getSections());
+        foreach ($this->getSections() as $index => $remainingSection) {
+            $remainingSection->reposition($index + 1);
+        }
     }
 
     public function findSection(string $sectionId): null | FormSectionEntity
@@ -162,15 +107,5 @@ class Form
         }
 
         return null;
-    }
-
-    /**
-     * @param list<FormSectionEntity> $sections
-     */
-    private function recalculateSectionPositions(array $sections): void
-    {
-        foreach ($sections as $index => $section) {
-            $section->reposition($index + 1);
-        }
     }
 }

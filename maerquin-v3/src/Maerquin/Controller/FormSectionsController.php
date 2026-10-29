@@ -8,7 +8,6 @@ use App\Application\Actions\Action;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Response;
 use Slim\Views\Twig;
@@ -34,15 +33,18 @@ class FormSectionsController extends Action
     {
         $form = $this->formRepository->getById((string)$this->request->getAttribute('formId'));
 
-        $isSectionRequest = $this->request->getAttribute('sectionId') !== null;
+        if ($this->request->getMethod() === 'GET') {
+            return $this->renderSectionView($form);
+        }
+
+        if ($this->request->getAttribute('sectionId') !== null) {
+            $this->formSectionHandler->delete($form, $this->findSection($form));
+
+            return new Response();
+        }
 
         try {
-            return match (true) {
-                $this->request->getMethod() === 'GET' && $isSectionRequest => $this->renderSectionView($form),
-                $this->request->getMethod() === 'POST' && $isSectionRequest => $this->deleteSection($form),
-                $this->request->getMethod() === 'POST' => $this->addSection($form),
-                default => throw new HttpMethodNotAllowedException($this->request),
-            };
+            $this->formSectionHandler->handle($form, $this->request);
         } catch (FormSectionException $exception) {
             throw new HttpBadRequestException(
                 $this->request,
@@ -50,41 +52,27 @@ class FormSectionsController extends Action
                 $exception,
             );
         }
+
+        return new Response();
     }
 
     private function renderSectionView(Form $form): ResponseInterface
     {
-        $section = $this->findSection($form);
-
         return Twig::fromRequest($this->request)->render(
             $this->response,
             'form_section.html.twig',
             [
                 'form' => $form,
-                'section' => $section,
+                'section' => $this->findSection($form),
                 'fieldTypes' => FormFieldType::cases(),
                 'maxFieldsPerRow' => FormSection::MAX_FIELDS_PER_ROW,
             ],
         );
     }
 
-    private function deleteSection(Form $form): ResponseInterface
-    {
-        $this->formSectionHandler->delete($form, $this->findSection($form));
-
-        return new Response();
-    }
-
     private function findSection(Form $form): FormSection
     {
         return $form->findSection((string)$this->request->getAttribute('sectionId'))
             ?? throw new HttpNotFoundException($this->request);
-    }
-
-    private function addSection(Form $form): ResponseInterface
-    {
-        $this->formSectionHandler->handle($form, $this->request);
-
-        return new Response();
     }
 }

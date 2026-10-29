@@ -20,11 +20,6 @@ final class FormSectionException extends RuntimeException
         return new self('A section needs a title.', 'forms.section.error.title_missing');
     }
 
-    public static function sectionNotInForm(): self
-    {
-        return new self('The section does not belong to this form.', 'forms.section.error.section_not_in_form');
-    }
-
     public function getTranslationKey(): string
     {
         return $this->translationKey;

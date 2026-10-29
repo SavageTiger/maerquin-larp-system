@@ -35,11 +35,6 @@ final class FormFieldException extends RuntimeException
         return new self(sprintf('A row holds at most %d fields.', $maximum), 'forms.field.error.row_full');
     }
 
-    public static function sectionNotInForm(): self
-    {
-        return new self('The section does not belong to this form.', 'forms.field.error.section_not_in_form');
-    }
-
     public function getTranslationKey(): string
     {
         return $this->translationKey;

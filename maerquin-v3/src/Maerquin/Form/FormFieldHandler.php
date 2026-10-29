@@ -34,7 +34,9 @@ readonly class FormFieldHandler
                 throw FormFieldException::layoutInvalid();
             }
 
-            $rows[] = array_map($this->resolveField(...), array_values($fields));
+            if ($fields !== []) {
+                $rows[] = array_map($this->resolveField(...), array_values($fields));
+            }
         }
 
         $form->replaceSectionFields($section, $rows);
@@ -63,7 +65,7 @@ readonly class FormFieldHandler
 
         return [
             'id' => Uuid::fromString($field['id']),
-            'label' => $field['label'],
+            'label' => trim($field['label']),
             'type' => FormFieldType::tryFrom($field['type']) ?? throw FormFieldException::typeInvalid($field['type']),
             'required' => $field['required'],
         ];

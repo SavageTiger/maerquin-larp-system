@@ -49,11 +49,6 @@ class FormField
         return (string)$this->id;
     }
 
-    public function getSection(): FormSection
-    {
-        return $this->section;
-    }
-
     public function getKey(): string
     {
         return $this->key;
@@ -84,11 +79,13 @@ class FormField
         return $this->column;
     }
 
-    public function change(string $label, FormFieldType $type, bool $required): void
+    public function update(string $label, FormFieldType $type, bool $required, int $row, int $column): void
     {
         $this->label = $label;
         $this->type = $type;
         $this->required = $required;
+        $this->row = $row;
+        $this->column = $column;
     }
 
     public function isDeleted(): bool
@@ -99,11 +96,5 @@ class FormField
     public function delete(): void
     {
         $this->deleted = true;
-    }
-
-    public function moveTo(int $row, int $column): void
-    {
-        $this->row = $row;
-        $this->column = $column;
     }
 }

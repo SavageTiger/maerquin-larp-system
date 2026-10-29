@@ -99,32 +99,27 @@ class FormSection
         assert($this instanceof FormSectionEntity);
 
         $remainingFields = [];
-        $deletedFieldIds = [];
 
-        foreach ($this->fields as $field) {
-            if ($field->isDeleted()) {
-                $deletedFieldIds[$field->getId()] = true;
-
-                continue;
-            }
-
+        foreach ($this->getFields() as $field) {
             $remainingFields[$field->getId()] = $field;
         }
 
         foreach ($rows as $rowIndex => $fields) {
-            foreach ($fields as $columnIndex => $data) {
-                $fieldId = $data['id']->toString();
+            if (count($fields) > self::MAX_FIELDS_PER_ROW) {
+                throw FormFieldException::rowFull(self::MAX_FIELDS_PER_ROW);
+            }
 
+            foreach ($fields as $columnIndex => $data) {
+                if ($data['label'] === '') {
+                    throw FormFieldException::labelMissing();
+                }
+
+                $fieldId = $data['id']->toString();
                 $row = $rowIndex + 1;
                 $column = $columnIndex + 1;
 
-                if (isset($deletedFieldIds[$fieldId])) {
-                    throw FormFieldException::layoutInvalid();
-                }
-
                 if (isset($remainingFields[$fieldId])) {
-                    $remainingFields[$fieldId]->change($data['label'], $data['type'], $data['required']);
-                    $remainingFields[$fieldId]->moveTo($row, $column);
+                    $remainingFields[$fieldId]->update($data['label'], $data['type'], $data['required'], $row, $column);
 
                     unset($remainingFields[$fieldId]);
 

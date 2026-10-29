@@ -48,7 +48,7 @@
                             <button v-if="fields.length < maxFieldsPerRow"
                                     type="button"
                                     class="field-slot"
-                                    :class="{ 'is-selected': isNew && draft.row === String(rowIndex + 1) }"
+                                    :class="{ 'is-selected': isNew && draft.row === rowIndex + 1 }"
                                     @click="startAdd(rowIndex + 1)">
                                 <i class="fa-solid fa-plus"></i> {{ 'forms.field.add_here'|trans }}
                             </button>
@@ -57,8 +57,8 @@
 
                     <button type="button"
                             class="field-slot is-new-row"
-                            :class="{ 'is-selected': isNew && draft.row === '' }"
-                            @click="startAdd(null)">
+                            :class="{ 'is-selected': isNew && draft.row === 0 }"
+                            @click="startAdd(0)">
                         <i class="fa-solid fa-plus"></i> {{ 'forms.field.add_row'|trans }}
                     </button>
                 </div>
@@ -98,19 +98,19 @@
                             <div class="field has-addons">
                                 <div class="control">
                                     <div class="select">
-                                        <select v-model="draft.row" @change="placeAtEndOfRow()">
-                                            <option value="">{{ 'forms.field.placement.new_row'|trans }}</option>
+                                        <select v-model.number="draft.row" @change="placeAtEndOfRow()">
+                                            <option :value="0">{{ 'forms.field.placement.new_row'|trans }}</option>
                                             <option v-for="option in rowOptions" :key="option.row"
-                                                    :value="String(option.row)" :disabled="option.isFull">
+                                                    :value="option.row" :disabled="option.isFull">
                                                 {{ '{{ option.label }}' }}
                                             </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="control" v-if="draft.row !== ''">
+                                <div class="control" v-if="draft.row !== 0">
                                     <div class="select">
-                                        <select v-model="draft.column">
-                                            <option v-for="column in columnOptions" :key="column" :value="String(column)">
+                                        <select v-model.number="draft.column">
+                                            <option v-for="column in columnOptions" :key="column" :value="column">
                                                 {{ '{{ columnLabel(column) }}' }}
                                             </option>
                                         </select>
@@ -161,8 +161,8 @@
             label: '',
             type: '{{ (fieldTypes|first).value }}',
             required: false,
-            row: '',
-            column: '',
+            row: 0,
+            column: 1,
         });
 
         const toRows = (fields) => {
@@ -215,7 +215,7 @@
                     });
                 },
                 columnOptions() {
-                    const option = this.rowOptions.find((option) => String(option.row) === this.draft.row);
+                    const option = this.rowOptions.find((option) => option.row === this.draft.row);
 
                     return option ? Array.from({ length: option.count + 1 }, (_, index) => index + 1) : [];
                 },
@@ -236,7 +236,7 @@
                     return columnLabel.replace('%column%', column);
                 },
                 placeAtEndOfRow() {
-                    this.draft.column = this.columnOptions.length > 0 ? String(this.columnOptions.at(-1)) : '';
+                    this.draft.column = this.columnOptions.at(-1) ?? 1;
                 },
                 focusEditor() {
                     this.$nextTick(() => {
@@ -245,7 +245,7 @@
                     });
                 },
                 startAdd(row) {
-                    this.draft = { ...emptyDraft(), row: row === null ? '' : String(row) };
+                    this.draft = { ...emptyDraft(), row };
                     this.placeAtEndOfRow();
                     this.focusEditor();
                 },
@@ -254,8 +254,8 @@
 
                     this.draft = {
                         ...field,
-                        row: String(rowIndex + 1),
-                        column: String(this.rows[rowIndex].indexOf(field) + 1),
+                        row: rowIndex + 1,
+                        column: this.rows[rowIndex].indexOf(field) + 1,
                     };
                     this.focusEditor();
                 },
@@ -281,10 +281,10 @@
                     };
                     const rows = this.withoutDraftField();
 
-                    if (row === '') {
+                    if (row === 0) {
                         rows.push([field]);
                     } else {
-                        rows[Number(row) - 1].splice(Number(column) - 1, 0, field);
+                        rows[row - 1].splice(column - 1, 0, field);
                     }
 
                     this.rows = rows.filter((fields) => fields.length > 0);

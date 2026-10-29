@@ -6,13 +6,13 @@ namespace SvenHK\Maerquin\Form;
 
 use Ramsey\Uuid\Uuid;
 use Slim\Psr7\Request;
-use SvenHK\Maerquin\Exception\MaerquinEmailAlreadyInUseException;
-use SvenHK\Maerquin\Exception\MaerquinRegistrationException;
+use SvenHK\Maerquin\Exception\Account\EmailAlreadyInUseException;
+use SvenHK\Maerquin\Exception\Account\RegistrationException;
+use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Model\User as UserModel;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
-
 use function Tamtamchik\NameCase\str_name_case;
 
 readonly class RegistrationFormHandler
@@ -24,8 +24,8 @@ readonly class RegistrationFormHandler
     }
 
     /**
-     * @throws MaerquinRegistrationException
-     * @throws MaerquinEmailAlreadyInUseException
+     * @throws RegistrationException
+     * @throws EmailAlreadyInUseException
      * @throws MissingFormFieldException
      */
     public function handle(Request $request): UserModel
@@ -64,8 +64,8 @@ readonly class RegistrationFormHandler
     }
 
     /**
-     * @throws MaerquinRegistrationException
-     * @throws MaerquinEmailAlreadyInUseException
+     * @throws RegistrationException
+     * @throws EmailAlreadyInUseException
      */
     private function guardRegistration(
         string $firstName,
@@ -75,30 +75,30 @@ readonly class RegistrationFormHandler
         string $passwordRepeat,
     ): void {
         if ($firstName === '') {
-            throw MaerquinRegistrationException::firstNameMissing();
+            throw RegistrationException::firstNameMissing();
         }
 
         if ($lastName === '') {
-            throw MaerquinRegistrationException::lastNameMissing();
+            throw RegistrationException::lastNameMissing();
         }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            throw MaerquinRegistrationException::invalidEmail();
+            throw RegistrationException::invalidEmail();
         }
 
         if (mb_strlen($password) < 8) {
-            throw MaerquinRegistrationException::passwordTooShort();
+            throw RegistrationException::passwordTooShort();
         }
 
         if ($password !== $passwordRepeat) {
-            throw MaerquinRegistrationException::passwordsNotMatching();
+            throw RegistrationException::passwordsNotMatching();
         }
 
         if (
             $this->userRepository->findByUsername($email) !== null ||
             $this->playerRepository->findByEmail($email) !== null
         ) {
-            throw MaerquinEmailAlreadyInUseException::withEmail($email);
+            throw EmailAlreadyInUseException::withEmail($email);
         }
     }
 }

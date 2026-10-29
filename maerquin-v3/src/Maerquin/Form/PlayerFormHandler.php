@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Form;
 
 use Slim\Psr7\Request;
-use SvenHK\Maerquin\Exception\MaerquinUserAlreadyExists;
+use SvenHK\Maerquin\Exception\Account\UserAlreadyExistsException;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 use SvenHK\Maerquin\Model\User as UserModel;
 use SvenHK\Maerquin\Repository\PlayerRepository;
@@ -66,7 +66,7 @@ readonly class PlayerFormHandler
         $existingAccount = $this->userRepository->findByUsername($username);
 
         if ($existingAccount && $existingAccount->getId() !== $user->getId()) {
-            throw MaerquinUserAlreadyExists::withUsername($username);
+            throw UserAlreadyExistsException::withUsername($username);
         }
 
         $user->changeUsername($username);

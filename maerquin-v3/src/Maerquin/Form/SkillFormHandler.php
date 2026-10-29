@@ -6,7 +6,8 @@ namespace SvenHK\Maerquin\Form;
 
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Skill;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
+use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Model\RequirementType;
 use SvenHK\Maerquin\Model\SkillSkillLink;
 use SvenHK\Maerquin\Repository\DeityRepository;
@@ -28,7 +29,7 @@ class SkillFormHandler
 
     /**
      * @throws MissingFormFieldException
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function handle(Skill $skill, Request $request): void
     {

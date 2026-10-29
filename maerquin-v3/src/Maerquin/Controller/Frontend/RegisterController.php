@@ -9,8 +9,8 @@ use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Controller\RedirectTo;
-use SvenHK\Maerquin\Exception\MaerquinEmailAlreadyInUseException;
-use SvenHK\Maerquin\Exception\MaerquinRegistrationException;
+use SvenHK\Maerquin\Exception\Account\EmailAlreadyInUseException;
+use SvenHK\Maerquin\Exception\Account\RegistrationException;
 use SvenHK\Maerquin\Form\FormResolver;
 use SvenHK\Maerquin\Form\RegistrationFormHandler;
 use SvenHK\Maerquin\Mail\AccountMailer;
@@ -47,9 +47,9 @@ class RegisterController extends Action
     {
         try {
             $user = $this->registrationFormHandler->handle($this->request);
-        } catch (MaerquinRegistrationException $exception) {
+        } catch (RegistrationException $exception) {
             return $this->renderRegisterView('form', $this->translator->trans($exception->getTranslationKey()));
-        } catch (MaerquinEmailAlreadyInUseException) {
+        } catch (EmailAlreadyInUseException) {
             return $this->renderRegisterView('emailTaken');
         }
 

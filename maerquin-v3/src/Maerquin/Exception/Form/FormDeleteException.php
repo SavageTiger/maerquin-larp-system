@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Exception;
+namespace SvenHK\Maerquin\Exception\Form;
 
 use RuntimeException;
 
-final class MaerquinFormDeleteException extends RuntimeException
+final class FormDeleteException extends RuntimeException
 {
     private function __construct(
         string $message,

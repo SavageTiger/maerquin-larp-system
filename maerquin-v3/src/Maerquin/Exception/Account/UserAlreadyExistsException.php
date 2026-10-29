@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Exception;
+namespace SvenHK\Maerquin\Exception\Account;
 
 use Exception;
 
-class MaerquinUserAlreadyExists extends Exception
+class UserAlreadyExistsException extends Exception
 {
     public static function withUsername(string $username): self
     {

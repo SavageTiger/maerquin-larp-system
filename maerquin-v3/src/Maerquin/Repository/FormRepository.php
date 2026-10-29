@@ -7,7 +7,7 @@ namespace SvenHK\Maerquin\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\Form;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
 
 class FormRepository
 {
@@ -16,12 +16,12 @@ class FormRepository
     }
 
     /**
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function getById(string $formId): Form
     {
         return $this->entities()->findOneBy(['id' => $formId]) ??
-            throw MaerquinEntityNotFoundException::withType(Form::class);
+            throw EntityNotFoundException::withType(Form::class);
     }
 
     public function findById(string $formId): null | Form

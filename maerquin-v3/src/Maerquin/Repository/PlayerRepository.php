@@ -7,7 +7,7 @@ namespace SvenHK\Maerquin\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\Player;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
 use SvenHK\Maerquin\Model\Player as PlayerModel;
 
 class PlayerRepository
@@ -23,11 +23,11 @@ class PlayerRepository
     }
 
     /**
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function getById(string $playerId): Player
     {
-        return $this->entities()->findOneBy(['id' => $playerId]) ?? throw MaerquinEntityNotFoundException::withType(Player::class);
+        return $this->entities()->findOneBy(['id' => $playerId]) ?? throw EntityNotFoundException::withType(Player::class);
     }
 
     public function findById(string $playerId): null | Player

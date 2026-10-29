@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Exception;
+namespace SvenHK\Maerquin\Exception\Account;
 
 use RuntimeException;
 
-final class MaerquinRegistrationException extends RuntimeException
+final class RegistrationException extends RuntimeException
 {
     private function __construct(
         string $message,

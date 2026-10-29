@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Status\Provider\Platform;
+namespace SvenHK\Maerquin\Exception\Status;
 
 use RuntimeException;
 use SvenHK\Maerquin\Status\Results\Unavailable;
 
-final class SystemInfoNotAvailable extends RuntimeException
+final class SystemInfoNotAvailableException extends RuntimeException
 {
     /**
      * @param array<string, string> $parameters

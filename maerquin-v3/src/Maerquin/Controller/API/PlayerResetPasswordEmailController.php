@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Slim\Psr7\Response;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\User;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
 use SvenHK\Maerquin\Mail\AccountMailer;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
@@ -29,7 +29,7 @@ class PlayerResetPasswordEmailController extends Action
         $playerAccount = $this->userRepository->findByPlayer($player->getId());
 
         if ($playerAccount === null) {
-            throw MaerquinEntityNotFoundException::withType(User::class);
+            throw EntityNotFoundException::withType(User::class);
         }
 
         $this->accountMailer->sendPasswordSetup(Twig::fromRequest($this->request), $playerAccount);

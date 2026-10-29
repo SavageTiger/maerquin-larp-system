@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Exception;
+namespace SvenHK\Maerquin\Exception\Persistence;
 
 use Exception;
 
-class MaerquinEntityNotFoundException extends Exception
+class EntityNotFoundException extends Exception
 {
     public static function withType(string $entityName): self
     {

@@ -9,7 +9,7 @@ use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Psr7\Response;
-use SvenHK\Maerquin\Exception\MaerquinFormDeleteException;
+use SvenHK\Maerquin\Exception\Form\FormDeleteException;
 use SvenHK\Maerquin\Form\FormDeleteHandler;
 use SvenHK\Maerquin\Repository\FormRepository;
 use SvenHK\Maerquin\Translation\Translator;
@@ -30,7 +30,7 @@ class FormDeleteController extends Action
 
         try {
             $this->formDeleteHandler->handle($form);
-        } catch (MaerquinFormDeleteException $exception) {
+        } catch (FormDeleteException $exception) {
             throw new HttpBadRequestException(
                 $this->request,
                 $this->translator->trans($exception->getTranslationKey()),

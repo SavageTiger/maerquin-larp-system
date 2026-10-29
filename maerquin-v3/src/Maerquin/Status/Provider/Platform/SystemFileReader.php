@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Status\Provider\Platform;
 
+use SvenHK\Maerquin\Exception\Status\SystemInfoNotAvailableException;
+
 /**
  * Reads kernel / cgroup files (/proc, /sys), which do not exist on every system.
  */
 class SystemFileReader
 {
     /**
-     * @throws SystemInfoNotAvailable
+     * @throws SystemInfoNotAvailableException
      */
     public function read(string $path): string
     {
         if (@is_readable($path) === false) {
-            throw SystemInfoNotAvailable::fileNotReadable($path);
+            throw SystemInfoNotAvailableException::fileNotReadable($path);
         }
 
         $content = @file_get_contents($path);
 
         if ($content === false) {
-            throw SystemInfoNotAvailable::fileNotReadable($path);
+            throw SystemInfoNotAvailableException::fileNotReadable($path);
         }
 
         return $content;
@@ -30,7 +32,7 @@ class SystemFileReader
     /**
      * Reads a cgroup limit file, where "max" means unlimited.
      *
-     * @throws SystemInfoNotAvailable
+     * @throws SystemInfoNotAvailableException
      *
      * @return int The limit, 0 when unlimited
      */
@@ -46,7 +48,7 @@ class SystemFileReader
     }
 
     /**
-     * @throws SystemInfoNotAvailable
+     * @throws SystemInfoNotAvailableException
      */
     public function readInt(string $path): int
     {
@@ -56,7 +58,7 @@ class SystemFileReader
     private function toInt(string $path, string $content): int
     {
         if (ctype_digit($content) === false) {
-            throw SystemInfoNotAvailable::unexpectedFileContent($path);
+            throw SystemInfoNotAvailableException::unexpectedFileContent($path);
         }
 
         return (int)$content;

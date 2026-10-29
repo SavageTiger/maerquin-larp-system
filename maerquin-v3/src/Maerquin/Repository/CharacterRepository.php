@@ -10,7 +10,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\CharacterEventLink;
 use SvenHK\Maerquin\Entity\CharacterSkillLink;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
 use SvenHK\Maerquin\Model\Character as CharacterModel;
 
 class CharacterRepository
@@ -41,11 +41,11 @@ class CharacterRepository
     }
 
     /**
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function getById(string $characterId): Character
     {
-        return $this->entities()->findOneBy(['id' => $characterId]) ?? throw MaerquinEntityNotFoundException::withType(Character::class);
+        return $this->entities()->findOneBy(['id' => $characterId]) ?? throw EntityNotFoundException::withType(Character::class);
     }
 
     /**

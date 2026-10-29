@@ -11,7 +11,7 @@ use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Psr7\Response;
 use SvenHK\Maerquin\Entity\Form;
-use SvenHK\Maerquin\Exception\MaerquinFormSectionException;
+use SvenHK\Maerquin\Exception\Form\FormSectionException;
 use SvenHK\Maerquin\Form\FormSectionHandler;
 use SvenHK\Maerquin\Repository\FormRepository;
 use SvenHK\Maerquin\Translation\Translator;
@@ -35,7 +35,7 @@ class FormSectionsController extends Action
                 'POST' => $this->addSection($form),
                 default => throw new HttpMethodNotAllowedException($this->request),
             };
-        } catch (MaerquinFormSectionException $exception) {
+        } catch (FormSectionException $exception) {
             throw new HttpBadRequestException(
                 $this->request,
                 $this->translator->trans($exception->getTranslationKey()),

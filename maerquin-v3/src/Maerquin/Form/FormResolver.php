@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Form;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
+use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 
 class FormResolver
 {

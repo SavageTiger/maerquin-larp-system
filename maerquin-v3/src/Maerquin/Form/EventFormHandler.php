@@ -13,7 +13,8 @@ use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\CharacterEventLink;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Exception\Event\EventDateUnparsableException;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
+use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Repository\FormRepository;
@@ -29,7 +30,7 @@ class EventFormHandler
 
     /**
      * @throws EventDateUnparsableException
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      * @throws MissingFormFieldException
      * @throws DateMalformedStringException
      */
@@ -114,7 +115,7 @@ class EventFormHandler
     /**
      * @param array<int, string> $characterIds
      *
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      */
     private function createCharacterPresenceList(
         Event $event,

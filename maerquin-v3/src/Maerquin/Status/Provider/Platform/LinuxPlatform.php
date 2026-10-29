@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Status\Provider\Platform;
 
 use Override;
+use SvenHK\Maerquin\Exception\Status\SystemInfoNotAvailableException;
 use SvenHK\Maerquin\Status\Results\ContainerMemoryStatus;
 use SvenHK\Maerquin\Status\Results\CpuStatus;
 use SvenHK\Maerquin\Status\Results\MemoryStatus;
@@ -29,7 +30,7 @@ class LinuxPlatform implements Platform
             $cores = (int)preg_match_all('/^processor\s*:/m', $cpuInfo);
 
             if ($cores === 0) {
-                throw SystemInfoNotAvailable::cpuCoresUnknown();
+                throw SystemInfoNotAvailableException::cpuCoresUnknown();
             }
 
             return new CpuStatus(
@@ -38,7 +39,7 @@ class LinuxPlatform implements Platform
                 quota: $this->getContainerQuota(),
                 load: $this->loadAverageReader->read(),
             );
-        } catch (SystemInfoNotAvailable $exception) {
+        } catch (SystemInfoNotAvailableException $exception) {
             return $exception->toUnavailable();
         }
     }
@@ -50,7 +51,7 @@ class LinuxPlatform implements Platform
             $memInfo = $this->parseMemInfo($this->fileReader->read('/proc/meminfo'));
 
             if (($memInfo['MemTotal'] ?? 0) === 0) {
-                throw SystemInfoNotAvailable::memoryTotalUnknown();
+                throw SystemInfoNotAvailableException::memoryTotalUnknown();
             }
 
             return new MemoryStatus(
@@ -62,7 +63,7 @@ class LinuxPlatform implements Platform
                 phpPeak: memory_get_peak_usage(true),
                 container: $this->getContainerMemoryStatus(),
             );
-        } catch (SystemInfoNotAvailable $exception) {
+        } catch (SystemInfoNotAvailableException $exception) {
             return $exception->toUnavailable();
         }
     }
@@ -85,7 +86,7 @@ class LinuxPlatform implements Platform
     {
         try {
             $cpuMax = trim($this->fileReader->read('/sys/fs/cgroup/cpu.max'));
-        } catch (SystemInfoNotAvailable) {
+        } catch (SystemInfoNotAvailableException) {
             return 0.0;
         }
 
@@ -103,7 +104,7 @@ class LinuxPlatform implements Platform
                 usage: $this->fileReader->readInt('/sys/fs/cgroup/memory.current'),
                 limit: $this->fileReader->readLimit('/sys/fs/cgroup/memory.max'),
             );
-        } catch (SystemInfoNotAvailable $exception) {
+        } catch (SystemInfoNotAvailableException $exception) {
             return $exception->toUnavailable();
         }
     }

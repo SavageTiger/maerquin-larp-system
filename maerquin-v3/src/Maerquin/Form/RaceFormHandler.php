@@ -8,7 +8,8 @@ use JsonException;
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Entity\RaceSkillLink;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
+use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use SvenHK\Maerquin\Repository\SkillRepository;
 use SvenHK\Maerquin\Warning\CharacterWarningUpdater;
@@ -24,7 +25,7 @@ class RaceFormHandler
 
     /**
      * @throws MissingFormFieldException
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      * @throws JsonException
      */
     public function handle(Race $race, Request $request): void

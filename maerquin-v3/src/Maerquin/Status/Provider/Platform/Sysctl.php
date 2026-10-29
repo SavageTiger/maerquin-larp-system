@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SvenHK\Maerquin\Status\Provider\Platform;
 
+use SvenHK\Maerquin\Exception\Status\SystemInfoNotAvailableException;
+
 /**
  * Reads kernel state through sysctl(8), as used on FreeBSD.
  */
@@ -21,7 +23,7 @@ class Sysctl
      *
      * @param non-empty-list<string> $names
      *
-     * @throws SystemInfoNotAvailable
+     * @throws SystemInfoNotAvailableException
      *
      * @return array<string, string>
      */
@@ -48,14 +50,14 @@ class Sysctl
     /**
      * @param array<string, string> $values Result of read()
      *
-     * @throws SystemInfoNotAvailable
+     * @throws SystemInfoNotAvailableException
      */
     public function requireInt(array $values, string $name): int
     {
         $value = $values[$name] ?? '';
 
         if (ctype_digit($value) === false) {
-            throw SystemInfoNotAvailable::sysctlMissing($name);
+            throw SystemInfoNotAvailableException::sysctlMissing($name);
         }
 
         return (int)$value;

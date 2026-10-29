@@ -7,7 +7,7 @@ namespace SvenHK\Maerquin\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\Skill;
-use SvenHK\Maerquin\Exception\MaerquinEntityNotFoundException;
+use SvenHK\Maerquin\Exception\Persistence\EntityNotFoundException;
 use SvenHK\Maerquin\Model\Skill as SkillModel;
 
 class SkillRepository
@@ -30,11 +30,11 @@ class SkillRepository
     }
 
     /**
-     * @throws MaerquinEntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function getById(string $skillId): Skill
     {
-        return $this->entities()->findOneBy(['id' => $skillId]) ?? throw MaerquinEntityNotFoundException::withType(Skill::class);
+        return $this->entities()->findOneBy(['id' => $skillId]) ?? throw EntityNotFoundException::withType(Skill::class);
     }
 
     public function save(SkillModel $skill): void

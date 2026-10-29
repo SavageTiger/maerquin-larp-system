@@ -6,7 +6,7 @@ namespace SvenHK\Maerquin\Form;
 
 use Slim\Psr7\Request;
 use SvenHK\Maerquin\Entity\Token;
-use SvenHK\Maerquin\Exception\MaerquinPasswordResetException;
+use SvenHK\Maerquin\Exception\Account\PasswordResetException;
 use SvenHK\Maerquin\Repository\TokenRepository;
 use SvenHK\Maerquin\Repository\UserRepository;
 
@@ -28,11 +28,11 @@ class PasswordResetFormHandler
         $passwordRepeat = $formResolver->getValue('passwordRepeat', 'password');
 
         if (strlen($password) < 8) {
-            throw MaerquinPasswordResetException::tooShort();
+            throw PasswordResetException::tooShort();
         }
 
         if ($password !== $passwordRepeat) {
-            throw MaerquinPasswordResetException::notMatching();
+            throw PasswordResetException::notMatching();
         }
 
         $token->getUser()->updatePassword($password);

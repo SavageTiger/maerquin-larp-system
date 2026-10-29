@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Form;
+namespace SvenHK\Maerquin\Exception\Request;
 
 use Exception;
 

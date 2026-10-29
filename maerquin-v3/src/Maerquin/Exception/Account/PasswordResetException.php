@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Exception;
+namespace SvenHK\Maerquin\Exception\Account;
 
 use RuntimeException;
 
-final class MaerquinPasswordResetException extends RuntimeException
+final class PasswordResetException extends RuntimeException
 {
     public static function tooShort(): self
     {

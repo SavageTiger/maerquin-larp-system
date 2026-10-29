@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SvenHK\Maerquin\Exception;
+namespace SvenHK\Maerquin\Exception\Account;
 
 use RuntimeException;
 
-final class MaerquinEmailAlreadyInUseException extends RuntimeException
+final class EmailAlreadyInUseException extends RuntimeException
 {
     public static function withEmail(string $email): self
     {

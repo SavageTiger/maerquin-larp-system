@@ -13,6 +13,7 @@ use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
 use SvenHK\Maerquin\Controller\FormDeleteController;
 use SvenHK\Maerquin\Controller\FormsController;
+use SvenHK\Maerquin\Controller\FormSectionsController;
 use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
 use SvenHK\Maerquin\Controller\Frontend\RegisterController;
 use SvenHK\Maerquin\Controller\Frontend\SubscriptionsController as FrontendSubscriptionsController;
@@ -90,6 +91,7 @@ return function (App $app): void {
     $app->get('/admin/forms/{formId}.html', FormsController::class);
     $app->post('/admin/forms/{formId}.html', FormsController::class);
     $app->post('/admin/forms/{formId}/delete', FormDeleteController::class);
+    $app->post('/admin/forms/{formId}/sections', FormSectionsController::class);
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);

@@ -51,6 +51,16 @@ class FormSection
         return (string)$this->id;
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
     public function reposition(int $position): void
     {
         $this->position = $position;

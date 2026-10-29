@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
 use SvenHK\Maerquin\Entity\FormSection as FormSectionEntity;
+use SvenHK\Maerquin\Exception\MaerquinFormSectionException;
 
 class Form
 {
@@ -46,9 +47,18 @@ class Form
         $this->name = $name;
     }
 
+    /**
+     * @throws MaerquinFormSectionException
+     */
     public function addSection(string $title, null | int $position = null): FormSectionEntity
     {
         assert($this instanceof FormEntity);
+
+        $title = trim($title);
+
+        if ($title === '') {
+            throw MaerquinFormSectionException::titleMissing();
+        }
 
         $sections = $this->getSections();
 

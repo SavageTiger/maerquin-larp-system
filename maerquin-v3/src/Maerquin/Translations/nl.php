@@ -41,6 +41,10 @@ return [
     'forms.delete.error.linked_events' => 'Dit formulier is gekoppeld aan een of meerdere evenementen en kan niet verwijderd worden.',
     'forms.delete.error.has_submissions' => 'Dit formulier is al ingevuld en kan niet verwijderd worden.',
     'forms.events' => 'Evenementen',
+    'forms.sections' => 'Secties',
+    'forms.section.title' => 'Titel',
+    'forms.section.add' => 'Sectie toevoegen',
+    'forms.section.error.title_missing' => 'Een sectie heeft een titel nodig.',
 
     'status.state.online' => 'Online',
     'status.state.offline' => 'Offline',

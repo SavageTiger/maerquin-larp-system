@@ -92,9 +92,81 @@
         </div>
     </div>
 
+    {% if form.name %}
+        <div class="columns is-gapless">
+            <div class="column is-12">
+                <article class="message is-dark">
+                    <div class="message-header">
+                        {{ 'forms.sections'|trans }}
+                    </div>
+                    <div class="message-body">
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">{{ 'forms.sections'|trans }}</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field card ml-5 mr-5 m-1 p-3">
+                                    {% for section in form.sections %}
+                                        <div>
+                                            <i class="fa-solid fa-layer-group"></i>
+                                            {{ section.title }}
+                                        </div>
+                                    {% else %}
+                                        <span>(Geen)</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">{{ 'forms.section.title'|trans }}</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field has-addons">
+                                    <div class="control is-expanded">
+                                        <input class="input" type="text" v-model="newSectionTitle"
+                                               @keydown.enter.prevent="addSection('{{ form.id }}')"/>
+                                    </div>
+                                    <div class="control">
+                                        <button class="button"
+                                                onclick="return false"
+                                                @click="addSection('{{ form.id }}')">
+                                            <i class="fa-solid fa-circle-plus"></i>&nbsp;{{ 'forms.section.add'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    {% endif %}
+
     <script type="module">
         Vue.createApp({
+            data() {
+                return {
+                    newSectionTitle: '',
+                };
+            },
             methods: {
+                addSection(formId) {
+                    axios
+                        .post(`/admin/forms/${formId}/sections`, { section: { title: this.newSectionTitle } })
+                        .then(() => {
+                            document.location.href = `/admin/forms/${formId}.html`
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+
+                    return false;
+                },
+
                 saveForm(formId) {
                     const form = serializeForm('containerForm');
 

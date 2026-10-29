@@ -24,11 +24,11 @@ class FormSection extends FormSectionModel
     #[ORM\Column(length: 255)]
     protected string $title;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    protected null | string $description;
-
     #[ORM\Column(type: 'integer')]
     protected int $position;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $deleted;
 
     #[ORM\OneToMany(
         targetEntity: FormField::class,

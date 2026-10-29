@@ -94,6 +94,7 @@ return function (App $app): void {
     $app->post('/admin/forms/{formId}/delete', FormDeleteController::class);
     $app->post('/admin/forms/{formId}/sections', FormSectionsController::class);
     $app->get('/admin/forms/{formId}/sections/{sectionId}.html', FormSectionsController::class);
+    $app->post('/admin/forms/{formId}/sections/{sectionId}/delete', FormSectionsController::class);
     $app->post('/admin/forms/{formId}/sections/{sectionId}/fields', FormFieldsController::class);
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);

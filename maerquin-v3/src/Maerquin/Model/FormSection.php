@@ -23,9 +23,9 @@ class FormSection
 
     protected string $title;
 
-    protected null | string $description;
-
     protected int $position;
+
+    protected bool $deleted;
 
     /**
      * @var Collection<int, FormFieldEntity>
@@ -36,14 +36,13 @@ class FormSection
         Form $form,
         string $title,
         int $position,
-        null | string $description = null,
     ): FormSectionEntity {
         $section = new FormSectionEntity();
         $section->id = Uuid::uuid4();
         $section->form = $form;
         $section->title = $title;
-        $section->description = $description;
         $section->position = $position;
+        $section->deleted = false;
         $section->fields = new ArrayCollection();
 
         return $section;
@@ -62,6 +61,16 @@ class FormSection
     public function getPosition(): int
     {
         return $this->position;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function delete(): void
+    {
+        $this->deleted = true;
     }
 
     public function reposition(int $position): void

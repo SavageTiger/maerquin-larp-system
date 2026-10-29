@@ -80,6 +80,9 @@ return [
     'forms.field.placement.row_full' => '(vol)',
     'forms.field.placement.column' => 'Kolom %column%',
     'forms.field.error.section_not_in_form' => 'Deze sectie hoort niet bij dit formulier.',
+    'forms.section.delete' => 'Sectie verwijderen',
+    'forms.section.delete.confirm' => 'Weet je zeker dat je deze sectie wilt verwijderen? Al ingevulde antwoorden blijven bewaard.',
+    'forms.section.error.section_not_in_form' => 'Deze sectie hoort niet bij dit formulier.',
     'forms.section.error.title_missing' => 'Een sectie heeft een titel nodig.',
 
     'status.state.online' => 'Online',

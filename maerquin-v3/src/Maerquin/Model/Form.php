@@ -51,7 +51,7 @@ class Form
     /**
      * @throws FormSectionException
      */
-    public function addSection(string $title, null | int $position = null): FormSectionEntity
+    public function addSection(string $title): FormSectionEntity
     {
         assert($this instanceof FormEntity);
 
@@ -61,25 +61,19 @@ class Form
             throw FormSectionException::titleMissing();
         }
 
-        $sections = $this->getSections();
-
-        $index = $position === null
-            ? count($sections)
-            : max(0, min($position - 1, count($sections)));
-
-        $section = FormSection::create($this, $title, $index + 1);
-
-        array_splice($sections, $index, 0, [$section]);
+        $section = FormSection::create($this, $title, count($this->getSections()) + 1);
 
         $this->sections->add($section);
-        $this->recalculateSectionPositions($sections);
 
         return $section;
     }
 
     public function getSections(): array
     {
-        $sections = array_values($this->sections->toArray());
+        $sections = array_values(array_filter(
+            $this->sections->toArray(),
+            static fn(FormSectionEntity $section): bool => $section->isDeleted() === false,
+        ));
 
         usort(
             $sections,
@@ -145,9 +139,23 @@ class Form
         $section->replaceFields($rows);
     }
 
+    /**
+     * @throws FormSectionException
+     */
+    public function deleteSection(FormSectionEntity $section): void
+    {
+        if (in_array($section, $this->getSections(), true) === false) {
+            throw FormSectionException::sectionNotInForm();
+        }
+
+        $section->delete();
+
+        $this->recalculateSectionPositions($this->getSections());
+    }
+
     public function findSection(string $sectionId): null | FormSectionEntity
     {
-        foreach ($this->sections as $section) {
+        foreach ($this->getSections() as $section) {
             if ($section->getId() === $sectionId) {
                 return $section;
             }

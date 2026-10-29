@@ -6,6 +6,9 @@
         <div class="column is-12">
             <div class="buttons is-right">
                 <span v-if="isDirty" class="tag is-warning is-light is-medium mr-2">{{ 'forms.section.unsaved'|trans }}</span>
+                <button class="button is-danger is-light" onclick="return false" @click="deleteSection()">
+                    <i class="fa-solid fa-trash"></i>&nbsp;{{ 'forms.section.delete'|trans }}
+                </button>
                 <a class="button" href="/admin/forms/{{ form.id }}.html">
                     <i class="fa-solid fa-arrow-left"></i>&nbsp;{{ 'forms.section.back'|trans }}
                 </a>
@@ -290,6 +293,23 @@
                 removeDraft() {
                     this.rows = this.withoutDraftField().filter((fields) => fields.length > 0);
                     this.reset();
+                },
+                deleteSection() {
+                    if (confirm({{ 'forms.section.delete.confirm'|trans|json_encode|raw }}) === false) {
+                        return;
+                    }
+
+                    axios
+                        .post(`/admin/forms/{{ form.id }}/sections/{{ section.id }}/delete`, {})
+                        .then(() => {
+                            this.savedRows = JSON.stringify(this.rows);
+                            document.location.href = `/admin/forms/{{ form.id }}.html`;
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
                 },
                 saveLayout() {
                     axios

@@ -6,13 +6,13 @@ namespace SvenHK\Maerquin\Model;
 
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use SvenHK\Maerquin\Entity\Form;
 use SvenHK\Maerquin\Entity\FormField as FormFieldEntity;
+use SvenHK\Maerquin\Entity\FormSection;
 
 class FormField
 {
     protected UuidInterface $id;
-    protected Form $form;
+    protected FormSection $section;
     protected string $name;
     protected FormFieldType $type;
     protected string $label;
@@ -21,7 +21,7 @@ class FormField
     protected int $column;
 
     public static function create(
-        Form $form,
+        FormSection $section,
         string $name,
         FormFieldType $type,
         string $label,
@@ -31,7 +31,7 @@ class FormField
     ): FormFieldEntity {
         $field = new FormFieldEntity();
         $field->id = Uuid::uuid4();
-        $field->form = $form;
+        $field->section = $section;
         $field->name = $name;
         $field->type = $type;
         $field->label = $label;
@@ -40,6 +40,11 @@ class FormField
         $field->column = $column;
 
         return $field;
+    }
+
+    public function getSection(): FormSection
+    {
+        return $this->section;
     }
 
     public function getName(): string

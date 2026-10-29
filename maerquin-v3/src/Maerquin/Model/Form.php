@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
-use SvenHK\Maerquin\Entity\FormField;
+use SvenHK\Maerquin\Entity\FormSection as FormSectionEntity;
 
 class Form
 {
@@ -17,16 +17,16 @@ class Form
     protected string $name;
 
     /**
-     * @var Collection<int, FormField>
+     * @var Collection<int, FormSectionEntity>
      */
-    protected Collection $fields;
+    protected Collection $sections;
 
     public static function create(UuidInterface $formId, string $name = ''): FormEntity
     {
         $form = new FormEntity();
         $form->id = $formId;
         $form->name = $name;
-        $form->fields = new ArrayCollection();
+        $form->sections = new ArrayCollection();
 
         return $form;
     }
@@ -46,11 +46,45 @@ class Form
         $this->name = $name;
     }
 
-    /**
-     * @return list<FormField>
-     */
-    public function getFields(): array
+    public function addSection(string $title, null | int $position = null): FormSectionEntity
     {
-        return array_values($this->fields->toArray());
+        assert($this instanceof FormEntity);
+
+        $sections = $this->getSections();
+
+        $index = $position === null
+            ? count($sections)
+            : max(0, min($position - 1, count($sections)));
+
+        $section = FormSection::create($this, $title, $index + 1);
+
+        array_splice($sections, $index, 0, [$section]);
+
+        $this->sections->add($section);
+        $this->recalculateSectionPositions($sections);
+
+        return $section;
+    }
+
+    public function getSections(): array
+    {
+        $sections = array_values($this->sections->toArray());
+
+        usort(
+            $sections,
+            static fn(FormSectionEntity $a, FormSectionEntity $b): int => $a->getPosition() <=> $b->getPosition(),
+        );
+
+        return $sections;
+    }
+
+    /**
+     * @param list<FormSectionEntity> $sections in the desired order
+     */
+    private function recalculateSectionPositions(array $sections): void
+    {
+        foreach ($sections as $index => $section) {
+            $section->reposition($index + 1);
+        }
     }
 }

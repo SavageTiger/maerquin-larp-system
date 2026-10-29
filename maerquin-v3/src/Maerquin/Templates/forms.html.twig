@@ -14,16 +14,18 @@
             <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
                 <tr>
                     <th>{{ 'forms.name'|trans }}</th>
+                    <th>{{ 'forms.section_count'|trans }}</th>
                     <th>{{ 'forms.field_count'|trans }}</th>
                 </tr>
                 {% for form in forms %}
                     <tr>
                         <td><a href="/admin/forms/{{ form.id }}.html">{{ form.name }}</a></td>
-                        <td>{{ form.fields|length }}</td>
+                        <td>{{ form.sections|length }}</td>
+                        <td>{{ form.sections|reduce((count, section) => count + section.fields|length, 0) }}</td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">{{ 'forms.empty'|trans }}</td>
+                        <td colspan="3">{{ 'forms.empty'|trans }}</td>
                     </tr>
                 {% endfor %}
             </table>

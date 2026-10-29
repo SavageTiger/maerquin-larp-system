@@ -27,6 +27,7 @@ return [
     'menu.settings.forms' => 'Forms',
 
     'forms.name' => 'Naam',
+    'forms.section_count' => 'Aantal secties',
     'forms.field_count' => 'Aantal velden',
     'forms.empty' => 'Er zijn nog geen formulieren aangemaakt.',
     'forms.create' => 'Nieuwe aanmaken',

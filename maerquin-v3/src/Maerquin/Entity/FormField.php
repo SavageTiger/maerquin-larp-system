@@ -11,16 +11,16 @@ use SvenHK\Maerquin\Model\FormFieldType;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'form_field')]
-#[ORM\UniqueConstraint(name: 'unique_form_field_name', columns: ['form_id', 'name'])]
+#[ORM\UniqueConstraint(name: 'unique_form_section_field_name', columns: ['section_id', 'name'])]
 class FormField extends FormFieldModel
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     protected UuidInterface $id;
 
-    #[ORM\ManyToOne(targetEntity: Form::class, inversedBy: 'fields')]
-    #[ORM\JoinColumn(name: 'form_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    protected Form $form;
+    #[ORM\ManyToOne(targetEntity: FormSection::class, inversedBy: 'fields')]
+    #[ORM\JoinColumn(name: 'section_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    protected FormSection $section;
 
     #[ORM\Column(length: 128)]
     protected string $name;

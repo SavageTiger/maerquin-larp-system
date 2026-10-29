@@ -21,10 +21,11 @@ class Form extends FormModel
     protected string $name;
 
     #[ORM\OneToMany(
-        targetEntity: FormField::class,
+        targetEntity: FormSection::class,
         mappedBy: 'form',
         cascade: ['persist'],
         orphanRemoval: true,
     )]
-    protected Collection $fields;
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    protected Collection $sections;
 }

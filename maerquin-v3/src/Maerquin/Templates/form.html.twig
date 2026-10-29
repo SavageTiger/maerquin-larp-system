@@ -108,8 +108,10 @@
                                 <div class="field card ml-5 mr-5 m-1 p-3">
                                     {% for section in form.sections %}
                                         <div>
-                                            <i class="fa-solid fa-layer-group"></i>
-                                            {{ section.title }}
+                                            <a href="/admin/forms/{{ form.id }}/sections/{{ section.id }}.html">
+                                                <i class="fa-solid fa-layer-group"></i>
+                                                {{ section.title }}
+                                            </a>
                                         </div>
                                     {% else %}
                                         <span>(Geen)</span>

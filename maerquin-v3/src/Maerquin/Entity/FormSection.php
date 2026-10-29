@@ -34,7 +34,6 @@ class FormSection extends FormSectionModel
         targetEntity: FormField::class,
         mappedBy: 'section',
         cascade: ['persist'],
-        orphanRemoval: true,
     )]
     #[ORM\OrderBy(['row' => 'ASC', 'column' => 'ASC'])]
     protected Collection $fields;

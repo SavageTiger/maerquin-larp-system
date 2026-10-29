@@ -9,10 +9,14 @@ use Override;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpMethodNotAllowedException;
+use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Response;
+use Slim\Views\Twig;
 use SvenHK\Maerquin\Entity\Form;
 use SvenHK\Maerquin\Exception\Form\FormSectionException;
 use SvenHK\Maerquin\Form\FormSectionHandler;
+use SvenHK\Maerquin\Model\FormFieldType;
+use SvenHK\Maerquin\Model\FormSection as FormSectionModel;
 use SvenHK\Maerquin\Repository\FormRepository;
 use SvenHK\Maerquin\Translation\Translator;
 
@@ -32,6 +36,7 @@ class FormSectionsController extends Action
 
         try {
             return match ($this->request->getMethod()) {
+                'GET' => $this->renderSectionView($form),
                 'POST' => $this->addSection($form),
                 default => throw new HttpMethodNotAllowedException($this->request),
             };
@@ -42,6 +47,26 @@ class FormSectionsController extends Action
                 $exception,
             );
         }
+    }
+
+    private function renderSectionView(Form $form): ResponseInterface
+    {
+        $section = $form->findSection((string)$this->request->getAttribute('sectionId'));
+
+        if ($section === null) {
+            throw new HttpNotFoundException($this->request);
+        }
+
+        return Twig::fromRequest($this->request)->render(
+            $this->response,
+            'form_section.html.twig',
+            [
+                'form' => $form,
+                'section' => $section,
+                'fieldTypes' => FormFieldType::cases(),
+                'maxFieldsPerRow' => FormSectionModel::MAX_FIELDS_PER_ROW,
+            ],
+        );
     }
 
     private function addSection(Form $form): ResponseInterface

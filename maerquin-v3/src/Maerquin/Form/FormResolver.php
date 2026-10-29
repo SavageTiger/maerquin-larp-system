@@ -53,4 +53,23 @@ class FormResolver
 
         return $value;
     }
+
+    /**
+     *
+     * @throws MissingFormFieldException
+     *
+     * @return array<mixed>
+     */
+    public function getArray(string $name, null | string $namespace = null): array
+    {
+        $value = is_string($namespace) === false ?
+            $this->request->getParsedBody()[$name] ?? null :
+            $this->request->getParsedBody()[$namespace][$name] ?? null;
+
+        if (is_array($value) === false) {
+            throw new MissingFormFieldException(sprintf('%s is not a valid form element', $name));
+        }
+
+        return $value;
+    }
 }

@@ -9,11 +9,14 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Form;
-use SvenHK\Maerquin\Entity\FormField;
+use SvenHK\Maerquin\Entity\FormField as FormFieldEntity;
 use SvenHK\Maerquin\Entity\FormSection as FormSectionEntity;
+use SvenHK\Maerquin\Exception\Form\FormFieldException;
 
 class FormSection
 {
+    public const int MAX_FIELDS_PER_ROW = 3;
+
     protected UuidInterface $id;
 
     protected Form $form;
@@ -25,7 +28,7 @@ class FormSection
     protected int $position;
 
     /**
-     * @var Collection<int, FormField>
+     * @var Collection<int, FormFieldEntity>
      */
     protected Collection $fields;
 
@@ -67,10 +70,66 @@ class FormSection
     }
 
     /**
-     * @return list<FormField>
+     * @return list<FormFieldEntity>
      */
     public function getFields(): array
     {
-        return array_values($this->fields->toArray());
+        return array_values(array_filter(
+            $this->fields->toArray(),
+            static fn(FormFieldEntity $field): bool => $field->isDeleted() === false,
+        ));
+    }
+
+    /**
+     * @param list<list<array{id: UuidInterface, label: string, type: FormFieldType, required: bool}>> $rows
+     *
+     * @throws FormFieldException
+     */
+    public function replaceFields(array $rows): void
+    {
+        assert($this instanceof FormSectionEntity);
+
+        $remainingFields = [];
+        $deletedFieldIds = [];
+
+        foreach ($this->fields as $field) {
+            if ($field->isDeleted()) {
+                $deletedFieldIds[$field->getId()] = true;
+
+                continue;
+            }
+
+            $remainingFields[$field->getId()] = $field;
+        }
+
+        foreach ($rows as $rowIndex => $fields) {
+            foreach ($fields as $columnIndex => $data) {
+                $fieldId = $data['id']->toString();
+
+                $row = $rowIndex + 1;
+                $column = $columnIndex + 1;
+
+                if (isset($deletedFieldIds[$fieldId])) {
+                    throw FormFieldException::layoutInvalid();
+                }
+
+                if (isset($remainingFields[$fieldId])) {
+                    $remainingFields[$fieldId]->change($data['label'], $data['type'], $data['required']);
+                    $remainingFields[$fieldId]->moveTo($row, $column);
+
+                    unset($remainingFields[$fieldId]);
+
+                    continue;
+                }
+
+                $this->fields->add(
+                    FormField::create($this, $data['id'], $data['type'], $data['label'], $data['required'], $row, $column),
+                );
+            }
+        }
+
+        foreach ($remainingFields as $removedField) {
+            $removedField->delete();
+        }
     }
 }

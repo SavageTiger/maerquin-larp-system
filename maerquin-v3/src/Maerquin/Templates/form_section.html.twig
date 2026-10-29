@@ -1,0 +1,314 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <div class="buttons is-right">
+                <span v-if="isDirty" class="tag is-warning is-light is-medium mr-2">{{ 'forms.section.unsaved'|trans }}</span>
+                <a class="button" href="/admin/forms/{{ form.id }}.html">
+                    <i class="fa-solid fa-arrow-left"></i>&nbsp;{{ 'forms.section.back'|trans }}
+                </a>
+                <button class="button is-dark" onclick="return false" :disabled="isDirty === false" @click="saveLayout()">
+                    <i class="fa-solid fa-save"></i>&nbsp;{{ 'forms.section.save'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="spacer is-12"></div>
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <article class="message is-dark form-builder">
+                <div class="message-header">
+                    {{ form.name }} &rsaquo; {{ section.title }}
+                </div>
+                <div class="message-body">
+                    <p v-if="rows.length === 0" class="mb-3">
+                        {{ 'forms.section.fields.empty'|trans }}
+                    </p>
+
+                    <div v-for="(fields, rowIndex) in rows" :key="rowIndex" class="layout-row">
+                        <div class="layout-row-label">{{ '{{ rowLabel(rowIndex + 1) }}' }}</div>
+                        <div class="layout-row-fields" style="--fields-per-row: {{ maxFieldsPerRow }}">
+                            <button v-for="field in fields" :key="field.id"
+                                    type="button"
+                                    class="field-card"
+                                    :class="{ 'is-selected': draft.id === field.id }"
+                                    @click="startEdit(field)">
+                                <span class="field-card-label">{{ '{{ field.label }}' }}</span>
+                                <span class="tags mb-0">
+                                    <span class="tag is-light mb-0">{{ '{{ typeLabels[field.type] }}' }}</span>
+                                    <span v-if="field.required" class="tag is-warning is-light mb-0">{{ 'forms.field.required'|trans }}</span>
+                                </span>
+                            </button>
+                            <button v-if="fields.length < maxFieldsPerRow"
+                                    type="button"
+                                    class="field-slot"
+                                    :class="{ 'is-selected': isNew && draft.row === String(rowIndex + 1) }"
+                                    @click="startAdd(rowIndex + 1)">
+                                <i class="fa-solid fa-plus"></i> {{ 'forms.field.add_here'|trans }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            class="field-slot is-new-row"
+                            :class="{ 'is-selected': isNew && draft.row === '' }"
+                            @click="startAdd(null)">
+                        <i class="fa-solid fa-plus"></i> {{ 'forms.field.add_row'|trans }}
+                    </button>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <article class="message is-dark" ref="editor">
+                <div class="message-header">
+                    <span v-if="isNew">{{ 'forms.field.add'|trans }}</span>
+                    <span v-else>{{ 'forms.field.edit.title'|trans }}</span>
+                </div>
+                <div class="message-body">
+                    <div class="columns is-variable is-3 is-multiline">
+                        <div class="column is-12-tablet is-5-desktop">
+                            <label class="label">{{ 'forms.field.label'|trans }}</label>
+                            <input class="input" type="text" v-model="draft.label" ref="label"
+                                   @keydown.enter.prevent="applyDraft()"
+                                   @keydown.esc.prevent="reset()"/>
+                        </div>
+
+                        <div class="column is-narrow">
+                            <label class="label">{{ 'forms.field.type'|trans }}</label>
+                            <div class="select">
+                                <select v-model="draft.type">
+                                    <option v-for="(typeLabel, typeValue) in typeLabels" :key="typeValue" :value="typeValue">
+                                        {{ '{{ typeLabel }}' }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="column is-narrow">
+                            <label class="label">{{ 'forms.field.placement'|trans }}</label>
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <div class="select">
+                                        <select v-model="draft.row" @change="placeAtEndOfRow()">
+                                            <option value="">{{ 'forms.field.placement.new_row'|trans }}</option>
+                                            <option v-for="option in rowOptions" :key="option.row"
+                                                    :value="String(option.row)" :disabled="option.isFull">
+                                                {{ '{{ option.label }}' }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control" v-if="draft.row !== ''">
+                                    <div class="select">
+                                        <select v-model="draft.column">
+                                            <option v-for="column in columnOptions" :key="column" :value="String(column)">
+                                                {{ '{{ columnLabel(column) }}' }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column is-narrow">
+                            <label class="label">&nbsp;</label>
+                            <label class="checkbox mt-2">
+                                <input type="checkbox" v-model="draft.required"/>
+                                {{ 'forms.field.required'|trans }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="buttons is-right">
+                        <button v-if="isNew === false" class="button is-danger is-light mr-auto" onclick="return false" @click="removeDraft()">
+                            <i class="fa-solid fa-trash"></i>&nbsp;{{ 'forms.field.remove'|trans }}
+                        </button>
+                        <button v-if="isNew === false" class="button" onclick="return false" @click="reset()">
+                            {{ 'forms.field.cancel'|trans }}
+                        </button>
+                        <button class="button" onclick="return false" @click="applyDraft()">
+                            <template v-if="isNew">
+                                <i class="fa-solid fa-circle-plus"></i>&nbsp;{{ 'forms.field.add'|trans }}
+                            </template>
+                            <template v-else>
+                                <i class="fa-solid fa-check"></i>&nbsp;{{ 'forms.field.apply'|trans }}
+                            </template>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <script type="module">
+        const rowLabel = {{ 'forms.field.placement.row'|trans|json_encode|raw }};
+        const rowFullLabel = {{ 'forms.field.placement.row_full'|trans|json_encode|raw }};
+        const columnLabel = {{ 'forms.field.placement.column'|trans|json_encode|raw }};
+        const labelMissing = {{ 'forms.field.error.label_missing'|trans|json_encode|raw }};
+        const unsavedWarning = {{ 'forms.section.unsaved'|trans|json_encode|raw }};
+
+        const emptyDraft = () => ({
+            id: null,
+            label: '',
+            type: '{{ (fieldTypes|first).value }}',
+            required: false,
+            row: '',
+            column: '',
+        });
+
+        const toRows = (fields) => {
+            const rows = {};
+
+            for (const field of fields) {
+                (rows[field.row] ??= []).push(field);
+            }
+
+            return Object.keys(rows)
+                .sort((a, b) => a - b)
+                .map((row) => rows[row]
+                    .sort((a, b) => a.column - b.column)
+                    .map(({ id, label, type, required }) => ({ id, label, type, required })));
+        };
+
+        Vue.createApp({
+            data() {
+                const rows = toRows({{ section.fields|map(field => {
+                    id: field.id,
+                    label: field.label,
+                    type: field.type.value,
+                    required: field.required,
+                    row: field.row,
+                    column: field.column,
+                })|json_encode|raw }});
+
+                return {
+                    maxFieldsPerRow: {{ maxFieldsPerRow }},
+                    typeLabels: {{ fieldTypes|reduce((labels, fieldType) => labels|merge({(fieldType.value): ('forms.field.type.' ~ fieldType.value)|trans}), {})|json_encode|raw }},
+                    rows,
+                    savedRows: JSON.stringify(rows),
+                    draft: emptyDraft(),
+                };
+            },
+            computed: {
+                isNew() {
+                    return this.draft.id === null;
+                },
+                isDirty() {
+                    return JSON.stringify(this.rows) !== this.savedRows;
+                },
+                rowOptions() {
+                    return this.rows.map((fields, rowIndex) => {
+                        const count = fields.filter((field) => field.id !== this.draft.id).length;
+                        const isFull = count >= this.maxFieldsPerRow;
+                        const label = this.rowLabel(rowIndex + 1);
+
+                        return { row: rowIndex + 1, count, isFull, label: isFull ? `${label} ${rowFullLabel}` : label };
+                    });
+                },
+                columnOptions() {
+                    const option = this.rowOptions.find((option) => String(option.row) === this.draft.row);
+
+                    return option ? Array.from({ length: option.count + 1 }, (_, index) => index + 1) : [];
+                },
+            },
+            mounted() {
+                window.addEventListener('beforeunload', (event) => {
+                    if (this.isDirty) {
+                        event.preventDefault();
+                        event.returnValue = unsavedWarning;
+                    }
+                });
+            },
+            methods: {
+                rowLabel(row) {
+                    return rowLabel.replace('%row%', row);
+                },
+                columnLabel(column) {
+                    return columnLabel.replace('%column%', column);
+                },
+                placeAtEndOfRow() {
+                    this.draft.column = this.columnOptions.length > 0 ? String(this.columnOptions.at(-1)) : '';
+                },
+                focusEditor() {
+                    this.$nextTick(() => {
+                        this.$refs.editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        this.$refs.label.focus();
+                    });
+                },
+                startAdd(row) {
+                    this.draft = { ...emptyDraft(), row: row === null ? '' : String(row) };
+                    this.placeAtEndOfRow();
+                    this.focusEditor();
+                },
+                startEdit(field) {
+                    const rowIndex = this.rows.findIndex((fields) => fields.includes(field));
+
+                    this.draft = {
+                        ...field,
+                        row: String(rowIndex + 1),
+                        column: String(this.rows[rowIndex].indexOf(field) + 1),
+                    };
+                    this.focusEditor();
+                },
+                reset() {
+                    this.draft = emptyDraft();
+                },
+                withoutDraftField() {
+                    return this.rows.map((fields) => fields.filter((field) => field.id !== this.draft.id));
+                },
+                applyDraft() {
+                    if (this.draft.label.trim() === '') {
+                        alert(labelMissing);
+
+                        return;
+                    }
+
+                    const { row, column } = this.draft;
+                    const field = {
+                        id: this.draft.id ?? crypto.randomUUID(),
+                        label: this.draft.label.trim(),
+                        type: this.draft.type,
+                        required: this.draft.required,
+                    };
+                    const rows = this.withoutDraftField();
+
+                    if (row === '') {
+                        rows.push([field]);
+                    } else {
+                        rows[Number(row) - 1].splice(Number(column) - 1, 0, field);
+                    }
+
+                    this.rows = rows.filter((fields) => fields.length > 0);
+                    this.reset();
+                },
+                removeDraft() {
+                    this.rows = this.withoutDraftField().filter((fields) => fields.length > 0);
+                    this.reset();
+                },
+                saveLayout() {
+                    axios
+                        .post(
+                            `/admin/forms/{{ form.id }}/sections/{{ section.id }}/fields`,
+                            { section: { rows: this.rows } },
+                        )
+                        .then(() => {
+                            this.savedRows = JSON.stringify(this.rows);
+                            document.location.reload();
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+                },
+            }
+        }).mount('.content');
+    </script>
+
+{% endblock %}

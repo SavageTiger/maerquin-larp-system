@@ -11,7 +11,7 @@ use SvenHK\Maerquin\Model\FormFieldType;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'form_field')]
-#[ORM\UniqueConstraint(name: 'unique_form_section_field_name', columns: ['section_id', 'name'])]
+#[ORM\UniqueConstraint(name: 'unique_form_section_field_key', columns: ['section_id', 'field_key'])]
 class FormField extends FormFieldModel
 {
     #[ORM\Id]
@@ -22,8 +22,8 @@ class FormField extends FormFieldModel
     #[ORM\JoinColumn(name: 'section_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected FormSection $section;
 
-    #[ORM\Column(length: 128)]
-    protected string $name;
+    #[ORM\Column(name: 'field_key', length: 128)]
+    protected string $key;
 
     #[ORM\Column(length: 16, enumType: FormFieldType::class)]
     protected FormFieldType $type;
@@ -39,4 +39,7 @@ class FormField extends FormFieldModel
 
     #[ORM\Column(name: 'form_column', type: 'integer')]
     protected int $column;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $deleted;
 }

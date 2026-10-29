@@ -13,16 +13,17 @@ class FormField
 {
     protected UuidInterface $id;
     protected FormSection $section;
-    protected string $name;
+    protected string $key;
     protected FormFieldType $type;
     protected string $label;
     protected bool $required;
     protected int $row;
     protected int $column;
+    protected bool $deleted;
 
     public static function create(
         FormSection $section,
-        string $name,
+        UuidInterface $fieldId,
         FormFieldType $type,
         string $label,
         bool $required,
@@ -30,16 +31,22 @@ class FormField
         int $column,
     ): FormFieldEntity {
         $field = new FormFieldEntity();
-        $field->id = Uuid::uuid4();
+        $field->id = $fieldId;
         $field->section = $section;
-        $field->name = $name;
+        $field->key = Uuid::uuid4()->toString();
         $field->type = $type;
         $field->label = $label;
         $field->required = $required;
         $field->row = $row;
         $field->column = $column;
+        $field->deleted = false;
 
         return $field;
+    }
+
+    public function getId(): string
+    {
+        return (string)$this->id;
     }
 
     public function getSection(): FormSection
@@ -47,9 +54,9 @@ class FormField
         return $this->section;
     }
 
-    public function getName(): string
+    public function getKey(): string
     {
-        return $this->name;
+        return $this->key;
     }
 
     public function getType(): FormFieldType
@@ -75,5 +82,28 @@ class FormField
     public function getColumn(): int
     {
         return $this->column;
+    }
+
+    public function change(string $label, FormFieldType $type, bool $required): void
+    {
+        $this->label = $label;
+        $this->type = $type;
+        $this->required = $required;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function delete(): void
+    {
+        $this->deleted = true;
+    }
+
+    public function moveTo(int $row, int $column): void
+    {
+        $this->row = $row;
+        $this->column = $column;
     }
 }

@@ -6,7 +6,6 @@ namespace SvenHK\Maerquin\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
 use SvenHK\Maerquin\Entity\FormField;
@@ -22,10 +21,10 @@ class Form
      */
     protected Collection $fields;
 
-    public static function create(string $name): FormEntity
+    public static function create(UuidInterface $formId, string $name = ''): FormEntity
     {
         $form = new FormEntity();
-        $form->id = Uuid::uuid4();
+        $form->id = $formId;
         $form->name = $name;
         $form->fields = new ArrayCollection();
 
@@ -40,6 +39,11 @@ class Form
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function rename(string $name): void
+    {
+        $this->name = $name;
     }
 
     /**

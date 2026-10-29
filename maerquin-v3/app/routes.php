@@ -11,6 +11,7 @@ use SvenHK\Maerquin\Controller\API\PlayerResetPasswordEmailController;
 use SvenHK\Maerquin\Controller\API\SkillsApiController;
 use SvenHK\Maerquin\Controller\CharactersController;
 use SvenHK\Maerquin\Controller\EventsController;
+use SvenHK\Maerquin\Controller\FormDeleteController;
 use SvenHK\Maerquin\Controller\FormsController;
 use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
 use SvenHK\Maerquin\Controller\Frontend\RegisterController;
@@ -84,6 +85,11 @@ return function (App $app): void {
 
     $app->get('/admin/status.html', StatusController::class);
     $app->get('/admin/forms.html', FormsController::class);
+    $app->get('/admin/form/create.html', FormsController::class);
+    $app->get('/admin/forms/persisted/{formId}.html', FormsController::class);
+    $app->get('/admin/forms/{formId}.html', FormsController::class);
+    $app->post('/admin/forms/{formId}.html', FormsController::class);
+    $app->post('/admin/forms/{formId}/delete', FormDeleteController::class);
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);

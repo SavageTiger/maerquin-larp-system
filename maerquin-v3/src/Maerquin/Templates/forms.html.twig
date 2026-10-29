@@ -2,6 +2,14 @@
 
 {% block container %}
     <div class="columns is-gapless">
+        <div class="column is-12 is-gapless">
+            <a class="button is-pulled-right" href="/admin/form/create.html">
+                <i class="fa-solid fa-circle-plus"></i>&nbsp;{{ 'forms.create'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <div class="columns is-gapless">
         <div class="column is-12">
             <table class="table is-bordered is-striped is-narrow is-hoverable is-overview-table">
                 <tr>
@@ -10,7 +18,7 @@
                 </tr>
                 {% for form in forms %}
                     <tr>
-                        <td>{{ form.name }}</td>
+                        <td><a href="/admin/forms/{{ form.id }}.html">{{ form.name }}</a></td>
                         <td>{{ form.fields|length }}</td>
                     </tr>
                 {% else %}

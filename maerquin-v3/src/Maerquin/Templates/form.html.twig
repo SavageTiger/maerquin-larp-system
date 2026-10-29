@@ -1,0 +1,136 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <button class="button is-pulled-right"
+                    onclick="return false"
+                    @click="saveForm('{{ form.id }}')">
+                <i class="fa-solid fa-save"></i>&nbsp;{{ 'forms.save'|trans }}
+            </button>
+            {% if form.name %}
+                <button class="button is-pulled-right mr-2"
+                        onclick="return false"
+                        {% if linkedEvents|length > 0 %}
+                            disabled="disabled"
+                            title="{{ 'forms.delete.error.linked_events'|trans }}"
+                        {% else %}
+                            @click="deleteForm('{{ form.id }}')"
+                        {% endif %}>
+                    <i class="fa-solid fa-trash has-text-danger"></i>&nbsp;{{ 'forms.delete'|trans }}
+                </button>
+            {% endif %}
+            &nbsp;
+        </div>
+    </div>
+
+    {% if persisted %}
+        <article class="message is-success">
+            <div class="message-header">
+                <p>{{ 'forms.persisted.title'|trans }}</p>
+            </div>
+            <div class="message-body">
+                {{ 'forms.persisted.body'|trans }}
+            </div>
+        </article>
+    {% endif %}
+
+    <div class="spacer is-12"></div>
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <article class="message is-dark">
+                <div class="message-header">
+                    {% if form.name == '' %}
+                        {{ 'forms.new'|trans }}
+                    {% endif %}
+                    {{ form.name }}
+                </div>
+                <div class="message-body">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">{{ 'forms.name'|trans }}</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" name="name" type="text"
+                                           value="{{ form.name }}" placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if form.name %}
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">{{ 'forms.events'|trans }}</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="card ml-5 mr-5 m-1 p-3">
+                                        {% for event in linkedEvents %}
+                                            <div>
+                                                <a href="/admin/events/{{ event.id }}.html">
+                                                    <i class="fa-solid fa-calendar"></i>
+                                                    {{ event.name }}
+                                                </a>
+                                            </div>
+                                        {% else %}
+                                            <span>(Geen)</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% if linkedEvents|length > 0 %}
+                                        <p class="help ml-5">{{ 'forms.delete.linked_events'|trans }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <script type="module">
+        Vue.createApp({
+            methods: {
+                saveForm(formId) {
+                    const form = serializeForm('containerForm');
+
+                    axios
+                        .post(`/admin/forms/${formId}.html`, { form: form })
+                        .then(() => {
+                            document.location.href = `/admin/forms/persisted/${formId}.html`
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+
+                    return false;
+                },
+
+                deleteForm(formId) {
+                    if (confirm({{ 'forms.delete.confirm'|trans|json_encode|raw }}) === false) {
+                        return false;
+                    }
+
+                    axios
+                        .post(`/admin/forms/${formId}/delete`, {})
+                        .then(() => {
+                            document.location.href = `/admin/forms.html`
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.error.description;
+
+                            alert(message);
+                        });
+
+                    return false;
+                },
+            }
+        }).mount('.content');
+    </script>
+{% endblock %}

@@ -58,6 +58,14 @@ class EventRepository
             ->getResult();
     }
 
+    /**
+     * @return Event[]
+     */
+    public function findAllForForm(string $formId): array
+    {
+        return $this->entities()->findBy(['form' => $formId], ['startDate' => 'ASC']);
+    }
+
     public function save(Event $event): void
     {
         $this->entityManager->persist($event);

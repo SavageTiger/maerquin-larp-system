@@ -24,6 +24,11 @@ class FormRepository
             throw MaerquinEntityNotFoundException::withType(Form::class);
     }
 
+    public function findById(string $formId): null | Form
+    {
+        return $this->entities()->findOneBy(['id' => $formId]);
+    }
+
     /**
      * @return Form[]
      */
@@ -35,6 +40,12 @@ class FormRepository
     public function save(Form $form): void
     {
         $this->entityManager->persist($form);
+        $this->entityManager->flush();
+    }
+
+    public function delete(Form $form): void
+    {
+        $this->entityManager->remove($form);
         $this->entityManager->flush();
     }
 

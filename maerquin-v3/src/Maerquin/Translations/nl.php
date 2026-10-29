@@ -39,7 +39,6 @@ return [
     'forms.delete.confirm' => 'Weet je zeker dat je dit formulier wilt verwijderen?',
     'forms.delete.linked_events' => 'Verwijderen kan pas als het formulier aan geen enkel evenement meer gekoppeld is.',
     'forms.delete.error.linked_events' => 'Dit formulier is gekoppeld aan een of meerdere evenementen en kan niet verwijderd worden.',
-    'forms.delete.error.has_submissions' => 'Dit formulier is al ingevuld en kan niet verwijderd worden.',
     'forms.events' => 'Evenementen',
     'forms.sections' => 'Secties',
     'forms.section.title' => 'Titel',

@@ -20,11 +20,13 @@ class Form extends FormModel
     #[ORM\Column(length: 255)]
     protected string $name;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $deleted;
+
     #[ORM\OneToMany(
         targetEntity: FormSection::class,
         mappedBy: 'form',
         cascade: ['persist'],
-        orphanRemoval: true,
     )]
     #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $sections;

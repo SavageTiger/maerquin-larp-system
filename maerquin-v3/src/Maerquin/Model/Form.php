@@ -18,6 +18,8 @@ class Form
 
     protected string $name;
 
+    protected bool $deleted;
+
     /**
      * @var Collection<int, FormSectionEntity>
      */
@@ -28,6 +30,7 @@ class Form
         $form = new FormEntity();
         $form->id = $formId;
         $form->name = $name;
+        $form->deleted = false;
         $form->sections = new ArrayCollection();
 
         return $form;
@@ -41,6 +44,11 @@ class Form
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function delete(): void
+    {
+        $this->deleted = true;
     }
 
     public function rename(string $name): void

@@ -20,13 +20,12 @@ class FormRepository
      */
     public function getById(string $formId): Form
     {
-        return $this->entities()->findOneBy(['id' => $formId]) ??
-            throw EntityNotFoundException::withType(Form::class);
+        return $this->findById($formId) ?? throw EntityNotFoundException::withType(Form::class);
     }
 
     public function findById(string $formId): null | Form
     {
-        return $this->entities()->findOneBy(['id' => $formId]);
+        return $this->entities()->findOneBy(['id' => $formId, 'deleted' => false]);
     }
 
     /**
@@ -34,18 +33,12 @@ class FormRepository
      */
     public function findAllSorted(): array
     {
-        return $this->entities()->findBy([], ['name' => 'ASC']);
+        return $this->entities()->findBy(['deleted' => false], ['name' => 'ASC']);
     }
 
     public function save(Form $form): void
     {
         $this->entityManager->persist($form);
-        $this->entityManager->flush();
-    }
-
-    public function delete(Form $form): void
-    {
-        $this->entityManager->remove($form);
         $this->entityManager->flush();
     }
 

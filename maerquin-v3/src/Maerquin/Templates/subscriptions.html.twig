@@ -1,26 +1,54 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
+    <div class="spacer is-12"></div>
 
-    <div class="columns is-gapless">
-        <div class="column is-12 is-gapless">
-            <div class="field is-pulled-right has-addons">
-                &nbsp;
-                <div class="control">
-                    <input class="input" type="text" v-model="search" placeholder="Zoeken">
-                </div>
+    <article class="message is-dark">
+        <div class="message-header">
+            {{ 'admin.subscriptions.latest'|trans }}
+        </div>
+        <div class="message-body">
+            <div class="table-container">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <tr>
+                        <th>{{ 'subscriptions.event'|trans }}</th>
+                        <th>{{ 'subscriptions.date'|trans }}</th>
+                        <th>{{ 'subscriptions.registration'|trans }}</th>
+                        {% for role in roles %}
+                            <th>{{ ('admin.subscriptions.role.' ~ role.value)|trans }}</th>
+                        {% endfor %}
+                        <th>{{ 'admin.subscriptions.waiting_list'|trans }}</th>
+                    </tr>
+                    {% for event in events %}
+                        {% set state = event.subscriptionState.value %}
+                        <tr>
+                            <td><a href="/admin/subscriptions/{{ event.id }}.html">{{ event.name }}</a></td>
+                            <td>{{ event.startDate|date_range(event.endDate) }}</td>
+                            <td>
+                                {% if state == 'OPEN' %}
+                                    <span class="tag is-success is-light">{{ 'subscriptions.state.open'|trans }}</span>
+                                {% elseif state == 'PENDING' %}
+                                    <span class="tag is-warning is-light">{{ 'subscriptions.state.pending'|trans }}</span>
+                                {% else %}
+                                    <span class="tag is-light">{{ 'admin.subscriptions.state.closed'|trans }}</span>
+                                {% endif %}
+                            </td>
+                            {% for role in roles %}
+                                {% set cap = event.subscriptionCap(role) %}
+                                <td>
+                                    {{ event.countSubscriptions(role) }}{% if cap > 0 %} / {{ cap }}{% endif %}
+                                </td>
+                            {% endfor %}
+                            <td>
+                                {% set waiting = roles|reduce((total, role) => total + event.countWaitingList(role), 0) %}
+                                {% if waiting > 0 %}
+                                    <span class="tag is-warning">{{ waiting }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
-    </div>
-
-    <script>
-        Vue.createApp({
-            data() {
-                return {};
-            },
-            computed: {},
-            methods: {}
-        }).mount('#containerForm');
-    </script>
-
+    </article>
 {% endblock %}

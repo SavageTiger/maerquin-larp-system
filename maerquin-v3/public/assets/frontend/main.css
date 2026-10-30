@@ -398,15 +398,26 @@ input.skill-input {
    Event subscriptions
    ========================================================================== */
 
-.subscription-event {
-    .message-header {
-        gap: 0.75rem;
+.subscriptions {
+    --subscriptions-gap: 0.75rem;
+    --subscriptions-radius: 2px;
+    --subscriptions-surface: #fff;
+    --subscriptions-border: #e0e0e0;
+    --subscriptions-text: #363636;
+    --subscriptions-muted: #7a7a7a;
+    --subscriptions-selected: #363636;
+    --subscriptions-waiting: #946c00;
+
+    /* Shared: event header, facts and description */
+
+    .subscription-event .message-header {
+        gap: var(--subscriptions-gap);
     }
 
     .subscription-facts {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-        gap: 0.75rem;
+        gap: var(--subscriptions-gap);
         margin-bottom: 1rem;
     }
 
@@ -415,9 +426,9 @@ input.skill-input {
         flex-direction: column;
         gap: 0.15rem;
         padding: 0.75rem 1rem;
-        background: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 2px;
+        background: var(--subscriptions-surface);
+        border: 1px solid var(--subscriptions-border);
+        border-radius: var(--subscriptions-radius);
     }
 
     .subscription-fact-label {
@@ -425,7 +436,7 @@ input.skill-input {
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.04em;
-        color: #7a7a7a;
+        color: var(--subscriptions-muted);
     }
 
     .subscription-fact-value {
@@ -435,57 +446,132 @@ input.skill-input {
 
     .subscription-fact-detail {
         font-size: 0.875rem;
-        color: #7a7a7a;
+        color: var(--subscriptions-muted);
     }
 
     .subscription-description {
         padding: 0.75rem 1rem;
-        background: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 2px;
+        background: var(--subscriptions-surface);
+        border: 1px solid var(--subscriptions-border);
+        border-radius: var(--subscriptions-radius);
+        overflow-wrap: anywhere;
+    }
+
+    /* Signing up: role choice */
+
+    .subscription-roles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        gap: var(--subscriptions-gap);
+    }
+
+    .subscription-role {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: var(--subscriptions-gap);
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--subscriptions-surface);
+        border: 1px solid var(--subscriptions-border);
+        border-radius: var(--subscriptions-radius);
+        cursor: pointer;
+
+        input {
+            grid-row: span 2;
+        }
+
+        &:has(input:checked) {
+            border-color: var(--subscriptions-selected);
+            box-shadow: 0 0 0 1px var(--subscriptions-selected);
+        }
+
+        &.is-full:has(input:checked) {
+            border-color: var(--subscriptions-waiting);
+            box-shadow: 0 0 0 1px var(--subscriptions-waiting);
+        }
+    }
+
+    .subscription-role-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .subscription-role-places {
+        font-size: 0.875rem;
+        color: var(--subscriptions-muted);
+    }
+
+    /* Admin: list of subscriptions with their answers */
+
+    .admin-subscription {
+        margin-bottom: 0.5rem;
+        background: var(--subscriptions-surface);
+        border: 1px solid var(--subscriptions-border);
+        border-radius: var(--subscriptions-radius);
+
+        summary {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--subscriptions-gap);
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+        }
+
+        &[open] summary {
+            border-bottom: 1px solid var(--subscriptions-border);
+        }
+    }
+
+    .admin-subscription-number {
+        min-width: 1.5rem;
+        font-weight: 600;
+        color: var(--subscriptions-muted);
+    }
+
+    .admin-subscription-name {
+        font-weight: 600;
+    }
+
+    .admin-subscription-date {
+        margin-left: auto;
+        font-size: 0.875rem;
+        color: var(--subscriptions-muted);
+    }
+
+    .admin-subscription-answers {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+        gap: 1rem;
+        align-items: start;
+        padding: 0.75rem 1rem 1rem;
+    }
+
+    .admin-subscription-section {
+        margin-bottom: 0 !important;
+        border: 1px solid var(--subscriptions-border);
+
+        th {
+            background: #f5f5f5;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--subscriptions-text) !important;
+        }
+
+        td {
+            vertical-align: top;
+        }
+    }
+
+    .admin-subscription-label {
+        width: 45%;
+        color: #4a4a4a;
+    }
+
+    .admin-subscription-value {
+        color: var(--subscriptions-text);
+        font-weight: 500;
         overflow-wrap: anywhere;
     }
 }
-
-.subscription-roles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: 0.75rem;
-}
-
-.subscription-role {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 0.75rem;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    cursor: pointer;
-
-    input {
-        grid-row: span 2;
-    }
-
-    &:has(input:checked) {
-        border-color: #363636;
-        box-shadow: 0 0 0 1px #363636;
-    }
-
-    &.is-full:has(input:checked) {
-        border-color: #946c00;
-        box-shadow: 0 0 0 1px #946c00;
-    }
-}
-
-.subscription-role-name {
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.subscription-role-places {
-    font-size: 0.875rem;
-    color: #7a7a7a;
-}
-

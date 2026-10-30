@@ -1,158 +1,160 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
+    <div class="subscriptions">
 
-    <div class="columns is-gapless">
-        <div class="column is-12">
-            <div class="buttons is-right">
-                <a class="button" href="/subscriptions.html">
-                    <i class="fa-solid fa-arrow-left"></i>&nbsp;{{ 'subscribe.back'|trans }}
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <article class="message is-dark subscription-event">
-        <div class="message-header">
-            <span>
-                {{ 'subscribe.title'|trans({'event': event.name}) }}
-                {% if event.secondaryName %}
-                    <span class="has-text-weight-normal">&middot; {{ event.secondaryName }}</span>
-                {% endif %}
-            </span>
-        </div>
-        <div class="message-body">
-            <div class="subscription-facts">
-                <div class="subscription-fact">
-                    <span class="subscription-fact-label">
-                        <i class="fa-regular fa-calendar"></i> {{ 'subscriptions.date'|trans }}
-                    </span>
-                    <span class="subscription-fact-value">{{ event.startDate|date_range(event.endDate) }}</span>
+        <div class="columns is-gapless">
+            <div class="column is-12">
+                <div class="buttons is-right">
+                    <a class="button" href="/subscriptions.html">
+                        <i class="fa-solid fa-arrow-left"></i>&nbsp;{{ 'subscribe.back'|trans }}
+                    </a>
                 </div>
             </div>
-
-            <p class="has-text-grey">{{ 'subscribe.required_hint'|trans }}</p>
         </div>
-    </article>
 
-    {% set defaultRole = roles|filter(role => event.isFull(role) == false)|first ?: roles|first %}
-
-    <article class="message is-dark">
-        <div class="message-header">
-            {{ 'subscribe.role.title'|trans }}
-        </div>
-        <div class="message-body">
-            <div class="subscription-roles">
-                {% for role in roles %}
-                    {% set cap = event.subscriptionCap(role) %}
-                    {% set isFull = event.isFull(role) %}
-
-                    <label class="subscription-role {% if isFull %}is-full{% endif %}">
-                        <input type="radio" name="role" value="{{ role.value }}" required
-                               {% if role == defaultRole %}checked{% endif %}/>
-                        <span class="subscription-role-name">{{ ('subscribe.role.' ~ role.value)|trans }}</span>
-                        <span class="subscription-role-places">
-                            {% if cap == 0 %}
-                                {{ 'subscribe.role.no_cap'|trans }}
-                            {% elseif isFull %}
-                                <span class="has-text-warning-dark">{{ 'subscribe.role.waiting_list'|trans }}</span>
-                            {% else %}
-                                {{ 'subscribe.role.places_left'|trans({'left': cap - event.countSubscriptions(role), 'cap': cap}) }}
-                            {% endif %}
-                        </span>
-                    </label>
-                {% endfor %}
-            </div>
-        </div>
-    </article>
-
-    {% for section in event.form.sections %}
-        <article class="message is-dark subscription-form-section">
+        <article class="message is-dark subscription-event">
             <div class="message-header">
-                {{ section.title }}
+                <span>
+                    {{ 'subscribe.title'|trans({'event': event.name}) }}
+                    {% if event.secondaryName %}
+                        <span class="has-text-weight-normal">&middot; {{ event.secondaryName }}</span>
+                    {% endif %}
+                </span>
             </div>
             <div class="message-body">
-                {% for fields in section.rows %}
-                    <div class="columns">
-                        {% for field in fields %}
-                            {% set inputName = 'answers[' ~ field.key ~ ']' %}
-                            {% set inputId = 'field-' ~ field.key %}
-
-                            <div class="column">
-                                <div class="field">
-                                    {% if field.type.value == 'checkbox' %}
-                                        <label class="checkbox" for="{{ inputId }}">
-                                            <input type="checkbox" id="{{ inputId }}" name="{{ inputName }}" value="1"
-                                                   {% if field.required %}required{% endif %}/>
-                                            {{ field.label }}
-                                            {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
-                                        </label>
-                                    {% else %}
-                                        <label class="label" for="{{ inputId }}">
-                                            {{ field.label }}
-                                            {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
-                                        </label>
-                                        <div class="control">
-                                            {% if field.type.value == 'textarea' %}
-                                                <textarea class="textarea" id="{{ inputId }}" name="{{ inputName }}" rows="3"
-                                                          {% if field.required %}required{% endif %}></textarea>
-                                            {% else %}
-                                                <input class="input" id="{{ inputId }}" name="{{ inputName }}"
-                                                       type="{{ field.type.value }}"
-                                                       {% if field.required %}required{% endif %}/>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
+                <div class="subscription-facts">
+                    <div class="subscription-fact">
+                        <span class="subscription-fact-label">
+                            <i class="fa-regular fa-calendar"></i> {{ 'subscriptions.date'|trans }}
+                        </span>
+                        <span class="subscription-fact-value">{{ event.startDate|date_range(event.endDate) }}</span>
                     </div>
-                {% endfor %}
+                </div>
+
+                <p class="has-text-grey">{{ 'subscribe.required_hint'|trans }}</p>
             </div>
         </article>
-    {% endfor %}
 
-    <div class="buttons is-right mb-6">
-        <button class="button is-dark is-medium" type="submit" id="subscribeButton">
-            <i class="fa-regular fa-paper-plane"></i>&nbsp;{{ 'subscribe.submit'|trans }}
-        </button>
+        {% set defaultRole = roles|filter(role => event.isFull(role) == false)|first ?: roles|first %}
+
+        <article class="message is-dark">
+            <div class="message-header">
+                {{ 'subscribe.role.title'|trans }}
+            </div>
+            <div class="message-body">
+                <div class="subscription-roles">
+                    {% for role in roles %}
+                        {% set cap = event.subscriptionCap(role) %}
+                        {% set isFull = event.isFull(role) %}
+
+                        <label class="subscription-role {% if isFull %}is-full{% endif %}">
+                            <input type="radio" name="role" value="{{ role.value }}" required
+                                   {% if role == defaultRole %}checked{% endif %}/>
+                            <span class="subscription-role-name">{{ ('subscribe.role.' ~ role.value)|trans }}</span>
+                            <span class="subscription-role-places">
+                                {% if cap == 0 %}
+                                    {{ 'subscribe.role.no_cap'|trans }}
+                                {% elseif isFull %}
+                                    <span class="has-text-warning-dark">{{ 'subscribe.role.waiting_list'|trans }}</span>
+                                {% else %}
+                                    {{ 'subscribe.role.places_left'|trans({'left': cap - event.countSubscriptions(role), 'cap': cap}) }}
+                                {% endif %}
+                            </span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </article>
+
+        {% for section in event.form.sections %}
+            <article class="message is-dark subscription-form-section">
+                <div class="message-header">
+                    {{ section.title }}
+                </div>
+                <div class="message-body">
+                    {% for fields in section.rows %}
+                        <div class="columns">
+                            {% for field in fields %}
+                                {% set inputName = 'answers[' ~ field.key ~ ']' %}
+                                {% set inputId = 'field-' ~ field.key %}
+
+                                <div class="column">
+                                    <div class="field">
+                                        {% if field.type.value == 'checkbox' %}
+                                            <label class="checkbox" for="{{ inputId }}">
+                                                <input type="checkbox" id="{{ inputId }}" name="{{ inputName }}" value="1"
+                                                       {% if field.required %}required{% endif %}/>
+                                                {{ field.label }}
+                                                {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
+                                            </label>
+                                        {% else %}
+                                            <label class="label" for="{{ inputId }}">
+                                                {{ field.label }}
+                                                {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
+                                            </label>
+                                            <div class="control">
+                                                {% if field.type.value == 'textarea' %}
+                                                    <textarea class="textarea" id="{{ inputId }}" name="{{ inputName }}" rows="3"
+                                                              {% if field.required %}required{% endif %}></textarea>
+                                                {% else %}
+                                                    <input class="input" id="{{ inputId }}" name="{{ inputName }}"
+                                                           type="{{ field.type.value }}"
+                                                           {% if field.required %}required{% endif %}/>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </article>
+        {% endfor %}
+
+        <div class="buttons is-right mb-6">
+            <button class="button is-dark is-medium" type="submit" id="subscribeButton">
+                <i class="fa-regular fa-paper-plane"></i>&nbsp;{{ 'subscribe.submit'|trans }}
+            </button>
+        </div>
+
+        <script type="module">
+            const form = document.getElementById('containerForm');
+            const button = document.getElementById('subscribeButton');
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (form.reportValidity() === false) {
+                    return;
+                }
+
+                const answers = {};
+
+                for (const input of form.querySelectorAll('[name^="answers["]')) {
+                    const key = input.name.slice('answers['.length, -1);
+
+                    answers[key] = input.type === 'checkbox' ? (input.checked ? '1' : '') : input.value;
+                }
+
+                button.classList.add('is-loading');
+
+                axios
+                    .post('/subscriptions/{{ event.id }}.html', {
+                        subscription: {
+                            role: form.querySelector('[name="role"]:checked')?.value ?? '',
+                            answers,
+                        },
+                    })
+                    .then(() => {
+                        document.location.href = '/subscriptions.html';
+                    })
+                    .catch((error) => {
+                        button.classList.remove('is-loading');
+                        alert(error.response?.data?.error?.description ?? error.message);
+                    });
+            });
+        </script>
     </div>
-
-    <script type="module">
-        const form = document.getElementById('containerForm');
-        const button = document.getElementById('subscribeButton');
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            if (form.reportValidity() === false) {
-                return;
-            }
-
-            const answers = {};
-
-            for (const input of form.querySelectorAll('[name^="answers["]')) {
-                const key = input.name.slice('answers['.length, -1);
-
-                answers[key] = input.type === 'checkbox' ? (input.checked ? '1' : '') : input.value;
-            }
-
-            button.classList.add('is-loading');
-
-            axios
-                .post('/subscriptions/{{ event.id }}.html', {
-                    subscription: {
-                        role: form.querySelector('[name="role"]:checked')?.value ?? '',
-                        answers,
-                    },
-                })
-                .then(() => {
-                    document.location.href = '/subscriptions.html';
-                })
-                .catch((error) => {
-                    button.classList.remove('is-loading');
-                    alert(error.response?.data?.error?.description ?? error.message);
-                });
-        });
-    </script>
 {% endblock %}

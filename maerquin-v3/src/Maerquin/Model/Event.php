@@ -122,6 +122,30 @@ class Event
         };
     }
 
+    /**
+     * @return list<EventSubscription> in order of subscription
+     */
+    public function getSubscriptions(SubscriptionRole $role): array
+    {
+        $subscriptions = array_values($this->subscriptions->filter(
+            static fn(EventSubscription $subscription): bool => $subscription->hasRole($role),
+        )->toArray());
+
+        usort(
+            $subscriptions,
+            static fn(EventSubscription $a, EventSubscription $b): int => $a->getSubscribedAt() <=> $b->getSubscribedAt(),
+        );
+
+        return $subscriptions;
+    }
+
+    public function countWaitingList(SubscriptionRole $role): int
+    {
+        $cap = $this->getSubscriptionCap($role);
+
+        return $cap === 0 ? 0 : max(0, $this->countSubscriptions($role) - $cap);
+    }
+
     public function countSubscriptions(SubscriptionRole $role): int
     {
         return $this->subscriptions->filter(
@@ -172,6 +196,22 @@ class Event
         return $this->subscriptions->findFirst(
             static fn(int $key, EventSubscription $subscription): bool => $subscription->isFor($player),
         );
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function markSubscriptionAsPaid(string $subscriptionId): void
+    {
+        $this->getSubscription($subscriptionId)->markAsPaid();
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function markSubscriptionAsUnpaid(string $subscriptionId): void
+    {
+        $this->getSubscription($subscriptionId)->markAsUnpaid();
     }
 
     public function isSubscribed(Player $player): bool
@@ -232,5 +272,15 @@ class Event
         $this->subscriptionsOpensAt = $subscriptionsOpensAt;
         $this->playerSubscriptionCap = $playerSubscriptionCap;
         $this->npcSubscriptionCap = $npcSubscriptionCap;
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    private function getSubscription(string $subscriptionId): EventSubscription
+    {
+        return $this->subscriptions->findFirst(
+            static fn(int $key, EventSubscription $subscription): bool => $subscription->getId() === $subscriptionId,
+        ) ?? throw SubscriptionException::notFound();
     }
 }

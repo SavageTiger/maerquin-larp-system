@@ -70,9 +70,34 @@ class EventSubscription
         return $this->role;
     }
 
+    public function getPlayer(): Player
+    {
+        return $this->player;
+    }
+
+    public function getSubscribedAt(): DateTimeInterface
+    {
+        return $this->subscribedAt;
+    }
+
+    public function getFormSubmission(): FormSubmissionEntity
+    {
+        return $this->formSubmission;
+    }
+
     public function getStatus(): SubscriptionStatus
     {
         return $this->status;
+    }
+
+    public function markAsPaid(): void
+    {
+        $this->status = SubscriptionStatus::Paid;
+    }
+
+    public function markAsUnpaid(): void
+    {
+        $this->status = SubscriptionStatus::PendingPayment;
     }
 
     public function hasRole(SubscriptionRole $role): bool

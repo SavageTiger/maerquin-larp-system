@@ -30,6 +30,11 @@ final class SubscriptionException extends RuntimeException
         return new self('The player is already subscribed to this event.', 'subscribe.error.already_subscribed');
     }
 
+    public static function notFound(): self
+    {
+        return new self('The subscription does not belong to this event.', 'subscribe.error.not_found');
+    }
+
     public static function roleInvalid(string $role): self
     {
         return new self(sprintf('"%s" is not a valid role.', $role), 'subscribe.error.role_invalid');

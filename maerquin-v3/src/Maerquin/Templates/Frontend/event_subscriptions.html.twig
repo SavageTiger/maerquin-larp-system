@@ -1,143 +1,146 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
-    {% set upcomingEvents = events|filter(event => event.subscriptionState.value != 'EXPIRED')|reverse %}
-    {% set pastEvents = events|filter(event => event.subscriptionState.value == 'EXPIRED') %}
+    <div class="subscriptions">
+        {% set upcomingEvents = events|filter(event => event.subscriptionState.value != 'EXPIRED')|reverse %}
+        {% set pastEvents = events|filter(event => event.subscriptionState.value == 'EXPIRED') %}
 
-    <div class="spacer is-12"></div>
+        <div class="spacer is-12"></div>
 
-    {% if upcomingEvents is empty %}
-        <article class="message is-dark">
-            <div class="message-header">
-                {{ 'subscriptions.upcoming'|trans }}
-            </div>
-            <div class="message-body">
-                {{ 'subscriptions.none_planned'|trans }}
-            </div>
-        </article>
-    {% endif %}
+        {% if upcomingEvents is empty %}
+            <article class="message is-dark">
+                <div class="message-header">
+                    {{ 'subscriptions.upcoming'|trans }}
+                </div>
+                <div class="message-body">
+                    {{ 'subscriptions.none_planned'|trans }}
+                </div>
+            </article>
+        {% endif %}
 
-    {% for event in upcomingEvents %}
-        {% set state = event.subscriptionState.value %}
+        {% for event in upcomingEvents %}
+            {% set state = event.subscriptionState.value %}
 
-        <article class="message is-dark subscription-event">
-            <div class="message-header">
-                <span>
-                    {{ event.name }}
-                    {% if event.secondaryName %}
-                        <span class="has-text-weight-normal">&middot; {{ event.secondaryName }}</span>
+            <article class="message is-dark subscription-event">
+                <div class="message-header">
+                    <span>
+                        {{ event.name }}
+                        {% if event.secondaryName %}
+                            <span class="has-text-weight-normal">&middot; {{ event.secondaryName }}</span>
+                        {% endif %}
+                    </span>
+
+                    {% if state == 'OPEN' %}
+                        <span class="tag is-success">{{ 'subscriptions.state.open'|trans }}</span>
+                    {% else %}
+                        <span class="tag is-warning">{{ 'subscriptions.state.pending'|trans }}</span>
                     {% endif %}
-                </span>
-
-                {% if state == 'OPEN' %}
-                    <span class="tag is-success">{{ 'subscriptions.state.open'|trans }}</span>
-                {% else %}
-                    <span class="tag is-warning">{{ 'subscriptions.state.pending'|trans }}</span>
-                {% endif %}
-            </div>
-            <div class="message-body">
-                <div class="subscription-facts">
-                    <div class="subscription-fact">
-                        <span class="subscription-fact-label">
-                            <i class="fa-regular fa-calendar"></i> {{ 'subscriptions.date'|trans }}
-                        </span>
-                        <span class="subscription-fact-value">{{ event.startDate|date_range(event.endDate) }}</span>
-                        <span class="subscription-fact-detail">{{ event.startDate|days_until }}</span>
-                    </div>
-
-                    <div class="subscription-fact">
-                        <span class="subscription-fact-label">
-                            <i class="fa-regular fa-calendar-check"></i> {{ 'subscriptions.registration'|trans }}
-                        </span>
-                        {% if state == 'OPEN' %}
-                            <span class="subscription-fact-value">{{ 'subscriptions.registration.open'|trans }}</span>
-                            <span class="subscription-fact-detail">
-                                {{ 'subscriptions.registration.until'|trans({'date': event.startDate|long_date}) }}
+                </div>
+                <div class="message-body">
+                    <div class="subscription-facts">
+                        <div class="subscription-fact">
+                            <span class="subscription-fact-label">
+                                <i class="fa-regular fa-calendar"></i> {{ 'subscriptions.date'|trans }}
                             </span>
-                        {% else %}
-                            <span class="subscription-fact-value">
-                                {{ 'subscriptions.registration.opens'|trans({'date': event.subscriptionsOpensAt|long_date}) }}
+                            <span class="subscription-fact-value">{{ event.startDate|date_range(event.endDate) }}</span>
+                            <span class="subscription-fact-detail">{{ event.startDate|days_until }}</span>
+                        </div>
+
+                        <div class="subscription-fact">
+                            <span class="subscription-fact-label">
+                                <i class="fa-regular fa-calendar-check"></i> {{ 'subscriptions.registration'|trans }}
                             </span>
-                            <span class="subscription-fact-detail">{{ event.subscriptionsOpensAt|days_until }}</span>
+                            {% if state == 'OPEN' %}
+                                <span class="subscription-fact-value">{{ 'subscriptions.registration.open'|trans }}</span>
+                                <span class="subscription-fact-detail">
+                                    {{ 'subscriptions.registration.until'|trans({'date': event.startDate|long_date}) }}
+                                </span>
+                            {% else %}
+                                <span class="subscription-fact-value">
+                                    {{ 'subscriptions.registration.opens'|trans({'date': event.subscriptionsOpensAt|long_date}) }}
+                                </span>
+                                <span class="subscription-fact-detail">{{ event.subscriptionsOpensAt|days_until }}</span>
+                            {% endif %}
+                        </div>
+
+                        {% if event.playerSubscriptionCap > 0 or event.npcSubscriptionCap > 0 %}
+                            <div class="subscription-fact">
+                                <span class="subscription-fact-label">
+                                    <i class="fa-solid fa-users"></i> {{ 'subscriptions.places'|trans }}
+                                </span>
+                                <span class="subscription-fact-value">
+                                    {% if event.playerSubscriptionCap > 0 %}
+                                        {{ 'subscriptions.places.player_count'|trans({'count': event.playerSubscriptionCap}) }}
+                                    {% endif %}
+                                    {% if event.playerSubscriptionCap > 0 and event.npcSubscriptionCap > 0 %}&middot;{% endif %}
+                                    {% if event.npcSubscriptionCap > 0 %}
+                                        {{ 'subscriptions.places.npc_count'|trans({'count': event.npcSubscriptionCap}) }}
+                                    {% endif %}
+                                </span>
+                            </div>
                         {% endif %}
                     </div>
 
-                    {% if event.playerSubscriptionCap > 0 or event.npcSubscriptionCap > 0 %}
-                        <div class="subscription-fact">
-                            <span class="subscription-fact-label">
-                                <i class="fa-solid fa-users"></i> {{ 'subscriptions.places'|trans }}
-                            </span>
-                            <span class="subscription-fact-value">
-                                {% if event.playerSubscriptionCap > 0 %}
-                                    {{ 'subscriptions.places.player_count'|trans({'count': event.playerSubscriptionCap}) }}
-                                {% endif %}
-                                {% if event.playerSubscriptionCap > 0 and event.npcSubscriptionCap > 0 %}&middot;{% endif %}
-                                {% if event.npcSubscriptionCap > 0 %}
-                                    {{ 'subscriptions.places.npc_count'|trans({'count': event.npcSubscriptionCap}) }}
-                                {% endif %}
-                            </span>
-                        </div>
+                    {% if event.description %}
+                        <div class="subscription-description content">{{ event.description|markdown_to_html }}</div>
+                    {% else %}
+                        <p class="has-text-grey">{{ 'subscriptions.no_description'|trans }}</p>
                     {% endif %}
+
+                    <div class="buttons mt-4">
+                        {% if player is null %}
+                            <a class="button is-dark" href="/login.html?redirect=/subscriptions.html">
+                                <i class="fa-solid fa-right-to-bracket"></i>&nbsp;{{ 'subscriptions.login_to_subscribe'|trans }}
+                            </a>
+                            <a class="button" href="/register.html">
+                                {{ 'subscriptions.create_account'|trans }}
+                            </a>
+                        {% elseif event.isSubscribed(player) %}
+                            <span class="tag is-success is-medium">
+                                <i class="fa-solid fa-check"></i>&nbsp;{{ 'subscriptions.subscribed'|trans }}
+                            </span>
+                            {% set status = event.findSubscription(player).status.value %}
+                            <span class="tag {{ status == 'paid' ? 'is-success is-light' : 'is-warning is-light' }} is-medium">
+                                {{ ('subscriptions.status.' ~ status)|trans }}
+                            </span>
+                        {% elseif state == 'OPEN' and event.form is not null %}
+                            <a class="button is-dark" href="/subscriptions/{{ event.id }}.html">
+                                <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'subscriptions.subscribe'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
+            </article>
+        {% endfor %}
 
-                {% if event.description %}
-                    <div class="subscription-description content">{{ event.description|markdown_to_html }}</div>
-                {% else %}
-                    <p class="has-text-grey">{{ 'subscriptions.no_description'|trans }}</p>
-                {% endif %}
-
-                <div class="buttons mt-4">
-                    {% if player is null %}
-                        <a class="button is-dark" href="/login.html?redirect=/subscriptions.html">
-                            <i class="fa-solid fa-right-to-bracket"></i>&nbsp;{{ 'subscriptions.login_to_subscribe'|trans }}
-                        </a>
-                        <a class="button" href="/register.html">
-                            {{ 'subscriptions.create_account'|trans }}
-                        </a>
-                    {% elseif event.isSubscribed(player) %}
-                        <span class="tag is-success is-medium">
-                            <i class="fa-solid fa-check"></i>&nbsp;{{ 'subscriptions.subscribed'|trans }}
-                        </span>
-                        <span class="tag is-warning is-light is-medium">
-                            {{ ('subscriptions.status.' ~ event.findSubscription(player).status.value)|trans }}
-                        </span>
-                    {% elseif state == 'OPEN' and event.form is not null %}
-                        <a class="button is-dark" href="/subscriptions/{{ event.id }}.html">
-                            <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'subscriptions.subscribe'|trans }}
-                        </a>
-                    {% endif %}
+        {% if player is not null and pastEvents is not empty %}
+            <article class="message is-dark">
+                <div class="message-header">
+                    {{ 'subscriptions.past'|trans }}
                 </div>
-            </div>
-        </article>
-    {% endfor %}
-
-    {% if player is not null and pastEvents is not empty %}
-        <article class="message is-dark">
-            <div class="message-header">
-                {{ 'subscriptions.past'|trans }}
-            </div>
-            <div class="message-body">
-                <div class="table-container">
-                    <table class="table is-bordered is-striped is-narrow is-fullwidth">
-                        <tr>
-                            <th>{{ 'subscriptions.event'|trans }}</th>
-                            <th>{{ 'subscriptions.date'|trans }}</th>
-                            <th></th>
-                        </tr>
-                        {% for event in pastEvents %}
+                <div class="message-body">
+                    <div class="table-container">
+                        <table class="table is-bordered is-striped is-narrow is-fullwidth">
                             <tr>
-                                <td>{{ event.name }}</td>
-                                <td>{{ event.startDate|date('d-m-Y') }}</td>
-                                <td>
-                                    {% if event.hasParticipated(player) %}
-                                        <span class="tag is-info is-light">{{ 'subscriptions.participated'|trans }}</span>
-                                    {% endif %}
-                                </td>
+                                <th>{{ 'subscriptions.event'|trans }}</th>
+                                <th>{{ 'subscriptions.date'|trans }}</th>
+                                <th></th>
                             </tr>
-                        {% endfor %}
-                    </table>
+                            {% for event in pastEvents %}
+                                <tr>
+                                    <td>{{ event.name }}</td>
+                                    <td>{{ event.startDate|date('d-m-Y') }}</td>
+                                    <td>
+                                        {% if event.hasParticipated(player) %}
+                                            <span class="tag is-info is-light">{{ 'subscriptions.participated'|trans }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </article>
-    {% endif %}
+            </article>
+        {% endif %}
+    </div>
 {% endblock %}

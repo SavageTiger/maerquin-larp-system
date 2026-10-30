@@ -44,4 +44,24 @@ readonly class EventSubscriptionHandler
 
         $this->eventRepository->save($event);
     }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function markAsPaid(Event $event, string $subscriptionId): void
+    {
+        $event->markSubscriptionAsPaid($subscriptionId);
+
+        $this->eventRepository->save($event);
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function markAsUnpaid(Event $event, string $subscriptionId): void
+    {
+        $event->markSubscriptionAsUnpaid($subscriptionId);
+
+        $this->eventRepository->save($event);
+    }
 }

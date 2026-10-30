@@ -31,6 +31,14 @@ class EventRepository
     /**
      * @return Event[]
      */
+    public function findLatest(int $limit): array
+    {
+        return $this->entities()->findBy([], ['startDate' => 'DESC'], $limit);
+    }
+
+    /**
+     * @return Event[]
+     */
     public function findAllSorted(): array
     {
         return $this->entities()->findBy([], ['startDate' => 'DESC']);

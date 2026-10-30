@@ -45,6 +45,11 @@ final class SubscriptionException extends RuntimeException
         return new self(sprintf('"%s" is not a valid role.', $role), 'subscribe.error.role_invalid');
     }
 
+    public static function actionInvalid(string $action): self
+    {
+        return new self(sprintf('"%s" is not a valid subscription action.', $action), 'subscribe.error.action_invalid');
+    }
+
     public function getTranslationKey(): string
     {
         return $this->translationKey;

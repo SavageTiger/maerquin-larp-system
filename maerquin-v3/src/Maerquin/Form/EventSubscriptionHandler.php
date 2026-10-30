@@ -10,6 +10,7 @@ use SvenHK\Maerquin\Entity\Player;
 use SvenHK\Maerquin\Exception\Form\FormSubmissionException;
 use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
+use SvenHK\Maerquin\Model\SubscriptionAction;
 use SvenHK\Maerquin\Model\SubscriptionRole;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
@@ -52,21 +53,30 @@ readonly class EventSubscriptionHandler
     }
 
     /**
+     * @throws MissingFormFieldException
      * @throws SubscriptionException
      */
-    public function markAsPaid(Event $event, string $subscriptionId): void
+    public function update(Event $event, string $subscriptionId, Request $request): void
     {
-        $event->markSubscriptionAsPaid($subscriptionId);
+        $action = FormResolver::createFromRequest($request)->getValue('action', 'subscription');
 
-        $this->eventRepository->save($event);
-    }
-
-    /**
-     * @throws SubscriptionException
-     */
-    public function markAsUnpaid(Event $event, string $subscriptionId): void
-    {
-        $event->markSubscriptionAsUnpaid($subscriptionId);
+        switch (SubscriptionAction::tryFrom($action) ?? throw SubscriptionException::actionInvalid($action)) {
+            case SubscriptionAction::Confirm:
+                $event->confirmSubscription($subscriptionId);
+                break;
+            case SubscriptionAction::PlaceOnWaitingList:
+                $event->placeSubscriptionOnWaitingList($subscriptionId);
+                break;
+            case SubscriptionAction::ResetStatus:
+                $event->resetSubscriptionStatus($subscriptionId);
+                break;
+            case SubscriptionAction::MarkAsPaid:
+                $event->markSubscriptionAsPaid($subscriptionId);
+                break;
+            case SubscriptionAction::MarkAsUnpaid:
+                $event->markSubscriptionAsUnpaid($subscriptionId);
+                break;
+        }
 
         $this->eventRepository->save($event);
     }

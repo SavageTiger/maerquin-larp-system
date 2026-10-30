@@ -108,6 +108,21 @@ class EventSubscription
         return $this->paymentState === PaymentState::Paid;
     }
 
+    public function confirm(): void
+    {
+        $this->status = SubscriptionStatus::Confirmed;
+    }
+
+    public function placeOnWaitingList(): void
+    {
+        $this->status = SubscriptionStatus::WaitingList;
+    }
+
+    public function resetStatus(): void
+    {
+        $this->status = SubscriptionStatus::Received;
+    }
+
     public function markAsPaid(): void
     {
         $this->paymentState = PaymentState::Paid;

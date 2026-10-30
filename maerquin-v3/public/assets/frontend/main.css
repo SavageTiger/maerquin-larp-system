@@ -527,13 +527,43 @@ input.skill-input {
         border: 1px solid var(--subscriptions-border);
         border-radius: var(--subscriptions-radius);
 
+        container-type: inline-size;
+
+        /* Phone: name, date and actions stacked */
         summary {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1.5rem minmax(0, 1fr);
+            grid-template-areas:
+                "number main"
+                "number date"
+                "number actions";
             align-items: center;
-            gap: var(--subscriptions-gap);
+            gap: 0.5rem var(--subscriptions-gap);
             padding: 0.6rem 1rem;
             cursor: pointer;
+            list-style: none;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+        }
+
+        /* Medium: name on top, date and actions on the line below */
+        @container (min-width: 24rem) {
+            summary {
+                grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+                grid-template-areas:
+                    "number main main"
+                    "number date actions";
+            }
+        }
+
+        /* Wide: everything on one line */
+        @container (min-width: 40rem) {
+            summary {
+                grid-template-columns: 1.5rem minmax(0, 1fr) auto auto;
+                grid-template-areas: "number main date actions";
+            }
         }
 
         &[open] summary {
@@ -542,9 +572,18 @@ input.skill-input {
     }
 
     .admin-subscription-number {
-        min-width: 1.5rem;
+        grid-area: number;
         font-weight: 600;
         color: var(--subscriptions-muted);
+    }
+
+    .admin-subscription-main {
+        grid-area: main;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.25rem var(--subscriptions-gap);
+        min-width: 0;
     }
 
     .admin-subscription-name {
@@ -552,9 +591,37 @@ input.skill-input {
     }
 
     .admin-subscription-date {
-        margin-left: auto;
+        grid-area: date;
         font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
         color: var(--subscriptions-muted);
+    }
+
+    .admin-subscription-actions {
+        grid-area: actions;
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        cursor: default;
+
+        @container (min-width: 24rem) {
+            justify-content: flex-end;
+        }
+
+        /* Reserve room for the widest combination so the dates line up across rows */
+        @container (min-width: 40rem) {
+            min-width: 15rem;
+        }
+
+        .button {
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .button[aria-pressed="false"] .icon {
+            color: var(--subscriptions-muted);
+        }
     }
 
     .admin-subscription-answers {

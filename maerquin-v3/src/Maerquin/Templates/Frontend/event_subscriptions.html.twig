@@ -102,11 +102,10 @@
                             <span class="tag {{ statusClasses[status] }} is-medium">
                                 <i class="fa-solid fa-check"></i>&nbsp;{{ ('subscriptions.status.' ~ status)|trans }}
                             </span>
-                            {% if status == 'received' %}
-                                <span class="tag {{ subscription.paid ? 'is-success' : 'is-warning is-light' }} is-medium">
-                                    {{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
-                                </span>
-                            {% endif %}
+                            {# Always show the payment state: a confirmed player may still have to pay #}
+                            <span class="tag {{ subscription.paid ? 'is-success' : 'is-warning is-light' }} is-medium">
+                                <i class="fa-solid fa-euro-sign"></i>&nbsp;{{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
+                            </span>
                         {% elseif state == 'OPEN' and event.form is not null %}
                             <a class="button is-dark" href="/subscriptions/{{ event.id }}.html">
                                 <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'subscriptions.subscribe'|trans }}

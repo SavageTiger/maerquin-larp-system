@@ -12,6 +12,8 @@ use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Response;
 use Slim\Views\Twig;
+use SvenHK\Maerquin\Entity\Event;
+use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
 use SvenHK\Maerquin\Form\EventSubscriptionHandler;
 use SvenHK\Maerquin\Model\SubscriptionRole;
@@ -38,11 +40,11 @@ class SubscriptionsController extends Action
         $subscriptionId = $this->request->getAttribute('subscriptionId');
 
         if (is_string($eventId) && is_string($subscriptionId)) {
-            return $this->changePayment($eventId, $subscriptionId, $this->request->getAttribute('payment') === 'paid');
+            return $this->updateSubscription($this->getEvent($eventId), $subscriptionId);
         }
 
         if (is_string($eventId)) {
-            return $this->renderEventView($eventId);
+            return $this->renderEventView($this->getEvent($eventId));
         }
 
         return Twig::fromRequest($this->request)->render(
@@ -55,32 +57,33 @@ class SubscriptionsController extends Action
         );
     }
 
-    private function changePayment(string $eventId, string $subscriptionId, bool $paid): ResponseInterface
+    private function updateSubscription(Event $event, string $subscriptionId): ResponseInterface
     {
-        $event = $this->eventRepository->findById($eventId) ?? throw new HttpNotFoundException($this->request);
-
         try {
-            if ($paid) {
-                $this->eventSubscriptionHandler->markAsPaid($event, $subscriptionId);
-            } else {
-                $this->eventSubscriptionHandler->markAsUnpaid($event, $subscriptionId);
-            }
+            $this->eventSubscriptionHandler->update($event, $subscriptionId, $this->request);
         } catch (SubscriptionException $exception) {
             throw new HttpBadRequestException($this->request, $this->translator->trans($exception->getTranslationKey()), $exception);
+        } catch (MissingFormFieldException $exception) {
+            throw new HttpBadRequestException($this->request, $exception->getMessage(), $exception);
         }
 
         return new Response();
     }
 
-    private function renderEventView(string $eventId): ResponseInterface
+    private function renderEventView(Event $event): ResponseInterface
     {
         return Twig::fromRequest($this->request)->render(
             $this->response,
             'subscriptions_event.html.twig',
             [
-                'event' => $this->eventRepository->findById($eventId) ?? throw new HttpNotFoundException($this->request),
+                'event' => $event,
                 'roles' => SubscriptionRole::cases(),
             ],
         );
+    }
+
+    private function getEvent(string $eventId): Event
+    {
+        return $this->eventRepository->findById($eventId) ?? throw new HttpNotFoundException($this->request);
     }
 }

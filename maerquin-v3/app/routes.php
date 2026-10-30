@@ -100,7 +100,7 @@ return function (App $app): void {
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/admin/subscriptions/{eventId}.html', SubscriptionsController::class);
-    $app->post('/admin/subscriptions/{eventId}/{subscriptionId}/{payment:paid|unpaid}', SubscriptionsController::class);
+    $app->post('/admin/subscriptions/{eventId}/{subscriptionId}', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);
     $app->get('/subscriptions/{eventId}.html', FrontendSubscriptionsController::class);
     $app->post('/subscriptions/{eventId}.html', FrontendSubscriptionsController::class);

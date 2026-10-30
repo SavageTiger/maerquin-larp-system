@@ -51,6 +51,11 @@
             </div>
         </article>
 
+        {% set status_toggles = {
+            'confirmed': {class: 'is-success', icon: 'fa-check', action: 'confirm'},
+            'waiting_list': {class: 'is-warning', icon: 'fa-hourglass-half', action: 'place_on_waiting_list'}
+        } %}
+
         {% for role in roles %}
             {% set subscriptions = event.subscriptions(role) %}
 
@@ -69,38 +74,60 @@
                         <details class="admin-subscription">
                             <summary>
                                 <span class="admin-subscription-number">{{ loop.index }}</span>
-                                <span class="admin-subscription-name">{{ subscription.player.name }}</span>
-                                {% if role.value == 'player' %}
-                                    {% if subscription.character is null %}
-                                        <span class="tag is-light mb-0">{{ 'admin.subscriptions.new_character'|trans }}</span>
-                                    {% else %}
-                                        <span class="has-text-grey">
-                                            <i class="fa-solid fa-hat-wizard"></i> {{ subscription.character.name }}
-                                        </span>
-                                    {% endif %}
-                                {% endif %}
-                                <span class="tags mb-0">
-                                    <span class="tag {{ subscription.paid ? 'is-success' : 'is-warning is-light' }} mb-0">
-                                        {{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
-                                    </span>
-                                    {% if subscription.status.value != 'received' %}
-                                        <span class="tag is-light mb-0">
-                                            {{ ('subscriptions.status.' ~ subscription.status.value)|trans }}
-                                        </span>
+                                <span class="admin-subscription-main">
+                                    <span class="admin-subscription-name">{{ subscription.player.name }}</span>
+                                    {% if role.value == 'player' %}
+                                        {% if subscription.character is null %}
+                                            <span class="tag is-light mb-0">{{ 'admin.subscriptions.new_character'|trans }}</span>
+                                        {% else %}
+                                            <span class="has-text-grey">
+                                                <i class="fa-solid fa-hat-wizard"></i> {{ subscription.character.name }}
+                                            </span>
+                                        {% endif %}
                                     {% endif %}
                                 </span>
                                 <span class="admin-subscription-date">{{ subscription.subscribedAt|date('d-m-Y H:i') }}</span>
-                                {% if not subscription.paid %}
-                                    <button class="button is-small" type="button"
-                                            onclick="event.preventDefault(); changePayment('{{ subscription.id }}', 'paid', this)">
-                                        <i class="fa-solid fa-euro-sign"></i>&nbsp;{{ 'admin.subscriptions.mark_paid'|trans }}
-                                    </button>
-                                {% else %}
-                                    <button class="button is-small is-white has-text-grey" type="button"
-                                            onclick="event.preventDefault(); changePayment('{{ subscription.id }}', 'unpaid', this)">
-                                        <i class="fa-solid fa-rotate-left"></i>&nbsp;{{ 'admin.subscriptions.mark_unpaid'|trans }}
-                                    </button>
-                                {% endif %}
+                                                                {#
+                                    Compact toggles: an active state shows its label, an inactive one only its icon.
+                                    'Ontvangen' is the default status, so it has no button: clicking the active
+                                    status toggles back to it.
+                                #}
+                                <span class="admin-subscription-actions" data-url="/admin/subscriptions/{{ event.id }}/{{ subscription.id }}">
+                                    {% if subscription.paid %}
+                                        <button class="button is-small is-success" type="button" aria-pressed="true"
+                                                title="{{ 'admin.subscriptions.mark_unpaid'|trans }}"
+                                                data-action="mark_as_unpaid"
+                                                data-confirm="{{ 'admin.subscriptions.mark_unpaid.confirm'|trans }}">
+                                            <span class="icon"><i class="fa-solid fa-euro-sign"></i></span>
+                                            <span>{{ 'subscriptions.payment.paid'|trans }}</span>
+                                        </button>
+                                    {% else %}
+                                        <button class="button is-small" type="button" aria-pressed="false"
+                                                title="{{ 'admin.subscriptions.mark_paid'|trans }}"
+                                                aria-label="{{ 'admin.subscriptions.mark_paid'|trans }}"
+                                                data-action="mark_as_paid">
+                                            <span class="icon"><i class="fa-solid fa-euro-sign"></i></span>
+                                        </button>
+                                    {% endif %}
+
+                                    {% for status, style in status_toggles %}
+                                        {% if subscription.status.value == status %}
+                                            <button class="button is-small {{ style.class }}" type="button" aria-pressed="true"
+                                                    title="{{ 'admin.subscriptions.status.reset'|trans }}"
+                                                    data-action="reset_status">
+                                                <span class="icon"><i class="fa-solid {{ style.icon }}"></i></span>
+                                                <span>{{ ('admin.subscriptions.status.' ~ status)|trans }}</span>
+                                            </button>
+                                        {% else %}
+                                            <button class="button is-small" type="button" aria-pressed="false"
+                                                    title="{{ ('admin.subscriptions.status.' ~ status ~ '.mark')|trans }}"
+                                                    aria-label="{{ ('admin.subscriptions.status.' ~ status ~ '.mark')|trans }}"
+                                                    data-action="{{ style.action }}">
+                                                <span class="icon"><i class="fa-solid {{ style.icon }}"></i></span>
+                                            </button>
+                                        {% endif %}
+                                    {% endfor %}
+                                </span>
                             </summary>
 
                             <div class="admin-subscription-answers">
@@ -138,21 +165,28 @@
         {% endfor %}
 
         <script>
-            function changePayment(subscriptionId, payment, button) {
-                if (payment === 'unpaid' && confirm({{ 'admin.subscriptions.mark_unpaid.confirm'|trans|json_encode|raw }}) === false) {
-                    return;
-                }
+            document.querySelectorAll('.admin-subscription-actions').forEach((actions) => {
+                actions.addEventListener('click', (event) => {
+                    // Buttons live inside <summary>: never let a click toggle the details.
+                    event.preventDefault();
 
-                button.classList.add('is-loading');
+                    const button = event.target.closest('button[data-action]');
 
-                axios
-                    .post(`/admin/subscriptions/{{ event.id }}/${subscriptionId}/${payment}`, {})
-                    .then(() => document.location.reload())
-                    .catch((error) => {
-                        button.classList.remove('is-loading');
-                        alert(error.response?.data?.error?.description ?? error.message);
-                    });
-            }
+                    if (button === null || (button.dataset.confirm && confirm(button.dataset.confirm) === false)) {
+                        return;
+                    }
+
+                    button.classList.add('is-loading');
+
+                    axios
+                        .post(actions.dataset.url, {subscription: {action: button.dataset.action}})
+                        .then(() => document.location.reload())
+                        .catch((error) => {
+                            button.classList.remove('is-loading');
+                            alert(error.response?.data?.error?.description ?? error.message);
+                        });
+                });
+            });
         </script>
     </div>
 {% endblock %}

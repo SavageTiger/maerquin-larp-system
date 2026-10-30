@@ -214,6 +214,30 @@ class Event
     }
 
     /**
+     * @throws SubscriptionException
+     */
+    public function confirmSubscription(string $subscriptionId): void
+    {
+        $this->getSubscription($subscriptionId)->confirm();
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function placeSubscriptionOnWaitingList(string $subscriptionId): void
+    {
+        $this->getSubscription($subscriptionId)->placeOnWaitingList();
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function resetSubscriptionStatus(string $subscriptionId): void
+    {
+        $this->getSubscription($subscriptionId)->resetStatus();
+    }
+
+    /**
      * @return list<CharacterEntity>
      */
     public function getPaidPlayerCharacters(): array

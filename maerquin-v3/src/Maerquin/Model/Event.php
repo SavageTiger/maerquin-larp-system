@@ -230,7 +230,7 @@ class Event
         foreach ($this->getSubscriptions(SubscriptionRole::Player) as $subscription) {
             $character = $subscription->getCharacter();
 
-            if ($subscription->getStatus() === SubscriptionStatus::Paid && $character !== null) {
+            if ($subscription->isPaid() && $character !== null) {
                 $characters[] = $character;
             }
         }

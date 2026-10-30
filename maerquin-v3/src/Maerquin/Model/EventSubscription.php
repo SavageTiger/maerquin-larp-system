@@ -24,6 +24,7 @@ class EventSubscription
     protected DateTimeInterface $subscribedAt;
     protected SubscriptionRole $role;
     protected FormSubmissionEntity $formSubmission;
+    protected PaymentState $paymentState;
     protected SubscriptionStatus $status;
 
     private function __construct(
@@ -40,7 +41,8 @@ class EventSubscription
         $this->role = $role;
         $this->character = $character;
         $this->formSubmission = $formSubmission;
-        $this->status = SubscriptionStatus::PendingPayment;
+        $this->paymentState = PaymentState::PendingPayment;
+        $this->status = SubscriptionStatus::Received;
     }
 
     public static function create(
@@ -61,6 +63,7 @@ class EventSubscription
             'playerName' => $this->player->getName(),
             'subscribedAt' => $this->subscribedAt->format(DateTimeInterface::ISO8601),
             'role' => $this->role->value,
+            'paymentState' => $this->paymentState->value,
             'status' => $this->status->value,
         ];
     }
@@ -100,14 +103,19 @@ class EventSubscription
         return $this->status;
     }
 
+    public function isPaid(): bool
+    {
+        return $this->paymentState === PaymentState::Paid;
+    }
+
     public function markAsPaid(): void
     {
-        $this->status = SubscriptionStatus::Paid;
+        $this->paymentState = PaymentState::Paid;
     }
 
     public function markAsUnpaid(): void
     {
-        $this->status = SubscriptionStatus::PendingPayment;
+        $this->paymentState = PaymentState::PendingPayment;
     }
 
     public function hasRole(SubscriptionRole $role): bool

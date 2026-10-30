@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Model;
 
 enum SubscriptionStatus: string
 {
-    case PendingPayment = 'pending_payment';
-    case Paid = 'paid';
+    case Received = 'received';
+    case Confirmed = 'confirmed';
+    case WaitingList = 'waiting_list';
 }

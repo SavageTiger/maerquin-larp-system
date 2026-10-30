@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\EventSubscription as EventSubscriptionModel;
+use SvenHK\Maerquin\Model\PaymentState;
 use SvenHK\Maerquin\Model\SubscriptionRole;
 use SvenHK\Maerquin\Model\SubscriptionStatus;
 
@@ -38,7 +39,10 @@ class EventSubscription extends EventSubscriptionModel
     #[ORM\Column(length: 16, enumType: SubscriptionRole::class, options: ['default' => 'player'])]
     protected SubscriptionRole $role;
 
-    #[ORM\Column(length: 32, enumType: SubscriptionStatus::class, options: ['default' => 'pending_payment'])]
+    #[ORM\Column(length: 32, enumType: PaymentState::class, options: ['default' => 'pending_payment'])]
+    protected PaymentState  $paymentState;
+
+    #[ORM\Column(length: 32, enumType: SubscriptionStatus::class, options: ['default' => 'received'])]
     protected SubscriptionStatus $status;
 
     #[ORM\OneToOne(targetEntity: FormSubmission::class, cascade: ['persist', 'remove'], orphanRemoval: true)]

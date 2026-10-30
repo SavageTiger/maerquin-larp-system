@@ -96,13 +96,17 @@
                                 {{ 'subscriptions.create_account'|trans }}
                             </a>
                         {% elseif event.isSubscribed(player) %}
-                            <span class="tag is-success is-medium">
-                                <i class="fa-solid fa-check"></i>&nbsp;{{ 'subscriptions.subscribed'|trans }}
+                            {% set subscription = event.findSubscription(player) %}
+                            {% set status = subscription.status.value %}
+                            {% set statusClasses = {'received': 'is-info', 'confirmed': 'is-success', 'waiting_list': 'is-warning'} %}
+                            <span class="tag {{ statusClasses[status] }} is-medium">
+                                <i class="fa-solid fa-check"></i>&nbsp;{{ ('subscriptions.status.' ~ status)|trans }}
                             </span>
-                            {% set status = event.findSubscription(player).status.value %}
-                            <span class="tag {{ status == 'paid' ? 'is-success is-light' : 'is-warning is-light' }} is-medium">
-                                {{ ('subscriptions.status.' ~ status)|trans }}
-                            </span>
+                            {% if status == 'received' %}
+                                <span class="tag is-warning is-light is-medium">
+                                    {{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
+                                </span>
+                            {% endif %}
                         {% elseif state == 'OPEN' and event.form is not null %}
                             <a class="button is-dark" href="/subscriptions/{{ event.id }}.html">
                                 <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'subscriptions.subscribe'|trans }}

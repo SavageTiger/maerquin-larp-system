@@ -2,7 +2,6 @@
 
 {% block container %}
     <div class="subscriptions">
-        {% set statusClasses = {'pending_payment': 'is-warning is-light', 'paid': 'is-success'} %}
         <div class="columns is-gapless">
             <div class="column is-12">
                 <div class="buttons is-right">
@@ -96,12 +95,15 @@
                                     {% elseif cap > 0 %}
                                         <span class="tag is-success is-light mb-0">{{ 'admin.subscriptions.has_place'|trans }}</span>
                                     {% endif %}
-                                    <span class="tag {{ statusClasses[subscription.status.value] }} mb-0">
+                                    <span class="tag {{ subscription.paid ? 'is-success' : 'is-warning is-light' }} mb-0">
+                                        {{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
+                                    </span>
+                                    <span class="tag is-light mb-0">
                                         {{ ('subscriptions.status.' ~ subscription.status.value)|trans }}
                                     </span>
                                 </span>
                                 <span class="admin-subscription-date">{{ subscription.subscribedAt|date('d-m-Y H:i') }}</span>
-                                {% if subscription.status.value == 'pending_payment' %}
+                                {% if not subscription.paid %}
                                     <button class="button is-small" type="button"
                                             onclick="event.preventDefault(); changePayment('{{ subscription.id }}', 'paid', this)">
                                         <i class="fa-solid fa-euro-sign"></i>&nbsp;{{ 'admin.subscriptions.mark_paid'|trans }}

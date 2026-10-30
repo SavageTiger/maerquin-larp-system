@@ -58,11 +58,6 @@ class FormSection
         return $this->title;
     }
 
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
     public function isDeleted(): bool
     {
         return $this->deleted;

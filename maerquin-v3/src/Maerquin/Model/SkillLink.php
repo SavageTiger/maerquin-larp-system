@@ -40,11 +40,6 @@ class SkillLink
         return $skillLink;
     }
 
-    public function getId(): string
-    {
-        return $this->id->toString();
-    }
-
     public function getSkill(): Skill
     {
         return $this->skill;

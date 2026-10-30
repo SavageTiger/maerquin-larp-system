@@ -43,11 +43,6 @@ class SkillSkillLink
         return $this->firstSkill->getId();
     }
 
-    public function getId(): string
-    {
-        return (string)$this->id;
-    }
-
     public function getRequirementType(): RequirementType
     {
         return RequirementType::from($this->requirementType);

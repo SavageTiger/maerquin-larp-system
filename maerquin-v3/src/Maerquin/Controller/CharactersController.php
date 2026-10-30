@@ -23,7 +23,6 @@ use SvenHK\Maerquin\Repository\CustomFieldRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
-use Webmozart\Assert\Assert;
 
 class CharactersController extends Action
 {
@@ -41,49 +40,32 @@ class CharactersController extends Action
     #[Override]
     protected function action(): ResponseInterface
     {
-        $characterId = (string)($this->request->getAttribute('characterId') ?? '');
-
-        $isCreateCharacterView =
-            str_ends_with($this->request->getUri()->getPath(), '/create.html');
-
-        $isEditCharacterView = $isCreateCharacterView === false && Uuid::isValid($characterId);
-
-        if ($isCreateCharacterView === true) {
-            return $this->renderNewCharacter();
+        if (str_ends_with($this->request->getUri()->getPath(), '/create.html')) {
+            return $this->renderEditCharacter(Uuid::uuid4());
         }
 
-        if ($isEditCharacterView === true) {
+        $characterId = (string)($this->request->getAttribute('characterId') ?? '');
+
+        if (Uuid::isValid($characterId)) {
             return $this->renderEditCharacter(Uuid::fromString($characterId));
         }
 
         return $this->renderCharacterList();
     }
 
-    private function renderNewCharacter(): ResponseInterface
-    {
-        $characterId = Uuid::uuid4();
-
-        return $this->renderEditCharacter($characterId);
-    }
-
     private function renderEditCharacter(UuidInterface $characterId): ResponseInterface
     {
-        $view = Twig::fromRequest($this->request);
-
         $customFields = $this->customFieldRepository->findCollectionForCharacter($characterId->toString());
 
-        $character = $this->getCharacter($characterId);
+        $existingCharacter = $this->characterRepository->findById($characterId->toString());
+
+        $character = $existingCharacter ?? $this->createCharacter($characterId);
 
         if ($this->request->getMethod() === 'POST') {
-            $this->characterFormHandler->handle(
-                $this->isNewCharacter($character),
-                $character,
-                $customFields,
-                $this->request,
-            );
+            $this->characterFormHandler->handle($existingCharacter === null, $character, $customFields, $this->request);
         }
 
-        return $view->render(
+        return Twig::fromRequest($this->request)->render(
             $this->response,
             'character.html.twig',
             [
@@ -97,79 +79,37 @@ class CharactersController extends Action
         );
     }
 
-    private function getCharacter(UuidInterface $characterId): Character
+    private function createCharacter(UuidInterface $characterId): Character
     {
-        $character = $this->characterRepository->findById($characterId->toString());
-
-        if ($character === null) {
-            $player = $this->playerRepository->findById(
-                $this->request->getQueryParams()['playerId'] ?? '',
-            );
-
-            $character = Character::createWithDefaults(
-                $characterId,
-                $this->getRace(),
-                $player,
-            );
-        }
-
-        Assert::isInstanceOf($character, Character::class);
-
-        return $character;
+        return Character::createWithDefaults(
+            $characterId,
+            $this->getRace(),
+            $this->playerRepository->findById($this->request->getQueryParams()['playerId'] ?? ''),
+        );
     }
 
     private function getRace(): Race
     {
-        $formResolver = FormResolver::createFromRequest($this->request);
-
-        $raceId = $formResolver->getValue('raceId', 'character', '');
+        $raceId = FormResolver::createFromRequest($this->request)->getValue('raceId', 'character', '');
 
         if ($raceId !== '') {
             return $this->raceRepository->getById($raceId);
         }
 
         return $this->raceRepository->findByName('Mens') ??
-            throw new LogicException(
-                'Make sure "Mens" race exists before creating a character',
-            );
-    }
-
-    private function isNewCharacter(Character $character): bool
-    {
-        return $this->characterRepository->findById($character->getId()) === null;
-    }
-
-    /**
-     * @return array{
-     *     deities: DeitiesCollection,
-     *     players: PlayerCollection
-     * }
-     */
-    private function getViewContext(): array
-    {
-        return [
-            'deities' => new DeitiesCollection($this->deityRepository->findAll()),
-            'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
-        ];
+            throw new LogicException('Make sure "Mens" race exists before creating a character');
     }
 
     private function renderCharacterList(): ResponseInterface
     {
-        $view = Twig::fromRequest($this->request);
-
-        $viewContext = array_merge(
-            $this->getViewContext(),
-            [
-                'characters' => new CharacterCollection(
-                    ...$this->characterRepository->findAllSorted(),
-                ),
-            ],
-        );
-
-        return $view->render(
+        return Twig::fromRequest($this->request)->render(
             $this->response,
             'characters.html.twig',
-            $viewContext,
+            [
+                'characters' => new CharacterCollection(...$this->characterRepository->findAllSorted()),
+                'deities' => new DeitiesCollection($this->deityRepository->findAll()),
+                'players' => new PlayerCollection($this->playerRepository->findAllSorted()),
+            ],
         );
     }
 }

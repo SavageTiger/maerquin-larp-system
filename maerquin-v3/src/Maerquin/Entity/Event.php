@@ -38,6 +38,9 @@ class Event extends EventModel
     #[ORM\Column(type: 'text', nullable: true)]
     protected null | string $notes;
 
+    #[ORM\Column(type: 'text')]
+    protected string $description;
+
     #[ORM\Column(
         type: 'datetime_immutable',
         nullable: true,
@@ -85,6 +88,7 @@ class Event extends EventModel
         $this->subscriptions = new ArrayCollection();
         $this->name = '';
         $this->secondaryName = '';
+        $this->description = '';
         $this->points = 20;
         $this->startDate = new DateTimeImmutable('-1 day');
         $this->endDate = new DateTimeImmutable('now');

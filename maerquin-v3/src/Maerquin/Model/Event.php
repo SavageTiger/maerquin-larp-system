@@ -20,6 +20,8 @@ class Event
     protected DateTimeInterface $endDate;
     protected int $points;
     protected null | string $notes;
+
+    protected string $description;
     protected DateTimeInterface $subscriptionsOpensAt;
     protected int $playerSubscriptionCap;
     protected int $npcSubscriptionCap;
@@ -50,6 +52,7 @@ class Event
             'endDate' => $this->getEndDate()->format(DateTimeInterface::ISO8601),
             'points' => $this->getPoints(),
             'notes' => $this->getNotes(),
+            'description' => $this->getDescription(),
         ];
     }
 
@@ -137,6 +140,11 @@ class Event
         return SubscriptionState::Pending;
     }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
     public function updateEvent(
         string $name,
         string $secondaryName,
@@ -144,6 +152,7 @@ class Event
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         string $notes,
+        string $description,
         Collection $charactersPresent,
         DateTimeImmutable $subscriptionsOpensAt,
         int $playerSubscriptionCap,
@@ -157,6 +166,7 @@ class Event
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->notes = $notes;
+        $this->description = $description;
         $this->charactersPresent = $charactersPresent;
         $this->subscriptionsOpensAt = $subscriptionsOpensAt;
         $this->playerSubscriptionCap = $playerSubscriptionCap;

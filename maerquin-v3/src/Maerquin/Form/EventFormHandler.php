@@ -88,6 +88,7 @@ class EventFormHandler
             $startDate,
             $endDate,
             $notes,
+            $formResolver->getValue('description', 'event', ''),
             $this->createCharacterPresenceList($event, $characterIds),
             $subscriptionsOpensAt,
             max(0, $playerSubscriptionCap),

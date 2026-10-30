@@ -132,32 +132,8 @@
 
                 </div>
             </article>
-        </div>
 
-        {% if event.name %}
-        <div class="column is-6">
-            <article class="message is-dark">
-                <div class="message-header">
-                    Personages aanwezig
-                </div>
-                <div class="message-body">
-                    <div class="box is-shadowless inner-box">
-                        <button class="button is-pulled-right" onclick="return false"
-                                @click="manageCharacters">&nbsp;Aanpassen
-                        </button>
-
-                        <div class="content">
-                            <ol type="1">
-                                <li v-for="character in characters">
-                                    <i class="fa-regular fa-id-badge"></i>
-                                    {{ '{{ character.name }}' }}
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
+            {% if event.name %}
             <article class="message is-dark">
                 <div class="message-header">
                     Inschrijving
@@ -242,12 +218,59 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label" style="width: 120px;">Omschrijving</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <textarea name="description" class="textarea is-family-monospace" rows="8"
+                                              placeholder="**Locatie:** Scoutinggebouw De Eik, Bosweg 1, Ergens">{{ event.description }}</textarea>
+                                </div>
+                                <p class="help">
+                                    <i class="fa-brands fa-markdown"></i>
+                                    Zichtbaar voor spelers bij het inschrijven. Opmaak met Markdown:
+                                    <code>**vet**</code>, <code>*cursief*</code>, <code># kop</code>,
+                                    <code>- opsomming</code>, <code>[tekst](https://...)</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </article>
-
+            {% endif %}
         </div>
+
+        {% if event.name %}
+        <div class="column is-6">
+            <article class="message is-dark">
+                <div class="message-header">
+                    Personages aanwezig
+                </div>
+                <div class="message-body">
+                    <div class="box is-shadowless inner-box">
+                        <button class="button is-pulled-right" onclick="return false"
+                                @click="manageCharacters">&nbsp;Aanpassen
+                        </button>
+
+                        <div class="content">
+                            <ol type="1">
+                                <li v-for="character in characters">
+                                    <i class="fa-regular fa-id-badge"></i>
+                                    {{ '{{ character.name }}' }}
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        {% endif %}
     </div>
 
+    {% if event.name %}
     <div class="modal" id="manageCharacters">
         <div class="modal-background"></div>
         <div class="modal-card">

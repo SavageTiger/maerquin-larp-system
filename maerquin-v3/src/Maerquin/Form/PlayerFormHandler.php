@@ -55,6 +55,12 @@ readonly class PlayerFormHandler
                 $coupledAccount->promote();
             }
 
+            if ($formResolver->getBoolean('hasGdprRights', 'player', false) === true) {
+                $coupledAccount->grantGdprRights();
+            } else {
+                $coupledAccount->revokeGdprRights();
+            }
+
             $this->userRepository->save($coupledAccount);
         }
 

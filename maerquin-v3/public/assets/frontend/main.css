@@ -639,6 +639,12 @@ input.skill-input {
         }
     }
 
+    .admin-subscription-restricted {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: var(--subscriptions-muted);
+    }
+
     .admin-subscription-answers {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));

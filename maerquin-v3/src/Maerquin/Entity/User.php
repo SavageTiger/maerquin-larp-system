@@ -32,6 +32,9 @@ class User extends UserModel
     protected bool $admin;
 
     #[ORM\Column(options: ['default' => false])]
+    protected bool $gdprRights;
+
+    #[ORM\Column(options: ['default' => false])]
     protected bool $emailVerified;
 
     #[ORM\OneToOne(

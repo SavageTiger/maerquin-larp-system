@@ -115,6 +115,7 @@ return [
     'admin.subscriptions.status.confirmed.mark' => 'Deelname bevestigen',
     'admin.subscriptions.status.waiting_list' => 'Wachtlijst',
     'admin.subscriptions.status.waiting_list.mark' => 'Op de wachtlijst zetten',
+    'admin.subscriptions.gdpr_restricted' => 'Je hebt geen AVG-rechten om de antwoorden op het inschrijfformulier in te zien.',
     'admin.subscriptions.export' => 'Exporteer inschrijvingen',
     'admin.subscriptions.export.name' => 'Naam',
     'admin.subscriptions.export.email' => 'E-mail',

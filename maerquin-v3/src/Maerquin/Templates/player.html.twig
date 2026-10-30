@@ -176,6 +176,18 @@
                                     {% endif %}
                                 </div>
                             </div>
+
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">AVG-rechten</label>
+                                </div>
+                                <div class="field-body mt-1">
+                                    <div class="field">
+                                        <input name="hasGdprRights" type="checkbox" {% if account.hasGdprRights %}checked="checked"{% endif %}/>
+                                        <p class="help">Mag de antwoorden op inschrijfformulieren inzien</p>
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
                 </article>

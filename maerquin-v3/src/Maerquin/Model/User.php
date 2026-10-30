@@ -6,6 +6,7 @@ namespace SvenHK\Maerquin\Model;
 
 use App\Domain\Entity\User as FrameworkUser;
 use DateTimeImmutable;
+use Override;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\User as UserEntity;
@@ -18,6 +19,7 @@ class User extends FrameworkUser
     protected DateTimeImmutable $lastLogin;
     protected PlayerModel $player;
     protected bool $admin;
+    protected bool $gdprRights;
     protected string $salt;
     protected string $hash;
     protected bool $emailVerified;
@@ -31,6 +33,7 @@ class User extends FrameworkUser
         $user->player = $player;
         $user->lastLogin = new DateTimeImmutable('1970-1-1');
         $user->admin = false;
+        $user->gdprRights = false;
         $user->emailVerified = false;
         $user->updatePassword(random_bytes(36));
 
@@ -137,6 +140,22 @@ class User extends FrameworkUser
     public function demote(): void
     {
         $this->admin = false;
+    }
+
+    #[Override]
+    public function hasGdprRights(): bool
+    {
+        return $this->gdprRights;
+    }
+
+    public function grantGdprRights(): void
+    {
+        $this->gdprRights = true;
+    }
+
+    public function revokeGdprRights(): void
+    {
+        $this->gdprRights = false;
     }
 
     public function isAnonymous(): bool

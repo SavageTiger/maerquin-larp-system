@@ -133,34 +133,40 @@
                                 </span>
                             </summary>
 
-                            <div class="admin-subscription-answers">
-                                {% for section in submission.form.sections %}
-                                    <table class="table is-narrow is-striped is-fullwidth admin-subscription-section">
-                                        <thead>
-                                            <tr><th colspan="2">{{ section.title }}</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for field in section.fields %}
-                                                {% set answer = submission.answer(field.key) %}
-                                                <tr>
-                                                    <td class="admin-subscription-label">{{ field.label }}</td>
-                                                    <td class="admin-subscription-value">
-                                                        {%- if answer is null or answer == '' -%}
-                                                            <span class="has-text-grey-light">&mdash;</span>
-                                                        {%- elseif field.type.value == 'checkbox' -%}
-                                                            {{ 'admin.subscriptions.yes'|trans }}
-                                                        {%- elseif field.type.value == 'date' -%}
-                                                            {{ date(answer)|long_date }}
-                                                        {%- else -%}
-                                                            {{ answer|nl2br }}
-                                                        {%- endif -%}
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                {% endfor %}
-                            </div>
+                            {% if not canViewSubmissions %}
+                                <p class="admin-subscription-restricted">
+                                    <i class="fa-solid fa-lock"></i>&nbsp;{{ 'admin.subscriptions.gdpr_restricted'|trans }}
+                                </p>
+                            {% else %}
+                                <div class="admin-subscription-answers">
+                                    {% for section in submission.form.sections %}
+                                        <table class="table is-narrow is-striped is-fullwidth admin-subscription-section">
+                                            <thead>
+                                                <tr><th colspan="2">{{ section.title }}</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for field in section.fields %}
+                                                    {% set answer = submission.answer(field.key) %}
+                                                    <tr>
+                                                        <td class="admin-subscription-label">{{ field.label }}</td>
+                                                        <td class="admin-subscription-value">
+                                                            {%- if answer is null or answer == '' -%}
+                                                                <span class="has-text-grey-light">&mdash;</span>
+                                                            {%- elseif field.type.value == 'checkbox' -%}
+                                                                {{ 'admin.subscriptions.yes'|trans }}
+                                                            {%- elseif field.type.value == 'date' -%}
+                                                                {{ date(answer)|long_date }}
+                                                            {%- else -%}
+                                                                {{ answer|nl2br }}
+                                                            {%- endif -%}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </details>
                     {% endfor %}
                 </div>
@@ -170,7 +176,6 @@
         <script>
             document.querySelectorAll('.admin-subscription-actions').forEach((actions) => {
                 actions.addEventListener('click', (event) => {
-                    // Buttons live inside <summary>: never let a click toggle the details.
                     event.preventDefault();
 
                     const button = event.target.closest('button[data-action]');

@@ -16,6 +16,11 @@ class User
         return false;
     }
 
+    public function hasGdprRights(): bool
+    {
+        return false;
+    }
+
     public function isAnonymous(): bool
     {
         return true;

@@ -18,6 +18,7 @@ use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
 use SvenHK\Maerquin\Form\EventSubscriptionHandler;
 use SvenHK\Maerquin\Model\SubscriptionRole;
 use SvenHK\Maerquin\Repository\EventRepository;
+use SvenHK\Maerquin\Session\Session;
 use SvenHK\Maerquin\Translation\Translator;
 
 class SubscriptionsController extends Action
@@ -29,6 +30,7 @@ class SubscriptionsController extends Action
         private readonly EventRepository $eventRepository,
         private readonly EventSubscriptionHandler $eventSubscriptionHandler,
         private readonly Translator $translator,
+        private readonly Session $session,
     ) {
         parent::__construct($logger);
     }
@@ -78,6 +80,7 @@ class SubscriptionsController extends Action
             [
                 'event' => $event,
                 'roles' => SubscriptionRole::cases(),
+                'canViewSubmissions' => $this->session->getUser()->hasGdprRights(),
             ],
         );
     }

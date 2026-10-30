@@ -159,20 +159,22 @@ class Skill
         return $this->remarks;
     }
 
-    public function getParentRequirementSkillId(
+    public function getParentRequirementSkill(
         RequirementType $requirementType = RequirementType::PrimarySkill,
-    ): null | string {
-        if ($this->requiredSkills === null) {
-            return null;
-        }
-
-        foreach ($this->requiredSkills as $requiredSkillLink) {
+    ): null | Skill {
+        foreach ($this->requiredSkills ?? [] as $requiredSkillLink) {
             if ($requiredSkillLink->getRequirementType() === $requirementType) {
-                return $requiredSkillLink->requiredSkillId();
+                return $requiredSkillLink->getRequiredSkill();
             }
         }
 
         return null;
+    }
+
+    public function getParentRequirementSkillId(
+        RequirementType $requirementType = RequirementType::PrimarySkill,
+    ): null | string {
+        return $this->getParentRequirementSkill($requirementType)?->getId();
     }
 
     public function hasFastCasting()
@@ -199,6 +201,7 @@ class Skill
             'skillGroupOrdering' => $this->getSkillTypeOrdering(),
             'maximumAmountBuyable' => $this->getMaximumAmountBuyable(),
             'requiresParentSkill' => $this->getParentRequirementSkillId(),
+            'requiresParentSkillName' => $this->getParentRequirementSkill()?->getName() ?? '',
             'points' => $points,
             'pointsSource' => $this->getPoints(),
             'canFastCast' => $this->hasFastCasting(),

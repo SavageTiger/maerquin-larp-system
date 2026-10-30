@@ -9,14 +9,25 @@ use DateTimeImmutable;
 use DOMDocument;
 use DOMNode;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Exception\HttpUnauthorizedException;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Form\FormResolver;
 use SvenHK\Maerquin\Pdf\PdfGeneratorFactory;
+use SvenHK\Maerquin\Session\Session;
 
 class PrintCharacter extends Action
 {
+    public function __construct(
+        private readonly Session $session,
+    ) {
+    }
+
     public function action(): ResponseInterface
     {
+        if ($this->session->getUser()->isAnonymous()) {
+            throw new HttpUnauthorizedException($this->request);
+        }
+
         $view = Twig::fromRequest($this->request);
 
         $formResolver = FormResolver::createFromRequest($this->request);

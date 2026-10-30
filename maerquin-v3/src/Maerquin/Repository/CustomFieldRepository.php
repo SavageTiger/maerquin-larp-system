@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SvenHK\Maerquin\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use SvenHK\Maerquin\Model\CustomFieldCollection;
 use Doctrine\ORM\EntityRepository;
 use SvenHK\Maerquin\Entity\CustomField;
 use SvenHK\Maerquin\Entity\CustomValue;
@@ -21,6 +22,18 @@ class CustomFieldRepository
     public function findForCharacter(): array
     {
         return $this->entities()->findBy(['tableName' => 'character'], ['ordinal' => 'ASC']);
+    }
+
+    public function findCollectionForCharacter(string $characterId): CustomFieldCollection
+    {
+        $customFields = $this->findForCharacter();
+        $customValues = [];
+
+        foreach ($customFields as $customField) {
+            $customValues[$customField->getId()] = $this->readFieldValue($customField->getId(), $characterId);
+        }
+
+        return new CustomFieldCollection($customFields, $customValues);
     }
 
     public function updateFieldValue(string $fieldId, string $subjectId, string $value): void

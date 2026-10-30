@@ -105,4 +105,6 @@ return function (App $app): void {
     $app->get('/subscriptions/{eventId}.html', FrontendSubscriptionsController::class);
     $app->post('/subscriptions/{eventId}.html', FrontendSubscriptionsController::class);
     $app->get('/characters.html', FrontendCharactersController::class);
+    $app->get('/characters/{characterId}.html', FrontendCharactersController::class);
+    $app->post('/character/print.sheet.pdf', PrintCharacter::class);
 };

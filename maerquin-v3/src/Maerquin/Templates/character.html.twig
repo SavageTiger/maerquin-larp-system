@@ -1,14 +1,21 @@
 {% extends 'skeleton.html.twig' %}
 
 {% block container %}
+    {% set readOnly = readOnly ?? false %}
 
     <div class="columns is-gapless">
         <div class="column is-12">
-            <button class="button is-pulled-right"
-                    onclick="return false"
-                    @click="saveCharacter('{{ character.id }}')">
-                <i class="fa-solid fa-save"></i>&nbsp;Opslaan
-            </button>
+            {% if readOnly %}
+                <a class="button is-pulled-right" href="/characters.html">
+                    <i class="fa-solid fa-arrow-left"></i>&nbsp;Terug naar personages
+                </a>
+            {% else %}
+                <button class="button is-pulled-right"
+                        onclick="return false"
+                        @click="saveCharacter('{{ character.id }}')">
+                    <i class="fa-solid fa-save"></i>&nbsp;Opslaan
+                </button>
+            {% endif %}
             &nbsp;
             <button class="button is-pulled-right mr-5"
                     onclick="return false"
@@ -30,7 +37,7 @@
         </article>
     {% endif %}
 
-    {% if character.warnings|length > 0 %}
+    {% if character.warnings|length > 0 and not readOnly %}
         <article class="message is-warning">
             <div class="message-header">
                 <p>Regelsysteem overteding</p>
@@ -52,7 +59,7 @@
             {% endif %}
         </div>
         <div class="message-body">
-            {% if character.name %}
+            {% if character.name and not readOnly %}
                 <div class="tabs is-toggle is-fullwidth mr-6 ml-4">
                     <ul>
                         <li :class="{ 'is-active': activeTab === 'basic' }">
@@ -90,9 +97,11 @@
             </div>
 
             {% if character.name %}
-                <div v-show="activeTab === 'skills'">
-                    {% include'character_tab_skill.html.twig' %}
-                </div>
+                {% if not readOnly %}
+                    <div v-show="activeTab === 'skills'">
+                        {% include'character_tab_skill.html.twig' %}
+                    </div>
+                {% endif %}
 
                 <div v-show="activeTab === 'sheet'">
                     {% include'character_tab_sheet.html.twig' %}
@@ -105,7 +114,7 @@
         Vue.createApp({
             data() {
                 return {
-                    activeTab: 'basic',
+                    activeTab: '{{ readOnly ? 'sheet' : 'basic' }}',
 
                     character: {{ character.serialize(false)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
 
@@ -184,7 +193,7 @@
 
                     axios
                         .post(
-                            `/admin/character/print.pdf`,
+                            '{{ readOnly ? '/character/print.sheet.pdf' : '/admin/character/print.pdf' }}',
                             {
                                 html: {
                                     body1: characterHtml,
@@ -278,21 +287,6 @@
                     return sortedGroups;
                 },
 
-                getSkillName(skillId) {
-                    if (!skillId) {
-                        return '';
-                    }
-
-                    for (linkedSkill of this.linkableSkillList) {
-                        if (linkedSkill.skillId === skillId) {
-                            return linkedSkill.skillName;
-                        }
-                    }
-
-                    return skillId;
-                },
-
-
                 numbersOnly(sender, field, allowDot) {
                     const pattern = allowDot ? /[^\.0-9]/g : /[^0-9]/g;
 
@@ -383,11 +377,13 @@
                     (left, right) => left.skillName.localeCompare(right.skillName)
                 );
 
-                axios.get(
-                    '/admin/skills/linkable/api?raceId=' + this.character.raceId
-                ).then((response) => {
-                    this.linkableSkillList = response.data.data ?? [];
-                });
+                {% if not readOnly %}
+                    axios.get(
+                        '/admin/skills/linkable/api?raceId=' + this.character.raceId
+                    ).then((response) => {
+                        this.linkableSkillList = response.data.data ?? [];
+                    });
+                {% endif %}
             }
         }).mount('.content');
     </script>

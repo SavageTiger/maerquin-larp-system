@@ -22,7 +22,7 @@
                             {% for character in characters %}
                                 <tr>
                                     <td>
-                                        {{ character.name }}
+                                        <a href="/characters/{{ character.id }}.html">{{ character.name }}</a>
                                         {% if character.title %}
                                             <span class="has-text-grey">({{ character.title }})</span>
                                         {% endif %}

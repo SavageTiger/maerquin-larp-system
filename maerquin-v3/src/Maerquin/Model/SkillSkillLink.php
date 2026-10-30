@@ -38,9 +38,9 @@ class SkillSkillLink
         );
     }
 
-    public function requiredSkillId(): string
+    public function getRequiredSkill(): Skill
     {
-        return $this->firstSkill->getId();
+        return $this->firstSkill;
     }
 
     public function getRequirementType(): RequirementType

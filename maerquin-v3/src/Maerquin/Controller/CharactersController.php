@@ -16,15 +16,11 @@ use SvenHK\Maerquin\Entity\Race;
 use SvenHK\Maerquin\Form\CharacterFormHandler;
 use SvenHK\Maerquin\Form\FormResolver;
 use SvenHK\Maerquin\Model\CharacterCollection;
-use SvenHK\Maerquin\Model\CustomFieldCollection;
 use SvenHK\Maerquin\Model\DeitiesCollection;
-use SvenHK\Maerquin\Model\EventCollection;
 use SvenHK\Maerquin\Model\PlayerCollection;
-use SvenHK\Maerquin\Model\RaceCollection;
 use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\CustomFieldRepository;
 use SvenHK\Maerquin\Repository\DeityRepository;
-use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Repository\PlayerRepository;
 use SvenHK\Maerquin\Repository\RaceRepository;
 use Webmozart\Assert\Assert;
@@ -33,12 +29,12 @@ class CharactersController extends Action
 {
     public function __construct(
         private readonly CharacterRepository $characterRepository,
-        private readonly EventRepository $eventRepository,
         private readonly DeityRepository $deityRepository,
         private readonly PlayerRepository $playerRepository,
         private readonly RaceRepository $raceRepository,
         private readonly CustomFieldRepository $customFieldRepository,
         private readonly CharacterFormHandler $characterFormHandler,
+        private readonly CharacterViewContext $characterViewContext,
     ) {
     }
 
@@ -74,7 +70,7 @@ class CharactersController extends Action
     {
         $view = Twig::fromRequest($this->request);
 
-        $customFields = $this->fetchCustomFields($characterId);
+        $customFields = $this->customFieldRepository->findCollectionForCharacter($characterId->toString());
 
         $character = $this->getCharacter($characterId);
 
@@ -87,39 +83,18 @@ class CharactersController extends Action
             );
         }
 
-        $viewContext = array_merge(
-            $this->getViewContext(),
-            [
-                'character' => $character,
-                'eventsForCharacter' => new EventCollection($this->eventRepository->findAllForCharacter(
-                    (string)$characterId,
-                )),
-                'races' => new RaceCollection($this->raceRepository->findAllSorted()),
-                'customFields' => $customFields,
-                'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
-            ],
-        );
-
         return $view->render(
             $this->response,
             'character.html.twig',
-            $viewContext,
+            [
+                ...$this->characterViewContext->forCharacter(
+                    $character,
+                    new PlayerCollection($this->playerRepository->findAllSorted()),
+                    $customFields,
+                ),
+                'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
+            ],
         );
-    }
-
-    private function fetchCustomFields(UuidInterface $characterId): CustomFieldCollection
-    {
-        $customFields = $this->customFieldRepository->findForCharacter();
-        $customValues = [];
-
-        foreach ($customFields as $customField) {
-            $customValues[$customField->getId()] = $this->customFieldRepository->readFieldValue(
-                $customField->getId(),
-                $characterId->toString(),
-            );
-        }
-
-        return new CustomFieldCollection($customFields, $customValues);
     }
 
     private function getCharacter(UuidInterface $characterId): Character

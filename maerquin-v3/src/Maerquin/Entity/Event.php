@@ -48,6 +48,9 @@ class Event extends EventModel
     )]
     protected DateTimeInterface $subscriptionsOpensAt;
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    protected DateTimeInterface $subscriptionsClosesAt;
+
     #[ORM\Column(
         type: 'integer',
         options: ['default' => 0],
@@ -93,6 +96,8 @@ class Event extends EventModel
         $this->startDate = new DateTimeImmutable('-1 day');
         $this->endDate = new DateTimeImmutable('now');
         $this->subscriptionsOpensAt = new DateTimeImmutable('+14 days');
+        // By default subscriptions close 24 hours before the event starts
+        $this->subscriptionsClosesAt = DateTimeImmutable::createFromInterface($this->startDate)->modify('-24 hours');
         $this->playerSubscriptionCap = 0;
         $this->npcSubscriptionCap = 0;
     }

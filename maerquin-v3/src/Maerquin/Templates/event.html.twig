@@ -164,6 +164,61 @@
 
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
+                            <label class="label" style="width: 120px;">Openingstijd</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input input-time" name="subscriptionsOpensAtTime" type="time" step="60"
+                                           value="{{ event.subscriptionsOpensAt.format('H:i') }}"
+                                    />
+                                </div>
+                                <p class="help">Nederlandse tijd</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label" style="width: 120px;">Sluitingsdatum</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input input-date" name="subscriptionsClosesAtDay" type="text"
+                                           value="{{ event.subscriptionsClosesAt.format('d') }}"
+                                    />
+
+                                    <input class="input input-date" name="subscriptionsClosesAtMonth" type="text"
+                                           value="{{ event.subscriptionsClosesAt.format('m') }}"
+                                    />
+
+                                    <input class="input input-date" name="subscriptionsClosesAtYear" type="text"
+                                           value="{{ event.subscriptionsClosesAt.format('Y') }}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label" style="width: 120px;">Sluitingstijd</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input input-time" name="subscriptionsClosesAtTime" type="time" step="60"
+                                           value="{{ event.subscriptionsClosesAt.format('H:i') }}"
+                                    />
+                                </div>
+                                <p class="help">Nederlandse tijd</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
                             <label class="label" style="width: 120px;">
                                 <nobr>Spelers cap</nobr>
                             </label>

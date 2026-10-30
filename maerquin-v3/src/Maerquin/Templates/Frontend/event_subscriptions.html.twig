@@ -32,6 +32,8 @@
 
                     {% if state == 'OPEN' %}
                         <span class="tag is-success">{{ 'subscriptions.state.open'|trans }}</span>
+                    {% elseif state == 'CLOSED' %}
+                        <span class="tag is-danger">{{ 'subscriptions.state.closed'|trans }}</span>
                     {% else %}
                         <span class="tag is-warning">{{ 'subscriptions.state.pending'|trans }}</span>
                     {% endif %}
@@ -53,13 +55,23 @@
                             {% if state == 'OPEN' %}
                                 <span class="subscription-fact-value">{{ 'subscriptions.registration.open'|trans }}</span>
                                 <span class="subscription-fact-detail">
-                                    {{ 'subscriptions.registration.until'|trans({'date': event.startDate|long_date}) }}
+                                    {{ 'subscriptions.registration.until'|trans({'date': event.subscriptionsClosesAt|long_date}) }},
+                                    {{ 'subscriptions.registration.time'|trans({'time': event.subscriptionsClosesAt|date('H:i')}) }}
+                                </span>
+                            {% elseif state == 'CLOSED' %}
+                                <span class="subscription-fact-value">{{ 'subscriptions.registration.closed'|trans }}</span>
+                                <span class="subscription-fact-detail">
+                                    {{ 'subscriptions.registration.closed_since'|trans({'date': event.subscriptionsClosesAt|long_date}) }},
+                                    {{ 'subscriptions.registration.time'|trans({'time': event.subscriptionsClosesAt|date('H:i')}) }}
                                 </span>
                             {% else %}
                                 <span class="subscription-fact-value">
                                     {{ 'subscriptions.registration.opens'|trans({'date': event.subscriptionsOpensAt|long_date}) }}
                                 </span>
-                                <span class="subscription-fact-detail">{{ event.subscriptionsOpensAt|days_until }}</span>
+                                <span class="subscription-fact-detail">
+                                    {{ event.subscriptionsOpensAt|days_until }},
+                                    {{ 'subscriptions.registration.time'|trans({'time': event.subscriptionsOpensAt|date('H:i')}) }}
+                                </span>
                             {% endif %}
                         </div>
 

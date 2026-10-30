@@ -48,9 +48,6 @@ class EventFormHandler
         $points = (int)$formResolver->getValue('points', 'event');
         $notes = $formResolver->getValue('notes', 'event');
 
-        $subscriptionsOpensAtYear = (int)$formResolver->getValue('subscriptionsOpensAtYear', 'event', (string)$startDateYear);
-        $subscriptionsOpensAtMonth = (int)$formResolver->getValue('subscriptionsOpensAtMonth', 'event', (string)$startDateMonth);
-        $subscriptionsOpensAtDay = (int)$formResolver->getValue('subscriptionsOpensAtDay', 'event', (string)$startDateDay);
         $playerSubscriptionCap = (int)$formResolver->getValue('playerSubscriptionCap', 'event', '0');
         $npcSubscriptionCap = (int)$formResolver->getValue('npcSubscriptionCap', 'event', '0');
         $formId = $formResolver->getValue('formId', 'event', '');
@@ -63,7 +60,6 @@ class EventFormHandler
 
         $this->guardDate($startDateYear, $startDateMonth, $startDateDay);
         $this->guardDate($endDateYear, $endDateMonth, $endDateDay);
-        $this->guardDate($subscriptionsOpensAtYear, $subscriptionsOpensAtMonth, $subscriptionsOpensAtDay);
 
         $startDate = new DateTimeImmutable(
             sprintf('%04d-%02d-%02d', $startDateYear, $startDateMonth, $startDateDay),
@@ -73,9 +69,11 @@ class EventFormHandler
             sprintf('%04d-%02d-%02d', $endDateYear, $endDateMonth, $endDateDay),
         );
 
-        $subscriptionsOpensAt = new DateTimeImmutable(
-            sprintf('%04d-%02d-%02d', $subscriptionsOpensAtYear, $subscriptionsOpensAtMonth, $subscriptionsOpensAtDay),
-        );
+        // A new event has no subscription fields yet: it closes 24 hours before the start and does not open until configured
+        $defaultSubscriptionMoment = $startDate->modify('-24 hours');
+
+        $subscriptionsOpensAt = $this->resolveDateTime($formResolver, 'subscriptionsOpensAt', $defaultSubscriptionMoment);
+        $subscriptionsClosesAt = $this->resolveDateTime($formResolver, 'subscriptionsClosesAt', $defaultSubscriptionMoment);
 
         if (trim($name) === '') {
             $name = '(Naamloos)';
@@ -91,6 +89,7 @@ class EventFormHandler
             $formResolver->getValue('description', 'event', ''),
             $this->createCharacterPresenceList($event, $characterIds),
             $subscriptionsOpensAt,
+            $subscriptionsClosesAt,
             max(0, $playerSubscriptionCap),
             max(0, $npcSubscriptionCap),
             $formId === '' ? null : $this->formRepository->getById($formId),
@@ -110,6 +109,33 @@ class EventFormHandler
             $day > 31
         ) {
             throw new EventDateUnparsableException('Invalid date format');
+        }
+    }
+
+    /**
+     * Reads the `<prefix>Day`, `<prefix>Month`, `<prefix>Year` and `<prefix>Time` fields.
+     *
+     * @throws EventDateUnparsableException
+     * @throws MissingFormFieldException
+     * @throws DateMalformedStringException
+     */
+    private function resolveDateTime(FormResolver $formResolver, string $prefix, DateTimeImmutable $default): DateTimeImmutable
+    {
+        $day = (int)$formResolver->getValue($prefix . 'Day', 'event', $default->format('d'));
+        $month = (int)$formResolver->getValue($prefix . 'Month', 'event', $default->format('m'));
+        $year = (int)$formResolver->getValue($prefix . 'Year', 'event', $default->format('Y'));
+        $time = $formResolver->getValue($prefix . 'Time', 'event', $default->format('H:i'));
+
+        $this->guardDate($year, $month, $day);
+        $this->guardTime($time);
+
+        return new DateTimeImmutable(sprintf('%04d-%02d-%02d %s', $year, $month, $day, $time));
+    }
+
+    private function guardTime(string $time): void
+    {
+        if (preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $time) !== 1) {
+            throw new EventDateUnparsableException('Invalid time format');
         }
     }
 

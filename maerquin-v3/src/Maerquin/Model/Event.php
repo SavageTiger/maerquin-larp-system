@@ -12,6 +12,7 @@ use SvenHK\Maerquin\Entity\Character as CharacterEntity;
 use SvenHK\Maerquin\Entity\Event as EventEntity;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
 use SvenHK\Maerquin\Entity\Player as PlayerEntity;
+use SvenHK\Maerquin\Exception\Event\EventDateUnparsableException;
 use SvenHK\Maerquin\Exception\Form\FormSubmissionException;
 use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
 
@@ -27,6 +28,7 @@ class Event
 
     protected string $description;
     protected DateTimeInterface $subscriptionsOpensAt;
+    protected DateTimeInterface $subscriptionsClosesAt;
     protected int $playerSubscriptionCap;
     protected int $npcSubscriptionCap;
     protected Collection $charactersPresent;
@@ -98,6 +100,11 @@ class Event
     public function getSubscriptionsOpensAt(): DateTimeInterface
     {
         return $this->subscriptionsOpensAt;
+    }
+
+    public function getSubscriptionsClosesAt(): DateTimeInterface
+    {
+        return $this->subscriptionsClosesAt;
     }
 
     public function getPlayerSubscriptionCap(): int
@@ -276,6 +283,10 @@ class Event
             return SubscriptionState::Expired;
         }
 
+        if ($now >= $this->getSubscriptionsClosesAt()) {
+            return SubscriptionState::Closed;
+        }
+
         if ($now >= $this->subscriptionsOpensAt) {
             return SubscriptionState::Open;
         }
@@ -288,6 +299,9 @@ class Event
         return $this->description;
     }
 
+    /**
+     * @throws EventDateUnparsableException when subscriptions would open after they close
+     */
     public function updateEvent(
         string $name,
         string $secondaryName,
@@ -298,10 +312,15 @@ class Event
         string $description,
         Collection $charactersPresent,
         DateTimeImmutable $subscriptionsOpensAt,
+        DateTimeImmutable $subscriptionsClosesAt,
         int $playerSubscriptionCap,
         int $npcSubscriptionCap,
         null | FormEntity $form,
     ): void {
+        if ($subscriptionsOpensAt > $subscriptionsClosesAt) {
+            throw new EventDateUnparsableException('Subscriptions can not open after they close');
+        }
+
         $this->form = $form;
         $this->name = $name;
         $this->secondaryName = $secondaryName;
@@ -312,6 +331,7 @@ class Event
         $this->description = $description;
         $this->charactersPresent = $charactersPresent;
         $this->subscriptionsOpensAt = $subscriptionsOpensAt;
+        $this->subscriptionsClosesAt = $subscriptionsClosesAt;
         $this->playerSubscriptionCap = $playerSubscriptionCap;
         $this->npcSubscriptionCap = $npcSubscriptionCap;
     }

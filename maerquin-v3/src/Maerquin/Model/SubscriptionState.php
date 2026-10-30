@@ -8,5 +8,6 @@ enum SubscriptionState: string
 {
     case Pending = 'PENDING';
     case Open = 'OPEN';
+    case Closed = 'CLOSED';
     case Expired = 'EXPIRED';
 }

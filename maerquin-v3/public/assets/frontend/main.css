@@ -208,6 +208,10 @@ input.input-date {
     margin-right: 10px;
 }
 
+input.input-time {
+    width: 8rem;
+}
+
 .skill-original {
     float: right;
     color: #4a4949;

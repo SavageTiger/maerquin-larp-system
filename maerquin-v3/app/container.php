@@ -19,6 +19,8 @@ $dotenv->required([
 $dotenv->required('DEBUG')->isBoolean();
 $dotenv->required('VALKEY_PASSWORD');
 
+date_default_timezone_set('Europe/Amsterdam');
+
 $containerBuilder = new ContainerBuilder();
 
 foreach (['cache', 'settings', 'dependencies', 'repositories', 'doctrine', 'mailer'] as $definitions) {

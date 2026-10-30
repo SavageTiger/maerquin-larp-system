@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 use App\Application\Session\Session;
 use App\Application\TwigExtension\UserExtension;
+use League\CommonMark\CommonMarkConverter;
 use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use SvenHK\Maerquin\Status\Twig\StatusExtension;
 use SvenHK\Maerquin\Translation\TranslationExtension;
+use Twig\Extra\Markdown\LeagueMarkdown;
+use Twig\Extra\Markdown\MarkdownExtension;
+use Twig\Extra\Markdown\MarkdownRuntime;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
 
 use Twig\Cache\CacheInterface;
 
@@ -68,6 +73,17 @@ return function (App $app): void {
 
     $twig->addExtension($app->getContainer()->get(TranslationExtension::class));
     $twig->addExtension($app->getContainer()->get(StatusExtension::class));
+
+    $twig->addExtension(new MarkdownExtension());
+    $twig->addRuntimeLoader(new FactoryRuntimeLoader([
+        MarkdownRuntime::class => static fn(): MarkdownRuntime => new MarkdownRuntime(
+            new LeagueMarkdown(new CommonMarkConverter([
+                'html_input' => 'strip',
+                'allow_unsafe_links' => false,
+                'renderer' => ['soft_break' => "<br>\n"],
+            ])),
+        ),
+    ]));
 
     $app->add(TwigMiddleware::create($app, $twig));
 };

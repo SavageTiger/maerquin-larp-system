@@ -31,6 +31,11 @@ class CharacterEventLink
         );
     }
 
+    public function isFor(Character $character): bool
+    {
+        return $this->character->getId() === $character->getId();
+    }
+
     public function isPlayedBy(Player $player): bool
     {
         return $this->character->isOwnedBy($player);

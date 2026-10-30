@@ -251,9 +251,16 @@
                 </div>
                 <div class="message-body">
                     <div class="box is-shadowless inner-box">
-                        <button class="button is-pulled-right" onclick="return false"
-                                @click="manageCharacters">&nbsp;Aanpassen
-                        </button>
+                        <div class="buttons is-right mb-2">
+                            <button class="button" onclick="return false"
+                                    :disabled="paidPlayerCharacters.length === 0"
+                                    @click="importPaidPlayers">
+                                <i class="fa-solid fa-user-check"></i>&nbsp;{{ 'event.import_paid_players'|trans }}
+                            </button>
+                            <button class="button" onclick="return false"
+                                    @click="manageCharacters">&nbsp;Aanpassen
+                            </button>
+                        </div>
 
                         <div class="content">
                             <ol type="1">
@@ -307,6 +314,7 @@
                 return {
                     characterFilter: '',
                     characters: {{ characters.serialize(true)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    paidPlayerCharacters: {{ paidPlayerCharacters.serialize(true)|json_encode|raw }},
                     allCharacters: []
                 };
             },
@@ -348,6 +356,16 @@
 
                         openModal(document.getElementById('manageCharacters'));
                     });
+                },
+
+                importPaidPlayers() {
+                    const presentIds = this.characters.map((character) => character.id);
+                    const added = this.paidPlayerCharacters.filter((character) => presentIds.includes(character.id) === false);
+
+                    this.characters = [...this.characters, ...added];
+                    this.orderCharacters();
+
+                    alert({{ 'event.import_paid_players.done'|trans|json_encode|raw }}.replace('%count%', added.length));
                 },
 
                 orderCharacters() {

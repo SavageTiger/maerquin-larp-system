@@ -501,6 +501,24 @@ input.skill-input {
         color: var(--subscriptions-muted);
     }
 
+    .subscription-character {
+        margin-top: 1.25rem;
+    }
+
+    .subscription-choice-title {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--subscriptions-muted);
+    }
+
+    &:has(input[name="role"][value="npc"]:checked) .subscription-character {
+        display: none;
+    }
+
     /* Admin: list of subscriptions with their answers */
 
     .admin-subscription {

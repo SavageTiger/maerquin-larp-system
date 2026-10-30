@@ -28,6 +28,10 @@ class EventSubscription extends EventSubscriptionModel
     #[ORM\JoinColumn(name: 'player_id', referencedColumnName: 'id', nullable: false)]
     protected Player $player;
 
+    #[ORM\ManyToOne(targetEntity: Character::class)]
+    #[ORM\JoinColumn(name: 'character_id', referencedColumnName: 'id', nullable: true)]
+    protected null | Character $character;
+
     #[ORM\Column(type: 'datetime_immutable')]
     protected DateTimeInterface $subscribedAt;
 

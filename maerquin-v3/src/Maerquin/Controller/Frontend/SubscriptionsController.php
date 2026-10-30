@@ -20,6 +20,7 @@ use SvenHK\Maerquin\Form\EventSubscriptionHandler;
 use SvenHK\Maerquin\Model\SubscriptionRole;
 use SvenHK\Maerquin\Model\SubscriptionState;
 use SvenHK\Maerquin\Model\User;
+use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Session\Session;
 use SvenHK\Maerquin\Translation\Translator;
@@ -32,6 +33,7 @@ class SubscriptionsController extends Action
         LoggerInterface $logger,
         private readonly EventRepository $eventRepository,
         private readonly EventSubscriptionHandler $eventSubscriptionHandler,
+        private readonly CharacterRepository $characterRepository,
         private readonly Session $session,
         private readonly Translator $translator,
     ) {
@@ -112,6 +114,7 @@ class SubscriptionsController extends Action
             [
                 'event' => $event,
                 'roles' => SubscriptionRole::cases(),
+                'characters' => $this->characterRepository->forPlayer($user->getPlayer()->getId()),
             ],
         );
     }

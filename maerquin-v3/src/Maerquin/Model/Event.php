@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Character as CharacterEntity;
 use SvenHK\Maerquin\Entity\Event as EventEntity;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
 use SvenHK\Maerquin\Entity\Player as PlayerEntity;
@@ -166,7 +167,7 @@ class Event
      * @throws SubscriptionException
      * @throws FormSubmissionException
      */
-    public function subscribe(Player $player, SubscriptionRole $role, array $answers): void
+    public function subscribe(Player $player, SubscriptionRole $role, null | CharacterEntity $character, array $answers): void
     {
         assert($this instanceof EventEntity);
         assert($player instanceof PlayerEntity);
@@ -183,10 +184,15 @@ class Event
             throw SubscriptionException::alreadySubscribed();
         }
 
+        if ($character !== null && ($role !== SubscriptionRole::Player || $character->isOwnedBy($player) === false)) {
+            throw SubscriptionException::characterInvalid();
+        }
+
         $this->subscriptions->add(EventSubscription::create(
             $this,
             $player,
             $role,
+            $character,
             $this->form->createSubmission($answers),
         ));
     }
@@ -212,6 +218,31 @@ class Event
     public function markSubscriptionAsUnpaid(string $subscriptionId): void
     {
         $this->getSubscription($subscriptionId)->markAsUnpaid();
+    }
+
+    /**
+     * @return list<CharacterEntity>
+     */
+    public function getPaidPlayerCharacters(): array
+    {
+        $characters = [];
+
+        foreach ($this->getSubscriptions(SubscriptionRole::Player) as $subscription) {
+            $character = $subscription->getCharacter();
+
+            if ($subscription->getStatus() === SubscriptionStatus::Paid && $character !== null) {
+                $characters[] = $character;
+            }
+        }
+
+        return $characters;
+    }
+
+    public function isPresent(CharacterEntity $character): bool
+    {
+        return $this->charactersPresent->exists(
+            static fn(int $key, CharacterEventLink $link): bool => $link->isFor($character),
+        );
     }
 
     public function isSubscribed(Player $player): bool

@@ -74,6 +74,7 @@ class EventsController extends Action
                 'characters' => new CharacterCollection(
                     ...$this->characterRepository->findByEvent($eventId->toString()),
                 ),
+                'paidPlayerCharacters' => new CharacterCollection(...$event->getPaidPlayerCharacters()),
                 'forms' => $this->formRepository->findAllSorted(),
                 'persisted' => str_contains($this->request->getUri()->getPath(), '/persisted/'),
             ],

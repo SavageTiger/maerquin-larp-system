@@ -11,12 +11,14 @@ use SvenHK\Maerquin\Exception\Form\FormSubmissionException;
 use SvenHK\Maerquin\Exception\Request\MissingFormFieldException;
 use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
 use SvenHK\Maerquin\Model\SubscriptionRole;
+use SvenHK\Maerquin\Repository\CharacterRepository;
 use SvenHK\Maerquin\Repository\EventRepository;
 
 readonly class EventSubscriptionHandler
 {
     public function __construct(
         private EventRepository $eventRepository,
+        private CharacterRepository $characterRepository,
     ) {
     }
 
@@ -30,6 +32,7 @@ readonly class EventSubscriptionHandler
         $formResolver = FormResolver::createFromRequest($request);
 
         $role = $formResolver->getValue('role', 'subscription');
+        $characterId = $formResolver->getValue('character', 'subscription', '');
 
         $answers = array_filter(
             $formResolver->getArray('answers', 'subscription'),
@@ -39,6 +42,9 @@ readonly class EventSubscriptionHandler
         $event->subscribe(
             $player,
             SubscriptionRole::tryFrom($role) ?? throw SubscriptionException::roleInvalid($role),
+            $characterId === ''
+                ? null
+                : $this->characterRepository->findById($characterId) ?? throw SubscriptionException::characterInvalid(),
             $answers,
         );
 
@@ -64,4 +70,5 @@ readonly class EventSubscriptionHandler
 
         $this->eventRepository->save($event);
     }
+
 }

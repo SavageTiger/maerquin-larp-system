@@ -30,6 +30,11 @@ final class SubscriptionException extends RuntimeException
         return new self('The player is already subscribed to this event.', 'subscribe.error.already_subscribed');
     }
 
+    public static function characterInvalid(): self
+    {
+        return new self('The character can not be used for this subscription.', 'subscribe.error.character_invalid');
+    }
+
     public static function notFound(): self
     {
         return new self('The subscription does not belong to this event.', 'subscribe.error.not_found');

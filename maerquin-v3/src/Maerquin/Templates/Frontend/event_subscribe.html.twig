@@ -64,10 +64,31 @@
                         </label>
                     {% endfor %}
                 </div>
+
+                <div class="subscription-character">
+                    <span class="subscription-choice-title">{{ 'subscribe.character.choice'|trans }}</span>
+                    <div class="subscription-roles">
+                        {% for character in characters %}
+                            <label class="subscription-role">
+                                <input type="radio" name="character" value="{{ character.id }}"
+                                       {% if loop.first %}checked{% endif %}/>
+                                <span class="subscription-role-name">{{ character.name }}</span>
+                                <span class="subscription-role-places">{{ character.race.name }}</span>
+                            </label>
+                        {% endfor %}
+                        <label class="subscription-role">
+                            <input type="radio" name="character" value="" {% if characters is empty %}checked{% endif %}/>
+                            <span class="subscription-role-name">{{ 'subscribe.character.new_character'|trans }}</span>
+                            <span class="subscription-role-places">
+                                {{ (characters is empty ? 'subscribe.character.no_characters' : 'subscribe.character.new_hint')|trans }}
+                            </span>
+                        </label>
+                    </div>
+                </div>
             </div>
         </article>
 
-        {% for section in event.form.sections %}
+        {% for section in event.form.sections|filter(section => section.fields is not empty) %}
             <article class="message is-dark subscription-form-section">
                 <div class="message-header">
                     {{ section.title }}
@@ -138,12 +159,15 @@
                     answers[key] = input.type === 'checkbox' ? (input.checked ? '1' : '') : input.value;
                 }
 
-                button.classList.add('is-loading');
+                const role = form.querySelector('[name="role"]:checked')?.value ?? '';
+
+            button.classList.add('is-loading');
 
                 axios
                     .post('/subscriptions/{{ event.id }}.html', {
                         subscription: {
-                            role: form.querySelector('[name="role"]:checked')?.value ?? '',
+                            role,
+                            character: role === 'player' ? (form.querySelector('[name="character"]:checked')?.value ?? '') : '',
                             answers,
                         },
                     })

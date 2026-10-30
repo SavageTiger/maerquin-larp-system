@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use SvenHK\Maerquin\Entity\Character;
 use SvenHK\Maerquin\Entity\Event;
 use SvenHK\Maerquin\Entity\EventSubscription as EventSubscriptionEntity;
 use SvenHK\Maerquin\Entity\FormSubmission as FormSubmissionEntity;
@@ -19,6 +20,7 @@ class EventSubscription
     protected UuidInterface $id;
     protected Event $event;
     protected Player $player;
+    protected null | Character $character;
     protected DateTimeInterface $subscribedAt;
     protected SubscriptionRole $role;
     protected FormSubmissionEntity $formSubmission;
@@ -28,6 +30,7 @@ class EventSubscription
         Event $event,
         Player $player,
         SubscriptionRole $role,
+        null | Character $character,
         FormSubmissionEntity $formSubmission,
     ) {
         $this->id = Uuid::uuid4();
@@ -35,6 +38,7 @@ class EventSubscription
         $this->player = $player;
         $this->subscribedAt = new DateTimeImmutable();
         $this->role = $role;
+        $this->character = $character;
         $this->formSubmission = $formSubmission;
         $this->status = SubscriptionStatus::PendingPayment;
     }
@@ -43,9 +47,10 @@ class EventSubscription
         Event $event,
         Player $player,
         SubscriptionRole $role,
+        null | Character $character,
         FormSubmissionEntity $formSubmission,
     ): self {
-        return new EventSubscriptionEntity($event, $player, $role, $formSubmission);
+        return new EventSubscriptionEntity($event, $player, $role, $character, $formSubmission);
     }
 
     public function serialize(): array
@@ -73,6 +78,11 @@ class EventSubscription
     public function getPlayer(): Player
     {
         return $this->player;
+    }
+
+    public function getCharacter(): null | Character
+    {
+        return $this->character;
     }
 
     public function getSubscribedAt(): DateTimeInterface

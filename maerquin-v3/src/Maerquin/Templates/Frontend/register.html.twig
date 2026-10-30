@@ -45,7 +45,7 @@
                 <div class="control has-icons-left">
                     <input id="firstName" type="text" name="registration[firstName]" class="input" required
                            autocomplete="given-name"
-                           value="{{ form.getValue('firstName', 'registration', '') }}" placeholder="e.g. Jan">
+                           value="{{ form.getValue('firstName', 'registration', '') }}" placeholder="e.g. Wolfgang">
                     <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                         <label class="label" for="infix">Tussenvoegsel</label>
                         <div class="control">
                             <input id="infix" type="text" name="registration[infix]" class="input"
-                                   value="{{ form.getValue('infix', 'registration', '') }}" placeholder="e.g. van der">
+                                   value="{{ form.getValue('infix', 'registration', '') }}" placeholder="e.g. van">
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         <div class="control">
                             <input id="lastName" type="text" name="registration[lastName]" class="input" required
                                    autocomplete="family-name"
-                                   value="{{ form.getValue('lastName', 'registration', '') }}" placeholder="e.g. Berg">
+                                   value="{{ form.getValue('lastName', 'registration', '') }}" placeholder="e.g. Marsilac tot Oosterdiep">
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                 <label class="label" for="email">E-mailadres</label>
                 <div class="control has-icons-left">
                     <input id="email" type="email" name="registration[email]" class="input" required
-                           value="{{ form.getValue('email', 'registration', '') }}" placeholder="john@example.com">
+                           value="{{ form.getValue('email', 'registration', '') }}" placeholder="baron@marsilac.net">
                     <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
                 </div>
                 <p class="help">Dit is ook je gebruikersnaam.</p>

@@ -103,7 +103,7 @@
                                 <i class="fa-solid fa-check"></i>&nbsp;{{ ('subscriptions.status.' ~ status)|trans }}
                             </span>
                             {% if status == 'received' %}
-                                <span class="tag is-warning is-light is-medium">
+                                <span class="tag {{ subscription.paid ? 'is-success' : 'is-warning is-light' }} is-medium">
                                     {{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
                                 </span>
                             {% endif %}

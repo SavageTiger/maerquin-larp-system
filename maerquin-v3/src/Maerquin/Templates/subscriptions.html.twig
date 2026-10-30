@@ -17,7 +17,6 @@
                         {% for role in roles %}
                             <th>{{ ('admin.subscriptions.role.' ~ role.value)|trans }}</th>
                         {% endfor %}
-                        <th>{{ 'admin.subscriptions.waiting_list'|trans }}</th>
                     </tr>
                     {% for event in events %}
                         {% set state = event.subscriptionState.value %}
@@ -39,12 +38,6 @@
                                     {{ event.countSubscriptions(role) }}{% if cap > 0 %} / {{ cap }}{% endif %}
                                 </td>
                             {% endfor %}
-                            <td>
-                                {% set waiting = roles|reduce((total, role) => total + event.countWaitingList(role), 0) %}
-                                {% if waiting > 0 %}
-                                    <span class="tag is-warning">{{ waiting }}</span>
-                                {% endif %}
-                            </td>
                         </tr>
                     {% endfor %}
                 </table>

@@ -140,13 +140,6 @@ class Event
         return $subscriptions;
     }
 
-    public function countWaitingList(SubscriptionRole $role): int
-    {
-        $cap = $this->getSubscriptionCap($role);
-
-        return $cap === 0 ? 0 : max(0, $this->countSubscriptions($role) - $cap);
-    }
-
     public function countSubscriptions(SubscriptionRole $role): int
     {
         return $this->subscriptions->filter(

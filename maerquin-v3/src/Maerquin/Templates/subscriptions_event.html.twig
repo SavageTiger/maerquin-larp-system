@@ -33,7 +33,6 @@
 
                     {% for role in roles %}
                         {% set cap = event.subscriptionCap(role) %}
-                        {% set waiting = event.countWaitingList(role) %}
                         <div class="subscription-fact">
                             <span class="subscription-fact-label">
                                 <i class="fa-solid fa-users"></i> {{ ('admin.subscriptions.role.' ~ role.value)|trans }}
@@ -42,9 +41,7 @@
                                 {{ event.countSubscriptions(role) }}{% if cap > 0 %} / {{ cap }}{% endif %}
                             </span>
                             <span class="subscription-fact-detail">
-                                {% if waiting > 0 %}
-                                    {{ 'admin.subscriptions.on_waiting_list'|trans({'count': waiting}) }}
-                                {% elseif cap == 0 %}
+                                {% if cap == 0 %}
                                     {{ 'subscribe.role.no_cap'|trans }}
                                 {% endif %}
                             </span>
@@ -55,7 +52,6 @@
         </article>
 
         {% for role in roles %}
-            {% set cap = event.subscriptionCap(role) %}
             {% set subscriptions = event.subscriptions(role) %}
 
             <article class="message is-dark">
@@ -68,7 +64,6 @@
                     {% endif %}
 
                     {% for subscription in subscriptions %}
-                        {% set onWaitingList = cap > 0 and loop.index > cap %}
                         {% set submission = subscription.formSubmission %}
 
                         <details class="admin-subscription">
@@ -82,25 +77,17 @@
                                         <span class="has-text-grey">
                                             <i class="fa-solid fa-hat-wizard"></i> {{ subscription.character.name }}
                                         </span>
-                                        {% if event.present(subscription.character) %}
-                                            <span class="tag is-info is-light mb-0">{{ 'admin.subscriptions.present'|trans }}</span>
-                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                                 <span class="tags mb-0">
-                                    {% if onWaitingList %}
-                                        <span class="tag is-warning mb-0">
-                                            {{ 'admin.subscriptions.waiting_position'|trans({'position': loop.index - cap}) }}
-                                        </span>
-                                    {% elseif cap > 0 %}
-                                        <span class="tag is-success is-light mb-0">{{ 'admin.subscriptions.has_place'|trans }}</span>
-                                    {% endif %}
                                     <span class="tag {{ subscription.paid ? 'is-success' : 'is-warning is-light' }} mb-0">
                                         {{ (subscription.paid ? 'subscriptions.payment.paid' : 'subscriptions.payment.pending_payment')|trans }}
                                     </span>
-                                    <span class="tag is-light mb-0">
-                                        {{ ('subscriptions.status.' ~ subscription.status.value)|trans }}
-                                    </span>
+                                    {% if subscription.status.value != 'received' %}
+                                        <span class="tag is-light mb-0">
+                                            {{ ('subscriptions.status.' ~ subscription.status.value)|trans }}
+                                        </span>
+                                    {% endif %}
                                 </span>
                                 <span class="admin-subscription-date">{{ subscription.subscribedAt|date('d-m-Y H:i') }}</span>
                                 {% if not subscription.paid %}

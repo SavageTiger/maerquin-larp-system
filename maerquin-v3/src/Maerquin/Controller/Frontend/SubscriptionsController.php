@@ -8,14 +8,21 @@ use App\Application\Actions\Action;
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpUnauthorizedException;
+use Slim\Psr7\Response;
 use Slim\Views\Twig;
 use SvenHK\Maerquin\Controller\RedirectTo;
+use SvenHK\Maerquin\Exception\Form\FormSubmissionException;
+use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
+use SvenHK\Maerquin\Form\EventSubscriptionHandler;
 use SvenHK\Maerquin\Model\SubscriptionRole;
 use SvenHK\Maerquin\Model\SubscriptionState;
 use SvenHK\Maerquin\Model\User;
 use SvenHK\Maerquin\Repository\EventRepository;
 use SvenHK\Maerquin\Session\Session;
+use SvenHK\Maerquin\Translation\Translator;
 
 class SubscriptionsController extends Action
 {
@@ -24,7 +31,9 @@ class SubscriptionsController extends Action
     public function __construct(
         LoggerInterface $logger,
         private readonly EventRepository $eventRepository,
+        private readonly EventSubscriptionHandler $eventSubscriptionHandler,
         private readonly Session $session,
+        private readonly Translator $translator,
     ) {
         parent::__construct($logger);
     }
@@ -33,6 +42,10 @@ class SubscriptionsController extends Action
     protected function action(): ResponseInterface
     {
         $eventId = $this->request->getAttribute('eventId');
+
+        if (is_string($eventId) && $this->request->getMethod() === 'POST') {
+            return $this->subscribe($eventId);
+        }
 
         if (is_string($eventId)) {
             return $this->renderSubscribeView($eventId);
@@ -50,6 +63,31 @@ class SubscriptionsController extends Action
         );
     }
 
+    private function subscribe(string $eventId): ResponseInterface
+    {
+        $user = $this->session->getUser();
+
+        if ($user instanceof User === false) {
+            throw new HttpUnauthorizedException($this->request);
+        }
+
+        $event = $this->eventRepository->findById($eventId) ?? throw new HttpNotFoundException($this->request);
+
+        try {
+            $this->eventSubscriptionHandler->subscribe($event, $user->getPlayer(), $this->request);
+        } catch (SubscriptionException $exception) {
+            throw new HttpBadRequestException($this->request, $this->translator->trans($exception->getTranslationKey()), $exception);
+        } catch (FormSubmissionException $exception) {
+            throw new HttpBadRequestException(
+                $this->request,
+                $this->translator->trans($exception->getTranslationKey(), $exception->getTranslationParameters()),
+                $exception,
+            );
+        }
+
+        return new Response();
+    }
+
     private function renderSubscribeView(string $eventId): ResponseInterface
     {
         $user = $this->session->getUser();
@@ -60,7 +98,11 @@ class SubscriptionsController extends Action
 
         $event = $this->eventRepository->findById($eventId) ?? throw new HttpNotFoundException($this->request);
 
-        if ($event->getSubscriptionState() !== SubscriptionState::Open || $event->isSubscribed($user->getPlayer())) {
+        if (
+            $event->getSubscriptionState() !== SubscriptionState::Open
+            || $event->getForm() === null
+            || $event->isSubscribed($user->getPlayer())
+        ) {
             return $this->redirectTo('/subscriptions.html');
         }
 

@@ -31,11 +31,7 @@
                 </div>
             </div>
 
-            {% if event.form is null %}
-                <p>{{ 'subscribe.no_form'|trans }}</p>
-            {% else %}
-                <p class="has-text-grey">{{ 'subscribe.required_hint'|trans }}</p>
-            {% endif %}
+            <p class="has-text-grey">{{ 'subscribe.required_hint'|trans }}</p>
         </div>
     </article>
 
@@ -70,51 +66,93 @@
         </div>
     </article>
 
-    {% if event.form is not null %}
-        {% for section in event.form.sections %}
-            <article class="message is-dark subscription-form-section">
-                <div class="message-header">
-                    {{ section.title }}
-                </div>
-                <div class="message-body">
-                    {% for fields in section.rows %}
-                        <div class="columns">
-                            {% for field in fields %}
-                                {% set inputName = 'answers[' ~ field.key ~ ']' %}
-                                {% set inputId = 'field-' ~ field.key %}
+    {% for section in event.form.sections %}
+        <article class="message is-dark subscription-form-section">
+            <div class="message-header">
+                {{ section.title }}
+            </div>
+            <div class="message-body">
+                {% for fields in section.rows %}
+                    <div class="columns">
+                        {% for field in fields %}
+                            {% set inputName = 'answers[' ~ field.key ~ ']' %}
+                            {% set inputId = 'field-' ~ field.key %}
 
-                                <div class="column">
-                                    <div class="field">
-                                        {% if field.type.value == 'checkbox' %}
-                                            <label class="checkbox" for="{{ inputId }}">
-                                                <input type="checkbox" id="{{ inputId }}" name="{{ inputName }}" value="1"
+                            <div class="column">
+                                <div class="field">
+                                    {% if field.type.value == 'checkbox' %}
+                                        <label class="checkbox" for="{{ inputId }}">
+                                            <input type="checkbox" id="{{ inputId }}" name="{{ inputName }}" value="1"
+                                                   {% if field.required %}required{% endif %}/>
+                                            {{ field.label }}
+                                            {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
+                                        </label>
+                                    {% else %}
+                                        <label class="label" for="{{ inputId }}">
+                                            {{ field.label }}
+                                            {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
+                                        </label>
+                                        <div class="control">
+                                            {% if field.type.value == 'textarea' %}
+                                                <textarea class="textarea" id="{{ inputId }}" name="{{ inputName }}" rows="3"
+                                                          {% if field.required %}required{% endif %}></textarea>
+                                            {% else %}
+                                                <input class="input" id="{{ inputId }}" name="{{ inputName }}"
+                                                       type="{{ field.type.value }}"
                                                        {% if field.required %}required{% endif %}/>
-                                                {{ field.label }}
-                                                {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
-                                            </label>
-                                        {% else %}
-                                            <label class="label" for="{{ inputId }}">
-                                                {{ field.label }}
-                                                {% if field.required %}<span class="has-text-danger">*</span>{% endif %}
-                                            </label>
-                                            <div class="control">
-                                                {% if field.type.value == 'textarea' %}
-                                                    <textarea class="textarea" id="{{ inputId }}" name="{{ inputName }}" rows="3"
-                                                              {% if field.required %}required{% endif %}></textarea>
-                                                {% else %}
-                                                    <input class="input" id="{{ inputId }}" name="{{ inputName }}"
-                                                           type="{{ field.type.value }}"
-                                                           {% if field.required %}required{% endif %}/>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </article>
-        {% endfor %}
-    {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+    {% endfor %}
+
+    <div class="buttons is-right mb-6">
+        <button class="button is-dark is-medium" type="submit" id="subscribeButton">
+            <i class="fa-regular fa-paper-plane"></i>&nbsp;{{ 'subscribe.submit'|trans }}
+        </button>
+    </div>
+
+    <script type="module">
+        const form = document.getElementById('containerForm');
+        const button = document.getElementById('subscribeButton');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (form.reportValidity() === false) {
+                return;
+            }
+
+            const answers = {};
+
+            for (const input of form.querySelectorAll('[name^="answers["]')) {
+                const key = input.name.slice('answers['.length, -1);
+
+                answers[key] = input.type === 'checkbox' ? (input.checked ? '1' : '') : input.value;
+            }
+
+            button.classList.add('is-loading');
+
+            axios
+                .post('/subscriptions/{{ event.id }}.html', {
+                    subscription: {
+                        role: form.querySelector('[name="role"]:checked')?.value ?? '',
+                        answers,
+                    },
+                })
+                .then(() => {
+                    document.location.href = '/subscriptions.html';
+                })
+                .catch((error) => {
+                    button.classList.remove('is-loading');
+                    alert(error.response?.data?.error?.description ?? error.message);
+                });
+        });
+    </script>
 {% endblock %}

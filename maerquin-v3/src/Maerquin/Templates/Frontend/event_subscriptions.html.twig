@@ -98,7 +98,10 @@
                         <span class="tag is-success is-medium">
                             <i class="fa-solid fa-check"></i>&nbsp;{{ 'subscriptions.subscribed'|trans }}
                         </span>
-                    {% elseif state == 'OPEN' %}
+                        <span class="tag is-warning is-light is-medium">
+                            {{ ('subscriptions.status.' ~ event.findSubscription(player).status.value)|trans }}
+                        </span>
+                    {% elseif state == 'OPEN' and event.form is not null %}
                         <a class="button is-dark" href="/subscriptions/{{ event.id }}.html">
                             <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'subscriptions.subscribe'|trans }}
                         </a>

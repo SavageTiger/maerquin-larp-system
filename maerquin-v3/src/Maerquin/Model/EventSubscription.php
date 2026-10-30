@@ -22,6 +22,7 @@ class EventSubscription
     protected DateTimeInterface $subscribedAt;
     protected SubscriptionRole $role;
     protected FormSubmissionEntity $formSubmission;
+    protected SubscriptionStatus $status;
 
     private function __construct(
         Event $event,
@@ -35,6 +36,7 @@ class EventSubscription
         $this->subscribedAt = new DateTimeImmutable();
         $this->role = $role;
         $this->formSubmission = $formSubmission;
+        $this->status = SubscriptionStatus::PendingPayment;
     }
 
     public static function create(
@@ -54,12 +56,23 @@ class EventSubscription
             'playerName' => $this->player->getName(),
             'subscribedAt' => $this->subscribedAt->format(DateTimeInterface::ISO8601),
             'role' => $this->role->value,
+            'status' => $this->status->value,
         ];
     }
 
     public function getId(): string
     {
         return (string)$this->id;
+    }
+
+    public function getRole(): SubscriptionRole
+    {
+        return $this->role;
+    }
+
+    public function getStatus(): SubscriptionStatus
+    {
+        return $this->status;
     }
 
     public function hasRole(SubscriptionRole $role): bool

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\EventSubscription as EventSubscriptionModel;
 use SvenHK\Maerquin\Model\SubscriptionRole;
+use SvenHK\Maerquin\Model\SubscriptionStatus;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'event_subscription')]
@@ -32,6 +33,9 @@ class EventSubscription extends EventSubscriptionModel
 
     #[ORM\Column(length: 16, enumType: SubscriptionRole::class, options: ['default' => 'player'])]
     protected SubscriptionRole $role;
+
+    #[ORM\Column(length: 32, enumType: SubscriptionStatus::class, options: ['default' => 'pending_payment'])]
+    protected SubscriptionStatus $status;
 
     #[ORM\OneToOne(targetEntity: FormSubmission::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'form_submission_id', referencedColumnName: 'id', nullable: false)]

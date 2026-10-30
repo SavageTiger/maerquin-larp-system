@@ -10,6 +10,9 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Event as EventEntity;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
+use SvenHK\Maerquin\Entity\Player as PlayerEntity;
+use SvenHK\Maerquin\Exception\Form\FormSubmissionException;
+use SvenHK\Maerquin\Exception\Subscription\SubscriptionException;
 
 class Event
 {
@@ -133,11 +136,47 @@ class Event
         return $cap > 0 && $this->countSubscriptions($role) >= $cap;
     }
 
-    public function isSubscribed(Player $player): bool
+    /**
+     * @param array<string, string> $answers field key => value
+     *
+     * @throws SubscriptionException
+     * @throws FormSubmissionException
+     */
+    public function subscribe(Player $player, SubscriptionRole $role, array $answers): void
     {
-        return $this->subscriptions->exists(
+        assert($this instanceof EventEntity);
+        assert($player instanceof PlayerEntity);
+
+        if ($this->getSubscriptionState() !== SubscriptionState::Open) {
+            throw SubscriptionException::notOpen();
+        }
+
+        if ($this->form === null) {
+            throw SubscriptionException::formMissing();
+        }
+
+        if ($this->isSubscribed($player)) {
+            throw SubscriptionException::alreadySubscribed();
+        }
+
+        $this->subscriptions->add(EventSubscription::create(
+            $this,
+            $player,
+            $role,
+            $this->form->createSubmission($answers),
+        ));
+    }
+
+    public function findSubscription(Player $player): null | EventSubscription
+    {
+        return $this->subscriptions->findFirst(
             static fn(int $key, EventSubscription $subscription): bool => $subscription->isFor($player),
         );
+    }
+
+    public function isSubscribed(Player $player): bool
+    {
+        return $this->findSubscription($player) !== null;
     }
 
     public function hasParticipated(Player $player): bool

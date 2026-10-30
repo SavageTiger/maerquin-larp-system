@@ -9,8 +9,10 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Entity\Form as FormEntity;
 use SvenHK\Maerquin\Entity\FormSection as FormSectionEntity;
+use SvenHK\Maerquin\Entity\FormSubmission as FormSubmissionEntity;
 use SvenHK\Maerquin\Exception\Form\FormFieldException;
 use SvenHK\Maerquin\Exception\Form\FormSectionException;
+use SvenHK\Maerquin\Exception\Form\FormSubmissionException;
 
 class Form
 {
@@ -104,6 +106,44 @@ class Form
         foreach ($this->getSections() as $index => $remainingSection) {
             $remainingSection->reposition($index + 1);
         }
+    }
+
+    /**
+     * @param array<string, string> $answers field key => value
+     *
+     * @throws FormSubmissionException
+     */
+    public function createSubmission(array $answers): FormSubmissionEntity
+    {
+        assert($this instanceof FormEntity);
+
+        $validAnswers = [];
+
+        foreach ($this->getSections() as $section) {
+            foreach ($section->getFields() as $field) {
+                $value = trim($answers[$field->getKey()] ?? '');
+
+                if ($field->getType() === FormFieldType::Checkbox) {
+                    $value = $value === '' ? '' : '1';
+                }
+
+                if ($value === '') {
+                    if ($field->isRequired()) {
+                        throw FormSubmissionException::answerMissing($field->getLabel());
+                    }
+
+                    continue;
+                }
+
+                if ($field->getType()->accepts($value) === false) {
+                    throw FormSubmissionException::answerInvalid($field->getLabel());
+                }
+
+                $validAnswers[$field->getKey()] = $value;
+            }
+        }
+
+        return FormSubmission::create($this, $validAnswers);
     }
 
     public function findSection(string $sectionId): null | FormSectionEntity

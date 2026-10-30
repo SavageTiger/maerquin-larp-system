@@ -111,6 +111,28 @@ class Event
         return $this->form;
     }
 
+    public function getSubscriptionCap(SubscriptionRole $role): int
+    {
+        return match ($role) {
+            SubscriptionRole::Player => $this->playerSubscriptionCap,
+            SubscriptionRole::Npc => $this->npcSubscriptionCap,
+        };
+    }
+
+    public function countSubscriptions(SubscriptionRole $role): int
+    {
+        return $this->subscriptions->filter(
+            static fn(EventSubscription $subscription): bool => $subscription->hasRole($role),
+        )->count();
+    }
+
+    public function isFull(SubscriptionRole $role): bool
+    {
+        $cap = $this->getSubscriptionCap($role);
+
+        return $cap > 0 && $this->countSubscriptions($role) >= $cap;
+    }
+
     public function isSubscribed(Player $player): bool
     {
         return $this->subscriptions->exists(

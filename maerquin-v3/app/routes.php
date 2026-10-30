@@ -100,5 +100,6 @@ return function (App $app): void {
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);
+    $app->get('/subscriptions/{eventId}.html', FrontendSubscriptionsController::class);
     $app->get('/characters.html', FrontendCharactersController::class);
 };

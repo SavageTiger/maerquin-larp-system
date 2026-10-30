@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SvenHK\Maerquin\Model\EventSubscription as EventSubscriptionModel;
+use SvenHK\Maerquin\Model\SubscriptionRole;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'event_subscription')]
@@ -28,6 +29,9 @@ class EventSubscription extends EventSubscriptionModel
 
     #[ORM\Column(type: 'datetime_immutable')]
     protected DateTimeInterface $subscribedAt;
+
+    #[ORM\Column(length: 16, enumType: SubscriptionRole::class, options: ['default' => 'player'])]
+    protected SubscriptionRole $role;
 
     #[ORM\OneToOne(targetEntity: FormSubmission::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'form_submission_id', referencedColumnName: 'id', nullable: false)]

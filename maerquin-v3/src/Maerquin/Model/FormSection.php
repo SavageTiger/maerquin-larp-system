@@ -85,6 +85,29 @@ class FormSection
     }
 
     /**
+     * @return list<list<FormFieldEntity>>
+     */
+    public function getRows(): array
+    {
+        $rows = [];
+
+        foreach ($this->getFields() as $field) {
+            $rows[$field->getRow()][$field->getColumn()] = $field;
+        }
+
+        ksort($rows);
+
+        return array_values(array_map(
+            static function (array $fields): array {
+                ksort($fields);
+
+                return array_values($fields);
+            },
+            $rows,
+        ));
+    }
+
+    /**
      * @param list<list<array{id: UuidInterface, label: string, type: FormFieldType, required: bool}>> $rows
      *
      * @throws FormFieldException

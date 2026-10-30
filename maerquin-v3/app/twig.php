@@ -9,6 +9,7 @@ use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use SvenHK\Maerquin\Status\Twig\StatusExtension;
+use SvenHK\Maerquin\Translation\DateExtension;
 use SvenHK\Maerquin\Translation\TranslationExtension;
 use Twig\Extra\Markdown\LeagueMarkdown;
 use Twig\Extra\Markdown\MarkdownExtension;
@@ -72,6 +73,7 @@ return function (App $app): void {
     ));
 
     $twig->addExtension($app->getContainer()->get(TranslationExtension::class));
+    $twig->addExtension($app->getContainer()->get(DateExtension::class));
     $twig->addExtension($app->getContainer()->get(StatusExtension::class));
 
     $twig->addExtension(new MarkdownExtension());

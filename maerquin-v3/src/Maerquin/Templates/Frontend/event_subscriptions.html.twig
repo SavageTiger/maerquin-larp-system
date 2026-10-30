@@ -1,35 +1,6 @@
 {% extends 'skeleton.html.twig' %}
 
-{% macro daysUntil(days) %}
-    {%- if days == 0 -%}
-        {{ 'subscriptions.today'|trans }}
-    {%- elseif days == 1 -%}
-        {{ 'subscriptions.tomorrow'|trans }}
-    {%- else -%}
-        {{ 'subscriptions.days_until'|trans({'days': days}) }}
-    {%- endif -%}
-{% endmacro %}
-
-{% macro longDate(date, withYear = true) %}
-    {%- set months = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'] -%}
-    {{- date|date('j') }} {{ months[date|date('n') - 1] }}{% if withYear %} {{ date|date('Y') }}{% endif -%}
-{% endmacro %}
-
-{% macro dateRange(start, end) %}
-    {%- import _self as helpers -%}
-    {%- if start|date('Y-m-d') == end|date('Y-m-d') -%}
-        {{ helpers.longDate(start) }}
-    {%- elseif start|date('Y-m') == end|date('Y-m') -%}
-        {{ start|date('j') }} t/m {{ helpers.longDate(end) }}
-    {%- elseif start|date('Y') == end|date('Y') -%}
-        {{ helpers.longDate(start, false) }} t/m {{ helpers.longDate(end) }}
-    {%- else -%}
-        {{ helpers.longDate(start) }} t/m {{ helpers.longDate(end) }}
-    {%- endif -%}
-{% endmacro %}
-
 {% block container %}
-    {% import _self as helpers %}
     {% set upcomingEvents = events|filter(event => event.subscriptionState.value != 'EXPIRED')|reverse %}
     {% set pastEvents = events|filter(event => event.subscriptionState.value == 'EXPIRED') %}
 
@@ -48,8 +19,6 @@
 
     {% for event in upcomingEvents %}
         {% set state = event.subscriptionState.value %}
-        {% set daysUntilStart = date(event.startDate).diff(date('today')).days %}
-        {% set daysUntilOpening = date(event.subscriptionsOpensAt).diff(date('today')).days %}
 
         <article class="message is-dark subscription-event">
             <div class="message-header">
@@ -72,8 +41,8 @@
                         <span class="subscription-fact-label">
                             <i class="fa-regular fa-calendar"></i> {{ 'subscriptions.date'|trans }}
                         </span>
-                        <span class="subscription-fact-value">{{ helpers.dateRange(event.startDate, event.endDate) }}</span>
-                        <span class="subscription-fact-detail">{{ helpers.daysUntil(daysUntilStart) }}</span>
+                        <span class="subscription-fact-value">{{ event.startDate|date_range(event.endDate) }}</span>
+                        <span class="subscription-fact-detail">{{ event.startDate|days_until }}</span>
                     </div>
 
                     <div class="subscription-fact">
@@ -83,13 +52,13 @@
                         {% if state == 'OPEN' %}
                             <span class="subscription-fact-value">{{ 'subscriptions.registration.open'|trans }}</span>
                             <span class="subscription-fact-detail">
-                                {{ 'subscriptions.registration.until'|trans({'date': helpers.longDate(event.startDate)}) }}
+                                {{ 'subscriptions.registration.until'|trans({'date': event.startDate|long_date}) }}
                             </span>
                         {% else %}
                             <span class="subscription-fact-value">
-                                {{ 'subscriptions.registration.opens'|trans({'date': helpers.longDate(event.subscriptionsOpensAt)}) }}
+                                {{ 'subscriptions.registration.opens'|trans({'date': event.subscriptionsOpensAt|long_date}) }}
                             </span>
-                            <span class="subscription-fact-detail">{{ helpers.daysUntil(daysUntilOpening) }}</span>
+                            <span class="subscription-fact-detail">{{ event.subscriptionsOpensAt|days_until }}</span>
                         {% endif %}
                     </div>
 
@@ -130,9 +99,9 @@
                             <i class="fa-solid fa-check"></i>&nbsp;{{ 'subscriptions.subscribed'|trans }}
                         </span>
                     {% elseif state == 'OPEN' %}
-                        <button class="button is-dark" type="button">
+                        <a class="button is-dark" href="/subscriptions/{{ event.id }}.html">
                             <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'subscriptions.subscribe'|trans }}
-                        </button>
+                        </a>
                     {% endif %}
                 </div>
             </div>

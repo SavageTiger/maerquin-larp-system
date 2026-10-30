@@ -111,6 +111,9 @@ return [
     'admin.subscriptions.status.confirmed.mark' => 'Deelname bevestigen',
     'admin.subscriptions.status.waiting_list' => 'Wachtlijst',
     'admin.subscriptions.status.waiting_list.mark' => 'Op de wachtlijst zetten',
+    'admin.subscriptions.count.confirmed' => 'bevestigd',
+    'admin.subscriptions.count.registered' => '%count% ingeschreven',
+    'admin.subscriptions.count.waiting_list' => '%count% op de wachtlijst',
     'admin.subscriptions.status.reset' => 'Terug naar "Inschrijving ontvangen"',
     'admin.subscriptions.mark_unpaid.confirm' => 'Weet je zeker dat je deze betaling ongedaan wilt maken?',
 

@@ -140,18 +140,12 @@ class Event
         return $subscriptions;
     }
 
-    public function countSubscriptions(SubscriptionRole $role): int
+    public function getOccupancy(SubscriptionRole $role): SubscriptionOccupancy
     {
-        return $this->subscriptions->filter(
-            static fn(EventSubscription $subscription): bool => $subscription->hasRole($role),
-        )->count();
-    }
-
-    public function isFull(SubscriptionRole $role): bool
-    {
-        $cap = $this->getSubscriptionCap($role);
-
-        return $cap > 0 && $this->countSubscriptions($role) >= $cap;
+        return SubscriptionOccupancy::fromSubscriptions(
+            $this->getSubscriptionCap($role),
+            $this->getSubscriptions($role),
+        );
     }
 
     /**

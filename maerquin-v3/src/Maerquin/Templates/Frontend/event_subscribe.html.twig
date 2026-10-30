@@ -36,7 +36,7 @@
             </div>
         </article>
 
-        {% set defaultRole = roles|filter(role => event.isFull(role) == false)|first ?: roles|first %}
+        {% set defaultRole = roles|filter(role => not event.occupancy(role).full)|first ?: roles|first %}
 
         <article class="message is-dark">
             <div class="message-header">
@@ -45,20 +45,19 @@
             <div class="message-body">
                 <div class="subscription-roles">
                     {% for role in roles %}
-                        {% set cap = event.subscriptionCap(role) %}
-                        {% set isFull = event.isFull(role) %}
+                        {% set occupancy = event.occupancy(role) %}
 
-                        <label class="subscription-role {% if isFull %}is-full{% endif %}">
+                        <label class="subscription-role {% if occupancy.full %}is-full{% endif %}">
                             <input type="radio" name="role" value="{{ role.value }}" required
                                    {% if role == defaultRole %}checked{% endif %}/>
                             <span class="subscription-role-name">{{ ('subscribe.role.' ~ role.value)|trans }}</span>
                             <span class="subscription-role-places">
-                                {% if cap == 0 %}
+                                {% if not occupancy.hasCap %}
                                     {{ 'subscribe.role.no_cap'|trans }}
-                                {% elseif isFull %}
+                                {% elseif occupancy.full %}
                                     <span class="has-text-warning-dark">{{ 'subscribe.role.waiting_list'|trans }}</span>
                                 {% else %}
-                                    {{ 'subscribe.role.places_left'|trans({'left': cap - event.countSubscriptions(role), 'cap': cap}) }}
+                                    {{ 'subscribe.role.places_left'|trans({'left': occupancy.placesLeft, 'cap': occupancy.cap}) }}
                                 {% endif %}
                             </span>
                         </label>

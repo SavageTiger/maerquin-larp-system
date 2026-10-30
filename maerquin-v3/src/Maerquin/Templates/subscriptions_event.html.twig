@@ -32,18 +32,23 @@
                     </div>
 
                     {% for role in roles %}
-                        {% set cap = event.subscriptionCap(role) %}
+                        {% set occupancy = event.occupancy(role) %}
                         <div class="subscription-fact">
                             <span class="subscription-fact-label">
                                 <i class="fa-solid fa-users"></i> {{ ('admin.subscriptions.role.' ~ role.value)|trans }}
                             </span>
                             <span class="subscription-fact-value">
-                                {{ event.countSubscriptions(role) }}{% if cap > 0 %} / {{ cap }}{% endif %}
+                                {{ occupancy.confirmed }}{% if occupancy.hasCap %} / {{ occupancy.cap }}{% endif %}
+                                <span class="subscription-fact-unit">{{ 'admin.subscriptions.count.confirmed'|trans }}</span>
                             </span>
+                            {% if occupancy.hasCap %}
+                                <progress class="progress is-small {{ occupancy.overbooked ? 'is-danger' : 'is-success' }}"
+                                          value="{{ occupancy.confirmed }}" max="{{ occupancy.cap }}"></progress>
+                            {% endif %}
                             <span class="subscription-fact-detail">
-                                {% if cap == 0 %}
-                                    {{ 'subscribe.role.no_cap'|trans }}
-                                {% endif %}
+                                {{ 'admin.subscriptions.count.registered'|trans({'count': occupancy.registered}) }}
+                                {%- if occupancy.waitingList %} &middot; {{ 'admin.subscriptions.count.waiting_list'|trans({'count': occupancy.waitingList}) }}{% endif %}
+                                {%- if not occupancy.hasCap %} &middot; {{ 'subscribe.role.no_cap'|trans|lower }}{% endif %}
                             </span>
                         </div>
                     {% endfor %}
@@ -87,11 +92,6 @@
                                     {% endif %}
                                 </span>
                                 <span class="admin-subscription-date">{{ subscription.subscribedAt|date('d-m-Y H:i') }}</span>
-                                                                {#
-                                    Compact toggles: an active state shows its label, an inactive one only its icon.
-                                    'Ontvangen' is the default status, so it has no button: clicking the active
-                                    status toggles back to it.
-                                #}
                                 <span class="admin-subscription-actions" data-url="/admin/subscriptions/{{ event.id }}/{{ subscription.id }}">
                                     {% if subscription.paid %}
                                         <button class="button is-small is-success" type="button" aria-pressed="true"

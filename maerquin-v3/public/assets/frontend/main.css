@@ -444,6 +444,17 @@ input.skill-input {
         font-weight: 600;
     }
 
+    .subscription-fact-unit {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: var(--subscriptions-muted);
+    }
+
+    .subscription-fact .progress {
+        height: 0.375rem;
+        margin: 0.25rem 0;
+    }
+
     .subscription-fact-detail {
         font-size: 0.875rem;
         color: var(--subscriptions-muted);

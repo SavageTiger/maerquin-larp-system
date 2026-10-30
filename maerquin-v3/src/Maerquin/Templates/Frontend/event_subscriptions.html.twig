@@ -1,77 +1,74 @@
-{% extends 'Frontend/skeleton.html.twig' %}
+{% extends 'skeleton.html.twig' %}
 
 {% block container %}
-    {% block main %}
+    <div class="spacer is-12"></div>
+    <div>
+        {% set upcomingEvents = events|filter(event => event.subscriptionState.value != 'EXPIRED') %}
 
-        <div class="container">
-            {% set upcomingEvents = events|filter(event => event.subscriptionState.value != 'EXPIRED') %}
+        {% if player is null %}
+            {% set events = upcomingEvents is empty ? [] : [upcomingEvents|last] %}
+        {% endif %}
 
-            {% if player is null %}
-                {% set events = upcomingEvents is empty ? [] : [upcomingEvents|last] %}
-            {% endif %}
-
-            {% if upcomingEvents is empty %}
-                <div class="columns">
-                    <div class="column is-two-thirds">
-                        <article class="message is-info">
-                            <div class="message-body">
-                                Er is momenteel geen evenement gepland.
-                            </div>
-                        </article>
-                    </div>
+        {% if upcomingEvents is empty %}
+            <div class="columns">
+                <div class="column is-two-thirds">
+                    <article class="message is-info">
+                        <div class="message-body">
+                            Er is momenteel geen evenement gepland.
+                        </div>
+                    </article>
                 </div>
-            {% endif %}
+            </div>
+        {% endif %}
 
-            {% for event in events %}
-                {% set state = event.subscriptionState.value %}
+        {% for event in events %}
+            {% set state = event.subscriptionState.value %}
 
-                <div class="columns">
-                    <div class="column is-two-thirds">
-                        <div class="box">
-                            <h4 class="title is-4">
-                                {{ event.name }}
-                                <span class="is-pulled-right" style="font-size: 13pt">
-                                    {{ event.startDate|date('d/m/Y') }}
+            <div class="columns">
+                <div class="column is-two-thirds">
+                    <div class="box">
+                        <h4 class="title is-4">
+                            {{ event.name }}
+                            <span class="is-pulled-right" style="font-size: 13pt">
+                                {{ event.startDate|date('d/m/Y') }}
+                            </span>
+                        </h4>
+
+                        <div class="tags">
+                            {% if state == 'OPEN' %}
+                                <span class="tag is-success">Inschrijving open</span>
+                            {% elseif state == 'PENDING' %}
+                                <span class="tag is-warning">
+                                    Inschrijving opent op {{ event.subscriptionsOpensAt|date('d/m/Y') }}
                                 </span>
-                            </h4>
+                            {% else %}
+                                <span class="tag is-danger">Inschrijving verlopen</span>
+                            {% endif %}
 
-                            <div class="tags">
-                                {% if state == 'OPEN' %}
-                                    <span class="tag is-success">Inschrijving open</span>
-                                {% elseif state == 'PENDING' %}
-                                    <span class="tag is-warning">
-                                        Inschrijving opent op {{ event.subscriptionsOpensAt|date('d/m/Y') }}
-                                    </span>
-                                {% else %}
-                                    <span class="tag is-danger">Inschrijving verlopen</span>
-                                {% endif %}
-
-                                {% if player is not null and state == 'EXPIRED' and event.hasParticipated(player) %}
-                                    <span class="tag is-info">Deelgenomen</span>
-                                {% endif %}
-                            </div>
-
-                            {% if state != 'EXPIRED' %}
-                                {% if player is null %}
-                                    <a class="button is-primary" href="/login.html?redirect=/subscriptions.html">
-                                        Log in om in te schrijven
-                                    </a>
-                                    <a class="button is-light" href="/register.html">
-                                        Account aanmaken
-                                    </a>
-                                {% elseif event.isSubscribed(player) %}
-                                    <span class="tag is-success is-medium">Je bent ingeschreven</span>
-                                {% elseif state == 'OPEN' %}
-                                    <button class="button is-success" type="button">
-                                        Inschrijven
-                                    </button>
-                                {% endif %}
+                            {% if player is not null and state == 'EXPIRED' and event.hasParticipated(player) %}
+                                <span class="tag is-info">Deelgenomen</span>
                             {% endif %}
                         </div>
+
+                        {% if state != 'EXPIRED' %}
+                            {% if player is null %}
+                                <a class="button is-primary" href="/login.html?redirect=/subscriptions.html">
+                                    Log in om in te schrijven
+                                </a>
+                                <a class="button is-light" href="/register.html">
+                                    Account aanmaken
+                                </a>
+                            {% elseif event.isSubscribed(player) %}
+                                <span class="tag is-success is-medium">Je bent ingeschreven</span>
+                            {% elseif state == 'OPEN' %}
+                                <button class="button is-success" type="button">
+                                    Inschrijven
+                                </button>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-
-    {% endblock %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

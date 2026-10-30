@@ -22,9 +22,20 @@ return [
     'mail.subject.password_setup' => 'Maerquin wachtwoord instellen',
     'mail.subject.email_verification' => 'Maerquin account bevestigen',
 
+    'menu.subscribe' => 'Inschrijven',
+    'menu.characters' => 'Personages',
+    'menu.login' => 'Inloggen',
+    'menu.logout' => 'Uitloggen',
     'menu.settings' => 'Instellingen',
     'menu.settings.status' => 'Status',
     'menu.settings.forms' => 'Forms',
+
+    'characters.title' => 'Mijn personages',
+    'characters.empty' => 'Er zijn nog geen personages aan je account gekoppeld. Personages worden door de spelleiding gekoppeld.',
+    'characters.name' => 'Naam',
+    'characters.race' => 'Ras',
+    'characters.guild' => 'Gilde',
+    'characters.occupation' => 'Beroep',
 
     'forms.name' => 'Naam',
     'forms.section_count' => 'Aantal secties',

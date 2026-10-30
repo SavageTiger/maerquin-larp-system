@@ -1,0 +1,41 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block container %}
+    <div class="spacer is-12"></div>
+    <div class="columns is-gapless">
+        <div class="column is-12">
+            <article class="message is-dark">
+                <div class="message-header">
+                    {{ 'characters.title'|trans }}
+                </div>
+                <div class="message-body">
+                    {% if characters is empty %}
+                        {{ 'characters.empty'|trans }}
+                    {% else %}
+                        <table class="table is-bordered is-striped is-narrow is-fullwidth">
+                            <tr>
+                                <th>{{ 'characters.name'|trans }}</th>
+                                <th>{{ 'characters.race'|trans }}</th>
+                                <th>{{ 'characters.guild'|trans }}</th>
+                                <th>{{ 'characters.occupation'|trans }}</th>
+                            </tr>
+                            {% for character in characters %}
+                                <tr>
+                                    <td>
+                                        {{ character.name }}
+                                        {% if character.title %}
+                                            <span class="has-text-grey">({{ character.title }})</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ character.race.name }}</td>
+                                    <td>{{ character.guild }}</td>
+                                    <td>{{ character.occupation }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+    </div>
+{% endblock %}

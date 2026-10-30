@@ -15,6 +15,7 @@ use SvenHK\Maerquin\Controller\FormDeleteController;
 use SvenHK\Maerquin\Controller\FormFieldsController;
 use SvenHK\Maerquin\Controller\FormsController;
 use SvenHK\Maerquin\Controller\FormSectionsController;
+use SvenHK\Maerquin\Controller\Frontend\CharactersController as FrontendCharactersController;
 use SvenHK\Maerquin\Controller\Frontend\PasswordEmailController;
 use SvenHK\Maerquin\Controller\Frontend\RegisterController;
 use SvenHK\Maerquin\Controller\Frontend\SubscriptionsController as FrontendSubscriptionsController;
@@ -99,4 +100,5 @@ return function (App $app): void {
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);
+    $app->get('/characters.html', FrontendCharactersController::class);
 };

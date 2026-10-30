@@ -6,39 +6,59 @@
             <div class="logo">
                 <i class="fa-solid fa-book-skull"></i>&nbsp;Maerquin Character Database
             </div>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+               onclick="this.classList.toggle('is-active'); document.getElementById('navbarMenu').classList.toggle('is-active');">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
         </div>
 
-        <div class="navbar-menu">
+        <div class="navbar-menu" id="navbarMenu">
+            {% set path = current_url() %}
+
             <div class="navbar-start">
                 {% if getUser().isAdmin %}
                     <a href="/admin/players.html"
-                       class="navbar-item {% if 'player' in current_url() %}is-active{% endif %}">
+                       class="navbar-item {% if path starts with '/admin/player' %}is-active{% endif %}">
                         <i class="fa-solid fa-user-group"></i> Spelers
                     </a>
 
                     <a href="/admin/subscriptions.html"
-                       class="navbar-item {% if 'subscriptions' in current_url() %}is-active{% endif %}">
+                       class="navbar-item {% if path starts with '/admin/subscriptions' %}is-active{% endif %}">
                         <i class="fa-solid fa-people-roof"></i> Inschrijvingen
                     </a>
 
                     <a href="/admin/characters.html"
-                       class="navbar-item {% if 'character' in current_url() %}is-active{% endif %}">
+                       class="navbar-item {% if path starts with '/admin/character' %}is-active{% endif %}">
                         <i class="fa-solid fa-hat-wizard"></i> Personages
                     </a>
 
                     <a href="/admin/events.html"
-                       class="navbar-item {% if 'event' in current_url() %}is-active{% endif %}">
+                       class="navbar-item {% if path starts with '/admin/event' %}is-active{% endif %}">
                         <i class="fa-regular fa-calendar-days"></i> Evenementen
                     </a>
 
                     <a href="/admin/skills.html"
-                       class="navbar-item {% if 'skills' in current_url() %}is-active{% endif %}">
+                       class="navbar-item {% if path starts with '/admin/skills' %}is-active{% endif %}">
                         <i class="fa-solid fa-scroll"></i> Skills
                     </a>
 
                     <a href="/admin/races.html"
-                       class="navbar-item {% if 'races' in current_url() %}is-active{% endif %}">
+                       class="navbar-item {% if path starts with '/admin/races' %}is-active{% endif %}">
                         <i class="fa-solid fa-hand-spock"></i> Rassen
+                    </a>
+                {% elseif getUser().isAnonymous == false %}
+                    <a href="/subscriptions.html"
+                       class="navbar-item {% if path starts with '/subscriptions' %}is-active{% endif %}">
+                        <i class="fa-regular fa-calendar-check"></i> {{ 'menu.subscribe'|trans }}
+                    </a>
+
+                    <a href="/characters.html"
+                       class="navbar-item {% if path starts with '/characters' %}is-active{% endif %}">
+                        <i class="fa-solid fa-hat-wizard"></i> {{ 'menu.characters'|trans }}
                     </a>
                 {% endif %}
             </div>
@@ -46,27 +66,45 @@
             <div class="navbar-end">
                 {% if getUser().isAdmin %}
                     <div class="navbar-item has-dropdown is-hoverable">
-                        <a class="navbar-link {% if 'status' in current_url() or 'forms' in current_url() %}is-active{% endif %}">
+                        <a class="navbar-link {% if path starts with '/admin/status' or path starts with '/admin/form' %}is-active{% endif %}">
                             <i class="fa-solid fa-gear"></i>&nbsp;{{ 'menu.settings'|trans }}
                         </a>
 
                         <div class="navbar-dropdown is-right">
                             <a href="/admin/status.html"
-                               class="navbar-item {% if 'status' in current_url() %}is-active{% endif %}">
+                               class="navbar-item {% if path starts with '/admin/status' %}is-active{% endif %}">
                                 <i class="fa-solid fa-signal"></i>&nbsp;{{ 'menu.settings.status'|trans }}
                             </a>
                             <a href="/admin/forms.html"
-                               class="navbar-item {% if 'forms' in current_url() %}is-active{% endif %}">
+                               class="navbar-item {% if path starts with '/admin/form' %}is-active{% endif %}">
                                 <i class="fa-solid fa-list-check"></i>&nbsp;{{ 'menu.settings.forms'|trans }}
                             </a>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if getUser().username %}
-                    <a href="/logout.html" class="navbar-item">
-                        <i class="fa-solid fa-door-open"></i> Uitloggen ({{ getUser().username|capitalize }})
+                {% if getUser().isAnonymous %}
+                    <a href="/login.html?redirect={{ path|url_encode }}" class="navbar-item">
+                        <i class="fa-solid fa-right-to-bracket"></i>&nbsp;{{ 'menu.login'|trans }}
                     </a>
+                {% else %}
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link {% if getUser().isAdmin and path starts with '/subscriptions' %}is-active{% endif %}">
+                            <i class="fa-solid fa-circle-user"></i>&nbsp;{{ getUser().username|capitalize }}
+                        </a>
+
+                        <div class="navbar-dropdown is-right">
+                            {% if getUser().isAdmin %}
+                                <a href="/subscriptions.html"
+                                   class="navbar-item {% if path starts with '/subscriptions' %}is-active{% endif %}">
+                                    <i class="fa-regular fa-calendar-check"></i>&nbsp;{{ 'menu.subscribe'|trans }}
+                                </a>
+                            {% endif %}
+                            <a href="/logout.html" class="navbar-item">
+                                <i class="fa-solid fa-door-open"></i>&nbsp;{{ 'menu.logout'|trans }}
+                            </a>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>

@@ -104,6 +104,33 @@ body::after {
     font-size: 16pt;
 }
 
+.navbar-burger {
+    color: white !important;
+}
+
+@media screen and (max-width: 1023px) {
+    .navbar-brand div.logo {
+        font-size: 13pt;
+    }
+
+    .navbar-start::before {
+        content: none;
+    }
+
+    .navbar-menu {
+        background-color: rgb(0, 133, 113) !important;
+    }
+
+    .navbar-dropdown {
+        background-color: transparent !important;
+    }
+
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
 .is-overview-table {
     width: 100%;
     margin-top: -10px;

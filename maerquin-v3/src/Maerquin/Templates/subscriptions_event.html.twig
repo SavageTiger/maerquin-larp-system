@@ -5,6 +5,9 @@
         <div class="columns is-gapless">
             <div class="column is-12">
                 <div class="buttons is-right">
+                    <a class="button" href="/admin/subscriptions/{{ event.id }}/subscribers.csv" download>
+                        <i class="fa-solid fa-file-csv"></i>&nbsp;{{ 'admin.subscriptions.export'|trans }}
+                    </a>
                     <a class="button" href="/admin/subscriptions.html">
                         <i class="fa-solid fa-arrow-left"></i>&nbsp;{{ 'admin.subscriptions.back'|trans }}
                     </a>

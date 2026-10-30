@@ -26,6 +26,7 @@ use SvenHK\Maerquin\Controller\LogoutController;
 use SvenHK\Maerquin\Controller\PlayerResetPasswordController;
 use SvenHK\Maerquin\Controller\PlayersController;
 use SvenHK\Maerquin\Controller\PrintCharacter;
+use SvenHK\Maerquin\Controller\SubscriptionsExportController;
 use SvenHK\Maerquin\Controller\RacesController;
 use SvenHK\Maerquin\Controller\SkillsController;
 use SvenHK\Maerquin\Controller\StatusController;
@@ -100,6 +101,7 @@ return function (App $app): void {
 
     $app->get('/admin/subscriptions.html', SubscriptionsController::class);
     $app->get('/admin/subscriptions/{eventId}.html', SubscriptionsController::class);
+    $app->get('/admin/subscriptions/{eventId}/subscribers.csv', SubscriptionsExportController::class);
     $app->post('/admin/subscriptions/{eventId}/{subscriptionId}', SubscriptionsController::class);
     $app->get('/subscriptions.html', FrontendSubscriptionsController::class);
     $app->get('/subscriptions/{eventId}.html', FrontendSubscriptionsController::class);

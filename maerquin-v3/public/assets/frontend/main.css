@@ -404,30 +404,45 @@ input.skill-input {
     }
 
     .subscription-facts {
-        dt {
-            font-weight: 600;
-            margin-top: 0.75rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
 
-            &:first-child {
-                margin-top: 0;
-            }
+    .subscription-fact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding: 0.75rem 1rem;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 2px;
+    }
 
-            i {
-                width: 1.25rem;
-                color: #7a7a7a;
-            }
-        }
+    .subscription-fact-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #7a7a7a;
+    }
 
-        dd {
-            margin-left: 1.25rem;
-        }
+    .subscription-fact-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .subscription-fact-detail {
+        font-size: 0.875rem;
+        color: #7a7a7a;
     }
 
     .subscription-description {
         padding: 0.75rem 1rem;
         background: #fff;
-        border: 1px solid #dbdbdb;
-        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+        border-radius: 2px;
         overflow-wrap: anywhere;
     }
 }

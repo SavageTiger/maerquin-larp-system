@@ -129,29 +129,57 @@
         {% endfor %}
 
         {% if player is not null and pastEvents is not empty %}
-            <article class="message is-dark">
+            {% set attendedCount = pastEvents|filter(event => event.hasParticipated(player))|length %}
+
+
+            <article class="message is-dark past-events">
                 <div class="message-header">
-                    {{ 'subscriptions.past'|trans }}
+                    <span>
+                        {{ 'subscriptions.past'|trans }}
+                        <span class="past-events-count has-text-weight-normal">
+                            <span class="count-attended">&middot; {{ 'subscriptions.past.attended_count'|trans({'count': attendedCount}) }}</span>
+                            <span class="count-all">&middot; {{ 'subscriptions.past.total_count'|trans({'count': pastEvents|length}) }}</span>
+                        </span>
+                    </span>
+
+                    <label class="past-events-toggle">
+                        <input type="checkbox" autocomplete="off">
+                        <span class="past-events-switch" aria-hidden="true"></span>
+                        {{ 'subscriptions.past.show_all'|trans }}
+                    </label>
                 </div>
                 <div class="message-body">
-                    <div class="table-container">
-                        <table class="table is-bordered is-striped is-narrow is-fullwidth">
-                            <tr>
-                                <th>{{ 'subscriptions.event'|trans }}</th>
-                                <th>{{ 'subscriptions.date'|trans }}</th>
-                                <th></th>
-                            </tr>
-                            {% for event in pastEvents %}
+                    {% if attendedCount == 0 %}
+                        <p class="past-events-empty has-text-grey">
+                            <i class="fa-regular fa-calendar-xmark"></i>&nbsp;{{ 'subscriptions.past.none_attended'|trans }}
+                        </p>
+                    {% endif %}
+
+                    <div class="table-container past-events-table {{ attendedCount == 0 ? 'is-empty' }}">
+                        <table class="table is-striped is-narrow is-fullwidth is-hoverable">
+                            <thead>
                                 <tr>
-                                    <td>{{ event.name }}</td>
-                                    <td>{{ event.startDate|date('d-m-Y') }}</td>
-                                    <td>
-                                        {% if event.hasParticipated(player) %}
-                                            <span class="tag is-info is-light">{{ 'subscriptions.participated'|trans }}</span>
-                                        {% endif %}
-                                    </td>
+                                    <th>{{ 'subscriptions.event'|trans }}</th>
+                                    <th>{{ 'subscriptions.date'|trans }}</th>
+                                    <th></th>
                                 </tr>
-                            {% endfor %}
+                            </thead>
+                            <tbody>
+                                {% for event in pastEvents %}
+                                    {% set attended = event.hasParticipated(player) %}
+                                    <tr class="{{ attended ? 'is-attended' : 'is-not-attended' }}">
+                                        <td>{{ event.name }}</td>
+                                        <td>{{ event.startDate|date('d-m-Y') }}</td>
+                                        <td class="has-text-right">
+                                            {% if attended %}
+                                                <span class="tag is-info is-light">
+                                                    <i class="fa-solid fa-check"></i>&nbsp;{{ 'subscriptions.participated'|trans }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>

@@ -534,6 +534,103 @@ input.skill-input {
         display: none;
     }
 
+    .past-events {
+        --past-events-switch-off: rgba(255, 255, 255, 0.25);
+        --past-events-switch-on: #48c78e;
+
+        .message-header {
+            flex-wrap: wrap;
+            gap: var(--subscriptions-gap);
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .is-not-attended td {
+            color: var(--subscriptions-muted);
+        }
+
+        .count-all {
+            display: none;
+        }
+
+        &:has(.past-events-toggle input:checked) {
+            .count-all {
+                display: inline;
+            }
+
+            .count-attended,
+            .past-events-empty {
+                display: none;
+            }
+        }
+
+        &:not(:has(.past-events-toggle input:checked)) {
+            .is-not-attended,
+            .past-events-table.is-empty {
+                display: none;
+            }
+        }
+    }
+
+    .past-events-count {
+        opacity: 0.75;
+    }
+
+    .past-events-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.9rem;
+        font-weight: normal;
+        cursor: pointer;
+        user-select: none;
+
+        input {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+        }
+
+        input:checked + .past-events-switch {
+            background: var(--past-events-switch-on);
+
+            &::after {
+                transform: translateX(1.1rem);
+            }
+        }
+
+        input:focus-visible + .past-events-switch {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+    }
+
+    .past-events-switch {
+        position: relative;
+        flex-shrink: 0;
+        width: 2.4rem;
+        height: 1.3rem;
+        border-radius: 1rem;
+        background: var(--past-events-switch-off);
+        transition: background 0.2s;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0.15rem;
+            left: 0.15rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+    }
+
     /* Admin: list of subscriptions with their answers */
 
     .admin-subscription {

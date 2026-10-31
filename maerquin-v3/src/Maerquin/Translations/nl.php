@@ -76,6 +76,10 @@ return [
     'subscriptions.past' => 'Eerdere evenementen',
     'subscriptions.event' => 'Evenement',
     'subscriptions.participated' => 'Deelgenomen',
+    'subscriptions.past.show_all' => 'Toon alle evenementen',
+    'subscriptions.past.attended_count' => '%count% bijgewoond',
+    'subscriptions.past.total_count' => '%count% in totaal',
+    'subscriptions.past.none_attended' => 'Je hebt nog geen eerdere evenementen bijgewoond.',
 
     'subscribe.back' => 'Terug naar evenementen',
     'subscribe.title' => 'Inschrijven voor %event%',

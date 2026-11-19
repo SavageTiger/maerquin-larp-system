@@ -273,7 +273,7 @@
 
                 manageSkills(windowName) {
                     axios.get('/admin/skills/api').then((response) => {
-                        this.allSkillsSorted = response.data.data ?? [];
+                        this.allSkillsSorted = response.data ?? [];
 
                         this.skillsSearch = '';
 

@@ -40,7 +40,7 @@ class LinkableSkillsApiController extends Action
             );
         }
 
-        return $this->respondWithData(
+        return $this->respondWithJson(
             $buffer,
         );
     }

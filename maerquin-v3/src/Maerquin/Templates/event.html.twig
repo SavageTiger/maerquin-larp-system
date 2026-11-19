@@ -407,7 +407,7 @@
 
                 manageCharacters() {
                     axios.get('/admin/characters/api?compact=true').then((response) => {
-                        this.allCharacters = response.data.data ?? [];
+                        this.allCharacters = response.data ?? [];
 
                         openModal(document.getElementById('manageCharacters'));
                     });

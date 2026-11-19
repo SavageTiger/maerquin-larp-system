@@ -20,7 +20,7 @@ class CharactersApiController extends Action
     {
         $compact = (($this->request->getQueryParams()['compact'] ?? '') === 'true');
 
-        return $this->respondWithData(
+        return $this->respondWithJson(
             new CharacterCollection(
                 ...$this->characterRepository->findAllSorted(),
             )->serialize(

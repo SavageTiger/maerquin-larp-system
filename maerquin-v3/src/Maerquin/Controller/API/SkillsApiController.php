@@ -18,7 +18,7 @@ class SkillsApiController extends Action
 
     public function action(): ResponseInterface
     {
-        return $this->respondWithData(
+        return $this->respondWithJson(
             new SkillCollection($this->skillRepository->findAllSorted())->serialize(false),
         );
     }

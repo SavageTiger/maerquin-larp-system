@@ -70,23 +70,12 @@ abstract class Action
         return $this->args[$name];
     }
 
-    /**
-     * @param null|array|object $data
-     */
-    protected function respondWithData($data = null, int $statusCode = 200): Response
+    protected function respondWithJson(array $body, int $statusCode = 200): Response
     {
-        $payload = new ActionPayload($statusCode, $data);
-
-        return $this->respond($payload);
-    }
-
-    protected function respond(ActionPayload $payload): Response
-    {
-        $json = json_encode($payload, JSON_PRETTY_PRINT);
-        $this->response->getBody()->write($json);
+        $this->response->getBody()->write(json_encode($body, JSON_PRETTY_PRINT));
 
         return $this->response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus($payload->getStatusCode());
+            ->withStatus($statusCode);
     }
 }
